@@ -1,4 +1,6 @@
-const $const $ = id => document.getElementById(id);
+--- START OF FILE text/javascript ---
+
+const $ = id => document.getElementById(id);
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR9cx11EjwDzoCshY_8_j-pBix_brYA50",
@@ -418,7 +420,6 @@ function updateUserUI() {
     if ($('payout-modal-tk')) $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
 }
 
-/* =================== AD HUB NAVIGATION =================== */
 function openEarnHubView() {
     triggerHaptic('light');
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
@@ -1619,7 +1620,6 @@ function executeUnlockSuccess(type = 'ad') {
     setTimeout(() => playMovie(activeDetailVideo), 800);
 }
 
-/* =================== STREAM PLAYER =================== */
 async function playMovie(videoObj) {
     if (!videoObj) return;
     pendingActionAfterJoin = () => playMovie(videoObj);
@@ -1774,7 +1774,6 @@ function switchNavTab(tabName, el) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* =================== PAYOUT HANDLERS =================== */
 function openPayoutView() {
     triggerHaptic('light');
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
