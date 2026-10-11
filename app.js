@@ -1508,6 +1508,8 @@ function closeVideoDetailView() {
     }, 10);
 }
 
+// app.js-এর মধ্যে updateUnlockProgressUI ফাংশনটি এভাবে আপডেট করে নিন:
+
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
@@ -1534,7 +1536,7 @@ function updateUnlockProgressUI() {
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(total)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = "100%";
         
-        adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}`;
+        adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> <span>${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}</span>`;
         pointBtn.disabled = true; 
         pointBtn.style.opacity = "0.5";
     } else {
@@ -1546,11 +1548,11 @@ function updateUnlockProgressUI() {
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = percent + "%";
 
-        adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}` :
-                         (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}` :
-                         `<i class="fa-solid fa-lock"></i> ${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}`);
+        adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> <span>${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}</span>` :
+                         (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> <span>${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}</span>` :
+                         `<i class="fa-solid fa-lock"></i> <span>${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}</span>`);
 
-        pointBtn.innerHTML = `<i class="fa-solid fa-coins"></i> ${APP_LANG === 'bn' ? 'আমার পয়েন্ট ব্যবহার করুন' : 'Use My Points'} (${formatNumber(APP_CONFIG.unlockPointsCost || 5)} pt)`;
+        pointBtn.innerHTML = `<span class="btn-inner-coin-circle"><i class="fa-solid fa-coins"></i></span> <span>${APP_LANG === 'bn' ? 'আমার পয়েন্ট ব্যবহার করুন' : 'Use My Points'}</span>`;
     }
 }
 
