@@ -24,7 +24,7 @@
   <!-- External Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body style="padding-bottom: 80px;">
 
 <!-- ================= PRELOADER ================= -->
 <div id="app-preloader">
@@ -40,20 +40,20 @@
 </div>
 
 <!-- ================= SYSTEM ALERTS / SCREENS ================= -->
-<div id="banned-screen">
+<div id="banned-screen" style="display:none;">
   <div class="banned-icon-circle"><i class="fa-solid fa-ban"></i></div>
   <h2 style="font-size: 22px; color: #fff; margin-bottom: 8px;" id="banned-title">আপনার একাউন্ট স্থগিত করা হয়েছে</h2>
   <p style="font-size: 14px; color: #cbd5e1; line-height: 1.6; max-width: 320px; margin-bottom: 22px;" id="banned-desc">অ্যাপের নিয়ম ভঙ্গের কারণে আপনার আইডিটি সাময়িক বা স্থায়ীভাবে ব্যান করা হয়েছে। বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।</p>
   <button class="btn-action-cyan" onclick="goToTelegramChannel()" style="max-width: 220px;" id="btn-banned-support"><i class="fa-brands fa-telegram"></i> সাপোর্টে মেসেজ দিন</button>
 </div>
 
-<div id="maintenance-screen">
+<div id="maintenance-screen" style="display:none;">
   <div style="font-size: 52px; color: #ffe000; margin-bottom: 14px;"><i class="fa-solid fa-wrench"></i></div>
   <h2 style="font-size: 21px; color: #fff; margin-bottom: 8px;" id="maint-title">অ্যাপ সাময়িক রক্ষণাবেক্ষণে আছে</h2>
   <p style="font-size: 14px; color: #cbd5e1; line-height: 1.5; max-width: 320px;" id="maint-desc">আমরা সিস্টেম আপডেট করছি। কিছুক্ষণ পর আবার চেষ্টা করুন।</p>
 </div>
 
-<div id="top-toast" class="top-toast">
+<div id="top-toast" class="top-toast" style="display:none;">
   <i class="fa-solid fa-circle-info" id="toast-icon"></i>
   <span id="toast-msg">বার্তা</span>
 </div>
@@ -104,7 +104,6 @@
 
 <!-- ================= TAB: MOVIES ================= -->
 <div id="tab-movies" class="content-tab">
-  
   <!-- STICKY HERO BANNER GRID -->
   <div class="hero-banner-grid">
     <div id="hero-card-movie-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'new_movie', 'movies')">
@@ -127,7 +126,6 @@
     <button class="btn-unlock-blue" onclick="openVideoRulesModal()"><i class="fa-solid fa-circle-info"></i> <span id="btn-video-rules-txt">ভিডিও দেখার নিয়ম</span></button>
   </div>
 
-  <!-- PURE BLACK THEME CATEGORY FILTER -->
   <div class="category-filter-section" id="movie-cat-section">
     <div class="category-filter-header">
       <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -143,8 +141,6 @@
 
 <!-- ================= TAB: SERIES ================= -->
 <div id="tab-series" class="content-tab" style="display:none;">
-  
-  <!-- STICKY HERO BANNER GRID -->
   <div class="hero-banner-grid">
     <div id="hero-card-series-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'new_series', 'series')">
       <div class="hero-icon-box"><i class="fa-solid fa-layer-group"></i></div>
@@ -165,7 +161,6 @@
     <p id="series-feature-desc">দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।</p>
   </div>
 
-  <!-- PURE BLACK THEME CATEGORY FILTER -->
   <div class="category-filter-section" id="series-cat-section">
     <div class="category-filter-header">
       <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -181,8 +176,6 @@
 
 <!-- ================= TAB: ADULT ================= -->
 <div id="tab-adult" class="content-tab" style="display:none;">
-  
-  <!-- STICKY HERO BANNER GRID -->
   <div class="hero-banner-grid">
     <div id="hero-card-adult-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'adult_new', 'adult')">
       <div class="hero-icon-box"><i class="fa-solid fa-fire"></i></div>
@@ -203,7 +196,6 @@
     <p id="adult-feature-desc" style="margin-bottom:0;">আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।</p>
   </div>
 
-  <!-- PURE BLACK THEME CATEGORY FILTER -->
   <div class="category-filter-section" id="adult-cat-section">
     <div class="category-filter-header">
       <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -291,7 +283,7 @@
 </div>
 
 <!-- ================= VIEW: AD HUB ================= -->
-<div id="earn-hub-view" class="content-tab">
+<div id="earn-hub-view" class="content-tab" style="display:none;">
   <div class="inpage-header-nav">
     <div style="display:flex; align-items:center; gap:12px;">
       <div class="circle-btn" onclick="closeEarnHubView()"><i class="fa-solid fa-arrow-left"></i></div>
@@ -339,7 +331,7 @@
 </div>
 
 <!-- ================= VIEW: DEDICATED AD SCREEN ================= -->
-<div id="dedicated-ad-view" class="content-tab">
+<div id="dedicated-ad-view" class="content-tab" style="display:none;">
   <div class="inpage-header-nav">
     <div style="display:flex; align-items:center; gap:12px;">
       <div class="circle-btn" onclick="closeDedicatedAdScreen()"><i class="fa-solid fa-arrow-left"></i></div>
@@ -368,7 +360,7 @@
 </div>
 
 <!-- ================= VIEW: PAYOUT ================= -->
-<div id="payout-view" class="content-tab">
+<div id="payout-view" class="content-tab" style="display:none;">
   <div class="inpage-header-nav">
     <div style="display:flex; align-items:center; gap:12px;">
       <div class="circle-btn" onclick="closePayoutView()"><i class="fa-solid fa-arrow-left"></i></div>
@@ -446,9 +438,7 @@
 </div>
 
 <!-- ================= 4. MASSIVE FULL HD VIDEO UNLOCK & DETAILS VIEW ================= -->
-<div id="video-unlock-detail-view">
-  
-  <!-- ১. বড় আনলক নোটিশ কার্ড -->
+<div id="video-unlock-detail-view" style="display:none;">
   <div class="custom-unlock-notice">
     <div class="cun-left">
       <div class="cun-bell-icon"><i class="fa-solid fa-bell"></i></div>
@@ -462,7 +452,6 @@
     </div>
   </div>
 
-  <!-- ২. বিশাল থাম্বনেইল ও ৩টি সোশ্যাল বাটন কার্ড -->
   <div class="poster-outer-wrapper">
     <div class="poster-card">
       <div class="poster-media-wrap">
@@ -487,23 +476,19 @@
     </div>
   </div>
 
-  <!-- ভিডিও টাইটেল -->
   <h2 class="unlock-movie-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</h2>
 
-  <!-- আনলক মেয়াদের টাইমার -->
   <div class="unlocked-timer-badge" id="unlock-status-timer-card" style="display:none;">
     <div class="ut-title" id="ut-title-txt"><i class="fa-solid fa-clock"></i> আনলক মেয়াদের বাকি:</div>
     <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
   </div>
 
-  <!-- ৩. মূল বড় আনলক বক্স -->
   <div class="unlock-system-container">
     <div class="usc-header">
       <span class="usc-glow-dot"></span>
       <span>এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।</span>
     </div>
 
-    <!-- ৩টি বিশাল স্ট্যাট কার্ড: প্রয়োজন, আমার পয়েন্ট, বাকি -->
     <div class="usc-stats-grid">
       <div class="usc-stat-card card-orange">
         <div class="usc-icon-circle ico-orange"><i class="fa-solid fa-key"></i></div>
@@ -522,7 +507,6 @@
       </div>
     </div>
 
-    <!-- প্রগ্রেস ট্র্যাক -->
     <div class="usc-progress-track">
       <div class="usc-progress-fill" id="unlock-p-bar"></div>
     </div>
@@ -532,19 +516,16 @@
       <div class="usc-prog-sub">পয়েন্ট অথবা ads দিয়ে ভিডিও আনলক করুন।</div>
     </div>
 
-    <!-- বাটন ১: বড় বিজ্ঞাপন আনলক বাটন -->
     <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
       <i class="fa-solid fa-lock"></i> <span>ভিডিও আনলক করুন</span>
     </button>
 
-    <!-- বাটন ২: বড় পয়েন্ট আনলক বাটন -->
     <button class="btn-unlock-teal" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
       <span class="btn-inner-coin-circle"><i class="fa-solid fa-coins"></i></span>
       <span id="ui-point-unlock-btn-txt">আমার পয়েন্ট ব্যবহার করুন</span>
     </button>
   </div>
 
-  <!-- ৪. নিচে আরো দেখুন বাটন -->
   <div class="btn-browse-more-bottom" onclick="closeVideoDetailView()">
     <div class="bbm-left">
       <span class="bbm-icon-box"><i class="fa-solid fa-clapperboard"></i></span>
@@ -552,11 +533,10 @@
     </div>
     <div class="bbm-arrow-circle"><i class="fa-solid fa-chevron-right"></i></div>
   </div>
-
 </div>
 
 <!-- ================= DRAWER: SERIES EPISODES ================= -->
-<div id="series-drawer-modal" class="series-drawer-modal" onclick="if(event.target===this) closeSeriesDrawer()">
+<div id="series-drawer-modal" class="series-drawer-modal" style="display:none;" onclick="if(event.target===this) closeSeriesDrawer()">
   <div class="series-drawer-sheet">
     <div class="series-drawer-header"><h3 id="series-drawer-title">সিরিজের এপিসোড</h3><div class="series-drawer-close" onclick="closeSeriesDrawer()"><i class="fa-solid fa-xmark"></i></div></div>
     <div class="series-episodes-list" id="series-episodes-list"></div>
@@ -586,7 +566,7 @@
 <!-- ================= MODALS ================= -->
 
 <!-- Web Video Player Modal -->
-<div id="web-player-modal" class="modal-wrap" onclick="if(event.target===this) closeWebVideoPlayer()">
+<div id="web-player-modal" class="modal-wrap" style="display:none;" onclick="if(event.target===this) closeWebVideoPlayer()">
   <div class="modal-box" style="max-width: 500px; padding: 16px; background: #030612; text-align: left;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
       <h4 id="web-player-title" style="font-size: 16.5px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 82%;">ভিডিও প্লেয়ার</h4>
@@ -607,7 +587,7 @@
 </div>
 
 <!-- Rules Modal -->
-<div id="rules-modal" class="modal-wrap" onclick="if(event.target===this) this.style.display='none'">
+<div id="rules-modal" class="modal-wrap" style="display:none;" onclick="if(event.target===this) this.style.display='none'">
   <div class="modal-box" style="text-align: left;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
       <h3 style="font-size: 17px; color: var(--primary); display: flex; align-items: center; gap: 8px;" id="rules-modal-title"><i class="fa-solid fa-circle-info"></i> ভিডিও দেখার নিয়ম</h3>
