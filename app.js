@@ -1421,6 +1421,11 @@ function openVideoDetailView(videoId, epIndex = null) {
     currentPlayingPartIndex = epIndex ?? 0;
     const video = allLoadedVideos.find(v => v.id === videoId);
     if (!video) return showToast(APP_LANG === 'bn' ? "ভিডিও পাওয়া যায়নি!" : "Video not found!", "error");
+    
+    // ব্যাক আসার জন্য বর্তমান স্ক্রল ও ভিডিও আইডি সেভ রাখা হলো
+    lastVideoCardScrollPosition = window.scrollY;
+    lastClickedVideoElementId = `video-card-${videoId}`;
+    
     activeDetailVideo = video;
 
     video.views = (video.views || 0) + 1;
@@ -1432,10 +1437,13 @@ function openVideoDetailView(videoId, epIndex = null) {
     if (typeof videoAdProgressMap[videoId] === 'undefined' || !videoUnlockExpiryMap[videoId]) videoAdProgressMap[videoId] = videoAdProgressMap[videoId] || 0;
 
     const badge = $('detail-category-badge');
+    const badgeText = $('detail-category-badge-text');
     if (badge) {
         const isAd = isAdultVideo(video) || currentActiveTab === 'adult', isSer = isSeriesVideo(video) || currentActiveTab === 'series';
-        badge.innerHTML = `<i class="fa-solid ${isAd ? 'fa-fire' : (isSer ? 'fa-layer-group' : 'fa-clapperboard')}"></i> ${APP_LANG === 'bn' ? (isAd ? 'এন্ডাল' : (isSer ? 'সিরিজ' : 'মুভি')) : (isAd ? 'Endal' : (isSer ? 'Series' : 'Movie'))}`;
+        const label = APP_LANG === 'bn' ? (isAd ? 'এন্ডাল' : (isSer ? 'সিরিজ' : 'মুভি')) : (isAd ? 'Endal' : (isSer ? 'Series' : 'Movie'));
+        badge.innerHTML = `<i class="fa-solid ${isAd ? 'fa-fire' : (isSer ? 'fa-layer-group' : 'fa-clapperboard')}"></i> ${label}`;
         badge.style.background = isAd ? 'var(--grad-red)' : (isSer ? 'var(--grad-purple-pink)' : 'var(--grad-blue)');
+        if (badgeText) badgeText.innerText = `${label} কনটেন্ট`;
     }
 
     $('detail-poster-img').src = video.thumb;
@@ -1447,9 +1455,10 @@ function openVideoDetailView(videoId, epIndex = null) {
     updateUnlockProgressUI();
 
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
+    $('main-header').style.display = 'none';
     $('video-unlock-detail-view').style.display = 'block';
     updateTelegramBackButtonState();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function updateDetailLikeUI() {
@@ -1478,34 +1487,70 @@ function toggleDetailVideoLike() {
 function closeVideoDetailView() {
     triggerHaptic('light');
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
+    
+    // ডিটেইলস পেজ লুকিয়ে আগের ট্যাব ওপেন করা
     $('video-unlock-detail-view').style.display = 'none';
-    switchNavTab(currentActiveTab);
+    $('main-header').style.display = 'block';
+    
+    if ($('tab-' + currentActiveTab)) {
+        $('tab-' + currentActiveTab).style.display = 'block';
+    }
+
     updateTelegramBackButtonState();
+
+    // একদম শুরুতে না গিয়ে ঠিক যেখানে ক্লিক করা হয়েছিল সেখানেই ফেরত যাওয়া
+    setTimeout(() => {
+        if (lastClickedVideoElementId && $(lastClickedVideoElementId)) {
+            $(lastClickedVideoElementId).scrollIntoView({ behavior: 'instant', block: 'center' });
+        } else {
+            window.scrollTo({ top: lastVideoCardScrollPosition || 0, behavior: 'instant' });
+        }
+    }, 10);
 }
 
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
-    const vId = activeDetailVideo.id, total = APP_CONFIG.unlockAdCount || 3, isUnlocked = isVideoCurrentlyUnlocked(vId);
-    const t = I18N[APP_LANG], timerCard = $('unlock-status-timer-card'), adBtn = $('btn-unlock-ad-step'), pointBtn = $('btn-unlock-point-step');
+    const vId = activeDetailVideo.id;
+    const total = APP_CONFIG.unlockAdCount || 5;
+    const done = videoAdProgressMap[vId] || 0;
+    const remaining = Math.max(0, total - done);
+    const userPts = userData.balancePoints ?? 0;
+    const isUnlocked = isVideoCurrentlyUnlocked(vId);
+    
+    const timerCard = $('unlock-status-timer-card');
+    const adBtn = $('btn-unlock-ad-step');
+    const pointBtn = $('btn-unlock-point-step');
+
+    // ৩টি নতুন কার্ডের মান সেট
+    if ($('ui-req-ads-count')) $('ui-req-ads-count').innerText = formatNumber(total);
+    if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(userPts);
+    if ($('ui-remaining-ads-count')) $('ui-remaining-ads-count').innerText = formatNumber(isUnlocked ? 0 : remaining);
 
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
 
     if (isUnlocked) {
-        timerCard.style.display = 'flex';
+        if (timerCard) timerCard.style.display = 'flex';
         startExpiryCountdown(vId);
-        $('unlock-ratio-txt').innerText = `${formatNumber(total)} / ${formatNumber(total)} ${t.unlockCompletedTxt} (100%)`;
-        $('unlock-p-bar').style.width = "100%";
+        if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(total)}/${formatNumber(total)}`;
+        if ($('unlock-p-bar')) $('unlock-p-bar').style.width = "100%";
+        
         adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}`;
-        pointBtn.disabled = true; pointBtn.style.opacity = "0.5";
+        pointBtn.disabled = true; 
+        pointBtn.style.opacity = "0.5";
     } else {
-        timerCard.style.display = 'none';
-        pointBtn.disabled = false; pointBtn.style.opacity = "1";
-        const done = videoAdProgressMap[vId] || 0, percent = Math.min(100, Math.round((done / total) * 100));
-        $('unlock-ratio-txt').innerText = `${formatNumber(done)} / ${formatNumber(total)} ${t.unlockCompletedTxt} (${formatNumber(percent)}%)`;
-        $('unlock-p-bar').style.width = percent + "%";
+        if (timerCard) timerCard.style.display = 'none';
+        pointBtn.disabled = false; 
+        pointBtn.style.opacity = "1";
+        
+        const percent = Math.min(100, Math.round((done / total) * 100));
+        if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
+        if ($('unlock-p-bar')) $('unlock-p-bar').style.width = percent + "%";
+
         adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}` :
                          (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}` :
-                         `<i class="fa-solid fa-desktop"></i> ${APP_LANG === 'bn' ? `বিজ্ঞাপন দেখুন (বাকি ${formatNumber(total - done)} টি)` : `Watch Ad (${total - done} remaining)`}`);
+                         `<i class="fa-solid fa-lock"></i> ${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}`);
+
+        pointBtn.innerHTML = `<i class="fa-solid fa-coins"></i> ${APP_LANG === 'bn' ? 'আমার পয়েন্ট ব্যবহার করুন' : 'Use My Points'} (${formatNumber(APP_CONFIG.unlockPointsCost || 5)} pt)`;
     }
 }
 

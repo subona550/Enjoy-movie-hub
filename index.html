@@ -438,48 +438,108 @@
 
 <!-- ================= VIEW: VIDEO UNLOCK & DETAILS ================= -->
 <div id="video-unlock-detail-view">
-    <div class="unlock-notice-card" id="unlock-top-notice">
-        <div class="unc-left"><div class="unc-play-icon"><i class="fa-solid fa-play"></i></div><div class="unc-text"><h4 id="video-unlock-notice-title">ভিডিও আনলক</h4><p id="video-unlock-notice-desc">বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।</p></div></div>
-        <div class="unc-close-btn" onclick="document.getElementById('unlock-top-notice').style.display='none'"><i class="fa-solid fa-xmark"></i></div>
-    </div>
-    <div class="poster-outer-wrapper">
-        <div class="poster-card">
-            <div class="poster-media-wrap">
-                <span class="poster-badge-top" id="detail-category-badge"><i class="fa-solid fa-clapperboard"></i> মুভি</span>
-                <img id="detail-poster-img" src="" alt="Thumbnail" decoding="async">
-                <span class="poster-badge-bottom" id="detail-duration-badge"><i class="fa-regular fa-clock"></i> HD</span>
-            </div>
-            <div class="poster-social-row">
-                <div class="poster-pill-btn" id="detail-like-btn-action" onclick="toggleDetailVideoLike()"><i class="fa-solid fa-thumbs-up"></i> <span id="detail-likes-txt">০ লাইক</span></div>
-                <div class="poster-pill-btn" style="cursor:default;"><i class="fa-solid fa-eye"></i> <span id="detail-views-txt">০ ভিউ</span></div>
-                <div class="poster-pill-btn" onclick="openTelegramMandatoryModal()"><i class="fa-brands fa-telegram"></i> <span id="detail-tg-txt">টেলিগ্রাম</span></div>
+    
+    <!-- শীর্ষ আনলক নোটিশ কার্ড -->
+    <div class="custom-unlock-notice">
+        <div class="cun-left">
+            <div class="cun-bell-icon"><i class="fa-solid fa-bell"></i></div>
+            <div class="cun-meta">
+                <div class="cun-head-row">
+                    <h4 id="video-unlock-notice-title">আনলক নোটিশ</h4>
+                    <span class="cun-cat-badge" id="detail-category-badge-pill"><i class="fa-solid fa-clapperboard"></i> <span id="detail-category-badge-text">মুভি কনটেন্ট</span></span>
+                </div>
+                <p id="video-unlock-notice-desc">এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।</p>
             </div>
         </div>
     </div>
-    <div class="unlock-file-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</div>
+
+    <!-- থাম্বনেইল ও সোশাল বাটন কার্ড -->
+    <div class="poster-outer-wrapper">
+        <div class="poster-card">
+            <div class="poster-media-wrap">
+                <span class="poster-badge-top" id="detail-category-badge"><i class="fa-solid fa-film"></i> মুভি</span>
+                <img id="detail-poster-img" src="" alt="Thumbnail" decoding="async">
+                <span class="poster-badge-bottom" id="detail-duration-badge"><i class="fa-regular fa-clock"></i> 4K 2:27:35</span>
+            </div>
+            <div class="poster-social-row">
+                <div class="poster-pill-btn" id="detail-like-btn-action" onclick="toggleDetailVideoLike()">
+                    <i class="fa-solid fa-thumbs-up"></i> <span id="detail-likes-txt">০ লাইক</span>
+                </div>
+                <div class="poster-pill-btn" style="cursor:default;">
+                    <i class="fa-solid fa-eye"></i> <span id="detail-views-txt">০ ভিউ</span>
+                </div>
+                <div class="poster-pill-btn" onclick="openTelegramMandatoryModal()">
+                    <i class="fa-brands fa-telegram"></i> <span id="detail-tg-txt">টেলিগ্রাম</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ভিডিও টাইটেল -->
+    <h2 class="unlock-movie-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</h2>
+
+    <!-- আনলক মেয়াদের টাইমার (আনলক থাকলে শো করবে) -->
     <div class="unlocked-timer-badge" id="unlock-status-timer-card" style="display:none;">
         <div class="ut-title" id="ut-title-txt"><i class="fa-solid fa-clock"></i> আনলক মেয়াদের বাকি:</div>
         <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
     </div>
-    <div class="unlock-action-card shimmer-card-effect" id="ad-unlock-section-box">
-        <div class="uac-top">
-            <div class="uac-left"><div class="uac-icon"><i class="fa-solid fa-play"></i></div><div class="uac-title"><h4 id="lbl-uac-ad-title">বিজ্ঞাপন দেখে আনলক</h4><p id="ui-ad-progress-desc">নির্দিষ্ট অ্যাড দেখে আনলক করুন</p></div></div>
-            <span class="uac-badge-green" id="ui-ad-duration-badge">২ ঘণ্টার জন্য ফ্রি</span>
+
+    <!-- মূল আনলক বক্স (স্ক্রিনশটের মতো) -->
+    <div class="unlock-system-container shimmer-card-effect">
+        <div class="usc-header">
+            <span class="usc-glow-dot"></span>
+            <span>এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।</span>
         </div>
-        <div class="uac-progress-box">
-            <div class="uac-progress-txt"><span><i class="fa-regular fa-circle-dot" style="color:var(--primary);"></i> <span id="lbl-unlock-progress-txt">আনলক অগ্রগতি:</span></span><span id="unlock-ratio-txt">০ সম্পন্ন</span></div>
-            <div class="uac-p-bar-outer"><div class="uac-p-bar-fill" id="unlock-p-bar"></div></div>
+
+        <!-- ৩টি স্ট্যাট কার্ড -->
+        <div class="usc-stats-grid">
+            <div class="usc-stat-card card-orange">
+                <div class="usc-icon-circle ico-orange"><i class="fa-solid fa-key"></i></div>
+                <div class="usc-stat-label">প্রয়োজন</div>
+                <div class="usc-stat-val" id="ui-req-ads-count">৫</div>
+            </div>
+            <div class="usc-stat-card card-green">
+                <div class="usc-icon-circle ico-green"><i class="fa-solid fa-coins"></i></div>
+                <div class="usc-stat-label">আমার পয়েন্ট</div>
+                <div class="usc-stat-val" id="ui-user-points-count">০</div>
+            </div>
+            <div class="usc-stat-card card-purple">
+                <div class="usc-icon-circle ico-purple"><i class="fa-solid fa-hourglass-half"></i></div>
+                <div class="usc-stat-label">বাকি</div>
+                <div class="usc-stat-val" id="ui-remaining-ads-count">৫</div>
+            </div>
         </div>
-        <button class="btn-action-cyan" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()"><i class="fa-solid fa-desktop"></i> <span id="btn-ad-remain-txt">বিজ্ঞাপন দেখুন</span></button>
+
+        <!-- প্রগ্রেস ট্র্যাক -->
+        <div class="usc-progress-track">
+            <div class="usc-progress-fill" id="unlock-p-bar"></div>
+        </div>
+
+        <div class="usc-progress-info">
+            <div class="usc-prog-count">প্রগ্রেস: <span id="unlock-ratio-txt">০/৫</span></div>
+            <div class="usc-prog-sub">পয়েন্ট অথবা ads দিয়ে আনলক করুন।</div>
+        </div>
+
+        <!-- বাটন ১: বিজ্ঞাপন আনলক বাটন -->
+        <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
+            <i class="fa-solid fa-lock"></i> <span id="btn-ad-remain-txt">ভিডিও আনলক করুন</span>
+        </button>
+
+        <!-- বাটন ২: পয়েন্ট আনলক বাটন -->
+        <button class="btn-unlock-teal" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
+            <i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">আমার পয়েন্ট ব্যবহার করুন</span>
+        </button>
     </div>
-    <div class="unlock-action-card shimmer-card-effect" id="point-unlock-section-box">
-        <div class="uac-top">
-            <div class="uac-left"><div class="uac-icon" style="background:rgba(255,224,0,0.15); color:#ffe000;"><i class="fa-solid fa-gem"></i></div><div class="uac-title"><h4 id="lbl-uac-point-title">পয়েন্ট দিয়ে সরাসরি আনলক</h4><p id="ui-point-duration-desc">২৪ ঘণ্টার জন্য আনলক থাকবে</p></div></div>
-            <div style="text-align:right;"><div style="font-size:12px; color:#8ba2c4; font-weight:800;" id="lbl-cost-txt">খরচ</div><div style="font-size:19px; font-weight:900; color:#ffe000;" id="ui-cost-points-badge">৫</div><div style="font-size:12px; font-weight:800; color:#ffe000;" id="lbl-points-unit">পয়েন্ট</div></div>
+
+    <!-- নিচে স্ক্রিনশটের মতো পিংক গ্রেডিয়েন্ট ব্যাক বাটন -->
+    <div class="btn-browse-more-bottom" onclick="closeVideoDetailView()">
+        <div class="bbm-left">
+            <i class="fa-solid fa-film"></i>
+            <span>আরো দেখুন</span>
         </div>
-        <button class="btn-action-gold" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()"><i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">পয়েন্ট দিয়ে আনলক করুন</span></button>
+        <i class="fa-solid fa-chevron-right bbm-arrow"></i>
     </div>
-    <div class="btn-back-home" onclick="closeVideoDetailView()"><div class="btn-back-home-left" style="display:flex; align-items:center; gap:8px;"><div class="back-circle-icon"><i class="fa-solid fa-arrow-left"></i></div><span id="lbl-back-home-txt">হোমে ফিরে যান</span></div></div>
+
 </div>
 
 <!-- ================= DRAWER: SERIES EPISODES ================= -->
