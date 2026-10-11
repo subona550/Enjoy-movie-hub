@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-head-title">ইনজ়য় মুভিজ আল্ট্রা এইচডি</title>
+    
+    <!-- Telegram & Ad SDKs -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script defer src="https://sad.adsgram.ai/js/sad.min.js"></script>
+    <script src="//libtl.com/sdk.js" data-zone="11928576" data-sdk="show_11928576"></script>
+    <script src="https://js.onclckvd.com/in-stream-ad-admanager/tma.js"></script>
+    
+    <!-- Third-Party Libraries -->
+    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
+    
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= PRELOADER ================= -->
+<div id="app-preloader">
+    <div class="preloader-bg-glow"></div>
+    <div class="preloader-content">
+        <div class="ring-wrapper">
+            <div class="outer-ring"></div>
+            <div class="inner-ring"></div>
+            <div class="center-circle"><span class="letter">R</span></div>
+        </div>
+        <div class="bot-title">Ret2_bot</div>
+    </div>
+</div>
+
+<!-- ================= SYSTEM ALERTS / SCREENS ================= -->
+<div id="banned-screen">
+    <div class="banned-icon-circle"><i class="fa-solid fa-ban"></i></div>
+    <h2 style="font-size: 22px; color: #fff; margin-bottom: 8px; font-weight: 900;" id="banned-title">আপনার একাউন্ট স্থগিত করা হয়েছে</h2>
+    <p style="font-size: 14px; color: #8ba2c4; line-height: 1.6; max-width: 320px; margin-bottom: 22px; font-weight: 700;" id="banned-desc">অ্যাপের নিয়ম ভঙ্গের কারণে আপনার আইডিটি সাময়িক বা স্থায়ীভাবে ব্যান করা হয়েছে। বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।</p>
+    <button class="btn-action-cyan" onclick="goToTelegramChannel()" style="max-width: 220px;" id="btn-banned-support"><i class="fa-brands fa-telegram"></i> সাপোর্টে মেসেজ দিন</button>
+</div>
+
+<div id="maintenance-screen">
+    <div style="font-size: 52px; color: #ffe000; margin-bottom: 14px;"><i class="fa-solid fa-wrench"></i></div>
+    <h2 style="font-size: 21px; color: #fff; margin-bottom: 8px; font-weight: 900;" id="maint-title">অ্যাপ সাময়িক রক্ষণাবেক্ষণে আছে</h2>
+    <p style="font-size: 14px; color: #8ba2c4; line-height: 1.5; max-width: 320px; font-weight: 700;" id="maint-desc">আমরা সিস্টেম আপডেট করছি। কিছুক্ষণ পর আবার চেষ্টা করুন।</p>
+</div>
+
+<div id="top-toast" class="top-toast">
+    <i class="fa-solid fa-circle-info" id="toast-icon"></i>
+    <span id="toast-msg">বার্তা</span>
+</div>
+
+<!-- ================= SIDEBAR DRAWER ================= -->
+<div id="drawer-overlay" class="drawer-overlay" onclick="toggleSidebarMenu(false)"></div>
+<div id="drawer-menu" class="drawer-menu">
+    <div class="drawer-header">
+        <h2 id="menu-title-txt">মেনু</h2>
+        <div class="drawer-close-btn" onclick="toggleSidebarMenu(false)"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+    <div class="drawer-items-list">
+        <div class="drawer-item active-blue-grad" id="drawer-nav-movies" onclick="navFromDrawer('movies')"><i class="fa-solid fa-clapperboard"></i><span id="drawer-item-movie">মুভি</span></div>
+        <div class="drawer-item" id="drawer-nav-series" onclick="navFromDrawer('series')"><i class="fa-solid fa-layer-group"></i><span id="drawer-item-series">সিরিজ</span></div>
+        <div class="drawer-item" id="drawer-nav-adult" onclick="navFromDrawer('adult')"><i class="fa-solid fa-fire"></i><span id="drawer-item-adult">এন্ডাল</span></div>
+        <div class="drawer-item" id="drawer-nav-profile" onclick="navFromDrawer('profile')"><i class="fa-solid fa-user"></i><span id="drawer-item-profile">ইউজার প্রোফাইল</span></div>
+    </div>
+    <div class="drawer-lang-card">
+        <div class="drawer-lang-title" id="drawer-lang-label"><i class="fa-solid fa-language"></i> ভাষা পরিবর্তন / Language</div>
+        <div class="drawer-lang-buttons">
+            <button class="drawer-lang-btn active" id="btn-lang-bn" onclick="changeAppLang('bn')">🇧🇩 বাংলা</button>
+            <button class="drawer-lang-btn" id="btn-lang-en" onclick="changeAppLang('en')">🇺🇸 English</button>
+        </div>
+    </div>
+    <div class="drawer-section-lbl" id="menu-social-lbl">সোশ্যাল লিংক</div>
+    <div class="drawer-item" onclick="goToTelegramChannel()" style="background: #081126;"><i class="fa-brands fa-telegram" style="color: var(--primary); font-size: 19px;"></i><span id="menu-telegram-name">টেলিগ্রাম</span></div>
+</div>
+
+<!-- ================= MAIN HEADER ================= -->
+<header id="main-header">
+    <div class="header-container">
+        <div class="head-left">
+            <div class="circle-btn" onclick="toggleSidebarMenu(true)"><i class="fa-solid fa-bars"></i></div>
+            <div class="brand-logo-wrap" onclick="switchNavTab('movies')">
+                <div class="brand-logo-icon"><i class="fa-solid fa-play"></i></div>
+                <div class="brand-title" id="app-brand-title">ইনজ়য় মুভিজ</div>
+                <span class="badge-ultra" id="app-header-badge">সিনেমা</span>
+            </div>
+        </div>
+        <div class="circle-btn" onclick="toggleSearchBox()"><i class="fa-solid fa-magnifying-glass"></i></div>
+    </div>
+</header>
+
+<!-- SEARCH BAR -->
+<div id="search-container" style="display:none; padding: 10px 14px; background: #070e20;">
+    <input type="text" id="video-search-input" class="premium-input" placeholder="ভিডিও বা সিনেমার নাম খুঁজুন..." oninput="debouncedSearch()" style="margin-bottom:0;">
+</div>
+
+<!-- ================= TAB: MOVIES ================= -->
+<div id="tab-movies" class="content-tab">
+    <div class="hero-banner-grid">
+        <div id="hero-card-movie-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'new_movie', 'movies')">
+            <div class="hero-icon-box"><i class="fa-solid fa-clapperboard"></i></div>
+            <div class="hero-text"><h3 id="movie-hero-title1">নতুন সিনেমা</h3><p id="movie-hero-sub1">সর্বশেষ রিলিজ</p></div>
+        </div>
+        <div id="hero-card-movie-trending" class="hero-card hero-teal" onclick="handleHeroSectionClick(this, 'trending', 'movies')">
+            <div class="hero-icon-box"><i class="fa-solid fa-bolt"></i></div>
+            <div class="hero-text"><h3 id="movie-hero-title2">হট সিনেমা</h3><p id="movie-hero-sub2">জনপ্রিয় সিনেমা</p></div>
+        </div>
+    </div>
+    
+    <div class="featured-card shimmer-card-effect">
+        <div class="featured-top-row">
+            <span class="pill-tag-outline" id="movie-badge-feature"><i class="fa-solid fa-film"></i> মুভিজ</span>
+            <div class="counter-badge-box"><span id="movie-total-count">০</span><small id="movie-count-sub">মুভি</small></div>
+        </div>
+        <h2 id="movie-feature-title">সিনেমা লাইব্রেরি</h2>
+        <p id="movie-feature-desc">আপনার পছন্দের সিনেমার উপর ক্লিক করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।</p>
+        <button class="btn-unlock-blue" onclick="openVideoRulesModal()"><i class="fa-solid fa-circle-info"></i> <span id="btn-video-rules-txt">ভিডিও দেখার নিয়ম</span></button>
+    </div>
+
+    <div class="category-filter-section" id="movie-cat-section">
+        <div class="category-filter-header">
+            <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
+        </div>
+        <div class="category-pills-grid" id="movie-category-chips"></div>
+    </div>
+
+    <div class="section-bar"><div class="section-bar-title" id="movie-bar-title">নতুন সিনেমা</div><span class="tag-pill-green" id="tag-pill-movie">⚡ সিনেমা</span></div>
+    <div id="movie-list-grid" class="video-grid"></div>
+    <div id="movie-pagination" class="pagination-container" style="display:none;"></div>
+    <div id="movie-empty-card" class="empty-video-card" style="display:none;">সিনেমা লাইব্রেরিতে কোনো সিনেমা পাওয়া যায়নি!</div>
+</div>
+
+<!-- ================= TAB: SERIES ================= -->
+<div id="tab-series" class="content-tab" style="display:none;">
+    <div class="hero-banner-grid">
+        <div id="hero-card-series-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'new_series', 'series')">
+            <div class="hero-icon-box"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="hero-text"><h3 id="series-hero-title1">নতুন সিরিজ</h3><p id="series-hero-sub1">ফুল সিজন</p></div>
+        </div>
+        <div id="hero-card-series-hot" class="hero-card hero-teal" onclick="handleHeroSectionClick(this, 'top_rated', 'series')">
+            <div class="hero-icon-box"><i class="fa-solid fa-bolt"></i></div>
+            <div class="hero-text"><h3 id="series-hero-title2">হট সিরিজ</h3><p id="series-hero-sub2">জনপ্রিয় সিরিজ</p></div>
+        </div>
+    </div>
+    
+    <div class="featured-card shimmer-card-effect">
+        <div class="featured-top-row">
+            <span class="pill-tag-outline" id="series-badge-feature"><i class="fa-solid fa-layer-group"></i> ওয়েব সিরিজ</span>
+            <div class="counter-badge-box"><span id="series-total-count">০</span><small id="series-count-sub">সিরিজ</small></div>
+        </div>
+        <h2 id="series-feature-title">সিরিজ লাইব্রেরি</h2>
+        <p id="series-feature-desc">দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।</p>
+    </div>
+
+    <div class="category-filter-section" id="series-cat-section">
+        <div class="category-filter-header">
+            <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
+        </div>
+        <div class="category-pills-grid" id="series-category-chips"></div>
+    </div>
+
+    <div class="section-bar"><div class="section-bar-title" id="series-bar-title">নতুন সিরিজ (ফুল সিজন)</div><span class="tag-pill-green" id="tag-pill-series">⚡ ফুল সিজন</span></div>
+    <div id="series-list-grid" class="video-grid"></div>
+    <div id="series-pagination" class="pagination-container" style="display:none;"></div>
+    <div id="series-empty-card" class="empty-video-card" style="display:none;">সিরিজ লাইব্রেরিতে কোনো সিরিজ পাওয়া যায়নি!</div>
+</div>
+
+<!-- ================= TAB: ADULT ================= -->
+<div id="tab-adult" class="content-tab" style="display:none;">
+    <div class="hero-banner-grid">
+        <div id="hero-card-adult-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'adult_new', 'adult')">
+            <div class="hero-icon-box"><i class="fa-solid fa-fire"></i></div>
+            <div class="hero-text"><h3 id="adult-hero-title1">নতুন এন্ডাল</h3><p id="adult-hero-sub1">লেটেস্ট আপডেট</p></div>
+        </div>
+        <div id="hero-card-adult-hot" class="hero-card hero-teal" onclick="handleHeroSectionClick(this, 'adult_hot', 'adult')">
+            <div class="hero-icon-box"><i class="fa-solid fa-bolt"></i></div>
+            <div class="hero-text"><h3 id="adult-hero-title2">হট এন্ডাল</h3><p id="adult-hero-sub2">জনপ্রিয় কালেকশন</p></div>
+        </div>
+    </div>
+
+    <div class="featured-card shimmer-card-effect">
+        <div class="featured-top-row">
+            <span class="pill-tag-outline" id="adult-badge-feature"><i class="fa-solid fa-fire"></i> এন্ডাল বিশেষ কালেকশন</span>
+            <div class="counter-badge-box"><span id="adult-total-count">০</span><small id="adult-count-sub">ভিডিও</small></div>
+        </div>
+        <h2 id="adult-feature-title">এন্ডাল ভিডিও লাইব্রেরি</h2>
+        <p id="adult-feature-desc" style="margin-bottom:0;">আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।</p>
+    </div>
+
+    <div class="category-filter-section" id="adult-cat-section">
+        <div class="category-filter-header">
+            <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
+        </div>
+        <div class="category-pills-grid" id="adult-category-chips"></div>
+    </div>
+
+    <div class="section-bar"><div class="section-bar-title" id="adult-bar-title">নতুন এন্ডাল</div><span class="tag-pill-green" id="tag-pill-ultra-adult">⚡ আল্ট্রা এইচডি</span></div>
+    <div id="adult-list-grid" class="video-grid"></div>
+    <div id="adult-pagination" class="pagination-container" style="display:none;"></div>
+    <div id="adult-empty-card" class="empty-video-card" style="display:none;">এই সেকশনে কোনো ভিডিও পাওয়া যায়নি!</div>
+</div>
+
+<!-- ================= TAB: PROFILE ================= -->
+<div id="tab-profile" class="content-tab" style="display:none;">
+    <div class="profile-user-card shimmer-card-effect">
+        <div class="profile-avatar-wrap"><i class="fa-solid fa-user"></i><div class="status-dot-online"></div></div>
+        <div class="profile-meta">
+            <h3><span id="u-profile-name">ব্যবহারকারী</span> <span class="badge-vip" id="u-badge-vip">ভিআইপি</span></h3>
+            <span class="profile-handle-txt" id="u-profile-handle">@user</span>
+            <div class="profile-id-txt"><i class="fa-solid fa-fingerprint"></i> <span id="lbl-uid-prefix">আইডি:</span> <span id="u-profile-id" style="color:#fff; font-weight:900;">লোড হচ্ছে...</span></div>
+        </div>
+    </div>
+    
+    <div class="section-bar" style="padding: 4px 12px 8px;">
+        <div class="section-bar-title" style="font-size:16px; color:var(--primary);" id="overview-bar-title"><i class="fa-solid fa-chart-simple"></i> ব্যালেন্স ওভারভিউ</div>
+    </div>
+    <div class="stat-grid-duo" id="profile-stats-container">
+        <div class="stat-card-box shimmer-card-effect">
+            <div><div class="stat-card-val" id="profile-points-val">০</div><div class="stat-card-lbl" id="lbl-stat-my-points">আমার পয়েন্ট</div></div>
+            <div class="stat-circle-icon"><i class="fa-solid fa-coins"></i></div>
+        </div>
+        <div class="stat-card-box shimmer-card-effect">
+            <div><div class="stat-card-val blue-val" id="profile-ref-count">০</div><div class="stat-card-lbl" id="lbl-stat-active-ref">সক্রিয় রেফারেল</div></div>
+            <div class="stat-circle-icon blue-icon"><i class="fa-solid fa-users"></i></div>
+        </div>
+    </div>
+
+    <div class="withdraw-banner-card shimmer-card-effect">
+        <div class="wb-header">
+            <div class="wb-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            <div class="wb-title"><h4 id="profile-withdraw-title">টাকা উত্তোলন (বিকাশ/নগদ/রিচার্জ)</h4><p id="profile-withdraw-sub">সহজ ও দ্রুত পেমেন্ট রিকোয়েস্ট ও হিস্টোরি</p></div>
+        </div>
+        <div class="wb-bottom-row">
+            <div class="wb-min-info" id="ui-min-withdraw-summary">রিচার্জ: ২০ ৳ | বিকাশ/নগদ: ৫০ ৳</div>
+            <button class="btn-withdraw-green" onclick="openPayoutView()" id="btn-open-withdraw"><i class="fa-solid fa-money-bill-wave"></i> <span id="btn-open-withdraw-txt">উত্তোলন করুন</span></button>
+        </div>
+    </div>
+    
+    <div class="section-bar" style="padding: 4px 12px 8px;">
+        <div class="section-bar-title" style="font-size:16px; color:var(--primary);" id="earn-bar-title"><i class="fa-solid fa-bolt"></i> পয়েন্ট আয় করুন</div>
+    </div>
+
+    <div class="ad-earn-box-wrapper profile-large-card shimmer-card-effect">
+        <div class="ad-earn-top-row">
+            <div class="ad-earn-icon-square"><i class="fa-solid fa-bolt"></i></div>
+            <div class="ad-earn-text-group">
+                <h3 id="profile-earn-title">রিওয়ার্ড অ্যাড দেখে পয়েন্ট আয় করুন</h3>
+                <p id="profile-earn-desc">বিজ্ঞাপন দেখে পয়েন্ট সংগ্রহ করে ভিডিও আনলক করুন অথবা সরাসরি টাকা উত্তোলন করুন।</p>
+            </div>
+        </div>
+        <div class="ad-earn-pills-row">
+            <span class="earn-pill pill-gold" id="pill-badge-instant"><i class="fa-solid fa-circle-check"></i> ৩টি মাল্টিপল নেটওয়ার্ক</span>
+            <span class="earn-pill pill-cyan" id="pill-badge-freecoins"><i class="fa-solid fa-coins"></i> ফ্রি পয়েন্ট</span>
+        </div>
+        <button class="btn-earn-gradient" onclick="openEarnHubView()" id="btn-profile-earn-more"><i class="fa-solid fa-bolt"></i> <span id="btn-profile-earn-more-txt">আরও পয়েন্ট আয় করুন</span></button>
+    </div>
+
+    <div class="section-bar" style="padding: 4px 12px 8px;">
+        <div class="section-bar-title" style="font-size:16px; color:var(--primary);" id="ref-bar-title"><i class="fa-solid fa-shield-halved"></i> সিকিউর রেফারেল সিস্টেম</div>
+    </div>
+
+    <div class="refer-details-card profile-large-card shimmer-card-effect">
+        <div class="ref-info-line"><span id="lbl-ref-bonus">সক্রিয় রেফারেল রিওয়ার্ড</span><b id="ui-referral-bonus-txt">২০ পয়েন্ট</b></div>
+        <div class="ref-info-line"><span id="lbl-join-bonus">বন্ধু জয়েন বোনাস</span><b id="ui-signup-bonus-txt">১০ পয়েন্ট</b></div>
+        <div class="ref-info-line"><span id="lbl-anti-fraud">শর্ত (অ্যান্টি-ফ্রড)</span><span style="font-size:13px; color:var(--primary); font-weight:800;" id="ui-ref-condition-txt">বন্ধু ৩টি বিজ্ঞাপন দেখলে পয়েন্ট যোগ হবে</span></div>
+        <div class="ref-info-line"><span id="lbl-ref-code">রেফারেল কোড</span><div class="ref-code-value" onclick="copyReferCode()"><span id="ref-user-code" style="color:var(--primary);">...</span> <i class="fa-regular fa-copy"></i></div></div>
+        <div style="font-size:14px; color:#cbd5e1; margin-top:12px; font-weight:800;" id="lbl-ref-link">আপনার রেফারেল লিংক</div>
+        <div class="ref-link-box" id="ref-share-url-box" onclick="copyReferLink()">লিংক প্রস্তুত হচ্ছে...</div>
+        <div style="display: flex; gap: 10px; margin-top: 14px;">
+            <button class="btn-share-ref" onclick="shareReferralLink()" style="flex: 1.2; background: var(--grad-blue); color:#fff;" id="btn-share-ref-link"><i class="fa-solid fa-share-nodes"></i> <span id="btn-share-ref-txt">শেয়ার করুন</span></button>
+            <button class="btn-share-ref" onclick="copyReferLink()" style="flex: 1; background: #09132e; border: 1.5px solid var(--card-border); color: var(--primary);" id="btn-copy-ref-link"><i class="fa-regular fa-copy"></i> <span id="btn-copy-ref-txt">লিংক কপি</span></button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= VIEW: AD HUB ================= -->
+<div id="earn-hub-view" class="content-tab">
+    <div class="inpage-header-nav">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div class="circle-btn" onclick="closeEarnHubView()"><i class="fa-solid fa-arrow-left"></i></div>
+            <div>
+                <h3 style="font-size:18px; font-weight:900; color:#fff;" id="earn-hub-page-head">অ্যাড নেটওয়ার্ক সিলেক্টর</h3>
+                <small style="color:#8ba2c4; font-weight:700; font-size:13px;" id="earn-hub-page-sub">পছন্দের নেটওয়ার্ক নির্বাচন করে পয়েন্ট আয় করুন</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="ad-hub-grid">
+        <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('adsgram')">
+            <div class="ad-net-card-left">
+                <div class="ad-net-square-icon sq-icon-adsgram"><i class="fa-solid fa-play"></i></div>
+                <div class="ad-net-meta">
+                    <h4>Adsgram Ads</h4>
+                    <p id="hub-limit-adsgram">দৈনিক ১০টি অ্যাড</p>
+                </div>
+            </div>
+            <div class="ad-net-badge"><i class="fa-solid fa-gift"></i> <span id="hub-reward-adsgram">২ pt</span></div>
+        </div>
+
+        <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('monetag')">
+            <div class="ad-net-card-left">
+                <div class="ad-net-square-icon sq-icon-monetag"><i class="fa-solid fa-bolt"></i></div>
+                <div class="ad-net-meta">
+                    <h4>Monetag Ads</h4>
+                    <p id="hub-limit-monetag">দৈনিক ১০টি অ্যাড</p>
+                </div>
+            </div>
+            <div class="ad-net-badge" style="border-color:#ff0844; color:#ff6b8b; background:rgba(255,8,68,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-monetag">২ pt</span></div>
+        </div>
+
+        <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('onclicka')">
+            <div class="ad-net-card-left">
+                <div class="ad-net-square-icon sq-icon-onclicka"><i class="fa-solid fa-coins"></i></div>
+                <div class="ad-net-meta">
+                    <h4>Onclicka Ads</h4>
+                    <p id="hub-limit-onclicka">দৈনিক ১০টি অ্যাড</p>
+                </div>
+            </div>
+            <div class="ad-net-badge" style="border-color:#ffe000; color:#ffe000; background:rgba(255,224,0,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-onclicka">২ pt</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= VIEW: DEDICATED AD SCREEN ================= -->
+<div id="dedicated-ad-view" class="content-tab">
+    <div class="inpage-header-nav">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div class="circle-btn" onclick="closeDedicatedAdScreen()"><i class="fa-solid fa-arrow-left"></i></div>
+            <div>
+                <h3 style="font-size:18px; font-weight:900; color:#fff;" id="ded-screen-title">Adsgram Ads</h3>
+                <small style="color:#8ba2c4; font-weight:700; font-size:13px;" id="ded-screen-subtitle">বিজ্ঞাপন দেখে পয়েন্ট সংগ্রহ করুন</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="earn-stats-2x2" style="margin-top: 14px;">
+        <div class="earn-stat-box shimmer-card-effect"><div><div class="earn-stat-num" id="ded-stat-balance">০</div><div class="earn-stat-title" id="lbl-ded-stat-balance">বর্তমান পয়েন্ট</div></div><div class="stat-rounded-icon sri-gold"><i class="fa-solid fa-coins"></i></div></div>
+        <div class="earn-stat-box shimmer-card-effect"><div><div class="earn-stat-num" id="ded-stat-reward">২</div><div class="earn-stat-title" id="lbl-ded-stat-reward">প্রতি অ্যাড পয়েন্ট</div></div><div class="stat-rounded-icon sri-pink"><i class="fa-solid fa-gift"></i></div></div>
+        <div class="earn-stat-box shimmer-card-effect"><div><div class="earn-stat-num" id="ded-stat-watched">০</div><div class="earn-stat-title" id="lbl-ded-stat-watched">দেখা বিজ্ঞাপন</div></div><div class="stat-rounded-icon sri-cyan"><i class="fa-solid fa-eye"></i></div></div>
+        <div class="earn-stat-box shimmer-card-effect"><div><div class="earn-stat-num" id="ded-stat-limit">১০</div><div class="earn-stat-title" id="lbl-ded-stat-limit">দৈনিক লিমিট</div></div><div class="stat-rounded-icon sri-emerald"><i class="fa-solid fa-shield-halved"></i></div></div>
+    </div>
+    
+    <div class="settings-detail-card shimmer-card-effect">
+        <div class="sd-row"><span id="lbl-ded-row-reward">প্রতি অ্যাড রিওয়ার্ড</span><b id="ded-row-reward">২ পয়েন্ট</b></div>
+        <div class="sd-row"><span id="lbl-ded-row-limit">সর্বোচ্চ দৈনিক বিজ্ঞাপন</span><b id="ded-row-limit">১০</b></div>
+        <div class="sd-row" style="border-bottom:none;"><span id="lbl-ded-row-remaining">আজ বাকি আছে</span><b id="ded-row-remaining">১০</b></div>
+        <div class="sd-progress-track"><div class="sd-progress-bar" id="ded-progress-bar"></div></div>
+        <div class="sd-progress-foot" id="ded-progress-text">০ / ১০ আজ সম্পন্ন হয়েছে</div>
+        <button class="btn-earn-gradient" id="btn-watch-dedicated-ad" onclick="watchSpecificNetworkAd()" style="margin-top: 14px;"><i class="fa-solid fa-play"></i> <span id="btn-watch-ded-txt">বিজ্ঞাপন দেখে পয়েন্ট নিন</span></button>
+    </div>
+</div>
+
+<!-- ================= VIEW: PAYOUT ================= -->
+<div id="payout-view" class="content-tab">
+    <div class="inpage-header-nav">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div class="circle-btn" onclick="closePayoutView()"><i class="fa-solid fa-arrow-left"></i></div>
+            <div>
+                <h3 style="font-size:18px; font-weight:900; color:#fff;" id="payout-page-head">টাকা উত্তোলন</h3>
+                <small style="color:#8ba2c4; font-weight:700; font-size:13px;" id="payout-page-sub">বিকাশ, নগদ ও মোবাইল রিচার্জ</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="payout-page-wrapper">
+        <div class="payout-switch-tabs">
+            <button class="payout-tab-btn active" id="tab-btn-withdraw-form" onclick="switchPayoutInnerTab('form')"><i class="fa-solid fa-money-bill-transfer"></i> <span id="lbl-tab-withdraw">উত্তোলন</span></button>
+            <button class="payout-tab-btn" id="tab-btn-withdraw-history" onclick="switchPayoutInnerTab('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span id="lbl-tab-history">হিস্টোরি</span></button>
+        </div>
+
+        <div class="payout-balance-card shimmer-card-effect" id="payout-balance-card-box">
+            <div class="pbc-left"><small id="lbl-cur-bal">বর্তমান ব্যালেন্স</small><b><span id="payout-modal-pts">০</span> <span id="lbl-pts-unit">পয়েন্ট</span></b></div>
+            <div class="pbc-right"><small id="lbl-taka-equiv">টাকার পরিমাণ</small><b><span id="lbl-currency-symbol">৳</span> <span id="payout-modal-tk">০.০০</span></b></div>
+        </div>
+
+        <div id="payout-form-view">
+            <div class="payout-admin-notice-box" id="payout-admin-notice-box" style="background: rgba(0, 229, 255, 0.08); border: 1.5px solid var(--card-border); border-radius: 16px; padding: 12px 14px; margin-bottom: 14px; text-align: left;">
+                <div class="pan-title" style="font-size: 13.5px; font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><i class="fa-solid fa-bullhorn"></i> <span id="lbl-admin-notice-title">অ্যাডমিন নোটিশ</span></div>
+                <div class="pan-desc" id="ui-payout-admin-notice" style="font-size: 13px; color: #d0e1fd; line-height: 1.5; font-weight: 700;">উত্তোলন রিকোয়েস্ট দেওয়ার সর্বোচ্চ ২৪ ঘণ্টার মধ্যে পেমেন্ট কমপ্লিট করা হবে। সঠিক নম্বর প্রদান করুন।</div>
+            </div>
+
+            <div style="font-size: 14px; color: #8ba2c4; font-weight: 800; margin-bottom: 8px; text-align: left;" id="lbl-choose-gw">উত্তোলন মাধ্যম বেছে নিন:</div>
+            
+            <div class="gateway-grid-select">
+                <div class="gateway-opt-card active" id="gw-card-bKash" onclick="selectGateway('bKash')">
+                    <span class="gw-off-badge" id="gw-badge-bkash" style="display:none;">বন্ধ</span>
+                    <div class="gateway-opt-name" style="color: #ff0844; font-weight:900; font-size:15px;" id="gw-title-bkash">বিকাশ</div>
+                    <div class="gateway-opt-min" style="color:#ffe000; font-size:11.5px; font-weight:800; margin-top:2px;" id="lbl-min-bkash">১০০ পয়েন্ট</div>
+                </div>
+                <div class="gateway-opt-card" id="gw-card-Nagad" onclick="selectGateway('Nagad')">
+                    <span class="gw-off-badge" id="gw-badge-nagad" style="display:none;">বন্ধ</span>
+                    <div class="gateway-opt-name" style="color: #ff7b00; font-weight:900; font-size:15px;" id="gw-title-nagad">নগদ</div>
+                    <div class="gateway-opt-min" style="color:#ffe000; font-size:11.5px; font-weight:800; margin-top:2px;" id="lbl-min-nagad">১০০ পয়েন্ট</div>
+                </div>
+                <div class="gateway-opt-card" id="gw-card-Recharge" onclick="selectGateway('Recharge')">
+                    <span class="gw-off-badge" id="gw-badge-recharge" style="display:none;">বন্ধ</span>
+                    <div class="gateway-opt-name" style="color: #00f260; font-weight:900; font-size:15px;" id="gw-title-recharge">রিচার্জ</div>
+                    <div class="gateway-opt-min" style="color:#ffe000; font-size:11.5px; font-weight:800; margin-top:2px;" id="lbl-min-recharge">৪০ পয়েন্ট</div>
+                </div>
+            </div>
+
+            <div id="sim-operator-container" style="display:none; margin-bottom: 14px; text-align: left;">
+                <div style="font-size: 13.5px; color: var(--primary); font-weight: 800; margin-bottom: 8px; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-sim-card"></i> <span id="lbl-choose-sim">সিম অপারেটর নির্বাচন করুন:</span></div>
+                <div class="sim-operator-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                    <div class="sim-opt-pill active" onclick="selectSimOperator('Grameenphone', this)">গ্রামীণফোন</div>
+                    <div class="sim-opt-pill" onclick="selectSimOperator('Banglalink', this)">বাংলালিংক</div>
+                    <div class="sim-opt-pill" onclick="selectSimOperator('Robi', this)">রবি</div>
+                    <div class="sim-opt-pill" onclick="selectSimOperator('Airtel', this)">এয়ারটেল</div>
+                    <div class="sim-opt-pill" onclick="selectSimOperator('Teletalk', this)">টেলিটক</div>
+                    <div class="sim-opt-pill" onclick="selectSimOperator('Skitto', this)">স্কিটো</div>
+                </div>
+            </div>
+
+            <div style="text-align:left;">
+                <input type="text" id="pay-number" class="premium-input" placeholder="মোবাইল নম্বর দিন">
+                <div style="position:relative;">
+                    <input type="number" id="pay-amount" class="premium-input" placeholder="পয়েন্ট পরিমাণ দিন" min="1" step="1" oninput="calculateWithdrawTakaPreview()">
+                    <span id="payout-live-calc-tag" style="position:absolute; right:14px; top:14px; font-size:14px; font-weight:900; color:#00f260;"></span>
+                </div>
+                <div id="payout-min-limit-alert" style="font-size: 13px; color: #ffe000; margin-bottom: 14px; font-weight: 800;">নূন্যতম উত্তোলন: ১০০ পয়েন্ট (৫০ ৳)</div>
+                <button class="btn-withdraw-green" id="btn-submit-payout" onclick="submitWithdrawalRequest()" style="width: 100%; justify-content: center; padding: 15px; font-size: 16px; border-radius:14px;">উত্তোলন রিকোয়েস্ট পাঠান</button>
+            </div>
+        </div>
+
+        <div id="payout-history-view" style="display:none;">
+            <div id="payout-history-list" class="history-list-box"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= VIEW: VIDEO UNLOCK & DETAILS ================= -->
+<div id="video-unlock-detail-view">
+    <div class="unlock-notice-card" id="unlock-top-notice">
+        <div class="unc-left"><div class="unc-play-icon"><i class="fa-solid fa-play"></i></div><div class="unc-text"><h4 id="video-unlock-notice-title">ভিডিও আনলক</h4><p id="video-unlock-notice-desc">বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।</p></div></div>
+        <div class="unc-close-btn" onclick="document.getElementById('unlock-top-notice').style.display='none'"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+    <div class="poster-outer-wrapper">
+        <div class="poster-card">
+            <div class="poster-media-wrap">
+                <span class="poster-badge-top" id="detail-category-badge"><i class="fa-solid fa-clapperboard"></i> মুভি</span>
+                <img id="detail-poster-img" src="" alt="Thumbnail" decoding="async">
+                <span class="poster-badge-bottom" id="detail-duration-badge"><i class="fa-regular fa-clock"></i> HD</span>
+            </div>
+            <div class="poster-social-row">
+                <div class="poster-pill-btn" id="detail-like-btn-action" onclick="toggleDetailVideoLike()"><i class="fa-solid fa-thumbs-up"></i> <span id="detail-likes-txt">০ লাইক</span></div>
+                <div class="poster-pill-btn" style="cursor:default;"><i class="fa-solid fa-eye"></i> <span id="detail-views-txt">০ ভিউ</span></div>
+                <div class="poster-pill-btn" onclick="openTelegramMandatoryModal()"><i class="fa-brands fa-telegram"></i> <span id="detail-tg-txt">টেলিগ্রাম</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="unlock-file-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</div>
+    <div class="unlocked-timer-badge" id="unlock-status-timer-card" style="display:none;">
+        <div class="ut-title" id="ut-title-txt"><i class="fa-solid fa-clock"></i> আনলক মেয়াদের বাকি:</div>
+        <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
+    </div>
+    <div class="unlock-action-card shimmer-card-effect" id="ad-unlock-section-box">
+        <div class="uac-top">
+            <div class="uac-left"><div class="uac-icon"><i class="fa-solid fa-play"></i></div><div class="uac-title"><h4 id="lbl-uac-ad-title">বিজ্ঞাপন দেখে আনলক</h4><p id="ui-ad-progress-desc">নির্দিষ্ট অ্যাড দেখে আনলক করুন</p></div></div>
+            <span class="uac-badge-green" id="ui-ad-duration-badge">২ ঘণ্টার জন্য ফ্রি</span>
+        </div>
+        <div class="uac-progress-box">
+            <div class="uac-progress-txt"><span><i class="fa-regular fa-circle-dot" style="color:var(--primary);"></i> <span id="lbl-unlock-progress-txt">আনলক অগ্রগতি:</span></span><span id="unlock-ratio-txt">০ সম্পন্ন</span></div>
+            <div class="uac-p-bar-outer"><div class="uac-p-bar-fill" id="unlock-p-bar"></div></div>
+        </div>
+        <button class="btn-action-cyan" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()"><i class="fa-solid fa-desktop"></i> <span id="btn-ad-remain-txt">বিজ্ঞাপন দেখুন</span></button>
+    </div>
+    <div class="unlock-action-card shimmer-card-effect" id="point-unlock-section-box">
+        <div class="uac-top">
+            <div class="uac-left"><div class="uac-icon" style="background:rgba(255,224,0,0.15); color:#ffe000;"><i class="fa-solid fa-gem"></i></div><div class="uac-title"><h4 id="lbl-uac-point-title">পয়েন্ট দিয়ে সরাসরি আনলক</h4><p id="ui-point-duration-desc">২৪ ঘণ্টার জন্য আনলক থাকবে</p></div></div>
+            <div style="text-align:right;"><div style="font-size:12px; color:#8ba2c4; font-weight:800;" id="lbl-cost-txt">খরচ</div><div style="font-size:19px; font-weight:900; color:#ffe000;" id="ui-cost-points-badge">৫</div><div style="font-size:12px; font-weight:800; color:#ffe000;" id="lbl-points-unit">পয়েন্ট</div></div>
+        </div>
+        <button class="btn-action-gold" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()"><i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">পয়েন্ট দিয়ে আনলক করুন</span></button>
+    </div>
+    <div class="btn-back-home" onclick="closeVideoDetailView()"><div class="btn-back-home-left" style="display:flex; align-items:center; gap:8px;"><div class="back-circle-icon"><i class="fa-solid fa-arrow-left"></i></div><span id="lbl-back-home-txt">হোমে ফিরে যান</span></div></div>
+</div>
+
+<!-- ================= DRAWER: SERIES EPISODES ================= -->
+<div id="series-drawer-modal" class="series-drawer-modal" onclick="if(event.target===this) closeSeriesDrawer()">
+    <div class="series-drawer-sheet">
+        <div class="series-drawer-header"><h3 id="series-drawer-title">সিরিজের এপিসোড</h3><div class="series-drawer-close" onclick="closeSeriesDrawer()"><i class="fa-solid fa-xmark"></i></div></div>
+        <div class="series-episodes-list" id="series-episodes-list"></div>
+    </div>
+</div>
+
+<!-- ================= BOTTOM NAVIGATION BAR ================= -->
+<nav class="bottom-nav">
+    <div class="nav-item active" onclick="switchNavTab('movies', this)">
+        <div class="nav-icon-pill"><i class="fa-solid fa-clapperboard"></i></div>
+        <span id="nav-lbl-movies">সিনেমা</span>
+    </div>
+    <div class="nav-item" onclick="switchNavTab('series', this)">
+        <div class="nav-icon-pill"><i class="fa-solid fa-layer-group"></i></div>
+        <span id="nav-lbl-series">সিরিজ</span>
+    </div>
+    <div class="nav-item" onclick="switchNavTab('adult', this)">
+        <div class="nav-icon-pill"><i class="fa-solid fa-fire"></i></div>
+        <span id="nav-lbl-adult">এন্ডাল</span>
+    </div>
+    <div class="nav-item" onclick="switchNavTab('profile', this)">
+        <div class="nav-icon-pill"><i class="fa-solid fa-user"></i></div>
+        <span id="nav-lbl-profile">প্রোফাইল</span>
+    </div>
+</nav>
+
+<!-- ================= MODALS ================= -->
+
+<!-- Web Video Player Modal -->
+<div id="web-player-modal" class="modal-wrap" onclick="if(event.target===this) closeWebVideoPlayer()">
+    <div class="modal-box" style="max-width: 480px; padding: 14px; background: #050b18; text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h4 id="web-player-title" style="font-size: 16px; color: #fff; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 82%;">ভিডিও প্লেয়ার</h4>
+            <i class="fa-solid fa-xmark" onclick="closeWebVideoPlayer()" style="cursor: pointer; color: #8ba2c4; font-size: 20px;"></i>
+        </div>
+        <div style="width: 100%; aspect-ratio: 16 / 12; background: #000; border-radius: 12px; overflow: hidden; position: relative;">
+            <video id="in-app-video-element" controls playsinline style="width: 100%; height: 100%; object-fit: contain;">ভিডিও ফরম্যাট সাপোর্ট করছে না।</video>
+            <iframe id="in-app-iframe-element" style="display:none; width: 100%; height: 100%; border:0;" allowfullscreen allow="autoplay; fullscreen; encrypted-media"></iframe>
+        </div>
+        <div class="player-parts-container" id="player-parts-container" style="display:none;">
+            <div class="player-parts-title" id="lbl-player-parts-title"><i class="fa-solid fa-layer-group"></i> প্লেয়ার / পাঠ নির্বাচন:</div>
+            <div class="player-parts-scroll" id="player-parts-scroll"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 14px;">
+            <button class="btn-withdraw-green" onclick="closeWebVideoPlayer()" style="font-size: 15px; padding: 12px 18px; width: 100%;" id="btn-player-close">বন্ধ করুন</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rules Modal -->
+<div id="rules-modal" class="modal-wrap" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-box" style="text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
+            <h3 style="font-size: 17px; color: var(--primary); font-weight: 900; display: flex; align-items: center; gap: 8px;" id="rules-modal-title"><i class="fa-solid fa-circle-info"></i> ভিডিও দেখার নিয়ম</h3>
+            <i class="fa-solid fa-xmark" onclick="document.getElementById('rules-modal').style.display='none'" style="cursor: pointer; color: #8ba2c4; font-size: 18px;"></i>
+        </div>
+        <div id="rules-modal-content-list" style="font-size: 14px; color: #d0e1fd; line-height: 1.6; display: flex; flex-direction: column; gap: 8px; font-weight: 700;"></div>
+        <button class="btn-unlock-blue" onclick="document.getElementById('rules-modal').style.display='none'" style="margin-top: 14px;" id="btn-rules-modal-close">বুঝেছি, ধন্যবাদ</button>
+    </div>
+</div>
+
+<!-- Adult Section Warning Modal -->
+<div id="adult-warning-modal" class="modal-wrap" style="display:none; z-index: 100010;">
+    <div class="modal-box" style="border-color: rgba(255, 8, 68, 0.6); max-width: 390px; text-align: left; box-shadow: 0 0 35px rgba(255, 8, 68, 0.35);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(255, 8, 68, 0.2); color: #ff6b8b; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #ff0844; flex-shrink: 0;">🔞</div>
+            <div><h3 style="font-size: 17.5px; color: #fff; font-weight: 900;" id="adult-warn-title">এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ</h3><small style="color: #ff0844; font-weight: 800;">ব্যক্তিগত সেকশন</small></div>
+        </div>
+        <div id="adult-warn-desc" style="font-size: 13.5px; color: #cbd5e1; line-height: 1.55; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; font-weight: 700;">
+            <p style="background: rgba(0, 229, 255, 0.08); border-left: 3px solid var(--primary); padding: 8px 10px; border-radius: 4px; color: #e2e8f0;">🎬 <b>বিনোদন তথ্য:</b> আমাদের অ্যাপে আপনাদের বিনোদনের জন্য নিয়মিত প্রচুর নাটক, সিনেমা ও ফুল সিরিজ যুক্ত করা রয়েছে যা যে কেউ সম্পূর্ণ নিশ্চিন্তে উপভোগ করতে পারেন।</p>
+            <p style="background: rgba(255, 8, 68, 0.12); border-left: 3px solid #ff0844; padding: 8px 10px; border-radius: 4px; color: #ffccd5;">⚠️ <b>গুরুত্বপূর্ণ ধর্মীয় ও নৈতিক সতর্কবার্তা:</b> এই এন্ডাল সেকশনের ভিডিও দেখার কারণে সৃষ্টি হওয়া কোনো ধরনের পাপ, গুনাহ বা নৈতিক অপরাধের দায়ভার অ্যাপ কর্তৃপক্ষ কিংবা অ্যাডমিন কোনোভাবেই বহন করবে না। ইউজার সম্পূর্ণ নিজ ইচ্ছায় এবং সম্পূর্ণ ব্যক্তিগত দায়িত্বে এই সেকশনে প্রবেশ করছেন।</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-action-cyan" style="background: var(--grad-red); box-shadow: 0 0 15px rgba(255,8,68,0.4);" onclick="confirmAdultAge()" id="btn-adult-confirm"><i class="fa-solid fa-circle-check"></i> আমি নিজ দায়িত্বে প্রবেশ করছি</button>
+            <button onclick="declineAdultAge()" style="background: rgba(255,255,255,0.06); border: 1.5px solid var(--card-border); color: #8ba2c4; padding: 11px; border-radius: 12px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-align: center;" id="btn-adult-decline">না, সিনেমা লাইব্রেরিতে ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<!-- Telegram Mandatory Modal -->
+<div id="telegram-mandatory-modal" class="modal-wrap" style="display:none; z-index: 100012;">
+    <div class="modal-box">
+        <div style="width: 52px; height: 52px; border-radius: 16px; background: var(--grad-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 10px; box-shadow: 0 0 15px var(--primary-glow);"><i class="fa-brands fa-telegram"></i></div>
+        <h3 style="font-size: 18px; color: #fff; font-weight: 900; margin-bottom: 6px;" id="tg-modal-heading">চ্যানেলে জয়েন করা বাধ্যতামূলক</h3>
+        <p id="tg-modal-desc-txt" style="font-size: 13.5px; color: #8ba2c4; line-height: 1.5; margin-bottom: 14px; font-weight: 700;">ভিডিও আনলক করতে ও প্লে করতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকা বাধ্যতামূলক।</p>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-action-cyan" onclick="goToTelegramChannel()" id="btn-tg-join-channel"><i class="fa-brands fa-telegram"></i> চ্যানেলে জয়েন করুন</button>
+            <button class="btn-withdraw-green" id="btn-verify-tg-status" onclick="verifyTelegramChannelJoin()" style="width: 100%; justify-content: center; padding: 12px; font-size: 14.5px;"><i class="fa-solid fa-check-double"></i> আমি জয়েন করেছি</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= FIREBASE & APP SCRIPTS ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+<!-- External Custom JS (সঠিক নাম: app.js) -->
+<script src="app.js"></script>
+
+</body>
+</html>
