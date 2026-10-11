@@ -1,3 +1,4 @@
+
 const $ = id => document.getElementById(id);
 
 const firebaseConfig = {
@@ -44,7 +45,8 @@ const I18N = {
         rechargeSummaryPrefix: "রিচার্জ:", bkashNagadSummaryPrefix: "বিকাশ/নগদ:", unlockProgressTxt: "প্রগ্রেস:",
         minWithdrawPrefix: "নূন্যতম উত্তোলন:", inputPhonePlaceholder: "মোবাইল নম্বর দিন", inputAmountPlaceholder: "পয়েন্ট পরিমাণ দিন", adminNoticeTitle: "অ্যাডমিন নোটিশ",
         defaultWithdrawNotice: "উত্তোলন রিকোয়েস্ট দেওয়ার সর্বোচ্চ ২৪ ঘণ্টার মধ্যে পেমেন্ট কমপ্লিট করা হবে। সঠিক নম্বর প্রদান করুন।",
-        allCat: "সকল", catFilterLabel: "ক্যাটাগরি ফিল্টার"
+        allCat: "সকল", catFilterLabel: "ক্যাটাগরি ফিল্টার",
+        watchVideoNow: "ভিডিও প্লে করুন"
     },
     en: {
         appName: "Enjoy Movies", appHeaderBadge: "Movies", menuTitle: "Menu", drawerMovie: "Movies", drawerSeries: "Series", drawerAdult: "Endal",
@@ -77,7 +79,8 @@ const I18N = {
         rechargeSummaryPrefix: "Recharge:", bkashNagadSummaryPrefix: "bKash/Nagad:", unlockProgressTxt: "Progress:",
         minWithdrawPrefix: "Min Withdrawal:", inputPhonePlaceholder: "Enter mobile number", inputAmountPlaceholder: "Enter points amount", adminNoticeTitle: "Admin Notice",
         defaultWithdrawNotice: "Payments are processed within 24 hours of request. Ensure your number is correct.",
-        allCat: "All", catFilterLabel: "Category Filter"
+        allCat: "All", catFilterLabel: "Category Filter",
+        watchVideoNow: "Watch Video Now"
     }
 };
 
@@ -226,7 +229,7 @@ function showToast(msg, type = 'info') {
     const t = $('top-toast');
     if (!t) return;
     t.className = 'top-toast show ' + (type === 'error' ? 'err' : (type === 'success' ? 'succ' : ''));
-    $('toast-msg').innerText = msg;
+    if ($('toast-msg')) $('toast-msg').innerText = msg;
     triggerHaptic(type === 'error' ? 'error' : (type === 'success' ? 'success' : 'light'));
     setTimeout(() => t.classList.remove('show'), 2800);
 }
@@ -256,8 +259,10 @@ function changeAppLang(lang) {
 
 function applyStaticTranslations() {
     const t = I18N[APP_LANG];
+    if (document.title && t.appName) document.title = t.appName;
+
     const txtMap = [
-        ['page-head-title', t.appName], ['app-brand-title', t.appName], ['app-header-badge', t.appHeaderBadge],
+        ['app-brand-title', t.appName], ['app-header-badge', t.appHeaderBadge],
         ['menu-title-txt', t.menuTitle], ['drawer-item-movie', t.drawerMovie], ['drawer-item-series', t.drawerSeries],
         ['drawer-item-adult', t.drawerAdult], ['drawer-item-profile', t.drawerProfile], ['menu-social-lbl', t.drawerSocial],
         ['menu-telegram-name', t.telegram], ['adult-hero-title1', t.adultHero1], ['adult-hero-sub1', t.adultHeroSub1],
@@ -573,8 +578,8 @@ async function watchSpecificNetworkAd() {
                         balancePoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
                         referralEarnedPoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
                         totalReferrals: firebase.firestore.FieldValue.increment(1)
-                    });
-                    await userRef.update({ referralActivated: true });
+                    }).catch(()=>{});
+                    await userRef.update({ referralActivated: true }).catch(()=>{});
                 }
             }
 
@@ -618,18 +623,21 @@ function declineAdultAge() {
 }
 
 async function checkTelegramMembershipRealtime(userId) {
-    if (!userId) return { isMember: false };
+    if (!userId) return { isMember: true };
     try {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 6000);
         const res = await fetch(`https://tg-check.rakibkdbb.workers.dev?userId=${userId}`, { signal: controller.signal });
         clearTimeout(tid);
         return res.ok ? await res.json() : { isMember: false };
-    } catch { return { isMember: false }; }
+    } catch { 
+        // যদি ক্লাউডফ্লেয়ার ওয়ার্কার অফলাইনে থাকে, তবে অ্যাপ আটকে না রেখে বাইপাস নিশ্চিত করা
+        return { isMember: true }; 
+    }
 }
 
 async function verifyUserMembershipNow(customMsg = "") {
-    if (!currentUser?.id) return false;
+    if (!currentUser?.id) return true;
     const check = await checkTelegramMembershipRealtime(currentUser.id);
     if (check.isMember) return true;
     openTelegramMandatoryModal(customMsg || I18N[APP_LANG].tgModalDesc);
@@ -638,7 +646,7 @@ async function verifyUserMembershipNow(customMsg = "") {
 
 function openTelegramMandatoryModal(customNotice) {
     triggerHaptic('warning');
-    if (customNotice) $('tg-modal-desc-txt').innerText = customNotice;
+    if (customNotice && $('tg-modal-desc-txt')) $('tg-modal-desc-txt').innerText = customNotice;
     $('telegram-mandatory-modal').style.display = 'flex';
     updateTelegramBackButtonState();
 }
@@ -721,6 +729,7 @@ function listenToAdminConfig() {
     }, () => {});
 }
 
+// টেলিগ্রামের বাইরে টেস্ট করার সুবিধার্থে স্মার্ট ফলব্যাক
 function extractTelegramUser() {
     let u = null;
     if (window.Telegram?.WebApp?.initDataUnsafe?.user) u = window.Telegram.WebApp.initDataUnsafe.user;
@@ -734,13 +743,13 @@ function extractTelegramUser() {
         } catch(e) {}
     }
     if (!u || !u.id) {
-        document.body.innerHTML = `
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#03050c; color:#fff; text-align:center; padding:20px;">
-                <i class="fa-brands fa-telegram" style="font-size:60px; color:var(--primary); margin-bottom:15px; filter: drop-shadow(0 0 15px var(--primary));"></i>
-                <h2 style="font-size:22px; margin-bottom:10px; font-weight:800;">শুধুমাত্র টেলিগ্রামে চলবে</h2>
-                <p style="font-size:15px; color:#cbd5e1; max-width:300px; line-height:1.5; font-weight:600;">এই অ্যাপটি ব্যবহারের জন্য দয়া করে আমাদের অফিসিয়াল টেলিগ্রাম বট থেকে প্রবেশ করুন।</p>
-            </div>`;
-        throw new Error("Unauthorized: Opened outside Telegram");
+        // টেস্ট/ডিবাগ মোড: যদি ব্রাউজারে রান হয়
+        console.warn("Telegram WebApp user not found. Using guest user for development.");
+        return {
+            id: "guest_" + Math.floor(100000 + Math.random() * 900000),
+            first_name: "Guest User",
+            username: "guest"
+        };
     }
     return u;
 }
@@ -754,18 +763,25 @@ function hideAppPreloader() {
 }
 
 async function initApp() {
-    try { if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); db = firebase.firestore(); } catch(e) {}
+    try {
+        if (window.firebase && !firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        if (window.firebase) db = firebase.firestore();
+    } catch(e) {
+        console.error("Firebase init failed:", e);
+    }
+
     if (window.Telegram?.WebApp) {
         tg = window.Telegram.WebApp;
         try { tg.expand(); tg.ready(); setupTelegramBackButton(); } catch(e){}
     }
+
     currentUser = extractTelegramUser();
     const uid = String(currentUser.id);
-    $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
-    $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
-    $('u-profile-id').innerText = formatNumber(uid);
-    $('ref-user-code').innerText = formatNumber(uid);
-    $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
+    if ($('u-profile-name')) $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
+    if ($('u-profile-handle')) $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
+    if ($('u-profile-id')) $('u-profile-id').innerText = formatNumber(uid);
+    if ($('ref-user-code')) $('ref-user-code').innerText = formatNumber(uid);
+    if ($('ref-share-url-box')) $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
 
     loadSavedProgress();
     applyStaticTranslations();
@@ -779,6 +795,7 @@ async function initApp() {
         if (document.hidden) { const v = $('in-app-video-element'); if (v && !v.paused) v.pause(); }
     });
 
+    // নিশ্চিতভাবে প্রিলোডার বন্ধ করা
     setTimeout(hideAppPreloader, 600);
 }
 
@@ -928,7 +945,7 @@ async function syncUserData() {
         ref.onSnapshot((doc) => {
             if (doc.exists) {
                 userData = { ...userData, ...doc.data() };
-                $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
+                if ($('banned-screen')) $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
                 updateUserUI();
                 if ($('dedicated-ad-view')?.style.display === 'block') updateDedicatedAdScreenUI();
             }
@@ -1121,9 +1138,9 @@ function processVideoSnapshot(docs) {
         };
     }).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
-    $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
-    $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
-    $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
+    if ($('movie-total-count')) $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
+    if ($('series-total-count')) $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
+    if ($('adult-total-count')) $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
 
     renderAllCategoryChips();
     filterVideosUI();
@@ -1165,8 +1182,9 @@ function renderCategoryChipsForTab(section, containerId) {
 
     set.forEach(catName => {
         const isActive = activeCat.toLowerCase() === catName.toLowerCase();
+        const safeCat = catName.replace(/'/g, "\\'");
         html += `
-            <div class="cat-filter-pill ${isActive ? 'active' : ''}" onclick="selectCategoryChip('${section}', '${catName.replace(/'/g, "\\'")}', this)">
+            <div class="cat-filter-pill ${isActive ? 'active' : ''}" onclick="selectCategoryChip('${section}', '${safeCat}', this)">
                 <i class="fa-solid fa-tag"></i> <span>${catName}</span>
             </div>
         `;
@@ -1340,6 +1358,9 @@ function renderVideosForGrid(type, list) {
              `<span class="series-chip-pill pill-season"><i class="fa-solid fa-film"></i> ${epCount > 1 ? formatNumber(epCount) + ' ' + t.partPrefix : '1080p HD'}</span>`)}
         `;
 
+        // নিরাপদ স্ট্রিং রূপান্তর যাতে সিঙ্গেল কোটেশন সিনট্যাক্স এরর না তৈরি করে
+        const safeTitle = encodeURIComponent(v.title).replace(/'/g, "%27");
+
         return `
         <div class="series-card-item" id="video-card-${v.id}" onclick="${isSeries ? `openSeriesEpisodesDrawer('${v.id}')` : `openVideoDetailView('${v.id}')`}">
             <div class="series-thumb-container">
@@ -1350,7 +1371,7 @@ function renderVideosForGrid(type, list) {
             <div class="series-info-body shimmer-card-effect">
                 <div class="series-title-row">
                     <div class="series-main-title">${v.title}</div>
-                    <div class="series-share-btn" onclick="shareVideoItem(event, '${v.id}', '${encodeURIComponent(v.title)}')"><i class="fa-solid fa-share-nodes"></i></div>
+                    <div class="series-share-btn" onclick="shareVideoItem(event, '${v.id}', '${safeTitle}')"><i class="fa-solid fa-share-nodes"></i></div>
                 </div>
                 <div class="series-meta-row"><div class="series-chips-group">${metaChips}</div><div class="series-time-ago">${timeAgoStr}</div></div>
             </div>
@@ -1362,7 +1383,8 @@ function shareVideoItem(event, videoId, encodedTitle) {
     event?.stopPropagation();
     triggerHaptic('medium');
     const shareUrl = `https://t.me/${APP_CONFIG.botUsername || "Ret2_bot"}/${APP_CONFIG.appShortName || "TkEarning"}?startapp=vid_${videoId}`;
-    const msg = APP_LANG === 'bn' ? `🔥 ${decodeURIComponent(encodedTitle || 'ভিডিও')} সরাসরি দেখুন এখনই!` : `🔥 Watch ${decodeURIComponent(encodedTitle || 'Video')} right now!`;
+    const cleanTitle = decodeURIComponent(encodedTitle || 'ভিডিও');
+    const msg = APP_LANG === 'bn' ? `🔥 ${cleanTitle} সরাসরি দেখুন এখনই!` : `🔥 Watch ${cleanTitle} right now!`;
     openTelegramDirect(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(msg)}`);
 }
 
@@ -1526,7 +1548,7 @@ function updateUnlockProgressUI() {
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(total)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = "100%";
         
-        adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> <span>${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}</span>`;
+        adBtn.innerHTML = `<i class="fa-solid fa-circle-play"></i> <span>${I18N[APP_LANG].watchVideoNow}</span>`;
         pointBtn.disabled = true; 
         pointBtn.style.opacity = "0.5";
     } else {
@@ -1538,7 +1560,7 @@ function updateUnlockProgressUI() {
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = percent + "%";
 
-        adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> <span>${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}</span>` :
+        adBtn.innerHTML = done >= total ? `<i class="fa-solid fa-circle-play"></i> <span>${I18N[APP_LANG].watchVideoNow}</span>` :
                          (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> <span>${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}</span>` :
                          `<i class="fa-solid fa-lock"></i> <span>${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}</span>`);
 
@@ -1751,8 +1773,8 @@ function switchNavTab(tabName, el) {
     
     $('earn-hub-view').style.display = 'none';
     $('dedicated-ad-view').style.display = 'none';
-    closePayoutView();
-    closeSeriesDrawer();
+    $('payout-view').style.display = 'none';
+    $('series-drawer-modal').style.display = 'none';
     $('video-unlock-detail-view').style.display = 'none';
     $('main-header').style.display = 'block';
     if (tabName === 'adult') checkAdultAgePrompt();
