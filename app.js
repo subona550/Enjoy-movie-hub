@@ -1,3 +1,4 @@
+  
 const $ = id => document.getElementById(id);
 
 const firebaseConfig = {
@@ -31,9 +32,9 @@ const I18N = {
         btnShareRef: "শেয়ার করুন", btnCopyRef: "লিংক কপি",
         payoutPageHead: "টাকা উত্তোলন", payoutPageSub: "বিকাশ, নগদ ও মোবাইল রিচার্জ",
         lblEarnStatBal: "বর্তমান পয়েন্ট", lblEarnStatRew: "প্রতি অ্যাড পয়েন্ট", lblEarnStatWatch: "দেখা বিজ্ঞাপন", lblEarnStatLim: "দৈনিক লিমিট",
-        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "ভিডিও আনলক", videoUnlockNoticeDesc: "বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।",
-        unlockDurationAdBadge: "২ ঘণ্টার জন্য ফ্রি", unlockDurationPtDesc: "২৪ ঘণ্টার জন্য আনলক থাকবে", btnAdWatchRemain: "বিজ্ঞাপন দেখুন", btnPointUnlock: "পয়েন্ট দিয়ে আনলক করুন",
-        lblBackHome: "হোমে ফিরে যান", rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
+        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "আনলক নোটিশ", videoUnlockNoticeDesc: "এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।",
+        btnAdWatchRemain: "ভিডিও আনলক করুন", btnPointUnlock: "আমার পয়েন্ট ব্যবহার করুন",
+        rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
         btnAdultConfirm: "আমি নিজ দায়িত্বে প্রবেশ করছি", btnAdultDecline: "না, সিনেমা লাইব্রেরিতে ফিরে যান", tgModalHeading: "চ্যানেলে জয়েন করা বাধ্যতামূলক",
         tgModalDesc: "ভিডিও আনলক করতে ও প্লে করতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকা বাধ্যতামূলক।", btnTgJoin: "চ্যানেলে জয়েন করুন", btnTgVerify: "আমি জয়েন করেছি",
         lblTabWithdraw: "উত্তোলন", lblTabHistory: "হিস্টোরি", lblCurBal: "বর্তমান ব্যালেন্স", lblTakaEquiv: "টাকার পরিমাণ", lblChooseGw: "উত্তোলন মাধ্যম বেছে নিন:",
@@ -41,7 +42,7 @@ const I18N = {
         likesWord: "লাইক", viewsWord: "ভিউ", currencySymbol: "৳", uidPrefix: "আইডি:", emptyList: "কোনো ভিডিও বা তথ্য পাওয়া যায়নি!",
         bannedTitle: "আপনার একাউন্ট স্থগিত করা হয়েছে", bannedDesc: "অ্যাপের নিয়ম ভঙ্গের কারণে আপনার আইডিটি সাময়িক বা স্থায়ীভাবে ব্যান করা হয়েছে। বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।",
         bannedSupportBtn: "সাপোর্টে মেসেজ দিন", maintTitle: "অ্যাপ সাময়িক রক্ষণাবেক্ষণে আছে", maintDesc: "আমরা সিস্টেম আপডেট করছি। কিছুক্ষণ পর আবার চেষ্টা করুন।",
-        rechargeSummaryPrefix: "রিচার্জ:", bkashNagadSummaryPrefix: "বিকাশ/নগদ:", unlockProgressTxt: "আনলক অগ্রগতি:", unlockCompletedTxt: "সম্পন্ন",
+        rechargeSummaryPrefix: "রিচার্জ:", bkashNagadSummaryPrefix: "বিকাশ/নগদ:", unlockProgressTxt: "প্রগ্রেস:",
         minWithdrawPrefix: "নূন্যতম উত্তোলন:", inputPhonePlaceholder: "মোবাইল নম্বর দিন", inputAmountPlaceholder: "পয়েন্ট পরিমাণ দিন", adminNoticeTitle: "অ্যাডমিন নোটিশ",
         defaultWithdrawNotice: "উত্তোলন রিকোয়েস্ট দেওয়ার সর্বোচ্চ ২৪ ঘণ্টার মধ্যে পেমেন্ট কমপ্লিট করা হবে। সঠিক নম্বর প্রদান করুন।",
         allCat: "সকল", catFilterLabel: "ক্যাটাগরি ফিল্টার"
@@ -64,9 +65,9 @@ const I18N = {
         btnShareRef: "Share Link", btnCopyRef: "Copy Link",
         payoutPageHead: "Withdraw Money", payoutPageSub: "bKash, Nagad & Mobile Recharge",
         lblEarnStatBal: "Current Points", lblEarnStatRew: "Points Per Ad", lblEarnStatWatch: "Watched Ads", lblEarnStatLim: "Daily Limit",
-        btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", videoUnlockNoticeTitle: "Unlock Video", videoUnlockNoticeDesc: "Watch ads for free access or unlock permanently with points.",
-        unlockDurationAdBadge: "Free for 2 Hours", unlockDurationPtDesc: "Unlocked for 24 Hours", btnAdWatchRemain: "Watch Ad", btnPointUnlock: "Unlock with Points",
-        lblBackHome: "Back to Home", rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
+        btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", videoUnlockNoticeTitle: "Unlock Notice", videoUnlockNoticeDesc: "Unlock this content using ads or points.",
+        btnAdWatchRemain: "Unlock Video", btnPointUnlock: "Use My Points",
+        rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
         btnAdultConfirm: "I Enter At My Own Risk", btnAdultDecline: "No, Back To Movies", tgModalHeading: "Telegram Channel Join Required",
         tgModalDesc: "You must be a member of our official Telegram channel to unlock and watch videos.", btnTgJoin: "Join Channel", btnTgVerify: "I Have Joined",
         lblTabWithdraw: "Withdraw", lblTabHistory: "History", lblCurBal: "Current Balance", lblTakaEquiv: "Amount in Cash", lblChooseGw: "Select Gateway:",
@@ -74,7 +75,7 @@ const I18N = {
         likesWord: "Likes", viewsWord: "Views", currencySymbol: "BDT", uidPrefix: "ID:", emptyList: "No videos or content available in this section!",
         bannedTitle: "Your Account Has Been Suspended", bannedDesc: "Your account is temporarily or permanently suspended due to violation of rules. Please contact support.",
         bannedSupportBtn: "Contact Support", maintTitle: "App Under Maintenance", maintDesc: "We are currently updating our systems. Please check back shortly.",
-        rechargeSummaryPrefix: "Recharge:", bkashNagadSummaryPrefix: "bKash/Nagad:", unlockProgressTxt: "Unlock Progress:", unlockCompletedTxt: "Completed",
+        rechargeSummaryPrefix: "Recharge:", bkashNagadSummaryPrefix: "bKash/Nagad:", unlockProgressTxt: "Progress:",
         minWithdrawPrefix: "Min Withdrawal:", inputPhonePlaceholder: "Enter mobile number", inputAmountPlaceholder: "Enter points amount", adminNoticeTitle: "Admin Notice",
         defaultWithdrawNotice: "Payments are processed within 24 hours of request. Ensure your number is correct.",
         allCat: "All", catFilterLabel: "Category Filter"
@@ -104,7 +105,7 @@ let APP_CONFIG = {
     appShortName: "TkEarning", 
     telegramChannel: "https://t.me/Ads_Earn_Pro",
     telegramChannelTitle: "টেলিগ্রাম", 
-    unlockAdCount: 3, 
+    unlockAdCount: 5, 
     unlockPointsCost: 5, 
     adRewardPoints: 2, 
     dailyAdLimit: 20, 
@@ -152,6 +153,9 @@ let currentPageMap = { adult: 1, series: 1, movies: 1 };
 
 let userLikedVideos = {};
 try { userLikedVideos = JSON.parse(localStorage.getItem('app_user_liked_vids') || '{}'); } catch(e) { userLikedVideos = {}; }
+
+let lastVideoCardScrollPosition = 0;
+let lastClickedVideoElementId = null;
 
 function getTodayBDDate() { return new Date(Date.now() + 21600000).toISOString().slice(0, 10); }
 
@@ -201,9 +205,10 @@ function updateTelegramBackButtonState() {
 
 function formatNumber(n) {
     if (n === undefined || n === null || n === '') return APP_LANG === 'bn' ? '০' : '0';
-    if (APP_LANG === 'en') return String(n);
+    const numStr = typeof n === 'number' ? n.toLocaleString('en-US') : String(n);
+    if (APP_LANG === 'en') return numStr;
     const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-    return String(n).replace(/\d/g, d => bn[d]);
+    return numStr.replace(/\d/g, d => bn[d]);
 }
 
 function getDeviceUUID() {
@@ -220,6 +225,7 @@ function getDeviceUUID() {
 
 function showToast(msg, type = 'info') {
     const t = $('top-toast');
+    if (!t) return;
     t.className = 'top-toast show ' + (type === 'error' ? 'err' : (type === 'success' ? 'succ' : ''));
     $('toast-msg').innerText = msg;
     triggerHaptic(type === 'error' ? 'error' : (type === 'success' ? 'success' : 'light'));
@@ -228,8 +234,8 @@ function showToast(msg, type = 'info') {
 
 function toggleSidebarMenu(show) {
     triggerHaptic('light');
-    $('drawer-overlay').classList.toggle('open', show);
-    $('drawer-menu').classList.toggle('open', show);
+    $('drawer-overlay')?.classList.toggle('open', show);
+    $('drawer-menu')?.classList.toggle('open', show);
     updateTelegramBackButtonState();
 }
 
@@ -239,8 +245,8 @@ function changeAppLang(lang) {
     triggerHaptic('medium');
     APP_LANG = lang;
     localStorage.setItem('app_lang_choice', lang);
-    $('btn-lang-bn').classList.toggle('active', lang === 'bn');
-    $('btn-lang-en').classList.toggle('active', lang === 'en');
+    $('btn-lang-bn')?.classList.toggle('active', lang === 'bn');
+    $('btn-lang-en')?.classList.toggle('active', lang === 'en');
     document.documentElement.lang = lang;
     applyStaticTranslations();
     applyAdminConfigToUI();
@@ -273,15 +279,13 @@ function applyStaticTranslations() {
         ['btn-share-ref-txt', t.btnShareRef], ['btn-copy-ref-txt', t.btnCopyRef], 
         ['payout-page-head', t.payoutPageHead], ['payout-page-sub', t.payoutPageSub],
         ['video-unlock-notice-title', t.videoUnlockNoticeTitle], ['video-unlock-notice-desc', t.videoUnlockNoticeDesc],
-        ['lbl-uac-ad-title', APP_LANG === 'bn' ? "বিজ্ঞাপন দেখে আনলক" : "Unlock by Watching Ads"], ['lbl-unlock-progress-txt', t.unlockProgressTxt],
-        ['lbl-uac-point-title', APP_LANG === 'bn' ? "পয়েন্ট দিয়ে সরাসরি আনলক" : "Unlock Instantly with Points"], ['lbl-cost-txt', APP_LANG === 'bn' ? "খরচ" : "Cost"],
-        ['lbl-points-unit', t.unitPoints], ['lbl-back-home-txt', t.lblBackHome], ['btn-rules-modal-close', t.rulesDoneBtn],
-        ['adult-warn-title', t.adultModalTitle], ['btn-adult-decline', t.btnAdultDecline], ['tg-modal-heading', t.tgModalHeading],
-        ['tg-modal-desc-txt', t.tgModalDesc], ['lbl-tab-withdraw', t.lblTabWithdraw], ['lbl-tab-history', t.lblTabHistory],
-        ['lbl-cur-bal', t.lblCurBal], ['lbl-pts-unit', t.unitPoints], ['lbl-taka-equiv', t.lblTakaEquiv], ['lbl-currency-symbol', t.currencySymbol],
-        ['lbl-choose-gw', t.lblChooseGw], ['gw-title-bkash', APP_LANG === 'bn' ? "বিকাশ" : "bKash"], ['gw-title-nagad', APP_LANG === 'bn' ? "নগদ" : "Nagad"],
-        ['gw-title-recharge', APP_LANG === 'bn' ? "রিচার্জ" : "Recharge"], ['lbl-choose-sim', t.lblChooseSim], ['lbl-admin-notice-title', t.adminNoticeTitle],
-        ['btn-submit-payout', t.btnSubmitPayout], ['btn-player-close', t.btnClose],
+        ['btn-rules-modal-close', t.rulesDoneBtn], ['adult-warn-title', t.adultModalTitle], ['btn-adult-decline', t.btnAdultDecline],
+        ['tg-modal-heading', t.tgModalHeading], ['tg-modal-desc-txt', t.tgModalDesc], ['lbl-tab-withdraw', t.lblTabWithdraw],
+        ['lbl-tab-history', t.lblTabHistory], ['lbl-cur-bal', t.lblCurBal], ['lbl-pts-unit', t.unitPoints],
+        ['lbl-taka-equiv', t.lblTakaEquiv], ['lbl-currency-symbol', t.currencySymbol], ['lbl-choose-gw', t.lblChooseGw],
+        ['gw-title-bkash', APP_LANG === 'bn' ? "বিকাশ" : "bKash"], ['gw-title-nagad', APP_LANG === 'bn' ? "নগদ" : "Nagad"],
+        ['gw-title-recharge', APP_LANG === 'bn' ? "রিচার্জ" : "Recharge"], ['lbl-choose-sim', t.lblChooseSim],
+        ['lbl-admin-notice-title', t.adminNoticeTitle], ['btn-submit-payout', t.btnSubmitPayout], ['btn-player-close', t.btnClose],
         ['nav-lbl-movies', t.drawerMovie], ['nav-lbl-series', t.drawerSeries], ['nav-lbl-adult', t.drawerAdult],
         ['nav-lbl-profile', APP_LANG === 'bn' ? "প্রোফাইল" : "Profile"], ['banned-title', t.bannedTitle], ['banned-desc', t.bannedDesc],
         ['maint-title', t.maintTitle], ['maint-desc', t.maintDesc],
@@ -302,7 +306,7 @@ function applyStaticTranslations() {
         ['movie-badge-feature', `<i class="fa-solid fa-film"></i> ${t.movieBadgeFeature}`],
         ['overview-bar-title', `<i class="fa-solid fa-chart-simple"></i> ${t.overviewBarTitle}`],
         ['earn-bar-title', `<i class="fa-solid fa-bolt"></i> ${t.earnBarTitle}`],
-        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> 3টি মাল্টিপল নেটওয়ার্ক`],
+        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> ৩টি মাল্টিপল নেটওয়ার্ক`],
         ['pill-badge-freecoins', `<i class="fa-solid fa-coins"></i> ফ্রি পয়েন্ট`],
         ['ref-bar-title', `<i class="fa-solid fa-shield-halved"></i> ${t.refBarTitle}`],
         ['ut-title-txt', `<i class="fa-solid fa-clock"></i> ${APP_LANG === 'bn' ? 'আনলক মেয়াদের বাকি:' : 'Unlock Time Remaining:'}`],
@@ -327,20 +331,20 @@ function renderRulesList() {
     l.innerHTML = APP_LANG === 'bn' ? `
         <div><b style="color:#00f260;">১. নির্বাচন:</b> যেকোনো ভিডিও কার্ডে ক্লিক করুন।</div>
         <div><b style="color:var(--primary);">২. বিজ্ঞাপন আনলক:</b> নির্দিষ্ট অ্যাড দেখে ভিডিও ফ্রি আনলক করুন।</div>
-        <div><b style="color:#ffe000;">৩. পয়েন্ট আনলক:</b> কোনো অ্যাড ছাড়া পয়েন্ট দিয়ে ২৪ ঘণ্টার জন্য আনলক করুন।</div>
-        <div><b style="color:#ff0844;">৪. ডিভাইস পলিসি:</b> একই ফোনে একাধিক রেফার করা নিষিদ্ধ সাথে উত্তোলন স্বয়ংক্রিয়ভাবে বাতিল হবে।</div>
+        <div><b style="color:#ffe000;">৩. পয়েন্ট আনলক:</b> কোনো অ্যাড ছাড়া পয়েন্ট দিয়ে সরাসরি আনলক করুন।</div>
+        <div><b style="color:#ff0844;">৪. ডিভাইস পলিসি:</b> একই ফোনে একাধিক অ্যাকাউন্ট খোলা নিষিদ্ধ।</div>
     ` : `
         <div><b style="color:#00f260;">1. Select:</b> Click on any video card to open.</div>
-        <div><b style="color:var(--primary);">2. Ad Unlock:</b> Watch required ads to unlock video free.</div>
-        <div><b style="color:#ffe000;">3. Point Unlock:</b> Instantly unlock for 24 hours using reward points.</div>
-        <div><b style="color:#ff0844;">4. Device Policy:</b> Multiple accounts or self-referrals on the same device are strictly prohibited.</div>
+        <div><b style="color:var(--primary);">2. Ad Unlock:</b> Watch required ads to unlock videos for free.</div>
+        <div><b style="color:#ffe000;">3. Point Unlock:</b> Instantly unlock using reward points.</div>
+        <div><b style="color:#ff0844;">4. Device Policy:</b> Multiple accounts on the same device are prohibited.</div>
     `;
 }
 
 function isGatewayEnabled(gw) {
-    if (gw === 'bKash') return APP_CONFIG.enableBkash !== false && APP_CONFIG.bkashEnabled !== false;
-    if (gw === 'Nagad') return APP_CONFIG.enableNagad !== false && APP_CONFIG.nagadEnabled !== false;
-    if (gw === 'Recharge') return APP_CONFIG.enableRecharge !== false && APP_CONFIG.rechargeEnabled !== false;
+    if (gw === 'bKash') return APP_CONFIG.enableBkash !== false;
+    if (gw === 'Nagad') return APP_CONFIG.enableNagad !== false;
+    if (gw === 'Recharge') return APP_CONFIG.enableRecharge !== false;
     return true;
 }
 
@@ -348,31 +352,30 @@ function applyAdminConfigToUI() {
     const t = I18N[APP_LANG];
     const m = $('maintenance-screen');
     if (APP_CONFIG.maintenanceMode === true) {
-        m.style.display = 'flex';
-        $('maint-title').innerText = APP_CONFIG.maintenanceTitle || t.maintTitle;
-        $('maint-desc').innerText = APP_CONFIG.maintenanceNotice || t.maintDesc;
+        if (m) {
+            m.style.display = 'flex';
+            $('maint-title').innerText = APP_CONFIG.maintenanceTitle || t.maintTitle;
+            $('maint-desc').innerText = APP_CONFIG.maintenanceNotice || t.maintDesc;
+        }
         return;
-    } else { m.style.display = 'none'; }
+    } else { 
+        if (m) m.style.display = 'none'; 
+    }
 
     const bMin = APP_CONFIG.minWithdrawBkash || 100, nMin = APP_CONFIG.minWithdrawNagad || 100, rMin = APP_CONFIG.minWithdrawRecharge || 40;
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
-    $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
-    $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
-    $('ui-cost-points-badge').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
-    $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} ${t.unitPoints})`;
-    $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(APP_CONFIG.unlockAdCount)}টি পূরণ করুন` : `Watch ${formatNumber(APP_CONFIG.unlockAdCount)} ads to complete`;
-    $('ui-ad-duration-badge').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} ঘণ্টার জন্য ফ্রি` : `Free for ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} Hours`;
-    $('ui-point-duration-desc').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টার জন্য আনলক থাকবে` : `Unlocked for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} Hours`;
-    $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
-    $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
-    $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
-    $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
+    if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
+    if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
+    if ($('lbl-min-bkash')) $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
+    if ($('lbl-min-nagad')) $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
+    if ($('lbl-min-recharge')) $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
+    if ($('ui-min-withdraw-summary')) $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
 
     if ($('ui-payout-admin-notice')) $('ui-payout-admin-notice').innerText = APP_CONFIG.withdrawNotice || t.defaultWithdrawNotice;
     updateGatewaysAvailabilityUI();
 
-    if (currentUser?.id) {
+    if (currentUser?.id && $('ref-share-url-box')) {
         $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${currentUser.id}`;
     }
     updateUserUI();
@@ -410,10 +413,10 @@ function updateUserUI() {
     const pts = userData.balancePoints ?? (APP_CONFIG.initialPoints || 0);
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
-    $('profile-points-val').innerText = formatNumber(pts);
-    $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
-    $('payout-modal-pts').innerText = formatNumber(pts);
-    $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
+    if ($('profile-points-val')) $('profile-points-val').innerText = formatNumber(pts);
+    if ($('profile-ref-count')) $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
+    if ($('payout-modal-pts')) $('payout-modal-pts').innerText = formatNumber(pts);
+    if ($('payout-modal-tk')) $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
 }
 
 /* =================== AD HUB NAVIGATION =================== */
@@ -445,11 +448,7 @@ function openDedicatedAdScreen(network) {
     $('earn-hub-view').style.display = 'none';
     $('dedicated-ad-view').style.display = 'block';
 
-    const netNames = {
-        adsgram: "Adsgram Ads",
-        monetag: "Monetag Ads",
-        onclicka: "Onclicka Ads"
-    };
+    const netNames = { adsgram: "Adsgram Ads", monetag: "Monetag Ads", onclicka: "Onclicka Ads" };
     $('ded-screen-title').innerText = netNames[network] || "Reward Ads";
 
     updateDedicatedAdScreenUI();
@@ -493,7 +492,7 @@ function updateDedicatedAdScreenUI() {
 function initOnclickaTma() {
     if (window.initCdTma) {
         try {
-            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || 'Your Spot ID' })
+            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || '6153127' })
                 .then(show => {
                     window.onclickaShowMethod = show;
                     window.show = show;
@@ -510,10 +509,10 @@ function showOnclickaAd() {
         const showFn = window.onclickaShowMethod || window.show;
         if (typeof showFn === 'function') {
             showFn()
-                .then(() => resolve({ done:true, network: 'onclicka' }))
+                .then(() => resolve({ done: true, network: 'onclicka' }))
                 .catch(err => reject(err));
         } else if (window.initCdTma) {
-            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || 'Your Spot ID' })
+            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || '6153127' })
                 .then(show => {
                     window.onclickaShowMethod = show;
                     window.show = show;
@@ -972,7 +971,7 @@ async function watchVideoUnlockAd() {
     if (!btn || btn.classList.contains('btn-disabled-state') || btn.disabled) return;
     triggerHaptic('medium');
 
-    const vId = activeDetailVideo.id, total = APP_CONFIG.unlockAdCount || 3;
+    const vId = activeDetailVideo.id, total = APP_CONFIG.unlockAdCount || 5;
     if (!isVideoCurrentlyUnlocked(vId) && (videoAdProgressMap[vId] || 0) >= total) {
         videoAdProgressMap[vId] = 0; saveUnlockProgress(); updateUnlockProgressUI();
     }
@@ -1057,7 +1056,7 @@ function isSeriesVideo(v) {
 function isAdultVideo(v) {
     if (isSeriesVideo(v)) return false;
     const type = (v.type || '').toLowerCase(), cat = (v.category || '').toLowerCase(), sec = (v.section || '').toLowerCase(), title = (v.title || '').toLowerCase();
-    if (['adult', '18+', '18+', 'endal', 'এন্ডাল'].includes(sec) || ['adult', '18', '18+', 'endal', 'এন্ডাল'].includes(type) || v.isAdult === true || v.adult === true) return true;
+    if (['adult', '18+', 'endal', 'এন্ডাল'].includes(sec) || ['adult', '18', '18+', 'endal', 'এন্ডাল'].includes(type) || v.isAdult === true || v.adult === true) return true;
     if (['movie', 'movies'].includes(sec) || ['movie', 'movies'].includes(type)) return false;
     const kws = ['adult', '18', '18+', '১৮+', 'endal', 'এন্ডাল', 'hot', 'viral', 'tiktok', 'desi', 'college', 'exclusive', 'boudi', 'bhabi', 'sex', 'bhabhi', 'বউদি', 'ভাবি', 'বাবা মেয়ে', 'মা ছেলে', 'ভাই বোন', 'এডাল্ট', 'গার্লফ্রেন্ড', 'টিকটকার', 'গরম', 'choti', 'baba meye', 'ma chele', 'bhai bon'];
     return kws.some(k => title.includes(k) || cat.includes(k));
@@ -1422,7 +1421,6 @@ function openVideoDetailView(videoId, epIndex = null) {
     const video = allLoadedVideos.find(v => v.id === videoId);
     if (!video) return showToast(APP_LANG === 'bn' ? "ভিডিও পাওয়া যায়নি!" : "Video not found!", "error");
     
-    // ব্যাক আসার জন্য বর্তমান স্ক্রল ও ভিডিও আইডি সেভ রাখা হলো
     lastVideoCardScrollPosition = window.scrollY;
     lastClickedVideoElementId = `video-card-${videoId}`;
     
@@ -1442,7 +1440,7 @@ function openVideoDetailView(videoId, epIndex = null) {
         const isAd = isAdultVideo(video) || currentActiveTab === 'adult', isSer = isSeriesVideo(video) || currentActiveTab === 'series';
         const label = APP_LANG === 'bn' ? (isAd ? 'এন্ডাল' : (isSer ? 'সিরিজ' : 'মুভি')) : (isAd ? 'Endal' : (isSer ? 'Series' : 'Movie'));
         badge.innerHTML = `<i class="fa-solid ${isAd ? 'fa-fire' : (isSer ? 'fa-layer-group' : 'fa-clapperboard')}"></i> ${label}`;
-        badge.style.background = isAd ? 'var(--grad-red)' : (isSer ? 'var(--grad-purple-pink)' : 'var(--grad-blue)');
+        badge.style.background = isAd ? 'var(--grad-red)' : (isSer ? 'var(--grad-purple-pink)' : '#2563eb');
         if (badgeText) badgeText.innerText = `${label} কনটেন্ট`;
     }
 
@@ -1488,7 +1486,6 @@ function closeVideoDetailView() {
     triggerHaptic('light');
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
     
-    // ডিটেইলস পেজ লুকিয়ে আগের ট্যাব ওপেন করা
     $('video-unlock-detail-view').style.display = 'none';
     $('main-header').style.display = 'block';
     
@@ -1498,7 +1495,6 @@ function closeVideoDetailView() {
 
     updateTelegramBackButtonState();
 
-    // একদম শুরুতে না গিয়ে ঠিক যেখানে ক্লিক করা হয়েছিল সেখানেই ফেরত যাওয়া
     setTimeout(() => {
         if (lastClickedVideoElementId && $(lastClickedVideoElementId)) {
             $(lastClickedVideoElementId).scrollIntoView({ behavior: 'instant', block: 'center' });
@@ -1507,8 +1503,6 @@ function closeVideoDetailView() {
         }
     }, 10);
 }
-
-// app.js-এর মধ্যে updateUnlockProgressUI ফাংশনটি এভাবে আপডেট করে নিন:
 
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
@@ -1523,7 +1517,7 @@ function updateUnlockProgressUI() {
     const adBtn = $('btn-unlock-ad-step');
     const pointBtn = $('btn-unlock-point-step');
 
-    // ৩টি নতুন কার্ডের মান সেট
+    // ৩টি স্ট্যাট কার্ডের মান
     if ($('ui-req-ads-count')) $('ui-req-ads-count').innerText = formatNumber(total);
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(userPts);
     if ($('ui-remaining-ads-count')) $('ui-remaining-ads-count').innerText = formatNumber(isUnlocked ? 0 : remaining);
@@ -1629,7 +1623,7 @@ function executeUnlockSuccess(type = 'ad') {
     setTimeout(() => playMovie(activeDetailVideo), 800);
 }
 
-/* =================== CLOUDFLARE WORKER STREAM PLAYER =================== */
+/* =================== STREAM PLAYER =================== */
 async function playMovie(videoObj) {
     if (!videoObj) return;
     pendingActionAfterJoin = () => playMovie(videoObj);
@@ -1784,7 +1778,7 @@ function switchNavTab(tabName, el) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* =================== IN-PAGE PAYOUT VIEW HANDLERS =================== */
+/* =================== PAYOUT HANDLERS =================== */
 function openPayoutView() {
     triggerHaptic('light');
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
@@ -1808,16 +1802,13 @@ function closePayoutView() {
     updateTelegramBackButtonState();
 }
 
-function openPayoutMethodsModal() { openPayoutView(); }
-function closePayoutModal() { closePayoutView(); }
-
 function switchPayoutInnerTab(tab) {
     triggerHaptic('light');
     const isForm = tab === 'form';
-    $('tab-btn-withdraw-form').classList.toggle('active', isForm);
-    $('tab-btn-withdraw-history').classList.toggle('active', !isForm);
-    $('payout-form-view').style.display = isForm ? 'block' : 'none';
-    $('payout-history-view').style.display = isForm ? 'none' : 'block';
+    $('tab-btn-withdraw-form')?.classList.toggle('active', isForm);
+    $('tab-btn-withdraw-history')?.classList.toggle('active', !isForm);
+    if ($('payout-form-view')) $('payout-form-view').style.display = isForm ? 'block' : 'none';
+    if ($('payout-history-view')) $('payout-history-view').style.display = isForm ? 'none' : 'block';
     if ($('payout-balance-card-box')) $('payout-balance-card-box').style.display = isForm ? 'flex' : 'none';
     if (!isForm) loadWithdrawalHistory();
 }
@@ -1841,17 +1832,20 @@ function selectGateway(gw) {
     if ($('sim-operator-container')) $('sim-operator-container').style.display = (gw === 'Recharge') ? 'block' : 'none';
 
     const minPts = getGatewayMinPoints(gw), minTk = Math.round(minPts * (APP_CONFIG.pointsToTakaRate || 0.3)), t = I18N[APP_LANG];
-    $('payout-min-limit-alert').innerText = `${t.minWithdrawPrefix} ${formatNumber(minPts)} ${t.unitPoints} (${formatNumber(minTk)} ${t.currencySymbol})`;
+    if ($('payout-min-limit-alert')) {
+        $('payout-min-limit-alert').innerText = `${t.minWithdrawPrefix} ${formatNumber(minPts)} ${t.unitPoints} (${formatNumber(minTk)} ${t.currencySymbol})`;
+    }
 }
 
 function calculateWithdrawTakaPreview() {
     const val = parseInt($('pay-amount').value), tag = $('payout-live-calc-tag');
+    if (!tag) return;
     tag.innerText = (!isNaN(val) && val > 0) ? `= ${formatNumber((Math.round(val * (APP_CONFIG.pointsToTakaRate || 0.3) * 100) / 100).toFixed(2))} ${I18N[APP_LANG].currencySymbol}` : '';
 }
 
 async function loadWithdrawalHistory() {
     const list = $('payout-history-list');
-    if (!db || !currentUser?.id) return;
+    if (!db || !currentUser?.id || !list) return;
     list.innerHTML = "";
 
     try {
@@ -1910,9 +1904,7 @@ async function submitWithdrawalRequest() {
 
         const response = await fetch(WORKER_URL, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 initData: window.Telegram?.WebApp?.initData || "",
                 gateway: currentSelectedGateway,
