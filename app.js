@@ -1,4 +1,3 @@
-  
 const $ = id => document.getElementById(id);
 
 const firebaseConfig = {
@@ -21,10 +20,10 @@ const I18N = {
         seriesHero1: "নতুন সিরিজ", seriesHeroSub1: "ফুল সিজন", seriesHero2: "হট সিরিজ", seriesHeroSub2: "জনপ্রিয় সিরিজ",
         movieHero1: "নতুন সিনেমা", movieHeroSub1: "সর্বশেষ রিলিজ", movieHero2: "হট সিনেমা", movieHeroSub2: "জনপ্রিয় সিনেমা",
         adultFeatureTitle: "এন্ডাল ভিডিও লাইব্রেরি", adultFeatureDesc: "আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।",
-        adultBadgeFeature: "এন্ডাল বিশেষ কালেকশন", adultCountSub: "ভিডিও", tagUltraHd: "⚡ আল্ট্রা এইচডি",
+        adultBadgeFeature: "এন্ডাল বিশেষ কালেকশন", adultCountSub: "ভিডিও", tagUltraHd: "⚡ 1080p আল্ট্রা এইচডি",
         seriesBadgeFeature: "ওয়েব সিরিজ", seriesCountSub: "সিরিজ", seriesFeatureTitle: "সিরিজ লাইব্রেরি", seriesFeatureDesc: "দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।",
-        tagFullSeason: "⚡ ফুল সিজন", movieBadgeFeature: "মুভিজ", movieCountSub: "মুভি", movieFeatureTitle: "সিনেমা লাইব্রেরি", movieFeatureDesc: "আপনার পছন্দের সিনেমার উপর ক্লিক করে আনলক করে উপভোগ করুন।",
-        tagMovie: "⚡ সিনেমা", overviewBarTitle: "ব্যালেন্স ওভারভিউ", lblMyPoints: "আমার পয়েন্ট", lblActiveRef: "সক্রিয় রেফারেল",
+        tagFullSeason: "⚡ 1080p ফুল সিজন", movieBadgeFeature: "মুভিজ", movieCountSub: "মুভি", movieFeatureTitle: "সিনেমা লাইব্রেরি", movieFeatureDesc: "আপনার পছন্দের সিনেমার উপর ক্লিক করে আনলক করে উপভোগ করুন।",
+        tagMovie: "⚡ 1080p সিনেমা", overviewBarTitle: "ব্যালেন্স ওভারভিউ", lblMyPoints: "আমার পয়েন্ট", lblActiveRef: "সক্রিয় রেফারেল",
         profileWithdrawTitle: "টাকা উত্তোলন (বিকাশ/নগদ/রিচার্জ)", profileWithdrawSub: "সহজ ও দ্রুত পেমেন্ট রিকোয়েস্ট ও হিস্টোরি", btnOpenWithdraw: "উত্তোলন করুন",
         earnBarTitle: "পয়েন্ট আয় করুন", profileEarnTitle: "রিওয়ার্ড অ্যাড দেখে পয়েন্ট আয় করুন", profileEarnDesc: "বিজ্ঞাপন দেখে পয়েন্ট সংগ্রহ করে ভিডিও আনলক করুন অথবা টাকা উত্তোলন করুন।",
         pillInstant: "ইনস্ট্যান্ট পয়েন্ট", pillFreeCoins: "ফ্রি কয়েন", btnProfileEarnMore: "আরও পয়েন্ট আয় করুন", refBarTitle: "সিকিউর রেফারেল সিস্টেম",
@@ -32,7 +31,7 @@ const I18N = {
         btnShareRef: "শেয়ার করুন", btnCopyRef: "লিংক কপি",
         payoutPageHead: "টাকা উত্তোলন", payoutPageSub: "বিকাশ, নগদ ও মোবাইল রিচার্জ",
         lblEarnStatBal: "বর্তমান পয়েন্ট", lblEarnStatRew: "প্রতি অ্যাড পয়েন্ট", lblEarnStatWatch: "দেখা বিজ্ঞাপন", lblEarnStatLim: "দৈনিক লিমিট",
-        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "আনলক নোটিশ", videoUnlockNoticeDesc: "এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।",
+        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "আনলক নোটিউট", videoUnlockNoticeDesc: "এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।",
         btnAdWatchRemain: "ভিডিও আনলক করুন", btnPointUnlock: "আমার পয়েন্ট ব্যবহার করুন",
         rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
         btnAdultConfirm: "আমি নিজ দায়িত্বে প্রবেশ করছি", btnAdultDecline: "না, সিনেমা লাইব্রেরিতে ফিরে যান", tgModalHeading: "চ্যানেলে জয়েন করা বাধ্যতামূলক",
@@ -54,10 +53,10 @@ const I18N = {
         seriesHero1: "New Series", seriesHeroSub1: "Full Seasons", seriesHero2: "Hot Series", seriesHeroSub2: "Top Ranked",
         movieHero1: "New Movies", movieHeroSub1: "Latest Releases", movieHero2: "Hot Movies", movieHeroSub2: "Popular Movies",
         adultFeatureTitle: "Endal Video Library", adultFeatureDesc: "Pick your preferred video, unlock for free by watching ads or directly with points.",
-        adultBadgeFeature: "Endal Special", adultCountSub: "Videos", tagUltraHd: "⚡ Ultra HD",
+        adultBadgeFeature: "Endal Special", adultCountSub: "Videos", tagUltraHd: "⚡ 1080p Ultra HD",
         seriesBadgeFeature: "Web Series", seriesCountSub: "Series", seriesFeatureTitle: "Series Library", seriesFeatureDesc: "Unlock all episodes of popular local and international web series instantly.",
-        tagFullSeason: "⚡ Full Season", movieBadgeFeature: "Movies", movieCountSub: "Movies", movieFeatureTitle: "Movie Library", movieFeatureDesc: "Click any movie below to unlock and start streaming instantly.",
-        tagMovie: "⚡ Movies", overviewBarTitle: "Balance Overview", lblMyPoints: "My Points", lblActiveRef: "Active Referrals",
+        tagFullSeason: "⚡ 1080p Full Season", movieBadgeFeature: "Movies", movieCountSub: "Movies", movieFeatureTitle: "Movie Library", movieFeatureDesc: "Click any movie below to unlock and start streaming instantly.",
+        tagMovie: "⚡ 1080p Movies", overviewBarTitle: "Balance Overview", lblMyPoints: "My Points", lblActiveRef: "Active Referrals",
         profileWithdrawTitle: "Withdraw Money (bKash/Nagad/Recharge)", profileWithdrawSub: "Fast and secure payment requests and complete history", btnOpenWithdraw: "Withdraw Now",
         earnBarTitle: "Earn Points", profileEarnTitle: "Earn Points by Watching Ads", profileEarnDesc: "Collect reward points by watching ads to unlock movies or cash out.",
         pillInstant: "Instant Points", pillFreeCoins: "Free Coins", btnProfileEarnMore: "Earn More Points", refBarTitle: "Secure Referral System",
@@ -736,7 +735,7 @@ function extractTelegramUser() {
     }
     if (!u || !u.id) {
         document.body.innerHTML = `
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#050814; color:#fff; text-align:center; padding:20px;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#03050c; color:#fff; text-align:center; padding:20px;">
                 <i class="fa-brands fa-telegram" style="font-size:60px; color:var(--primary); margin-bottom:15px; filter: drop-shadow(0 0 15px var(--primary));"></i>
                 <h2 style="font-size:22px; margin-bottom:10px; font-weight:900;">শুধুমাত্র টেলিগ্রামে চলবে</h2>
                 <p style="font-size:15px; color:#8ba2c4; max-width:300px; line-height:1.5; font-weight:700;">এই অ্যাপটি ব্যবহারের জন্য দয়া করে আমাদের অফিসিয়াল টেলিগ্রাম বট থেকে প্রবেশ করুন।</p>
@@ -1042,10 +1041,10 @@ function extractVideoLinks(data) {
     let formatted = rawList.map((item, idx) => {
         const partName = `${I18N[APP_LANG].partPrefix} ${formatNumber(idx + 1)}`;
         const defaultThumb = data.thumb || data.thumbnail || data.poster || '';
-        return typeof item === 'string' ? { name: partName, part: partName, duration: data.duration || 'HD', views: Number(data.views || 0), url: item.trim(), thumb: defaultThumb }
-                                        : { name: item.name || item.title || partName, part: item.part || partName, duration: item.duration || data.duration || 'HD', views: Number(item.views || data.views || 0), thumb: item.thumb || item.thumbnail || defaultThumb, url: (item.url || item.link || '').trim() };
+        return typeof item === 'string' ? { name: partName, part: partName, duration: data.duration || '1080p HD', views: Number(data.views || 0), url: item.trim(), thumb: defaultThumb }
+                                        : { name: item.name || item.title || partName, part: item.part || partName, duration: item.duration || data.duration || '1080p HD', views: Number(item.views || data.views || 0), thumb: item.thumb || item.thumbnail || defaultThumb, url: (item.url || item.link || '').trim() };
     });
-    return formatted.length ? formatted : [{ name: `${I18N[APP_LANG].partPrefix} ${formatNumber(1)}`, duration: "HD", views: Number(data.views || 0), url: "", thumb: data.thumb || '' }];
+    return formatted.length ? formatted : [{ name: `${I18N[APP_LANG].partPrefix} ${formatNumber(1)}`, duration: "1080p HD", views: Number(data.views || 0), url: "", thumb: data.thumb || '' }];
 }
 
 function isSeriesVideo(v) {
@@ -1088,7 +1087,6 @@ function formatTimeAgo(dateObj) {
     if (!past) return APP_LANG === 'bn' ? 'এইমাত্র' : 'Just now';
 
     const diffSec = Math.max(0, Math.floor((Date.now() - past) / 1000));
-
     if (diffSec < 60) return APP_LANG === 'bn' ? 'এইমাত্র' : 'Just now';
 
     const diffM = Math.floor(diffSec / 60);
@@ -1115,8 +1113,8 @@ function processVideoSnapshot(docs) {
         const data = d.data(), links = extractVideoLinks(data);
         return {
             id: d.id, ...data, title: data.title || data.name || (APP_LANG === 'bn' ? 'ভিডিও' : 'Video'),
-            thumb: data.thumb || data.thumbnail || data.poster || 'https://via.placeholder.com/600x450?text=HD+Video',
-            duration: data.duration || 'HD', url: links[0]?.url || data.url || '', links, views: Number(data.views || 0),
+            thumb: data.thumb || data.thumbnail || data.poster || 'https://via.placeholder.com/800x450?text=1080p+Ultra+HD',
+            duration: data.duration || '1080p HD', url: links[0]?.url || data.url || '', links, views: Number(data.views || 0),
             likes: Number(data.likes || 0), season: data.season || 'S5',
             timeAgo: data.timeAgo || formatTimeAgo(data.createdAt || data.timestamp || data.date),
             section: (data.section || '').toLowerCase(), type: (data.type || '').toLowerCase(), 
@@ -1340,14 +1338,14 @@ function renderVideosForGrid(type, list) {
             <span class="series-chip-pill ${isLiked ? 'active-liked' : ''}" id="card-like-chip-${v.id}" onclick="toggleCardLike(event, '${v.id}')"><i class="fa-solid fa-thumbs-up"></i> <span id="card-like-count-${v.id}">${likesStr}</span></span>
             ${isSeries ? `<span class="series-chip-pill"><i class="fa-solid fa-bars-staggered"></i> ${formatNumber(epCount)} ${t.partPrefix}</span><span class="series-chip-pill pill-season"><i class="fa-solid fa-clapperboard"></i> ${v.season || 'S5'}</span>` : 
              (type === 'adult' ? `<span class="series-chip-pill pill-season"><i class="fa-solid fa-fire"></i> ${epCount > 1 ? formatNumber(epCount) + ' ' + t.partPrefix : (APP_LANG === 'bn' ? 'হট' : 'Hot')}</span>` :
-             `<span class="series-chip-pill pill-season"><i class="fa-solid fa-film"></i> ${epCount > 1 ? formatNumber(epCount) + ' ' + t.partPrefix : 'HD'}</span>`)}
+             `<span class="series-chip-pill pill-season"><i class="fa-solid fa-film"></i> ${epCount > 1 ? formatNumber(epCount) + ' ' + t.partPrefix : '1080p HD'}</span>`)}
         `;
 
         return `
         <div class="series-card-item" id="video-card-${v.id}" onclick="${isSeries ? `openSeriesEpisodesDrawer('${v.id}')` : `openVideoDetailView('${v.id}')`}">
             <div class="series-thumb-container">
-                <div class="series-thumb-badge-blue"><i class="fa-solid fa-circle-play"></i> ${v.duration || 'HD'}</div>
-                <img src="${v.thumb}" onerror="this.src='https://via.placeholder.com/600x450?text=Enjoy+Movies'" loading="lazy" decoding="async">
+                <div class="series-thumb-badge-blue"><i class="fa-solid fa-circle-play"></i> ${v.duration || '1080p HD'}</div>
+                <img src="${v.thumb}" onerror="this.src='https://via.placeholder.com/800x450?text=Enjoy+Movies+1080p'" loading="lazy" decoding="async">
                 ${rightBadge}
             </div>
             <div class="series-info-body shimmer-card-effect">
@@ -1387,12 +1385,12 @@ function openSeriesEpisodesDrawer(seriesId) {
         <div class="episode-item-card" onclick="selectEpisodeFromDrawer(${idx})">
             <div class="ep-left-wrap">
                 <div class="ep-thumb-box">
-                    <img src="${ep.thumb || s.thumb}" onerror="this.src='https://via.placeholder.com/120x90?text=EP'" loading="lazy" decoding="async">
+                    <img src="${ep.thumb || s.thumb}" onerror="this.src='https://via.placeholder.com/160x100?text=EP'" loading="lazy" decoding="async">
                     <span class="ep-badge-label">${t.partPrefix} ${formatNumber(idx + 1)}</span>
                 </div>
                 <div class="ep-details">
                     <h4>${s.title} - ${ep.name || `${t.partPrefix} ${formatNumber(idx + 1)}`}</h4>
-                    <p>${ep.duration || 'HD'} • ${APP_LANG === 'bn' ? `সিজন ${formatNumber(s.season?.replace(/\D/g, '') || 5)}` : `Season ${s.season?.replace(/\D/g, '') || 5}`} • ${formatNumber(ep.views || 0)} ${t.viewsWord}</p>
+                    <p>${ep.duration || '1080p HD'} • ${APP_LANG === 'bn' ? `সিজন ${formatNumber(s.season?.replace(/\D/g, '') || 5)}` : `Season ${s.season?.replace(/\D/g, '') || 5}`} • ${formatNumber(ep.views || 0)} ${t.viewsWord}</p>
                 </div>
             </div>
             <div class="ep-arrow-btn"><i class="fa-solid fa-chevron-right"></i></div>
@@ -1439,14 +1437,14 @@ function openVideoDetailView(videoId, epIndex = null) {
     if (badge) {
         const isAd = isAdultVideo(video) || currentActiveTab === 'adult', isSer = isSeriesVideo(video) || currentActiveTab === 'series';
         const label = APP_LANG === 'bn' ? (isAd ? 'এন্ডাল' : (isSer ? 'সিরিজ' : 'মুভি')) : (isAd ? 'Endal' : (isSer ? 'Series' : 'Movie'));
-        badge.innerHTML = `<i class="fa-solid ${isAd ? 'fa-fire' : (isSer ? 'fa-layer-group' : 'fa-clapperboard')}"></i> ${label}`;
+        badge.innerHTML = `<i class="fa-solid ${isAd ? 'fa-fire' : (isSer ? 'fa-layer-group' : 'fa-clapperboard')}"></i> ⚡ 1080p ${label}`;
         badge.style.background = isAd ? 'var(--grad-red)' : (isSer ? 'var(--grad-purple-pink)' : '#2563eb');
-        if (badgeText) badgeText.innerText = `${label} কনটেন্ট`;
+        if (badgeText) badgeText.innerText = `1080p ফুল এইচডি ${label} কনটেন্ট`;
     }
 
     $('detail-poster-img').src = video.thumb;
     $('detail-file-title').innerText = video.title;
-    $('detail-duration-badge').innerHTML = `<i class="fa-regular fa-clock"></i> ${video.duration || 'HD'}`;
+    $('detail-duration-badge').innerHTML = `<i class="fa-solid fa-video"></i> 1080P • ${video.duration || 'FULL HD'}`;
     $('detail-views-txt').innerText = `${formatNumber(video.views || 0)} ${I18N[APP_LANG].viewsWord}`;
 
     updateDetailLikeUI();
@@ -1517,7 +1515,6 @@ function updateUnlockProgressUI() {
     const adBtn = $('btn-unlock-ad-step');
     const pointBtn = $('btn-unlock-point-step');
 
-    // ৩টি স্ট্যাট কার্ডের মান
     if ($('ui-req-ads-count')) $('ui-req-ads-count').innerText = formatNumber(total);
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(userPts);
     if ($('ui-remaining-ads-count')) $('ui-remaining-ads-count').innerText = formatNumber(isUnlocked ? 0 : remaining);
