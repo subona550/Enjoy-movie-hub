@@ -1,4 +1,4 @@
-const $ = id => document.getElementById(id);
+const $const $ = id => document.getElementById(id);
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR9cx11EjwDzoCshY_8_j-pBix_brYA50",
@@ -31,7 +31,7 @@ const I18N = {
         btnShareRef: "শেয়ার করুন", btnCopyRef: "লিংক কপি",
         payoutPageHead: "টাকা উত্তোলন", payoutPageSub: "বিকাশ, নগদ ও মোবাইল রিচার্জ",
         lblEarnStatBal: "বর্তমান পয়েন্ট", lblEarnStatRew: "প্রতি অ্যাড পয়েন্ট", lblEarnStatWatch: "দেখা বিজ্ঞাপন", lblEarnStatLim: "দৈনিক লিমিট",
-        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "আনলক নোটিউট", videoUnlockNoticeDesc: "এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।",
+        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "আনলক নোটিশ", videoUnlockNoticeDesc: "এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।",
         btnAdWatchRemain: "ভিডিও আনলক করুন", btnPointUnlock: "আমার পয়েন্ট ব্যবহার করুন",
         rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
         btnAdultConfirm: "আমি নিজ দায়িত্বে প্রবেশ করছি", btnAdultDecline: "না, সিনেমা লাইব্রেরিতে ফিরে যান", tgModalHeading: "চ্যানেলে জয়েন করা বাধ্যতামূলক",
@@ -328,10 +328,10 @@ function renderRulesList() {
     const l = $('rules-modal-content-list');
     if (!l) return;
     l.innerHTML = APP_LANG === 'bn' ? `
-        <div><b style="color:#00f260;">১. নির্বাচন:</b> যেকোনো ভিডিও কার্ডে ক্লিক করুন।</div>
-        <div><b style="color:var(--primary);">২. বিজ্ঞাপন আনলক:</b> নির্দিষ্ট অ্যাড দেখে ভিডিও ফ্রি আনলক করুন।</div>
-        <div><b style="color:#ffe000;">৩. পয়েন্ট আনলক:</b> কোনো অ্যাড ছাড়া পয়েন্ট দিয়ে সরাসরি আনলক করুন।</div>
-        <div><b style="color:#ff0844;">৪. ডিভাইস পলিসি:</b> একই ফোনে একাধিক অ্যাকাউন্ট খোলা নিষিদ্ধ।</div>
+        <div><b style="color:#00f260;">১. নির্বাচন:</b> যেকোনো ভিডিও কার্ডে ক্লিক করে ভেতরে প্রবেশ করুন।</div>
+        <div><b style="color:var(--primary);">২. বিজ্ঞাপন আনলক:</b> নির্দিষ্ট অ্যাড দেখে ভিডিওটি ফ্রিতে আনলক করুন।</div>
+        <div><b style="color:#ffe000;">৩. পয়েন্ট আনলক:</b> কোনো অ্যাড ছাড়া পয়েন্ট ব্যবহার করে তাৎক্ষণিক আনলক করুন।</div>
+        <div><b style="color:#ff0844;">৪. ডিভাইস পলিসি:</b> একই ফোনে একাধিক অ্যাকাউন্ট খোলা সম্পূর্ণ নিষিদ্ধ।</div>
     ` : `
         <div><b style="color:#00f260;">1. Select:</b> Click on any video card to open.</div>
         <div><b style="color:var(--primary);">2. Ad Unlock:</b> Watch required ads to unlock videos for free.</div>
@@ -737,8 +737,8 @@ function extractTelegramUser() {
         document.body.innerHTML = `
             <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#03050c; color:#fff; text-align:center; padding:20px;">
                 <i class="fa-brands fa-telegram" style="font-size:60px; color:var(--primary); margin-bottom:15px; filter: drop-shadow(0 0 15px var(--primary));"></i>
-                <h2 style="font-size:22px; margin-bottom:10px; font-weight:900;">শুধুমাত্র টেলিগ্রামে চলবে</h2>
-                <p style="font-size:15px; color:#8ba2c4; max-width:300px; line-height:1.5; font-weight:700;">এই অ্যাপটি ব্যবহারের জন্য দয়া করে আমাদের অফিসিয়াল টেলিগ্রাম বট থেকে প্রবেশ করুন।</p>
+                <h2 style="font-size:22px; margin-bottom:10px; font-weight:800;">শুধুমাত্র টেলিগ্রামে চলবে</h2>
+                <p style="font-size:15px; color:#cbd5e1; max-width:300px; line-height:1.5; font-weight:600;">এই অ্যাপটি ব্যবহারের জন্য দয়া করে আমাদের অফিসিয়াল টেলিগ্রাম বট থেকে প্রবেশ করুন।</p>
             </div>`;
         throw new Error("Unauthorized: Opened outside Telegram");
     }
@@ -791,7 +791,6 @@ function initAdsgram() {
     }
 }
 
-// ================== AD ENGINES ==================
 let adWatchCounter = 0;
 
 function showMonetagAd() {
@@ -1847,7 +1846,7 @@ async function loadWithdrawalHistory() {
 
     try {
         const snap = await db.collection("withdrawals").where("userId", "==", String(currentUser.id)).limit(40).get();
-        if (snap.empty) { list.innerHTML = `<div style="text-align:center; padding:22px; color:#8ba2c4; font-size:14px; font-weight:800;">${APP_LANG === 'bn' ? 'কোনো হিস্টোরি পাওয়া যায়নি!' : 'No history found!'}</div>`; return; }
+        if (snap.empty) { list.innerHTML = `<div style="text-align:center; padding:22px; color:#cbd5e1; font-size:14px; font-weight:700;">${APP_LANG === 'bn' ? 'কোনো হিস্টোরি পাওয়া যায়নি!' : 'No history found!'}</div>`; return; }
 
         let items = [];
         snap.forEach(d => items.push({ id: d.id, ...d.data() }));
@@ -1861,13 +1860,13 @@ async function loadWithdrawalHistory() {
             <div class="history-card-item shimmer-card-effect" style="flex-direction:column; align-items:stretch; gap:6px;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div class="hci-left">
-                        <div style="font-size:13px; font-weight:800; color:var(--primary); margin-bottom:2px;"><i class="fa-solid fa-user"></i> ${item.userName || currentUser.first_name || 'User'} <span style="font-size:11px; color:#8ba2c4;">${item.userUsername ? `@${item.userUsername}` : ''}</span></div>
-                        <h5 style="font-size:14.5px; color:#fff; font-weight:900; margin: 2px 0;">${gw} - ${item.number}</h5>
-                        <p style="font-size:12px; color:#8ba2c4; font-weight:700;">${formatNumber(item.points || 0)} ${I18N[APP_LANG].unitPoints}</p>
+                        <div style="font-size:13.5px; font-weight:800; color:var(--primary); margin-bottom:2px;"><i class="fa-solid fa-user"></i> ${item.userName || currentUser.first_name || 'User'} <span style="font-size:12px; color:#cbd5e1;">${item.userUsername ? `@${item.userUsername}` : ''}</span></div>
+                        <h5 style="font-size:15px; color:#fff; font-weight:800; margin: 2px 0;">${gw} - ${item.number}</h5>
+                        <p style="font-size:13px; color:#cbd5e1; font-weight:600;">${formatNumber(item.points || 0)} ${I18N[APP_LANG].unitPoints}</p>
                     </div>
-                    <div class="hci-right"><div style="font-size:16px; font-weight:900; color:#00f260; text-shadow:0 0 8px rgba(0,242,96,0.5);">${I18N[APP_LANG].currencySymbol} ${formatNumber(item.amountBDT)}</div><span class="hci-status-badge ${statusClass}">${item.status}</span></div>
+                    <div class="hci-right"><div style="font-size:16px; font-weight:800; color:#00f260; text-shadow:0 0 8px rgba(0,242,96,0.5);">${I18N[APP_LANG].currencySymbol} ${formatNumber(item.amountBDT)}</div><span class="hci-status-badge ${statusClass}">${item.status}</span></div>
                 </div>
-                <div style="border-top:1px dashed rgba(255,255,255,0.08); padding-top:6px; display:flex; justify-content:space-between; font-size:12px; color:#8ba2c4; font-weight:700;">
+                <div style="border-top:1px dashed rgba(255,255,255,0.12); padding-top:6px; display:flex; justify-content:space-between; font-size:12.5px; color:#cbd5e1; font-weight:600;">
                     <span>রেফার: <b style="color:var(--primary);">${formatNumber(item.totalReferralsSnapshot ?? 0)}</b> (আয়: <b style="color:#ffe000;">${formatNumber(item.refEarnedSnapshot ?? 0)}</b> pt)</span>
                     <span>অবশিষ্ট ব্যালেন্স: <b style="color:#00f260;">${item.remainingBalanceSnapshot !== undefined ? formatNumber(item.remainingBalanceSnapshot) : '---'}</b> pt</span>
                 </div>
