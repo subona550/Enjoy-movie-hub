@@ -11,22 +11,22 @@
     <script src="https://libtl.com/sdk.js" data-zone="11928576" data-sdk="show_11928576"></script>
     <script src="https://js.onclckvd.com/in-stream-ad-admanager/tma.js"></script>
     
-    <!-- Third-Party Libraries -->
+    <!-- Third-Party Performance Libraries -->
     <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
     
-    <!-- Font Awesome & Google Fonts -->
+    <!-- Font Awesome 6 Pro & Premium Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- External Stylesheet -->
+    <!-- External Ultra HD Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ================= PRELOADER ================= -->
+<!-- ================= 1. PRELOADER ================= -->
 <div id="app-preloader">
     <div class="preloader-bg-glow"></div>
     <div class="preloader-content">
@@ -39,7 +39,7 @@
     </div>
 </div>
 
-<!-- ================= SYSTEM ALERTS / SCREENS ================= -->
+<!-- ================= 2. SYSTEM ALERTS / SECURITY SCREENS ================= -->
 <div id="banned-screen">
     <div class="banned-icon-circle"><i class="fa-solid fa-ban"></i></div>
     <h2 style="font-size: 22px; color: #fff; margin-bottom: 8px; font-weight: 900;" id="banned-title">আপনার একাউন্ট স্থগিত করা হয়েছে</h2>
@@ -53,12 +53,13 @@
     <p style="font-size: 14px; color: #8ba2c4; line-height: 1.5; max-width: 320px; font-weight: 700;" id="maint-desc">আমরা সিস্টেম আপডেট করছি। কিছুক্ষণ পর আবার চেষ্টা করুন।</p>
 </div>
 
+<!-- TOP TOAST NOTIFICATION -->
 <div id="top-toast" class="top-toast">
     <i class="fa-solid fa-circle-info" id="toast-icon"></i>
     <span id="toast-msg">বার্তা</span>
 </div>
 
-<!-- ================= SIDEBAR DRAWER ================= -->
+<!-- ================= 3. SIDEBAR NAVIGATION DRAWER ================= -->
 <div id="drawer-overlay" class="drawer-overlay" onclick="toggleSidebarMenu(false)"></div>
 <div id="drawer-menu" class="drawer-menu">
     <div class="drawer-header">
@@ -82,7 +83,7 @@
     <div class="drawer-item" onclick="goToTelegramChannel()" style="background: #081126;"><i class="fa-brands fa-telegram" style="color: var(--primary); font-size: 19px;"></i><span id="menu-telegram-name">টেলিগ্রাম</span></div>
 </div>
 
-<!-- ================= MAIN HEADER ================= -->
+<!-- ================= 4. MAIN APP HEADER ================= -->
 <header id="main-header">
     <div class="header-container">
         <div class="head-left">
@@ -97,12 +98,12 @@
     </div>
 </header>
 
-<!-- SEARCH BAR -->
+<!-- QUICK SEARCH BAR -->
 <div id="search-container" style="display:none; padding: 10px 14px; background: #070e20;">
     <input type="text" id="video-search-input" class="premium-input" placeholder="ভিডিও বা সিনেমার নাম খুঁজুন..." oninput="debouncedSearch()" style="margin-bottom:0;">
 </div>
 
-<!-- ================= TAB: MOVIES ================= -->
+<!-- ================= 5. TAB: MOVIES ================= -->
 <div id="tab-movies" class="content-tab">
     <div class="hero-banner-grid">
         <div id="hero-card-movie-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'new_movie', 'movies')">
@@ -125,7 +126,7 @@
         <button class="btn-unlock-blue" onclick="openVideoRulesModal()"><i class="fa-solid fa-circle-info"></i> <span id="btn-video-rules-txt">ভিডিও দেখার নিয়ম</span></button>
     </div>
 
-    <!-- কালো ব্যাকগ্রাউন্ড থিমে ক্যাটাগরি কন্টেইনার -->
+    <!-- ক্যাটাগরি ফিল্টার -->
     <div class="category-filter-section" id="movie-cat-section">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -139,7 +140,7 @@
     <div id="movie-empty-card" class="empty-video-card" style="display:none;">সিনেমা লাইব্রেরিতে কোনো সিনেমা পাওয়া যায়নি!</div>
 </div>
 
-<!-- ================= TAB: SERIES ================= -->
+<!-- ================= 6. TAB: SERIES ================= -->
 <div id="tab-series" class="content-tab" style="display:none;">
     <div class="hero-banner-grid">
         <div id="hero-card-series-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'new_series', 'series')">
@@ -161,7 +162,7 @@
         <p id="series-feature-desc">দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।</p>
     </div>
 
-    <!-- কালো ব্যাকগ্রাউন্ড থিমে ক্যাটাগরি কন্টেইনার -->
+    <!-- ক্যাটাগরি ফিল্টার -->
     <div class="category-filter-section" id="series-cat-section">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -175,7 +176,7 @@
     <div id="series-empty-card" class="empty-video-card" style="display:none;">সিরিজ লাইব্রেরিতে কোনো সিরিজ পাওয়া যায়নি!</div>
 </div>
 
-<!-- ================= TAB: ADULT ================= -->
+<!-- ================= 7. TAB: ADULT ================= -->
 <div id="tab-adult" class="content-tab" style="display:none;">
     <div class="hero-banner-grid">
         <div id="hero-card-adult-new" class="hero-card hero-blue active-animated" onclick="handleHeroSectionClick(this, 'adult_new', 'adult')">
@@ -197,7 +198,7 @@
         <p id="adult-feature-desc" style="margin-bottom:0;">আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।</p>
     </div>
 
-    <!-- কালো ব্যাকগ্রাউন্ড থিমে ক্যাটাগরি কন্টেইনার -->
+    <!-- ক্যাটাগরি ফিল্টার -->
     <div class="category-filter-section" id="adult-cat-section">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -211,7 +212,7 @@
     <div id="adult-empty-card" class="empty-video-card" style="display:none;">এই সেকশনে কোনো ভিডিও পাওয়া যায়নি!</div>
 </div>
 
-<!-- ================= TAB: PROFILE ================= -->
+<!-- ================= 8. TAB: USER PROFILE ================= -->
 <div id="tab-profile" class="content-tab" style="display:none;">
     <div class="profile-user-card shimmer-card-effect">
         <div class="profile-avatar-wrap"><i class="fa-solid fa-user"></i><div class="status-dot-online"></div></div>
@@ -284,7 +285,7 @@
     </div>
 </div>
 
-<!-- ================= VIEW: AD HUB ================= -->
+<!-- ================= 9. VIEW: AD HUB ================= -->
 <div id="earn-hub-view" class="content-tab">
     <div class="inpage-header-nav">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -332,7 +333,7 @@
     </div>
 </div>
 
-<!-- ================= VIEW: DEDICATED AD SCREEN ================= -->
+<!-- ================= 10. VIEW: DEDICATED AD SCREEN ================= -->
 <div id="dedicated-ad-view" class="content-tab">
     <div class="inpage-header-nav">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -361,7 +362,7 @@
     </div>
 </div>
 
-<!-- ================= VIEW: PAYOUT ================= -->
+<!-- ================= 11. VIEW: PAYOUT / WITHDRAW ================= -->
 <div id="payout-view" class="content-tab">
     <div class="inpage-header-nav">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -439,30 +440,30 @@
     </div>
 </div>
 
-<!-- ================= VIEW: VIDEO UNLOCK & DETAILS ================= -->
+<!-- ================= 12. VIEW: VIDEO UNLOCK & DETAILS (REVOLUTIONIZED ULTRA-HD) ================= -->
 <div id="video-unlock-detail-view">
     
-    <!-- শীর্ষ আনলক নোটিশ কার্ড -->
+    <!-- শীর্ষ প্রিমিয়াম নোটিশ কার্ড -->
     <div class="custom-unlock-notice">
         <div class="cun-left">
             <div class="cun-bell-icon"><i class="fa-solid fa-bell"></i></div>
             <div class="cun-meta">
                 <div class="cun-head-row">
-                    <h4 id="video-unlock-notice-title">আনলক নোটিশ</h4>
+                    <h4 id="video-unlock-notice-title">ভিডিও আনলক</h4>
                     <span class="cun-cat-badge" id="detail-category-badge-pill"><i class="fa-solid fa-clapperboard"></i> <span id="detail-category-badge-text">মুভি কনটেন্ট</span></span>
                 </div>
-                <p id="video-unlock-notice-desc">এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।</p>
+                <p id="video-unlock-notice-desc">বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।</p>
             </div>
         </div>
     </div>
 
-    <!-- থাম্বনেইল ও সোশাল বাটন কার্ড -->
+    <!-- থাম্বনেইল পোস্টার ও সোশাল বাটন কার্ড -->
     <div class="poster-outer-wrapper">
         <div class="poster-card">
             <div class="poster-media-wrap">
                 <span class="poster-badge-top" id="detail-category-badge"><i class="fa-solid fa-film"></i> মুভি</span>
                 <img id="detail-poster-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Thumbnail" decoding="async">
-                <span class="poster-badge-bottom" id="detail-duration-badge"><i class="fa-regular fa-clock"></i> 4K 2:27:35</span>
+                <span class="poster-badge-bottom" id="detail-duration-badge"><i class="fa-regular fa-clock"></i> HD</span>
             </div>
             <div class="poster-social-row">
                 <div class="poster-pill-btn" id="detail-like-btn-action" onclick="toggleDetailVideoLike()">
@@ -481,64 +482,74 @@
     <!-- ভিডিও টাইটেল -->
     <h2 class="unlock-movie-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</h2>
 
-    <!-- আনলক মেয়াদের টাইমার (আনলক থাকলে শো করবে) -->
+    <!-- আনলক মেয়াদের টাইমার (আনলক অবস্থায় শো হবে) -->
     <div class="unlocked-timer-badge" id="unlock-status-timer-card" style="display:none;">
         <div class="ut-title" id="ut-title-txt"><i class="fa-solid fa-clock"></i> আনলক মেয়াদের বাকি:</div>
         <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
     </div>
 
-    <!-- মূল আনলক বক্স -->
+    <!-- মূল আনলক কন্ট্রোল হাব -->
     <div class="unlock-system-container shimmer-card-effect">
         <div class="usc-header">
             <span class="usc-glow-dot"></span>
-            <span>এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।</span>
+            <span>অ্যাড দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে আনলক করুন:</span>
         </div>
 
-        <!-- ৩টি স্ট্যাট কার্ড -->
+        <!-- ৩টি মূল কার্ড: ১. আনলক পয়েন্ট কার্ড, ২. ব্যালেন্স কার্ড, ৩. অ্যাড কার্ড -->
         <div class="usc-stats-grid">
-            <div class="usc-stat-card card-orange">
-                <div class="usc-icon-circle ico-orange"><i class="fa-solid fa-key"></i></div>
-                <div class="usc-stat-label">প্রয়োজন</div>
-                <div class="usc-stat-val" id="ui-req-ads-count">৫</div>
-            </div>
             
-            <div class="usc-stat-card card-green" id="card-points-unlock-container">
-                <div class="usc-icon-circle ico-green"><i class="fa-solid fa-coins"></i></div>
-                <div class="usc-stat-label">আমার পয়েন্ট</div>
-                <div class="usc-stat-val" id="ui-user-points-count">০</div>
-                <!-- কার্ডের ভেতরে পয়েন্ট আনলক বাটন -->
+            <!-- কার্ড ১: আনলক পয়েন্ট কার্ড -->
+            <div class="usc-stat-card card-point-unlock">
+                <div class="usc-card-top-indicator"><i class="fa-solid fa-bolt"></i> ইনস্ট্যান্ট</div>
+                <div class="usc-icon-circle ico-point"><i class="fa-solid fa-key"></i></div>
+                <div class="usc-stat-label">আনলক পয়েন্ট</div>
+                <div class="usc-stat-val" id="ui-point-cost-preview">৫ <small>pt</small></div>
+                <!-- পয়েন্ট আনলক বাটন -->
                 <button class="card-point-unlock-btn" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
                     <i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">পয়েন্ট আনলক</span>
                 </button>
             </div>
 
-            <div class="usc-stat-card card-purple">
-                <div class="usc-icon-circle ico-purple"><i class="fa-solid fa-hourglass-half"></i></div>
-                <div class="usc-stat-label">বাকি</div>
-                <div class="usc-stat-val" id="ui-remaining-ads-count">৫</div>
+            <!-- কার্ড ২: ব্যবহারকারীর ব্যালেন্স কার্ড -->
+            <div class="usc-stat-card card-user-balance">
+                <div class="usc-card-top-indicator"><i class="fa-solid fa-wallet"></i> ওয়ালেট</div>
+                <div class="usc-icon-circle ico-balance"><i class="fa-solid fa-coins"></i></div>
+                <div class="usc-stat-label">আমার ব্যালেন্স</div>
+                <div class="usc-stat-val" id="ui-user-points-count">০</div>
+                <div class="usc-stat-sub-badge"><i class="fa-solid fa-circle-check"></i> কয়েন ব্যালেন্স</div>
             </div>
+
+            <!-- কার্ড ৩: অ্যাড কাউন্টার কার্ড -->
+            <div class="usc-stat-card card-ad-progress">
+                <div class="usc-card-top-indicator"><i class="fa-solid fa-film"></i> ফ্রি আনলক</div>
+                <div class="usc-icon-circle ico-ad"><i class="fa-solid fa-hourglass-half"></i></div>
+                <div class="usc-stat-label">বাকি অ্যাড</div>
+                <div class="usc-stat-val"><span id="ui-remaining-ads-count">৩</span><small>/<span id="ui-req-ads-count">৩</span></small></div>
+                <div class="usc-stat-sub-badge badge-ads"><i class="fa-solid fa-play"></i> মোট প্রয়োজন</div>
+            </div>
+
         </div>
 
-        <!-- প্রগ্রেস ট্র্যাক -->
+        <!-- প্রগ্রেস ট্র্যাক বার -->
         <div class="usc-progress-track">
             <div class="usc-progress-fill" id="unlock-p-bar"></div>
         </div>
 
         <div class="usc-progress-info">
-            <div class="usc-prog-count">প্রগ্রেস: <span id="unlock-ratio-txt">০/৫</span></div>
-            <div class="usc-prog-sub">পয়েন্ট অথবা ads দিয়ে আনলক করুন।</div>
+            <div class="usc-prog-count">বিজ্ঞাপন সম্পন্ন: <span id="unlock-ratio-txt">০/৩</span></div>
+            <div class="usc-prog-sub">সম্পূর্ণ বিজ্ঞাপন দেখলে ভিডিও স্বয়ংক্রিয়ভাবে চালু হবে।</div>
         </div>
 
-        <!-- বিজ্ঞাপন আনলক বাটন -->
+        <!-- বড় বিজ্ঞাপন আনলক বাটন -->
         <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
-            <i class="fa-solid fa-lock"></i> <span id="btn-ad-remain-txt">ভিডিও আনলক করুন</span>
+            <i class="fa-solid fa-lock"></i> <span id="btn-ad-remain-txt">বিজ্ঞাপন দেখে আনলক করুন</span>
         </button>
     </div>
 
-    <!-- নিচে পিংক গ্রেডিয়েন্ট ব্যাক বাটন -->
+    <!-- নিচে প্রিমিয়াম ব্রাউজ আরও দেখুন বাটন -->
     <div class="btn-browse-more-bottom" onclick="closeVideoDetailView()">
         <div class="bbm-left">
-            <i class="fa-solid fa-film"></i>
+            <i class="fa-solid fa-clapperboard"></i>
             <span id="lbl-back-home-txt">আরো দেখুন</span>
         </div>
         <i class="fa-solid fa-chevron-right bbm-arrow"></i>
@@ -546,7 +557,7 @@
 
 </div>
 
-<!-- ================= DRAWER: SERIES EPISODES ================= -->
+<!-- ================= 13. DRAWER: SERIES EPISODES ================= -->
 <div id="series-drawer-modal" class="series-drawer-modal" onclick="if(event.target===this) closeSeriesDrawer()">
     <div class="series-drawer-sheet">
         <div class="series-drawer-header"><h3 id="series-drawer-title">সিরিজের এপিসোড</h3><div class="series-drawer-close" onclick="closeSeriesDrawer()"><i class="fa-solid fa-xmark"></i></div></div>
@@ -554,7 +565,7 @@
     </div>
 </div>
 
-<!-- ================= BOTTOM NAVIGATION BAR ================= -->
+<!-- ================= 14. BOTTOM NAVIGATION DOCK ================= -->
 <nav class="bottom-nav">
     <div class="nav-item active" onclick="switchNavTab('movies', this)">
         <div class="nav-icon-pill"><i class="fa-solid fa-clapperboard"></i></div>
@@ -574,7 +585,7 @@
     </div>
 </nav>
 
-<!-- ================= MODALS ================= -->
+<!-- ================= 15. POPUP DIALOGS & MODALS ================= -->
 
 <!-- Web Video Player Modal -->
 <div id="web-player-modal" class="modal-wrap" onclick="if(event.target===this) closeWebVideoPlayer()">
@@ -597,7 +608,7 @@
     </div>
 </div>
 
-<!-- Rules Modal -->
+<!-- Video Rules Modal -->
 <div id="rules-modal" class="modal-wrap" onclick="if(event.target===this) { this.style.display='none'; updateTelegramBackButtonState(); }">
     <div class="modal-box" style="text-align: left;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
@@ -609,7 +620,7 @@
     </div>
 </div>
 
-<!-- Adult Section Warning Modal -->
+<!-- Adult Warning Modal -->
 <div id="adult-warning-modal" class="modal-wrap" style="display:none; z-index: 100010;">
     <div class="modal-box" style="border-color: rgba(255, 8, 68, 0.6); max-width: 390px; text-align: left; box-shadow: 0 0 35px rgba(255, 8, 68, 0.35);">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
@@ -627,7 +638,7 @@
     </div>
 </div>
 
-<!-- Telegram Mandatory Modal -->
+<!-- Telegram Mandatory Membership Modal -->
 <div id="telegram-mandatory-modal" class="modal-wrap" style="display:none; z-index: 100012;">
     <div class="modal-box">
         <div style="width: 52px; height: 52px; border-radius: 16px; background: var(--grad-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 10px; box-shadow: 0 0 15px var(--primary-glow);"><i class="fa-brands fa-telegram"></i></div>
@@ -640,11 +651,11 @@
     </div>
 </div>
 
-<!-- ================= FIREBASE & APP SCRIPTS ================= -->
+<!-- ================= 16. FIREBASE & CORE SCRIPTS ================= -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
-<!-- External Custom JS -->
+<!-- External Custom Controller Logic -->
 <script src="app.js"></script>
 
 </body>

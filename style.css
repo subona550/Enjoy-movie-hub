@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ENJOY MOVIES ULTRA HD - COMPLETE PREMIUM STYLESHEET
+   ENJOY MOVIES ULTRA HD - COMPLETE 100/100 PREMIUM STYLESHEET (style.css)
    ========================================================================== */
 
 :root { 
@@ -13,7 +13,8 @@
     --grad-blue: linear-gradient(135deg, #0052d4 0%, #4364f7 50%, #00e5ff 100%);
     --grad-red: linear-gradient(135deg, #ff0844 0%, #ff4e50 100%);
     --grad-green: linear-gradient(135deg, #00f260 0%, #0575e6 100%);
-    --grad-gold: linear-gradient(135deg, #ffe000 0%, #799f0c 100%);
+    --grad-gold: linear-gradient(135deg, #ffe000 0%, #ff8c00 100%);
+    --grad-purple: linear-gradient(135deg, #8a2387 0%, #e94057 50%, #f27121 100%);
     --grad-purple-pink: linear-gradient(90deg, #b224ef 0%, #7579ff 100%);
     --neon-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
 }
@@ -27,7 +28,7 @@
     -webkit-user-select: none; 
 }
 
-/* স্মুথ স্ক্রলিং এবং মোবাইল স্ক্রলবার হাইড */
+/* মসৃণ স্ক্রলিং ও বার হাইড */
 html, body { 
     overscroll-behavior: none !important; 
     scroll-behavior: smooth; 
@@ -56,7 +57,7 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     font-weight: 800; 
 }
 
-/* =================== PRELOADER =================== */
+/* =================== ১. প্রি-লোডার =================== */
 #app-preloader {
     position: fixed; 
     inset: 0;
@@ -152,27 +153,18 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     animation: fade-glow-preloader 2s ease-in-out infinite alternate;
 }
 
-@keyframes spin-clockwise { 
-    0% { transform: rotate(0deg); } 
-    100% { transform: rotate(360deg); } 
-}
-
-@keyframes spin-counter { 
-    0% { transform: rotate(0deg); } 
-    100% { transform: rotate(-360deg); } 
-}
-
+@keyframes spin-clockwise { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes spin-counter { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
 @keyframes pulse-preloader { 
     0% { transform: scale(0.96); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); } 
     100% { transform: scale(1.04); box-shadow: 0 0 32px rgba(0, 210, 255, 0.8); } 
 }
-
 @keyframes fade-glow-preloader { 
     0% { opacity: 0.8; text-shadow: 0 0 8px rgba(0, 210, 255, 0.4); } 
     100% { opacity: 1; text-shadow: 0 0 18px rgba(0, 210, 255, 0.9); } 
 }
 
-/* =================== ANIMATIONS & SHIMMER =================== */
+/* =================== ২. প্রিমিয়াম অ্যানিমেশন ও শিমার =================== */
 @keyframes subtleFadeUp { 
     from { opacity: 0; transform: translateY(8px); } 
     to { opacity: 1; transform: translateY(0); } 
@@ -215,7 +207,7 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
-/* বোতাম স্পর্শ ফিডব্যাক */
+/* বাটন ফিডব্যাক */
 .btn-unlock-blue, .btn-withdraw-green, .circle-btn, .nav-item, .btn-earn-gradient, .btn-share-ref, .btn-action-cyan, .btn-action-gold, .page-pill-btn, .sim-opt-pill, .cat-filter-pill, .ad-network-card, .btn-unlock-purple, .card-point-unlock-btn, .btn-browse-more-bottom {
     transition: transform 0.14s ease, filter 0.18s ease, box-shadow 0.2s ease; 
     position: relative; 
@@ -226,7 +218,7 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     transform: scale(0.96); 
 }
 
-/* =================== HEADER =================== */
+/* =================== ৩. হেডার ও সার্চ =================== */
 header { 
     background: rgba(8, 14, 30, 0.94); 
     padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px; 
@@ -304,7 +296,7 @@ header {
     box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
 }
 
-/* =================== DRAWER / SIDEBAR =================== */
+/* =================== ৪. সাইডবার ড্রয়ার =================== */
 .drawer-overlay {
     position: fixed; 
     top: 0; 
@@ -456,7 +448,7 @@ header {
     margin: 20px 4px 10px; 
 }
 
-/* =================== HERO & FEATURED =================== */
+/* =================== ৫. হিরো ব্যানার ও ফিচার্ড =================== */
 .hero-banner-grid { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
@@ -516,10 +508,7 @@ header {
     z-index: -1; 
 }
 
-@keyframes rotateAroundBorder { 
-    0% { transform: rotate(0deg); } 
-    100% { transform: rotate(360deg); } 
-}
+@keyframes rotateAroundBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .hero-icon-box {
     width: 40px; 
@@ -643,7 +632,7 @@ header {
     box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
 }
 
-/* =================== ক্যাটাগরি সেকশন =================== */
+/* =================== ৬. ক্যাটাগরি সেকশন =================== */
 .category-filter-section { 
     margin: 4px 10px 16px; 
     padding: 14px 14px; 
@@ -754,7 +743,7 @@ header {
     font-weight: 800; 
 }
 
-/* =================== VIDEO GRID & CARDS =================== */
+/* =================== ৭. ভিডিও গ্রিড ও কার্ড =================== */
 .video-grid { 
     display: flex; 
     flex-direction: column; 
@@ -787,7 +776,7 @@ header {
     overflow: hidden; 
     display: flex; 
     align-items: center; 
-    justify-content: center;
+    justify-content: center; 
 }
 
 .series-thumb-container img { 
@@ -926,7 +915,6 @@ header {
     margin-left: auto; 
 }
 
-/* হাইলাইট করা কার্ড পালস অ্যানিমেশন */
 @keyframes cardNeonPulse {
     0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); border-color: #00e5ff; }
     50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.95), 0 0 20px #ffe000; border-color: #ffe000; }
@@ -938,7 +926,7 @@ header {
     scroll-margin-top: 80px; 
 }
 
-/* =================== PAGINATION =================== */
+/* =================== ৮. পেজিনেশন =================== */
 .pagination-container { 
     display: flex; 
     justify-content: center; 
@@ -977,171 +965,82 @@ header {
     pointer-events: none; 
 }
 
-/* =================== SERIES DRAWER SHEET =================== */
-.series-drawer-modal {
-    display: none; 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(3, 7, 18, 0.88);
-    backdrop-filter: blur(10px); 
-    -webkit-backdrop-filter: blur(10px); 
-    z-index: 100015; 
-    align-items: flex-end; 
-    justify-content: center;
-}
-
-.series-drawer-sheet {
-    background: #081126; 
-    width: 100%; 
-    max-width: 520px; 
-    max-height: 85vh; 
-    border-radius: 26px 26px 0 0;
-    border: 1px solid var(--card-border); 
-    border-bottom: none; 
-    padding: 18px 14px calc(26px + env(safe-area-inset-bottom, 0px));
-    box-shadow: 0 -10px 45px rgba(0, 229, 255, 0.2); 
-    display: flex; 
-    flex-direction: column; 
-    animation: slideSheetUp 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-}
-
-@keyframes slideSheetUp { 
-    from { transform: translateY(100%); } 
-    to { transform: translateY(0); } 
-}
-
-.series-drawer-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding-bottom: 14px; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-    margin-bottom: 12px; 
-}
-
-.series-drawer-header h3 { 
-    font-size: 20px; 
-    font-weight: 900; 
-    color: #fff; 
-    text-shadow: 0 0 10px rgba(0,229,255,0.4); 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    max-width: 80%; 
-}
-
-.series-drawer-close {
-    width: 38px; 
-    height: 38px; 
-    border-radius: 12px; 
-    background: #132145; 
-    border: 1px solid var(--card-border);
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    color: #cbd5e1; 
-    font-size: 18px; 
-    cursor: pointer;
-}
-
-.series-episodes-list { 
-    overflow-y: auto; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 10px; 
-}
-
-.episode-item-card {
-    background: #0d1936; 
-    border: 1.5px solid var(--card-border); 
-    border-radius: 16px;
-    padding: 10px 12px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    gap: 10px; 
-    cursor: pointer;
-}
-
-.ep-left-wrap { 
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
-    flex: 1; 
-    min-width: 0; 
-}
-
-.ep-thumb-box { 
-    width: 110px; 
-    aspect-ratio: 16 / 12; 
-    border-radius: 10px; 
-    overflow: hidden; 
-    position: relative; 
-    background: #000; 
-    flex-shrink: 0; 
-}
-
-.ep-thumb-box img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    object-position: center 10%; 
-    filter: contrast(1.08) brightness(1.05); 
-}
-
-.ep-badge-label {
-    position: absolute; 
-    bottom: 3px; 
-    left: 3px; 
-    background: rgba(5, 12, 28, 0.92);
-    border: 1px solid var(--primary); 
-    color: #ffe000; 
-    font-size: 10.5px; 
-    font-weight: 900; 
-    padding: 2px 6px; 
-    border-radius: 5px;
-}
-
-.ep-details { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 4px; 
-    min-width: 0; 
-}
-
-.ep-details h4 { 
-    font-size: 14.5px; 
-    font-weight: 900; 
-    color: #fff; 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-}
-
-.ep-details p { 
-    font-size: 12px; 
-    font-weight: 700; 
-    color: #8ba2c4; 
-}
-
-.ep-arrow-btn { 
-    width: 36px; 
-    height: 36px; 
-    border-radius: 10px; 
-    background: #152550; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    color: var(--primary); 
-    font-size: 14px; 
-    flex-shrink: 0; 
-}
-
-/* =================== VIDEO UNLOCK DETAIL VIEW =================== */
+/* =================== ৯. ভিডিও আনলক ও ডিটেইল ভিউ (১০০% আপগ্রেডেড ৩টি কার্ড) =================== */
 #video-unlock-detail-view { 
     display: none; 
     padding-bottom: 45px; 
     animation: subtleFadeUp 0.2s ease forwards; 
+}
+
+.custom-unlock-notice {
+    background: linear-gradient(135deg, rgba(9, 20, 48, 0.95) 0%, rgba(13, 31, 71, 0.9) 100%);
+    border: 1.5px solid rgba(0, 229, 255, 0.45);
+    border-radius: 20px;
+    padding: 16px 16px;
+    margin: 10px 10px 16px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 229, 255, 0.2);
+}
+
+.cun-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.cun-bell-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0052d4 0%, #00e5ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 23px;
+    flex-shrink: 0;
+    box-shadow: 0 0 18px rgba(0, 229, 255, 0.65);
+}
+
+.cun-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.cun-head-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.cun-head-row h4 {
+    font-size: 17.5px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+.cun-cat-badge {
+    background: rgba(0, 229, 255, 0.15);
+    border: 1px solid rgba(0, 229, 255, 0.55);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 900;
+    padding: 3px 9px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cun-meta p {
+    font-size: 13.5px;
+    color: #b0c4de;
+    font-weight: 700;
+    line-height: 1.45;
 }
 
 .poster-outer-wrapper { 
@@ -1246,6 +1145,15 @@ header {
     text-shadow: 0 0 6px #ff0844; 
 }
 
+.unlock-movie-title {
+    font-size: 19px; 
+    font-weight: 900; 
+    color: #ffffff; 
+    line-height: 1.4; 
+    margin: 16px 12px 16px; 
+    text-shadow: 0 2px 8px rgba(0,0,0,0.85);
+}
+
 .unlocked-timer-badge { 
     margin: 0 10px 14px; 
     background: rgba(0, 242, 96, 0.12); 
@@ -1275,94 +1183,14 @@ header {
     text-shadow: 0 0 8px rgba(255, 224, 0, 0.6); 
 }
 
-.custom-unlock-notice {
-    background: linear-gradient(135deg, rgba(9, 20, 48, 0.95) 0%, rgba(13, 31, 71, 0.9) 100%);
-    border: 1.5px solid rgba(0, 229, 255, 0.45);
-    border-radius: 20px;
-    padding: 16px 16px;
-    margin: 10px 10px 16px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 229, 255, 0.2);
-}
-
-.cun-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    width: 100%;
-}
-
-.cun-bell-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #0052d4 0%, #00e5ff 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 23px;
-    flex-shrink: 0;
-    box-shadow: 0 0 18px rgba(0, 229, 255, 0.65);
-}
-
-.cun-meta {
-    flex: 1;
-    min-width: 0;
-}
-
-.cun-head-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-}
-
-.cun-head-row h4 {
-    font-size: 17.5px;
-    font-weight: 900;
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
-}
-
-.cun-cat-badge {
-    background: rgba(0, 229, 255, 0.15);
-    border: 1px solid rgba(0, 229, 255, 0.55);
-    color: var(--primary);
-    font-size: 12px;
-    font-weight: 900;
-    padding: 3px 9px;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.cun-meta p {
-    font-size: 13.5px;
-    color: #b0c4de;
-    font-weight: 700;
-    line-height: 1.45;
-}
-
-.unlock-movie-title {
-    font-size: 19px;
-    font-weight: 900;
-    color: #ffffff;
-    line-height: 1.4;
-    margin: 16px 12px 16px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.85);
-}
-
-/* =================== UNLOCK STATS & CARDS =================== */
+/* =================== মূল ৩টি কার্ডের সুপার লাক্সারি ডিজাইন =================== */
 .unlock-system-container {
     background: linear-gradient(180deg, #09132e 0%, #060c1d 100%);
-    border: 1.5px solid rgba(168, 85, 247, 0.45);
+    border: 1.5px solid rgba(0, 229, 255, 0.4);
     border-radius: 24px;
-    padding: 22px 16px;
+    padding: 20px 14px;
     margin: 0 10px 18px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(168, 85, 247, 0.2);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 229, 255, 0.15);
 }
 
 .usc-header {
@@ -1385,94 +1213,160 @@ header {
     flex-shrink: 0;
 }
 
+/* ৩টি কলামের ব্যালেন্সড গ্রিড */
 .usc-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 9px;
+    margin-bottom: 18px;
 }
 
 .usc-stat-card {
     border-radius: 18px;
-    padding: 15px 8px 12px;
+    padding: 12px 6px 12px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1.5px solid transparent;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-    transition: transform 0.2s ease;
+    justify-content: space-between;
+    min-height: 154px;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
 }
 
-.usc-stat-card.card-orange {
-    background: linear-gradient(180deg, rgba(255, 140, 0, 0.22) 0%, rgba(26, 17, 30, 0.95) 100%);
-    border-color: rgba(255, 165, 0, 0.55);
+.usc-card-top-indicator {
+    position: absolute;
+    top: -9px;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
 }
 
-.usc-stat-card.card-green {
-    background: linear-gradient(180deg, rgba(0, 242, 96, 0.24) 0%, rgba(10, 30, 22, 0.98) 100%);
-    border-color: rgba(0, 242, 96, 0.65);
-    padding-bottom: 10px;
+/* কার্ড ১: আনলক পয়েন্ট কার্ড */
+.card-point-unlock {
+    background: linear-gradient(180deg, rgba(255, 224, 0, 0.18) 0%, rgba(20, 16, 5, 0.95) 100%);
+    border-color: rgba(255, 224, 0, 0.55);
+}
+.card-point-unlock .usc-card-top-indicator {
+    background: #ffe000;
+    color: #050814;
+    box-shadow: 0 0 8px rgba(255, 224, 0, 0.6);
 }
 
-.usc-stat-card.card-purple {
-    background: linear-gradient(180deg, rgba(200, 30, 150, 0.26) 0%, rgba(30, 14, 38, 0.95) 100%);
-    border-color: rgba(218, 50, 170, 0.55);
+/* কার্ড ২: ব্যবহারকারীর ব্যালেন্স কার্ড */
+.card-user-balance {
+    background: linear-gradient(180deg, rgba(0, 242, 96, 0.18) 0%, rgba(4, 20, 14, 0.95) 100%);
+    border-color: rgba(0, 242, 96, 0.55);
+}
+.card-user-balance .usc-card-top-indicator {
+    background: #00f260;
+    color: #050814;
+    box-shadow: 0 0 8px rgba(0, 242, 96, 0.6);
+}
+
+/* কার্ড ৩: অ্যাড কাউন্টার কার্ড */
+.card-ad-progress {
+    background: linear-gradient(180deg, rgba(0, 229, 255, 0.18) 0%, rgba(8, 20, 36, 0.95) 100%);
+    border-color: rgba(0, 229, 255, 0.55);
+}
+.card-ad-progress .usc-card-top-indicator {
+    background: var(--primary);
+    color: #050814;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
 }
 
 .usc-icon-circle {
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
-    margin-bottom: 8px;
+    font-size: 16px;
+    margin-top: 4px;
+    margin-bottom: 6px;
 }
 
-.ico-orange { background: #ff9800; color: #fff; box-shadow: 0 0 12px rgba(255, 152, 0, 0.7); }
-.ico-green { background: #00f260; color: #050814; box-shadow: 0 0 12px rgba(0, 242, 96, 0.7); }
-.ico-purple { background: #b827fc; color: #fff; box-shadow: 0 0 12px rgba(184, 39, 252, 0.7); }
+.ico-point { background: #ffe000; color: #050814; box-shadow: 0 0 12px rgba(255, 224, 0, 0.7); }
+.ico-balance { background: #00f260; color: #050814; box-shadow: 0 0 12px rgba(0, 242, 96, 0.7); }
+.ico-ad { background: var(--primary); color: #050814; box-shadow: 0 0 12px rgba(0, 229, 255, 0.7); }
 
 .usc-stat-label {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
-    color: #d0e1fd;
-    margin-bottom: 5px;
+    color: #cbd5e1;
+    margin-bottom: 3px;
+    white-space: nowrap;
 }
 
 .usc-stat-val {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 900;
     color: #ffffff;
-    line-height: 1;
+    line-height: 1.1;
     text-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
+.usc-stat-val small {
+    font-size: 12px;
+    color: #8ba2c4;
+    font-weight: 800;
+    margin-left: 2px;
+}
+
+/* কার্ড ১-এর আনলক পয়েন্ট বাটন */
 .card-point-unlock-btn {
-    width: 100%;
-    margin-top: 10px;
-    background: linear-gradient(135deg, #00f260 0%, #00b4db 100%);
+    width: 96%;
+    margin-top: 6px;
+    background: linear-gradient(135deg, #ffe000 0%, #ff8c00 100%);
     border: none;
     color: #050814;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 900;
     padding: 7px 4px;
-    border-radius: 10px;
+    border-radius: 9px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    box-shadow: 0 0 12px rgba(0, 242, 96, 0.6);
-    transition: transform 0.14s ease, filter 0.18s ease;
+    gap: 4px;
+    box-shadow: 0 0 12px rgba(255, 224, 0, 0.6);
 }
 
 .card-point-unlock-btn:active {
-    transform: scale(0.95);
+    transform: scale(0.94);
 }
 
+/* কার্ড ২ ও ৩-এর সাব-ব্যাজ */
+.usc-stat-sub-badge {
+    background: rgba(0, 242, 96, 0.12);
+    border: 1px solid rgba(0, 242, 96, 0.4);
+    color: #00f260;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 4px 6px;
+    border-radius: 8px;
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.usc-stat-sub-badge.badge-ads {
+    background: rgba(0, 229, 255, 0.12);
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--primary);
+}
+
+/* প্রগ্রেস ট্র্যাক */
 .usc-progress-track {
     width: 100%;
     height: 10px;
@@ -1486,10 +1380,10 @@ header {
 .usc-progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #7928ca 0%, #b827fc 50%, #00e5ff 100%);
+    background: linear-gradient(90deg, #7928ca 0%, #00e5ff 100%);
     border-radius: 12px;
-    transition: width 0.3s ease;
-    box-shadow: 0 0 14px #b827fc;
+    transition: width 0.35s ease;
+    box-shadow: 0 0 14px var(--primary);
 }
 
 .usc-progress-info {
@@ -1524,13 +1418,12 @@ header {
     align-items: center;
     justify-content: center;
     gap: 9px;
-    box-shadow: 0 0 20px rgba(194, 24, 91, 0.5);
+    box-shadow: 0 0 22px rgba(194, 24, 91, 0.55);
 }
 
-/* =================== BROWSE MORE BUTTON =================== */
 .btn-browse-more-bottom {
     margin: 22px 10px 38px;
-    background: linear-gradient(90deg, #8a2387 0%, #e94057 50%, #f27121 100%);
+    background: var(--grad-purple);
     border-radius: 18px;
     padding: 16px 20px;
     display: flex;
@@ -1549,195 +1442,10 @@ header {
     font-weight: 900;
 }
 
-.bbm-left i {
-    font-size: 20px;
-}
+.bbm-left i { font-size: 20px; }
+.bbm-arrow { font-size: 16px; }
 
-.bbm-arrow {
-    font-size: 16px;
-}
-
-/* =================== AD HUB DESIGN =================== */
-.ad-hub-grid { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 14px; 
-    padding: 14px 12px; 
-}
-
-.ad-network-card {
-    background: #081126; 
-    border-radius: 20px; 
-    padding: 16px 14px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    border: 1.5px solid var(--card-border); 
-    cursor: pointer; 
-    position: relative; 
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-}
-
-.ad-net-card-left { 
-    display: flex; 
-    align-items: center; 
-    gap: 14px; 
-}
-
-.ad-net-square-icon {
-    width: 52px; 
-    height: 52px; 
-    border-radius: 14px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-size: 24px; 
-    color: #fff; 
-    flex-shrink: 0; 
-    position: relative;
-}
-
-.sq-icon-adsgram {
-    background: linear-gradient(135deg, #0052d4 0%, #00e5ff 100%);
-    border: 1.5px solid rgba(0, 229, 255, 0.6);
-    box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
-}
-
-.sq-icon-monetag {
-    background: linear-gradient(135deg, #ff0844 0%, #ff6b8b 100%);
-    border: 1.5px solid rgba(255, 8, 68, 0.6);
-    box-shadow: 0 0 16px rgba(255, 8, 68, 0.45);
-}
-
-.sq-icon-onclicka {
-    background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
-    border: 1.5px solid rgba(255, 210, 0, 0.6);
-    box-shadow: 0 0 16px rgba(255, 210, 0, 0.45);
-    color: #050814 !important;
-}
-
-.ad-net-meta h4 { 
-    font-size: 17px; 
-    font-weight: 900; 
-    color: #fff; 
-    margin-bottom: 3px; 
-}
-
-.ad-net-meta p { 
-    font-size: 13px; 
-    color: #8ba2c4; 
-    font-weight: 700; 
-}
-
-.ad-net-badge {
-    background: rgba(0, 229, 255, 0.15); 
-    border: 1.5px solid var(--primary); 
-    color: var(--primary);
-    font-size: 12px; 
-    font-weight: 900; 
-    padding: 5px 12px; 
-    border-radius: 12px; 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 6px;
-}
-
-/* =================== IN-PAGE FULL VIEW SCREENS =================== */
-#earn-hub-view, #dedicated-ad-view, #payout-view { 
-    display: none; 
-    animation: subtleFadeUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
-}
-
-.inpage-header-nav { 
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 14px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    border-bottom: 1.5px solid rgba(0, 229, 255, 0.25); 
-    background: rgba(8, 14, 30, 0.96); 
-    backdrop-filter: blur(16px); 
-    -webkit-backdrop-filter: blur(16px); 
-    position: sticky; 
-    top: 0; 
-    z-index: 1000;
-}
-
-.earn-stats-2x2 { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 10px; 
-    padding: 0 10px 12px; 
-}
-
-.earn-stat-box { 
-    background: var(--card-bg); 
-    border: 1.5px solid var(--card-border); 
-    border-radius: 18px; 
-    padding: 16px 14px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-}
-
-.earn-stat-num { 
-    font-size: 26px; 
-    font-weight: 900; 
-    color: #fff; 
-    line-height: 1; 
-    text-shadow: 0 0 8px rgba(255,255,255,0.4); 
-}
-
-.earn-stat-title { 
-    font-size: 13px; 
-    font-weight: 800; 
-    color: #8ba2c4; 
-    margin-top: 5px; 
-}
-
-.stat-rounded-icon { 
-    width: 42px; 
-    height: 42px; 
-    border-radius: 12px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-size: 19px; 
-    flex-shrink: 0; 
-}
-
-.sri-gold { background: #ffe000; color: #050814; } 
-.sri-pink { background: #ff0844; color: #fff; } 
-.sri-cyan { background: var(--primary); color: #050814; } 
-.sri-emerald { background: #00f260; color: #050814; }
-
-.sd-progress-track { 
-    width: 100%; 
-    height: 8px; 
-    background: #060b18; 
-    border-radius: 8px; 
-    margin-top: 14px; 
-    overflow: hidden; 
-}
-
-.sd-progress-bar { 
-    height: 100%; 
-    width: 0%; 
-    background: var(--grad-blue); 
-    border-radius: 8px; 
-    transition: width 0.3s; 
-    box-shadow: 0 0 8px var(--primary); 
-}
-
-.sd-progress-foot { 
-    text-align: center; 
-    margin-top: 8px; 
-    font-size: 13.5px; 
-    font-weight: 800; 
-    color: #8ba2c4; 
-}
-
-/* =================== PROFILE TAB STYLES =================== */
+/* =================== ১০. ইউজার প্রোফাইল ট্যাব =================== */
 .profile-user-card {
     margin: 12px 10px 14px; 
     background: var(--card-bg); 
@@ -2095,6 +1803,159 @@ header {
     gap: 7px;
 }
 
+/* =================== ১১. অ্যাড হাব ও ডেডিকেটেড স্ক্রিন =================== */
+#earn-hub-view, #dedicated-ad-view, #payout-view { 
+    display: none; 
+    animation: subtleFadeUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
+}
+
+.inpage-header-nav { 
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 14px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    border-bottom: 1.5px solid rgba(0, 229, 255, 0.25); 
+    background: rgba(8, 14, 30, 0.96); 
+    backdrop-filter: blur(16px); 
+    -webkit-backdrop-filter: blur(16px); 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+}
+
+.ad-hub-grid { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 14px; 
+    padding: 14px 12px; 
+}
+
+.ad-network-card {
+    background: #081126; 
+    border-radius: 20px; 
+    padding: 16px 14px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    border: 1.5px solid var(--card-border); 
+    cursor: pointer; 
+    position: relative; 
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+}
+
+.ad-net-card-left { 
+    display: flex; 
+    align-items: center; 
+    gap: 14px; 
+}
+
+.ad-net-square-icon {
+    width: 52px; 
+    height: 52px; 
+    border-radius: 14px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 24px; 
+    color: #fff; 
+    flex-shrink: 0; 
+    position: relative;
+}
+
+.sq-icon-adsgram {
+    background: linear-gradient(135deg, #0052d4 0%, #00e5ff 100%);
+    border: 1.5px solid rgba(0, 229, 255, 0.6);
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
+}
+
+.sq-icon-monetag {
+    background: linear-gradient(135deg, #ff0844 0%, #ff6b8b 100%);
+    border: 1.5px solid rgba(255, 8, 68, 0.6);
+    box-shadow: 0 0 16px rgba(255, 8, 68, 0.45);
+}
+
+.sq-icon-onclicka {
+    background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+    border: 1.5px solid rgba(255, 210, 0, 0.6);
+    box-shadow: 0 0 16px rgba(255, 210, 0, 0.45);
+    color: #050814 !important;
+}
+
+.ad-net-meta h4 { 
+    font-size: 17px; 
+    font-weight: 900; 
+    color: #fff; 
+    margin-bottom: 3px; 
+}
+
+.ad-net-meta p { 
+    font-size: 13px; 
+    color: #8ba2c4; 
+    font-weight: 700; 
+}
+
+.ad-net-badge {
+    background: rgba(0, 229, 255, 0.15); 
+    border: 1.5px solid var(--primary); 
+    color: var(--primary);
+    font-size: 12px; 
+    font-weight: 900; 
+    padding: 5px 12px; 
+    border-radius: 12px; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 6px;
+}
+
+.earn-stats-2x2 { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px; 
+    padding: 0 10px 12px; 
+}
+
+.earn-stat-box { 
+    background: var(--card-bg); 
+    border: 1.5px solid var(--card-border); 
+    border-radius: 18px; 
+    padding: 16px 14px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.earn-stat-num { 
+    font-size: 26px; 
+    font-weight: 900; 
+    color: #fff; 
+    line-height: 1; 
+    text-shadow: 0 0 8px rgba(255,255,255,0.4); 
+}
+
+.earn-stat-title { 
+    font-size: 13px; 
+    font-weight: 800; 
+    color: #8ba2c4; 
+    margin-top: 5px; 
+}
+
+.stat-rounded-icon { 
+    width: 42px; 
+    height: 42px; 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 19px; 
+    flex-shrink: 0; 
+}
+
+.sri-gold { background: #ffe000; color: #050814; } 
+.sri-pink { background: #ff0844; color: #fff; } 
+.sri-cyan { background: var(--primary); color: #050814; } 
+.sri-emerald { background: #00f260; color: #050814; }
+
 .settings-detail-card {
     background: var(--card-bg); 
     border: 1.5px solid var(--card-border); 
@@ -2120,50 +1981,33 @@ header {
     font-size: 15px; 
 }
 
-.player-parts-container { 
-    margin-top: 12px; 
+.sd-progress-track { 
+    width: 100%; 
+    height: 8px; 
+    background: #060b18; 
+    border-radius: 8px; 
+    margin-top: 14px; 
+    overflow: hidden; 
 }
 
-.player-parts-title { 
+.sd-progress-bar { 
+    height: 100%; 
+    width: 0%; 
+    background: var(--grad-blue); 
+    border-radius: 8px; 
+    transition: width 0.3s; 
+    box-shadow: 0 0 8px var(--primary); 
+}
+
+.sd-progress-foot { 
+    text-align: center; 
+    margin-top: 8px; 
     font-size: 13.5px; 
     font-weight: 800; 
     color: #8ba2c4; 
-    margin-bottom: 8px; 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
 }
 
-.player-parts-scroll { 
-    display: flex; 
-    gap: 8px; 
-    overflow-x: auto; 
-    padding-bottom: 4px; 
-}
-
-.player-part-pill {
-    background: #0c152e; 
-    border: 1.5px solid var(--card-border); 
-    border-radius: 10px;
-    padding: 6px 12px; 
-    font-size: 13px; 
-    font-weight: 800; 
-    color: #cbd5e1; 
-    cursor: pointer;
-    white-space: nowrap; 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 6px;
-}
-
-.player-part-pill.active { 
-    background: var(--grad-blue); 
-    color: #fff; 
-    border-color: var(--primary); 
-    box-shadow: 0 0 10px var(--primary-glow); 
-}
-
-/* =================== PAYOUT SCREEN =================== */
+/* =================== ১২. পে-আউট (টাকা উত্তোলন) স্ক্রিন =================== */
 .payout-page-wrapper { 
     padding: 12px 10px; 
 }
@@ -2335,7 +2179,7 @@ header {
     border: 1px solid #ff0844; 
 }
 
-/* =================== BOTTOM NAVIGATION =================== */
+/* =================== ১৩. বটম নেভিগেশন বার =================== */
 .bottom-nav {
     position: fixed; 
     bottom: 0; 
@@ -2414,7 +2258,7 @@ header {
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8)); 
 }
 
-/* =================== MODAL & INPUTS =================== */
+/* =================== ১৪. মোডাল, প্লেয়ার ও ড্রয়ার শিট =================== */
 .modal-wrap {
     display: none; 
     position: fixed; 
@@ -2444,6 +2288,206 @@ header {
     box-shadow: 0 0 35px rgba(0, 229, 255, 0.25); 
 }
 
+.series-drawer-modal {
+    display: none; 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(3, 7, 18, 0.88);
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
+    z-index: 100015; 
+    align-items: flex-end; 
+    justify-content: center;
+}
+
+.series-drawer-sheet {
+    background: #081126; 
+    width: 100%; 
+    max-width: 520px; 
+    max-height: 85vh; 
+    border-radius: 26px 26px 0 0;
+    border: 1px solid var(--card-border); 
+    border-bottom: none; 
+    padding: 18px 14px calc(26px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -10px 45px rgba(0, 229, 255, 0.2); 
+    display: flex; 
+    flex-direction: column; 
+    animation: slideSheetUp 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+
+@keyframes slideSheetUp { 
+    from { transform: translateY(100%); } 
+    to { transform: translateY(0); } 
+}
+
+.series-drawer-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding-bottom: 14px; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    margin-bottom: 12px; 
+}
+
+.series-drawer-header h3 { 
+    font-size: 20px; 
+    font-weight: 900; 
+    color: #fff; 
+    text-shadow: 0 0 10px rgba(0,229,255,0.4); 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    max-width: 80%; 
+}
+
+.series-drawer-close {
+    width: 38px; 
+    height: 38px; 
+    border-radius: 12px; 
+    background: #132145; 
+    border: 1px solid var(--card-border);
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #cbd5e1; 
+    font-size: 18px; 
+    cursor: pointer;
+}
+
+.series-episodes-list { 
+    overflow-y: auto; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+}
+
+.episode-item-card {
+    background: #0d1936; 
+    border: 1.5px solid var(--card-border); 
+    border-radius: 16px;
+    padding: 10px 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 10px; 
+    cursor: pointer;
+}
+
+.ep-left-wrap { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    flex: 1; 
+    min-width: 0; 
+}
+
+.ep-thumb-box { 
+    width: 110px; 
+    aspect-ratio: 16 / 12; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    position: relative; 
+    background: #000; 
+    flex-shrink: 0; 
+}
+
+.ep-thumb-box img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: center 10%; 
+    filter: contrast(1.08) brightness(1.05); 
+}
+
+.ep-badge-label {
+    position: absolute; 
+    bottom: 3px; 
+    left: 3px; 
+    background: rgba(5, 12, 28, 0.92);
+    border: 1px solid var(--primary); 
+    color: #ffe000; 
+    font-size: 10.5px; 
+    font-weight: 900; 
+    padding: 2px 6px; 
+    border-radius: 5px;
+}
+
+.ep-details { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 4px; 
+    min-width: 0; 
+}
+
+.ep-details h4 { 
+    font-size: 14.5px; 
+    font-weight: 900; 
+    color: #fff; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
+.ep-details p { 
+    font-size: 12px; 
+    font-weight: 700; 
+    color: #8ba2c4; 
+}
+
+.ep-arrow-btn { 
+    width: 36px; 
+    height: 36px; 
+    border-radius: 10px; 
+    background: #152550; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: var(--primary); 
+    font-size: 14px; 
+    flex-shrink: 0; 
+}
+
+.player-parts-container { margin-top: 12px; }
+.player-parts-title { 
+    font-size: 13.5px; 
+    font-weight: 800; 
+    color: #8ba2c4; 
+    margin-bottom: 8px; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+}
+
+.player-parts-scroll { 
+    display: flex; 
+    gap: 8px; 
+    overflow-x: auto; 
+    padding-bottom: 4px; 
+}
+
+.player-part-pill {
+    background: #0c152e; 
+    border: 1.5px solid var(--card-border); 
+    border-radius: 10px;
+    padding: 6px 12px; 
+    font-size: 13px; 
+    font-weight: 800; 
+    color: #cbd5e1; 
+    cursor: pointer;
+    white-space: nowrap; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 6px;
+}
+
+.player-part-pill.active { 
+    background: var(--grad-blue); 
+    color: #fff; 
+    border-color: var(--primary); 
+    box-shadow: 0 0 10px var(--primary-glow); 
+}
+
+/* =================== ১৫. ইউটিলিটি, ইনপুট ও সিস্টেম নোটিশ =================== */
 .premium-input { 
     width: 100%; 
     padding: 14px 15px; 
@@ -2451,7 +2495,7 @@ header {
     border: 1.5px solid var(--card-border); 
     border-radius: 14px; 
     color: #fff; 
-    font-size: 16px; /* মোবাইলে অটো-জুম প্রতিরোধ করে */
+    font-size: 16px; 
     font-weight: 800; 
     margin-bottom: 12px; 
     outline: none; 
@@ -2463,7 +2507,6 @@ header {
     box-shadow: 0 0 12px rgba(0, 229, 255, 0.4); 
 }
 
-/* =================== TOASTS & UTILS =================== */
 .top-toast {
     position: fixed; 
     top: -100px; 
