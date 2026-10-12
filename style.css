@@ -16,7 +16,7 @@
     --grad-gold: linear-gradient(135deg, #ffe000 0%, #ff8c00 100%);
     --grad-purple: linear-gradient(135deg, #8a2387 0%, #e94057 50%, #f27121 100%);
     --grad-purple-pink: linear-gradient(90deg, #b224ef 0%, #7579ff 100%);
-    --neon-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
+    --neon-shadow: 0 0 22px rgba(0, 229, 255, 0.4);
 }
 
 * { 
@@ -28,7 +28,7 @@
     -webkit-user-select: none; 
 }
 
-/* মসৃণ স্ক্রলিং ও বার হাইড */
+/* মসৃণ স্ক্রলিং ও স্ক্রলবার গোপন করা */
 html, body { 
     overscroll-behavior: none !important; 
     scroll-behavior: smooth; 
@@ -47,7 +47,7 @@ body {
     font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif; 
     font-size: 16px; 
     font-weight: 700; 
-    padding-bottom: calc(125px + env(safe-area-inset-bottom, 0px)) !important; 
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)) !important; 
     overflow-x: hidden; 
     min-height: 100vh; 
     -webkit-font-smoothing: antialiased;
@@ -67,7 +67,7 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     justify-content: center; 
     align-items: center; 
     z-index: 999999999; 
-    transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.3, 1), visibility 0.5s ease;
+    transition: opacity 0.45s cubic-bezier(0.2, 0.9, 0.3, 1), visibility 0.45s ease;
 }
 
 #app-preloader.hide-loader { 
@@ -80,7 +80,7 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     position: absolute; 
     width: 320px; 
     height: 320px;
-    background: radial-gradient(circle, rgba(0, 229, 255, 0.18) 0%, transparent 70%); 
+    background: radial-gradient(circle, rgba(0, 229, 255, 0.2) 0%, transparent 70%); 
     pointer-events: none;
 }
 
@@ -106,19 +106,19 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     width: 130px; 
     height: 130px; 
     border-radius: 50%; 
-    border: 3px dotted #00d2ff;
-    animation: spin-clockwise 8s linear infinite; 
-    box-shadow: 0 0 16px rgba(0, 210, 255, 0.35);
+    border: 3.5px dotted #00d2ff;
+    animation: spin-clockwise 7s linear infinite; 
+    box-shadow: 0 0 18px rgba(0, 210, 255, 0.45);
 }
 
 .inner-ring {
     position: absolute; 
-    width: 108px; 
-    height: 108px; 
+    width: 106px; 
+    height: 106px; 
     border-radius: 50%; 
     border: 3px dotted #ff8c37;
-    animation: spin-counter 6s linear infinite; 
-    box-shadow: 0 0 16px rgba(255, 140, 55, 0.35);
+    animation: spin-counter 5s linear infinite; 
+    box-shadow: 0 0 16px rgba(255, 140, 55, 0.45);
 }
 
 .center-circle {
@@ -130,8 +130,8 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     display: flex; 
     justify-content: center; 
     align-items: center;
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); 
-    animation: pulse-preloader 2s ease-in-out infinite alternate;
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.7); 
+    animation: pulse-preloader 1.8s ease-in-out infinite alternate;
 }
 
 .letter { 
@@ -139,34 +139,34 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     font-size: 38px; 
     font-weight: 900; 
     font-family: 'Plus Jakarta Sans', sans-serif; 
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); 
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
 }
 
 .bot-title {
     color: #e2e8f0; 
     font-size: 20px; 
-    font-weight: 800; 
+    font-weight: 900; 
     letter-spacing: 2px; 
     text-transform: uppercase;
     font-family: 'Plus Jakarta Sans', sans-serif; 
-    text-shadow: 0 0 12px rgba(0, 210, 255, 0.7);
-    animation: fade-glow-preloader 2s ease-in-out infinite alternate;
+    text-shadow: 0 0 14px rgba(0, 210, 255, 0.8);
+    animation: fade-glow-preloader 1.8s ease-in-out infinite alternate;
 }
 
 @keyframes spin-clockwise { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes spin-counter { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
 @keyframes pulse-preloader { 
-    0% { transform: scale(0.96); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); } 
-    100% { transform: scale(1.04); box-shadow: 0 0 32px rgba(0, 210, 255, 0.8); } 
+    0% { transform: scale(0.96); box-shadow: 0 0 18px rgba(59, 130, 246, 0.4); } 
+    100% { transform: scale(1.05); box-shadow: 0 0 34px rgba(0, 210, 255, 0.9); } 
 }
 @keyframes fade-glow-preloader { 
     0% { opacity: 0.8; text-shadow: 0 0 8px rgba(0, 210, 255, 0.4); } 
-    100% { opacity: 1; text-shadow: 0 0 18px rgba(0, 210, 255, 0.9); } 
+    100% { opacity: 1; text-shadow: 0 0 20px rgba(0, 210, 255, 1); } 
 }
 
-/* =================== ২. প্রিমিয়াম অ্যানিমেশন ও শিমার =================== */
+/* =================== ২. অ্যানিমেশন ও কার্ড গ্লো =================== */
 @keyframes subtleFadeUp { 
-    from { opacity: 0; transform: translateY(8px); } 
+    from { opacity: 0; transform: translateY(10px); } 
     to { opacity: 1; transform: translateY(0); } 
 }
 
@@ -197,7 +197,7 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     width: 50%; 
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
-    animation: subtleCardShimmer 4s infinite ease-in-out; 
+    animation: subtleCardShimmer 3.8s infinite ease-in-out; 
     pointer-events: none; 
     z-index: 1;
 }
@@ -207,28 +207,34 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
-/* বাটন ফিডব্যাক */
-.btn-unlock-blue, .btn-withdraw-green, .circle-btn, .nav-item, .btn-earn-gradient, .btn-share-ref, .btn-action-cyan, .btn-action-gold, .page-pill-btn, .sim-opt-pill, .cat-filter-pill, .ad-network-card, .btn-unlock-purple, .card-point-unlock-btn, .btn-browse-more-bottom {
+/* বাটন টাচ রেসপন্স */
+.btn-unlock-blue, .btn-withdraw-green, .circle-btn, .nav-item, 
+.btn-earn-gradient, .btn-share-ref, .btn-action-cyan, .page-pill-btn, 
+.sim-opt-pill, .cat-filter-pill, .ad-network-card, .btn-unlock-purple, 
+.btn-unlock-gold-direct, .btn-browse-more-bottom {
     transition: transform 0.14s ease, filter 0.18s ease, box-shadow 0.2s ease; 
     position: relative; 
     font-weight: 800;
 }
 
-.btn-unlock-blue:active, .btn-withdraw-green:active, .circle-btn:active, .btn-earn-gradient:active, .btn-share-ref:active, .btn-action-cyan:active, .btn-action-gold:active, .sim-opt-pill:active, .cat-filter-pill:active, .ad-network-card:active, .btn-unlock-purple:active, .card-point-unlock-btn:active, .btn-browse-more-bottom:active { 
+.btn-unlock-blue:active, .btn-withdraw-green:active, .circle-btn:active, 
+.btn-earn-gradient:active, .btn-share-ref:active, .btn-action-cyan:active, 
+.sim-opt-pill:active, .cat-filter-pill:active, .ad-network-card:active, 
+.btn-unlock-purple:active, .btn-unlock-gold-direct:active, .btn-browse-more-bottom:active { 
     transform: scale(0.96); 
 }
 
-/* =================== ৩. হেডার ও সার্চ =================== */
+/* =================== ৩. মেইন হেডার =================== */
 header { 
     background: rgba(8, 14, 30, 0.94); 
     padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px; 
-    border-bottom: 1px solid rgba(0, 229, 255, 0.3); 
+    border-bottom: 1.5px solid rgba(0, 229, 255, 0.3); 
     position: sticky; 
     top: 0; 
     z-index: 1000; 
     backdrop-filter: blur(16px); 
     -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.65);
 }
 
 .header-container { 
@@ -255,7 +261,7 @@ header {
     color: var(--primary); 
     font-size: 19px; 
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
 }
 
 .brand-logo-wrap { 
@@ -275,7 +281,7 @@ header {
     justify-content: center; 
     color: #fff; 
     font-size: 18px;
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.65);
 }
 
 .brand-title { 
@@ -296,14 +302,11 @@ header {
     box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
 }
 
-/* =================== ৪. সাইডবার ড্রয়ার =================== */
+/* =================== ৪. সাইডবার নেভিগেশন ড্রয়ার =================== */
 .drawer-overlay {
     position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(3, 6, 18, 0.85);
+    inset: 0;
+    background: rgba(3, 6, 18, 0.88);
     backdrop-filter: blur(8px); 
     -webkit-backdrop-filter: blur(8px); 
     z-index: 1000000; 
@@ -325,14 +328,14 @@ header {
     max-width: 320px; 
     height: 100%; 
     background: #080f24;
-    box-shadow: 10px 0 40px rgba(0, 229, 255, 0.25); 
+    box-shadow: 12px 0 45px rgba(0, 229, 255, 0.3); 
     z-index: 1000001; 
     transition: left 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
     display: flex; 
     flex-direction: column; 
     padding: calc(20px + env(safe-area-inset-top, 0px)) 18px 22px; 
     overflow-y: auto; 
-    border-right: 1px solid var(--card-border);
+    border-right: 1.5px solid var(--card-border);
 }
 
 .drawer-menu.open { 
@@ -392,7 +395,7 @@ header {
     background: var(--grad-blue); 
     border: none; 
     color: #fff; 
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); 
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.55); 
 }
 
 .drawer-lang-card { 
@@ -448,84 +451,97 @@ header {
     margin: 20px 4px 10px; 
 }
 
-/* =================== ৫. হিরো ব্যানার ও ফিচার্ড =================== */
+/* =================== ৫. হিরো ব্যানার ও ৪-দিকের মোটা নিয়ন বর্ডার মোশন =================== */
 .hero-banner-grid { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
-    gap: 11px; 
-    padding: 10px 10px; 
-    position: sticky;
-    top: 68px;
-    z-index: 990;
-    background: rgba(5, 8, 20, 0.94);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(0, 229, 255, 0.2);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    gap: 12px; 
+    padding: 14px 10px 8px; 
+    position: relative; /* ফ্লো ক্লিন রাখা হয়েছে যেন নিচের কনটেন্ট আটকে বা ঢাকা না পড়ে */
+    z-index: 10;
 }
 
 .hero-card {
-    border-radius: 18px; 
-    padding: 12px 12px; 
-    min-height: 72px; 
+    border-radius: 20px; 
+    padding: 12px 14px; 
+    min-height: 74px; 
     display: flex; 
     align-items: center; 
-    gap: 10px;
+    gap: 12px;
     cursor: pointer; 
     position: relative; 
     overflow: hidden; 
-    border: 2px solid rgba(255, 255, 255, 0.1); 
-    z-index: 1;
+    border: 2px solid rgba(255, 255, 255, 0.08); 
     background: #081126;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .hero-blue { background: linear-gradient(135deg, #091a3e, #132a61); } 
 .hero-teal { background: linear-gradient(135deg, #062835, #0d465c); } 
 
+/* ৪ দিক দিয়ে ঘোরাঘুরি করা মোটা প্রিমিয়াম নিয়ন বর্ডার */
 .hero-card.active-animated {
     border-color: transparent !important;
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5), inset 0 0 14px rgba(0, 229, 255, 0.2) !important;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.5), inset 0 0 16px rgba(0, 229, 255, 0.25) !important;
 }
 
 .hero-card.active-animated::before {
     content: ''; 
     position: absolute; 
-    top: -60%; 
-    left: -60%; 
-    width: 220%; 
-    height: 220%;
-    background: conic-gradient(from 0deg, transparent 0%, #00e5ff 25%, #ffe000 50%, #ff0844 75%, #00e5ff 100%);
-    animation: rotateAroundBorder 2.4s linear infinite; 
-    z-index: -2;
+    top: -90%; 
+    left: -90%; 
+    width: 280%; 
+    height: 280%;
+    /* মোটা ও স্পষ্ট নিয়ন কালার রোটেশন */
+    background: conic-gradient(
+        from 0deg, 
+        transparent 0deg, 
+        #00e5ff 60deg, 
+        #ffe000 120deg, 
+        #ff0844 180deg, 
+        #b224ef 240deg, 
+        #00e5ff 360deg
+    );
+    animation: rotateAroundBorder 2.2s linear infinite; 
+    z-index: 1;
 }
 
+/* কার্ডের ভেতরের ব্যাকগ্রাউন্ড প্যাচ (বর্ডার থিকনেস ৩.৫ পিক্সেল রাখার জন্য) */
 .hero-card.active-animated::after { 
     content: ''; 
     position: absolute; 
-    inset: 3px; 
-    background: inherit; 
-    border-radius: 15px; 
-    z-index: -1; 
+    inset: 3.5px; /* ৩.৫ পিক্সেল দৃষ্টিনন্দন মোটা বর্ডার */
+    background: linear-gradient(135deg, #091738 0%, #061026 100%); 
+    border-radius: 17px; 
+    z-index: 2; 
 }
 
-@keyframes rotateAroundBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.hero-card.active-animated > * {
+    position: relative;
+    z-index: 3;
+}
+
+@keyframes rotateAroundBorder { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+}
 
 .hero-icon-box {
-    width: 40px; 
-    height: 40px; 
-    border-radius: 12px; 
-    background: rgba(255, 255, 255, 0.16);
+    width: 42px; 
+    height: 42px; 
+    border-radius: 13px; 
+    background: rgba(255, 255, 255, 0.15);
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-size: 19px; 
+    font-size: 20px; 
     color: #fff; 
     flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(255,255,255,0.25);
+    box-shadow: 0 0 14px rgba(255,255,255,0.25);
 }
 
 .hero-text h3 { 
-    font-size: 15px; 
+    font-size: 15.5px; 
     font-weight: 900; 
     color: #fff; 
     line-height: 1.25; 
@@ -536,24 +552,25 @@ header {
 
 .hero-card.active-animated .hero-text h3 { 
     color: #ffe000; 
-    text-shadow: 0 0 10px rgba(255, 224, 0, 0.8); 
+    text-shadow: 0 0 10px rgba(255, 224, 0, 0.85); 
 }
 
 .hero-text p { 
-    font-size: 12px; 
+    font-size: 12.5px; 
     color: #cbd5e1; 
-    margin-top: 2px; 
+    margin-top: 3px; 
     white-space: nowrap; 
     font-weight: 700; 
 }
 
+/* =================== ৬. ফিচার্ড ব্যানার =================== */
 .featured-card { 
     margin: 12px 10px 14px; 
     background: var(--card-bg); 
     border: 1.5px solid var(--card-border); 
-    border-radius: 20px; 
+    border-radius: 22px; 
     padding: 18px 16px; 
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.55);
 }
 
 .featured-top-row { 
@@ -601,7 +618,7 @@ header {
 }
 
 .featured-card h2 { 
-    font-size: 19px; 
+    font-size: 20px; 
     font-weight: 900; 
     color: #fff; 
     margin-bottom: 6px; 
@@ -629,15 +646,15 @@ header {
     align-items: center; 
     justify-content: center; 
     gap: 8px;
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
 }
 
-/* =================== ৬. ক্যাটাগরি সেকশন =================== */
+/* =================== ৭. ক্যাটাগরি ফিল্টার চিপস =================== */
 .category-filter-section { 
-    margin: 4px 10px 16px; 
+    margin: 6px 10px 16px; 
     padding: 14px 14px; 
-    background: #01040a !important;
-    border: 1.5px solid rgba(0, 229, 255, 0.28); 
+    background: #030712 !important;
+    border: 1.5px solid rgba(0, 229, 255, 0.35); 
     border-radius: 20px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 0, 0, 0.95);
     position: relative;
@@ -674,10 +691,10 @@ header {
 }
 
 .cat-filter-pill {
-    background: #090f1d; 
-    border: 1.5px solid rgba(0, 229, 255, 0.2); 
-    border-radius: 13px; 
-    padding: 7px 14px;
+    background: #081022; 
+    border: 1.5px solid rgba(0, 229, 255, 0.22); 
+    border-radius: 14px; 
+    padding: 8px 15px;
     font-size: 13px; 
     font-weight: 800; 
     color: #cbd5e1; 
@@ -706,7 +723,7 @@ header {
     display: flex; 
     align-items: center; 
     gap: 8px; 
-    font-size: 17.5px; 
+    font-size: 18px; 
     font-weight: 900; 
     color: #fff; 
 }
@@ -733,7 +750,7 @@ header {
 
 .empty-video-card { 
     background: var(--card-bg); 
-    border: 1px solid var(--card-border); 
+    border: 1.5px solid var(--card-border); 
     border-radius: 20px; 
     padding: 35px 16px; 
     text-align: center; 
@@ -743,13 +760,13 @@ header {
     font-weight: 800; 
 }
 
-/* =================== ৭. ভিডিও গ্রিড ও কার্ড =================== */
+/* =================== ৮. ভিডিও গ্রিড ও ভিডিও কার্ড =================== */
 .video-grid { 
     display: flex; 
     flex-direction: column; 
     gap: 16px; 
-    padding: 0 6px !important; 
-    margin-bottom: 20px; 
+    padding: 0 8px !important; 
+    margin-bottom: 22px; 
     width: 100%; 
     contain: content; 
 }
@@ -761,7 +778,7 @@ header {
     overflow: hidden; 
     display: flex; 
     flex-direction: column; 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 16px rgba(0, 229, 255, 0.15);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 229, 255, 0.15);
     position: relative; 
     cursor: pointer; 
     contain: content; 
@@ -822,10 +839,10 @@ header {
 }
 
 .series-info-body { 
-    padding: 10px 14px 12px; 
+    padding: 12px 14px 14px; 
     display: flex; 
     flex-direction: column; 
-    gap: 7px; 
+    gap: 8px; 
     background: linear-gradient(180deg, #09132d 0%, #060b1b 100%); 
     position: relative;
 }
@@ -838,7 +855,7 @@ header {
 }
 
 .series-main-title { 
-    font-size: 16px; 
+    font-size: 16.5px; 
     font-weight: 900; 
     color: #ffffff; 
     line-height: 1.3; 
@@ -915,25 +932,14 @@ header {
     margin-left: auto; 
 }
 
-@keyframes cardNeonPulse {
-    0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); border-color: #00e5ff; }
-    50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.95), 0 0 20px #ffe000; border-color: #ffe000; }
-    100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); border-color: #00e5ff; }
-}
-
-.series-card-item.highlight-glow-pulse { 
-    animation: cardNeonPulse 1.2s infinite ease-in-out !important;
-    scroll-margin-top: 80px; 
-}
-
-/* =================== ৮. পেজিনেশন =================== */
+/* =================== ৯. পেজিনেশন =================== */
 .pagination-container { 
     display: flex; 
     justify-content: center; 
     align-items: center; 
     flex-wrap: wrap; 
     gap: 8px; 
-    margin: 8px 10px 26px; 
+    margin: 10px 10px 28px; 
     padding: 6px 0; 
 }
 
@@ -965,11 +971,11 @@ header {
     pointer-events: none; 
 }
 
-/* =================== ৯. ভিডিও আনলক ও ডিটেইল ভিউ (১০০% আপগ্রেডেড ৩টি কার্ড) =================== */
+/* =================== ১০. ভিডিও আনলক ও ডিটেইল ভিউ (১০০% আপগ্রেডেড) =================== */
 #video-unlock-detail-view { 
     display: none; 
     padding-bottom: 45px; 
-    animation: subtleFadeUp 0.2s ease forwards; 
+    animation: subtleFadeUp 0.22s ease forwards; 
 }
 
 .custom-unlock-notice {
@@ -977,7 +983,7 @@ header {
     border: 1.5px solid rgba(0, 229, 255, 0.45);
     border-radius: 20px;
     padding: 16px 16px;
-    margin: 10px 10px 16px;
+    margin: 12px 10px 16px;
     display: flex;
     align-items: center;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 229, 255, 0.2);
@@ -1045,18 +1051,18 @@ header {
 
 .poster-outer-wrapper { 
     margin: 0 0 14px; 
-    padding: 0 6px; 
+    padding: 0 8px; 
     width: 100%; 
 }
 
 .poster-card { 
     background: #081024; 
     border: 1.5px solid var(--card-border); 
-    border-radius: 22px; 
+    border-radius: 24px; 
     overflow: hidden; 
     position: relative; 
     width: 100%; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(0, 229, 255, 0.2); 
+    box-shadow: 0 10px 32px rgba(0,0,0,0.8), 0 0 20px rgba(0, 229, 255, 0.2); 
 }
 
 .poster-media-wrap { 
@@ -1142,32 +1148,33 @@ header {
 
 .poster-pill-btn.active-liked i { 
     color: #ff0844; 
-    text-shadow: 0 0 6px #ff0844; 
+    text-shadow: 0 0 8px #ff0844; 
 }
 
 .unlock-movie-title {
-    font-size: 19px; 
+    font-size: 20px; 
     font-weight: 900; 
     color: #ffffff; 
     line-height: 1.4; 
-    margin: 16px 12px 16px; 
+    margin: 16px 12px 14px; 
     text-shadow: 0 2px 8px rgba(0,0,0,0.85);
 }
 
+/* আনলক টাইমার স্ট্যাটাস কার্ড */
 .unlocked-timer-badge { 
-    margin: 0 10px 14px; 
+    margin: 0 10px 16px; 
     background: rgba(0, 242, 96, 0.12); 
-    border: 1.5px solid #00f260; 
-    border-radius: 16px; 
+    border: 1.8px solid #00f260; 
+    border-radius: 18px; 
     padding: 14px 18px; 
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
-    box-shadow: 0 0 14px rgba(0, 242, 96, 0.3); 
+    box-shadow: 0 0 18px rgba(0, 242, 96, 0.35); 
 }
 
 .ut-title { 
-    font-size: 14.5px; 
+    font-size: 15px; 
     font-weight: 900; 
     color: #00f260; 
     display: flex; 
@@ -1176,31 +1183,31 @@ header {
 }
 
 .ut-countdown { 
-    font-size: 18px; 
+    font-size: 20px; 
     font-weight: 900; 
     color: #ffe000; 
-    font-family: monospace; 
-    text-shadow: 0 0 8px rgba(255, 224, 0, 0.6); 
+    font-family: 'Plus Jakarta Sans', monospace; 
+    text-shadow: 0 0 10px rgba(255, 224, 0, 0.7); 
 }
 
-/* =================== মূল ৩টি কার্ডের সুপার লাক্সারি ডিজাইন =================== */
+/* =================== ১১. আনলক কন্ট্রোল হাব ও ৩টি কার্ড =================== */
 .unlock-system-container {
     background: linear-gradient(180deg, #09132e 0%, #060c1d 100%);
-    border: 1.5px solid rgba(0, 229, 255, 0.4);
+    border: 1.5px solid rgba(0, 229, 255, 0.45);
     border-radius: 24px;
-    padding: 20px 14px;
-    margin: 0 10px 18px;
-    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 229, 255, 0.15);
+    padding: 22px 14px;
+    margin: 0 10px 20px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 229, 255, 0.18);
 }
 
 .usc-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 14.5px;
+    font-size: 15px;
     font-weight: 800;
     color: #d0e1fd;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .usc-glow-dot {
@@ -1213,7 +1220,7 @@ header {
     flex-shrink: 0;
 }
 
-/* ৩টি কলামের ব্যালেন্সড গ্রিড */
+/* ৩টি স্ট্যাটাস কার্ডের গ্রিড */
 .usc-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1223,15 +1230,15 @@ header {
 
 .usc-stat-card {
     border-radius: 18px;
-    padding: 12px 6px 12px;
+    padding: 14px 6px 12px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    min-height: 154px;
+    min-height: 148px;
     position: relative;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.65);
     border: 1.5px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -1249,7 +1256,7 @@ header {
     text-transform: uppercase;
 }
 
-/* কার্ড ১: আনলক পয়েন্ট কার্ড */
+/* কার্ড ১: আনলক কস্ট */
 .card-point-unlock {
     background: linear-gradient(180deg, rgba(255, 224, 0, 0.18) 0%, rgba(20, 16, 5, 0.95) 100%);
     border-color: rgba(255, 224, 0, 0.55);
@@ -1260,7 +1267,7 @@ header {
     box-shadow: 0 0 8px rgba(255, 224, 0, 0.6);
 }
 
-/* কার্ড ২: ব্যবহারকারীর ব্যালেন্স কার্ড */
+/* কার্ড ২: ব্যবহারকারীর লাইভ ব্যালেন্স */
 .card-user-balance {
     background: linear-gradient(180deg, rgba(0, 242, 96, 0.18) 0%, rgba(4, 20, 14, 0.95) 100%);
     border-color: rgba(0, 242, 96, 0.55);
@@ -1271,7 +1278,7 @@ header {
     box-shadow: 0 0 8px rgba(0, 242, 96, 0.6);
 }
 
-/* কার্ড ৩: অ্যাড কাউন্টার কার্ড */
+/* কার্ড ৩: অ্যাড অগ্রগতি */
 .card-ad-progress {
     background: linear-gradient(180deg, rgba(0, 229, 255, 0.18) 0%, rgba(8, 20, 36, 0.95) 100%);
     border-color: rgba(0, 229, 255, 0.55);
@@ -1283,13 +1290,13 @@ header {
 }
 
 .usc-icon-circle {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 17px;
     margin-top: 4px;
     margin-bottom: 6px;
 }
@@ -1299,7 +1306,7 @@ header {
 .ico-ad { background: var(--primary); color: #050814; box-shadow: 0 0 12px rgba(0, 229, 255, 0.7); }
 
 .usc-stat-label {
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 800;
     color: #cbd5e1;
     margin-bottom: 3px;
@@ -1307,7 +1314,7 @@ header {
 }
 
 .usc-stat-val {
-    font-size: 21px;
+    font-size: 22px;
     font-weight: 900;
     color: #ffffff;
     line-height: 1.1;
@@ -1315,39 +1322,15 @@ header {
 }
 
 .usc-stat-val small {
-    font-size: 12px;
+    font-size: 13px;
     color: #8ba2c4;
     font-weight: 800;
     margin-left: 2px;
 }
 
-/* কার্ড ১-এর আনলক পয়েন্ট বাটন */
-.card-point-unlock-btn {
-    width: 96%;
-    margin-top: 6px;
-    background: linear-gradient(135deg, #ffe000 0%, #ff8c00 100%);
-    border: none;
-    color: #050814;
-    font-size: 11.5px;
-    font-weight: 900;
-    padding: 7px 4px;
-    border-radius: 9px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    box-shadow: 0 0 12px rgba(255, 224, 0, 0.6);
-}
-
-.card-point-unlock-btn:active {
-    transform: scale(0.94);
-}
-
-/* কার্ড ২ ও ৩-এর সাব-ব্যাজ */
 .usc-stat-sub-badge {
     background: rgba(0, 242, 96, 0.12);
-    border: 1px solid rgba(0, 242, 96, 0.4);
+    border: 1px solid rgba(0, 242, 96, 0.45);
     color: #00f260;
     font-size: 10.5px;
     font-weight: 800;
@@ -1360,13 +1343,19 @@ header {
     white-space: nowrap;
 }
 
+.usc-stat-sub-badge.badge-gold {
+    background: rgba(255, 224, 0, 0.12);
+    border-color: rgba(255, 224, 0, 0.5);
+    color: #ffe000;
+}
+
 .usc-stat-sub-badge.badge-ads {
     background: rgba(0, 229, 255, 0.12);
-    border-color: rgba(0, 229, 255, 0.4);
+    border-color: rgba(0, 229, 255, 0.45);
     color: var(--primary);
 }
 
-/* প্রগ্রেস ট্র্যাক */
+/* প্রগ্রেস বার */
 .usc-progress-track {
     width: 100%;
     height: 10px;
@@ -1392,33 +1381,85 @@ header {
 }
 
 .usc-prog-count {
-    font-size: 15.5px;
+    font-size: 16px;
     font-weight: 900;
     color: #ffffff;
     margin-bottom: 4px;
 }
 
 .usc-prog-sub {
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 700;
     color: #8ba2c4;
 }
 
+/* আনলক বাটনের উল্লম্ব গ্রুপ (অ্যাড বাটনের ঠিক নিচে পয়েন্ট বাটন) */
+.unlock-action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+/* বাটন ১: বিজ্ঞাপন আনলক বাটন */
 .btn-unlock-purple {
     width: 100%;
     background: linear-gradient(90deg, #7b1fa2 0%, #c2185b 100%);
     border: none;
     color: #ffffff;
-    padding: 15px;
+    padding: 15px 16px;
     border-radius: 16px;
-    font-size: 16.5px;
+    font-size: 16px;
     font-weight: 900;
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 9px;
+    justify-content: space-between;
     box-shadow: 0 0 22px rgba(194, 24, 91, 0.55);
+}
+
+/* বাটন ২: পয়েন্ট দিয়ে সরাসরি আনলক বাটন (গোল্ডেন লাক্সারি লুক) */
+.btn-unlock-gold-direct {
+    width: 100%;
+    background: linear-gradient(135deg, #ffe000 0%, #ff8c00 100%);
+    border: none;
+    color: #050814;
+    padding: 15px 16px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 22px rgba(255, 224, 0, 0.55);
+}
+
+.btn-inner-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15.5px;
+}
+
+.btn-duration-tag {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.btn-duration-tag.duration-tag-gold {
+    background: #050814;
+    border-color: rgba(255, 224, 0, 0.6);
+    color: #ffe000;
 }
 
 .btn-browse-more-bottom {
@@ -1445,9 +1486,9 @@ header {
 .bbm-left i { font-size: 20px; }
 .bbm-arrow { font-size: 16px; }
 
-/* =================== ১০. ইউজার প্রোফাইল ট্যাব =================== */
+/* =================== ১২. প্রোফাইল ও ব্যালেন্স ওভারভিউ =================== */
 .profile-user-card {
-    margin: 12px 10px 14px; 
+    margin: 14px 10px 14px; 
     background: var(--card-bg); 
     border: 1.5px solid var(--card-border);
     border-radius: 20px; 
@@ -1547,7 +1588,7 @@ header {
 }
 
 .stat-card-val { 
-    font-size: 24px; 
+    font-size: 25px; 
     font-weight: 900; 
     color: #ffe000; 
     line-height: 1; 
@@ -1560,7 +1601,7 @@ header {
 }
 
 .stat-card-lbl { 
-    font-size: 12.5px; 
+    font-size: 13px; 
     font-weight: 800; 
     color: #8ba2c4; 
     margin-top: 5px; 
@@ -1639,7 +1680,7 @@ header {
 }
 
 .wb-min-info { 
-    font-size: 12.5px; 
+    font-size: 13px; 
     color: #ffe000; 
     font-weight: 800; 
 }
@@ -1803,7 +1844,7 @@ header {
     gap: 7px;
 }
 
-/* =================== ১১. অ্যাড হাব ও ডেডিকেটেড স্ক্রিন =================== */
+/* =================== ১৩. অ্যাড হাব ও ডেডিকেটেড স্ক্রিন =================== */
 #earn-hub-view, #dedicated-ad-view, #payout-view { 
     display: none; 
     animation: subtleFadeUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
@@ -2007,7 +2048,7 @@ header {
     color: #8ba2c4; 
 }
 
-/* =================== ১২. পে-আউট (টাকা উত্তোলন) স্ক্রিন =================== */
+/* =================== ১৪. পে-আউট (উত্তোলন) স্ক্রিন =================== */
 .payout-page-wrapper { 
     padding: 12px 10px; 
 }
@@ -2179,7 +2220,7 @@ header {
     border: 1px solid #ff0844; 
 }
 
-/* =================== ১৩. বটম নেভিগেশন বার =================== */
+/* =================== ১৫. বটম ডক নেভিগেশন =================== */
 .bottom-nav {
     position: fixed; 
     bottom: 0; 
@@ -2258,15 +2299,12 @@ header {
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8)); 
 }
 
-/* =================== ১৪. মোডাল, প্লেয়ার ও ড্রয়ার শিট =================== */
+/* =================== ১৬. মোডাল, প্লেয়ার ও ড্রয়ার শিট =================== */
 .modal-wrap {
     display: none; 
     position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    background: rgba(2, 5, 14, 0.9); 
+    inset: 0;
+    background: rgba(2, 5, 14, 0.92); 
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px);
     z-index: 100005; 
@@ -2292,7 +2330,7 @@ header {
     display: none; 
     position: fixed; 
     inset: 0; 
-    background: rgba(3, 7, 18, 0.88);
+    background: rgba(3, 7, 18, 0.9); 
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px); 
     z-index: 100015; 
@@ -2306,10 +2344,10 @@ header {
     max-width: 520px; 
     max-height: 85vh; 
     border-radius: 26px 26px 0 0;
-    border: 1px solid var(--card-border); 
+    border: 1.5px solid var(--card-border); 
     border-bottom: none; 
     padding: 18px 14px calc(26px + env(safe-area-inset-bottom, 0px));
-    box-shadow: 0 -10px 45px rgba(0, 229, 255, 0.2); 
+    box-shadow: 0 -10px 45px rgba(0, 229, 255, 0.25); 
     display: flex; 
     flex-direction: column; 
     animation: slideSheetUp 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
@@ -2487,7 +2525,7 @@ header {
     box-shadow: 0 0 10px var(--primary-glow); 
 }
 
-/* =================== ১৫. ইউটিলিটি, ইনপুট ও সিস্টেম নোটিশ =================== */
+/* =================== ১৭. ইনপুট ও সিস্টেম নোটিফিকেশন =================== */
 .premium-input { 
     width: 100%; 
     padding: 14px 15px; 

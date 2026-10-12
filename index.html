@@ -5,28 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title id="page-head-title">ইনজ়য় মুভিজ আল্ট্রা এইচডি</title>
     
-    <!-- Telegram & Ad SDKs -->
+    <!-- Telegram WebApp & Ad Network SDKs -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script defer src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://libtl.com/sdk.js" data-zone="11928576" data-sdk="show_11928576"></script>
     <script src="https://js.onclckvd.com/in-stream-ad-admanager/tma.js"></script>
     
-    <!-- Third-Party Performance Libraries -->
+    <!-- Third-Party Helpers -->
     <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
     
-    <!-- Font Awesome 6 Pro & Premium Google Fonts -->
+    <!-- Font Awesome 6 Pro & Premium Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- External Ultra HD Stylesheet -->
+    <!-- Ultra HD Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ================= 1. PRELOADER ================= -->
+<!-- ================= 1. PRELOADER SCREEN ================= -->
 <div id="app-preloader">
     <div class="preloader-bg-glow"></div>
     <div class="preloader-content">
@@ -39,7 +39,7 @@
     </div>
 </div>
 
-<!-- ================= 2. SYSTEM ALERTS / SECURITY SCREENS ================= -->
+<!-- ================= 2. SECURITY & MAINTENANCE SCREENS ================= -->
 <div id="banned-screen">
     <div class="banned-icon-circle"><i class="fa-solid fa-ban"></i></div>
     <h2 style="font-size: 22px; color: #fff; margin-bottom: 8px; font-weight: 900;" id="banned-title">আপনার একাউন্ট স্থগিত করা হয়েছে</h2>
@@ -126,8 +126,8 @@
         <button class="btn-unlock-blue" onclick="openVideoRulesModal()"><i class="fa-solid fa-circle-info"></i> <span id="btn-video-rules-txt">ভিডিও দেখার নিয়ম</span></button>
     </div>
 
-    <!-- ক্যাটাগরি ফিল্টার -->
-    <div class="category-filter-section" id="movie-cat-section">
+    <!-- অ্যাডমিন ক্যাটাগরি ফিল্টার -->
+    <div class="category-filter-section" id="movie-cat-section" style="display:none;">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
         </div>
@@ -162,8 +162,8 @@
         <p id="series-feature-desc">দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।</p>
     </div>
 
-    <!-- ক্যাটাগরি ফিল্টার -->
-    <div class="category-filter-section" id="series-cat-section">
+    <!-- অ্যাডমিন ক্যাটাগরি ফিল্টার -->
+    <div class="category-filter-section" id="series-cat-section" style="display:none;">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
         </div>
@@ -198,8 +198,8 @@
         <p id="adult-feature-desc" style="margin-bottom:0;">আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।</p>
     </div>
 
-    <!-- ক্যাটাগরি ফিল্টার -->
-    <div class="category-filter-section" id="adult-cat-section">
+    <!-- অ্যাডমিন ক্যাটাগরি ফিল্টার -->
+    <div class="category-filter-section" id="adult-cat-section" style="display:none;">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
         </div>
@@ -482,7 +482,7 @@
     <!-- ভিডিও টাইটেল -->
     <h2 class="unlock-movie-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</h2>
 
-    <!-- আনলক মেয়াদের টাইমার (আনলক অবস্থায় শো হবে) -->
+    <!-- আনলক মেয়াদের লাইভ টাইমার (ভিডিও আনলক থাকলে প্রদর্শন করবে) -->
     <div class="unlocked-timer-badge" id="unlock-status-timer-card" style="display:none;">
         <div class="ut-title" id="ut-title-txt"><i class="fa-solid fa-clock"></i> আনলক মেয়াদের বাকি:</div>
         <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
@@ -495,37 +495,34 @@
             <span>অ্যাড দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে আনলক করুন:</span>
         </div>
 
-        <!-- ৩টি মূল কার্ড: ১. আনলক পয়েন্ট কার্ড, ২. ব্যালেন্স কার্ড, ৩. অ্যাড কার্ড -->
+        <!-- ৩টি স্ট্যাটাস কার্ড: আনলক কস্ট, ইউজারের পয়েন্ট, অ্যাড প্রগ্রেস -->
         <div class="usc-stats-grid">
             
-            <!-- কার্ড ১: আনলক পয়েন্ট কার্ড -->
+            <!-- কার্ড ১: আনলক পয়েন্ট কস্ট -->
             <div class="usc-stat-card card-point-unlock">
                 <div class="usc-card-top-indicator"><i class="fa-solid fa-bolt"></i> ইনস্ট্যান্ট</div>
                 <div class="usc-icon-circle ico-point"><i class="fa-solid fa-key"></i></div>
-                <div class="usc-stat-label">আনলক পয়েন্ট</div>
+                <div class="usc-stat-label">আনলক খরচ</div>
                 <div class="usc-stat-val" id="ui-point-cost-preview">৫ <small>pt</small></div>
-                <!-- পয়েন্ট আনলক বাটন -->
-                <button class="card-point-unlock-btn" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
-                    <i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">পয়েন্ট আনলক</span>
-                </button>
+                <div class="usc-stat-sub-badge badge-gold"><i class="fa-solid fa-clock"></i> ২৪ ঘণ্টা মেয়াদ</div>
             </div>
 
-            <!-- কার্ড ২: ব্যবহারকারীর ব্যালেন্স কার্ড -->
+            <!-- কার্ড ২: ব্যবহারকারীর লাইভ ব্যালেন্স -->
             <div class="usc-stat-card card-user-balance">
                 <div class="usc-card-top-indicator"><i class="fa-solid fa-wallet"></i> ওয়ালেট</div>
                 <div class="usc-icon-circle ico-balance"><i class="fa-solid fa-coins"></i></div>
                 <div class="usc-stat-label">আমার ব্যালেন্স</div>
                 <div class="usc-stat-val" id="ui-user-points-count">০</div>
-                <div class="usc-stat-sub-badge"><i class="fa-solid fa-circle-check"></i> কয়েন ব্যালেন্স</div>
+                <div class="usc-stat-sub-badge"><i class="fa-solid fa-circle-check"></i> জমা কয়েন</div>
             </div>
 
-            <!-- কার্ড ৩: অ্যাড কাউন্টার কার্ড -->
+            <!-- কার্ড ৩: অ্যাড কাউন্টার -->
             <div class="usc-stat-card card-ad-progress">
                 <div class="usc-card-top-indicator"><i class="fa-solid fa-film"></i> ফ্রি আনলক</div>
                 <div class="usc-icon-circle ico-ad"><i class="fa-solid fa-hourglass-half"></i></div>
                 <div class="usc-stat-label">বাকি অ্যাড</div>
                 <div class="usc-stat-val"><span id="ui-remaining-ads-count">৩</span><small>/<span id="ui-req-ads-count">৩</span></small></div>
-                <div class="usc-stat-sub-badge badge-ads"><i class="fa-solid fa-play"></i> মোট প্রয়োজন</div>
+                <div class="usc-stat-sub-badge badge-ads"><i class="fa-solid fa-clock"></i> ২ ঘণ্টা মেয়াদ</div>
             </div>
 
         </div>
@@ -537,16 +534,31 @@
 
         <div class="usc-progress-info">
             <div class="usc-prog-count">বিজ্ঞাপন সম্পন্ন: <span id="unlock-ratio-txt">০/৩</span></div>
-            <div class="usc-prog-sub">সম্পূর্ণ বিজ্ঞাপন দেখলে ভিডিও স্বয়ংক্রিয়ভাবে চালু হবে।</div>
+            <div class="usc-prog-sub">সম্পূর্ণ বিজ্ঞাপন দেখলে ২ ঘণ্টার জন্য ভিডিও ফ্রিতে আনলক হবে।</div>
         </div>
 
-        <!-- বড় বিজ্ঞাপন আনলক বাটন -->
-        <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
-            <i class="fa-solid fa-lock"></i> <span id="btn-ad-remain-txt">বিজ্ঞাপন দেখে আনলক করুন</span>
-        </button>
+        <!-- বাটন ১: বিজ্ঞাপন দেখে আনলক করুন -->
+        <div class="unlock-action-group">
+            <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
+                <div class="btn-inner-content">
+                    <i class="fa-solid fa-lock"></i> 
+                    <span id="btn-ad-remain-txt">বিজ্ঞাপন দেখে ফ্রিতে আনলক করুন</span>
+                </div>
+                <span class="btn-duration-tag" id="ui-ad-duration-badge"><i class="fa-regular fa-clock"></i> ২ ঘণ্টার জন্য ফ্রি</span>
+            </button>
+
+            <!-- বাটন ২: পয়েন্ট দিয়ে সরাসরি আনলক বাটন (বিজ্ঞাপন বাটনের নিচে) -->
+            <button class="btn-unlock-gold-direct" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
+                <div class="btn-inner-content">
+                    <i class="fa-solid fa-coins"></i> 
+                    <span id="ui-point-unlock-btn-txt">পয়েন্ট দিয়ে সরাসরি আনলক করুন</span>
+                </div>
+                <span class="btn-duration-tag duration-tag-gold" id="ui-point-duration-badge"><i class="fa-solid fa-bolt"></i> ২৪ ঘণ্টার ফুল এক্সেস</span>
+            </button>
+        </div>
     </div>
 
-    <!-- নিচে প্রিমিয়াম ব্রাউজ আরও দেখুন বাটন -->
+    <!-- নিচে প্রিমিয়াম ব্রাউজ আরো দেখুন বাটন -->
     <div class="btn-browse-more-bottom" onclick="closeVideoDetailView()">
         <div class="bbm-left">
             <i class="fa-solid fa-clapperboard"></i>
@@ -651,7 +663,7 @@
     </div>
 </div>
 
-<!-- ================= 16. FIREBASE & CORE SCRIPTS ================= -->
+<!-- ================= 16. FIREBASE & CONTROLLER ENGINE ================= -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
