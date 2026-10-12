@@ -344,35 +344,42 @@ function isGatewayEnabled(gw) {
     return true;
 }
 
+// app.js এর উপরে এই দুটি ভ্যারিয়েবল ডিক্লেয়ার করে রাখা ভালো:
+let lastVideoCardScrollPosition = 0, lastClickedVideoElementId = null;
+
+// applyAdminConfigToUI ফাংশনটি এভাবে নিরাপদ (Safe) করে নিন:
 function applyAdminConfigToUI() {
     const t = I18N[APP_LANG];
     const m = $('maintenance-screen');
     if (APP_CONFIG.maintenanceMode === true) {
-        m.style.display = 'flex';
-        $('maint-title').innerText = APP_CONFIG.maintenanceTitle || t.maintTitle;
-        $('maint-desc').innerText = APP_CONFIG.maintenanceNotice || t.maintDesc;
+        if (m) m.style.display = 'flex';
+        if ($('maint-title')) $('maint-title').innerText = APP_CONFIG.maintenanceTitle || t.maintTitle;
+        if ($('maint-desc')) $('maint-desc').innerText = APP_CONFIG.maintenanceNotice || t.maintDesc;
         return;
-    } else { m.style.display = 'none'; }
+    } else { 
+        if (m) m.style.display = 'none'; 
+    }
 
     const bMin = APP_CONFIG.minWithdrawBkash || 100, nMin = APP_CONFIG.minWithdrawNagad || 100, rMin = APP_CONFIG.minWithdrawRecharge || 40;
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
-    $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
-    $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
-    $('ui-cost-points-badge').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
-    $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} ${t.unitPoints})`;
-    $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(APP_CONFIG.unlockAdCount)}টি পূরণ করুন` : `Watch ${formatNumber(APP_CONFIG.unlockAdCount)} ads to complete`;
-    $('ui-ad-duration-badge').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} ঘণ্টার জন্য ফ্রি` : `Free for ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} Hours`;
-    $('ui-point-duration-desc').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টার জন্য আনলক থাকবে` : `Unlocked for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} Hours`;
-    $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
-    $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
-    $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
-    $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
+    if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
+    if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
+    if ($('ui-cost-points-badge')) $('ui-cost-points-badge').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
+    if ($('ui-point-unlock-btn-txt')) $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} ${t.unitPoints})`;
+    if ($('ui-ad-progress-desc')) $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(APP_CONFIG.unlockAdCount)}টি পূরণ করুন` : `Watch ${formatNumber(APP_CONFIG.unlockAdCount)} ads to complete`;
+    if ($('ui-ad-duration-badge')) $('ui-ad-duration-badge').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} ঘণ্টার জন্য ফ্রি` : `Free for ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} Hours`;
+    if ($('ui-point-duration-desc')) $('ui-point-duration-desc').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টার জন্য আনলক থাকবে` : `Unlocked for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} Hours`;
+    
+    if ($('lbl-min-bkash')) $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
+    if ($('lbl-min-nagad')) $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
+    if ($('lbl-min-recharge')) $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
+    if ($('ui-min-withdraw-summary')) $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
 
     if ($('ui-payout-admin-notice')) $('ui-payout-admin-notice').innerText = APP_CONFIG.withdrawNotice || t.defaultWithdrawNotice;
     updateGatewaysAvailabilityUI();
 
-    if (currentUser?.id) {
+    if (currentUser?.id && $('ref-share-url-box')) {
         $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${currentUser.id}`;
     }
     updateUserUI();
