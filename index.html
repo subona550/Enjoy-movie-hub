@@ -2,13 +2,13 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title id="page-head-title">ইনজ়য় মুভিজ আল্ট্রা এইচডি</title>
     
     <!-- Telegram & Ad SDKs -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script defer src="https://sad.adsgram.ai/js/sad.min.js"></script>
-    <script src="//libtl.com/sdk.js" data-zone="11928576" data-sdk="show_11928576"></script>
+    <script src="https://libtl.com/sdk.js" data-zone="11928576" data-sdk="show_11928576"></script>
     <script src="https://js.onclckvd.com/in-stream-ad-admanager/tma.js"></script>
     
     <!-- Third-Party Libraries -->
@@ -461,7 +461,7 @@
         <div class="poster-card">
             <div class="poster-media-wrap">
                 <span class="poster-badge-top" id="detail-category-badge"><i class="fa-solid fa-film"></i> মুভি</span>
-                <img id="detail-poster-img" src="" alt="Thumbnail" decoding="async">
+                <img id="detail-poster-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Thumbnail" decoding="async">
                 <span class="poster-badge-bottom" id="detail-duration-badge"><i class="fa-regular fa-clock"></i> 4K 2:27:35</span>
             </div>
             <div class="poster-social-row">
@@ -494,7 +494,7 @@
             <span>এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।</span>
         </div>
 
-        <!-- ৩টি স্ট্যাট কার্ড (মাঝের পয়েন্ট কার্ডের ভেতরেই পয়েন্ট দিয়ে আনলকের বাটন যুক্ত করা হয়েছে) -->
+        <!-- ৩টি স্ট্যাট কার্ড -->
         <div class="usc-stats-grid">
             <div class="usc-stat-card card-orange">
                 <div class="usc-icon-circle ico-orange"><i class="fa-solid fa-key"></i></div>
@@ -529,7 +529,7 @@
             <div class="usc-prog-sub">পয়েন্ট অথবা ads দিয়ে আনলক করুন।</div>
         </div>
 
-        <!-- বিজ্ঞাপন আনলক বাটন (পয়েন্ট বাটন কার্ডের ভেতরে নেওয়ার কারণে এটি একমাত্র প্রধান বটম বাটন) -->
+        <!-- বিজ্ঞাপন আনলক বাটন -->
         <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
             <i class="fa-solid fa-lock"></i> <span id="btn-ad-remain-txt">ভিডিও আনলক করুন</span>
         </button>
@@ -539,7 +539,7 @@
     <div class="btn-browse-more-bottom" onclick="closeVideoDetailView()">
         <div class="bbm-left">
             <i class="fa-solid fa-film"></i>
-            <span>আরো দেখুন</span>
+            <span id="lbl-back-home-txt">আরো দেখুন</span>
         </div>
         <i class="fa-solid fa-chevron-right bbm-arrow"></i>
     </div>
@@ -598,14 +598,14 @@
 </div>
 
 <!-- Rules Modal -->
-<div id="rules-modal" class="modal-wrap" onclick="if(event.target===this) this.style.display='none'">
+<div id="rules-modal" class="modal-wrap" onclick="if(event.target===this) { this.style.display='none'; updateTelegramBackButtonState(); }">
     <div class="modal-box" style="text-align: left;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
             <h3 style="font-size: 17px; color: var(--primary); font-weight: 900; display: flex; align-items: center; gap: 8px;" id="rules-modal-title"><i class="fa-solid fa-circle-info"></i> ভিডিও দেখার নিয়ম</h3>
-            <i class="fa-solid fa-xmark" onclick="document.getElementById('rules-modal').style.display='none'" style="cursor: pointer; color: #8ba2c4; font-size: 18px;"></i>
+            <i class="fa-solid fa-xmark" onclick="document.getElementById('rules-modal').style.display='none'; updateTelegramBackButtonState();" style="cursor: pointer; color: #8ba2c4; font-size: 18px;"></i>
         </div>
         <div id="rules-modal-content-list" style="font-size: 14px; color: #d0e1fd; line-height: 1.6; display: flex; flex-direction: column; gap: 8px; font-weight: 700;"></div>
-        <button class="btn-unlock-blue" onclick="document.getElementById('rules-modal').style.display='none'" style="margin-top: 14px;" id="btn-rules-modal-close">বুঝেছি, ধন্যবাদ</button>
+        <button class="btn-unlock-blue" onclick="document.getElementById('rules-modal').style.display='none'; updateTelegramBackButtonState();" style="margin-top: 14px;" id="btn-rules-modal-close">বুঝেছি, ধন্যবাদ</button>
     </div>
 </div>
 

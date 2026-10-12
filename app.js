@@ -33,7 +33,7 @@ const I18N = {
         lblEarnStatBal: "বর্তমান পয়েন্ট", lblEarnStatRew: "প্রতি অ্যাড পয়েন্ট", lblEarnStatWatch: "দেখা বিজ্ঞাপন", lblEarnStatLim: "দৈনিক লিমিট",
         btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "ভিডিও আনলক", videoUnlockNoticeDesc: "বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।",
         unlockDurationAdBadge: "২ ঘণ্টার জন্য ফ্রি", unlockDurationPtDesc: "২৪ ঘণ্টার জন্য আনলক থাকবে", btnAdWatchRemain: "বিজ্ঞাপন দেখুন", btnPointUnlock: "পয়েন্ট আনলক",
-        lblBackHome: "হোমে ফিরে যান", rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
+        lblBackHome: "আরো দেখুন", rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
         btnAdultConfirm: "আমি নিজ দায়িত্বে প্রবেশ করছি", btnAdultDecline: "না, সিনেমা লাইব্রেরিতে ফিরে যান", tgModalHeading: "চ্যানেলে জয়েন করা বাধ্যতামূলক",
         tgModalDesc: "ভিডিও আনলক করতে ও প্লে করতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকা বাধ্যতামূলক।", btnTgJoin: "চ্যানেলে জয়েন করুন", btnTgVerify: "আমি জয়েন করেছি",
         lblTabWithdraw: "উত্তোলন", lblTabHistory: "হিস্টোরি", lblCurBal: "বর্তমান ব্যালেন্স", lblTakaEquiv: "টাকার পরিমাণ", lblChooseGw: "উত্তোলন মাধ্যম বেছে নিন:",
@@ -66,7 +66,7 @@ const I18N = {
         lblEarnStatBal: "Current Points", lblEarnStatRew: "Points Per Ad", lblEarnStatWatch: "Watched Ads", lblEarnStatLim: "Daily Limit",
         btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", videoUnlockNoticeTitle: "Unlock Video", videoUnlockNoticeDesc: "Watch ads for free access or unlock permanently with points.",
         unlockDurationAdBadge: "Free for 2 Hours", unlockDurationPtDesc: "Unlocked for 24 Hours", btnAdWatchRemain: "Watch Ad", btnPointUnlock: "Point Unlock",
-        lblBackHome: "Back to Home", rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
+        lblBackHome: "Browse More", rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
         btnAdultConfirm: "I Enter At My Own Risk", btnAdultDecline: "No, Back To Movies", tgModalHeading: "Telegram Channel Join Required",
         tgModalDesc: "You must be a member of our official Telegram channel to unlock and watch videos.", btnTgJoin: "Join Channel", btnTgVerify: "I Have Joined",
         lblTabWithdraw: "Withdraw", lblTabHistory: "History", lblCurBal: "Current Balance", lblTakaEquiv: "Amount in Cash", lblChooseGw: "Select Gateway:",
@@ -84,7 +84,8 @@ const I18N = {
 let APP_CONFIG = {
     appName: "ইনজ়য় মুভিজ", 
     appHeaderBadge: "সিনেমা", 
- jscriptreStreamApi: "https://open-player-7bd4.rakibkdbb.workersscript adsgramRewardBlockId: "46116", 
+    cloudflareStreamApi: "https://open-player-7bd4.rakibkdbb.workers.dev", 
+    adsgramRewardBlockId: "46116", 
     adsgramInterstitialBlockId: "int-38278",
     monetagZoneId: "11928576",
     monetagSdkName: "show_11928576",
@@ -221,16 +222,17 @@ function getDeviceUUID() {
 
 function showToast(msg, type = 'info') {
     const t = $('top-toast');
+    if (!t) return;
     t.className = 'top-toast show ' + (type === 'error' ? 'err' : (type === 'success' ? 'succ' : ''));
-    $('toast-msg').innerText = msg;
+    if ($('toast-msg')) $('toast-msg').innerText = msg;
     triggerHaptic(type === 'error' ? 'error' : (type === 'success' ? 'success' : 'light'));
     setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 function toggleSidebarMenu(show) {
     triggerHaptic('light');
-    $('drawer-overlay').classList.toggle('open', show);
-    $('drawer-menu').classList.toggle('open', show);
+    $('drawer-overlay')?.classList.toggle('open', show);
+    $('drawer-menu')?.classList.toggle('open', show);
     updateTelegramBackButtonState();
 }
 
@@ -240,8 +242,8 @@ function changeAppLang(lang) {
     triggerHaptic('medium');
     APP_LANG = lang;
     localStorage.setItem('app_lang_choice', lang);
-    $('btn-lang-bn').classList.toggle('active', lang === 'bn');
-    $('btn-lang-en').classList.toggle('active', lang === 'en');
+    $('btn-lang-bn')?.classList.toggle('active', lang === 'bn');
+    $('btn-lang-en')?.classList.toggle('active', lang === 'en');
     document.documentElement.lang = lang;
     applyStaticTranslations();
     applyAdminConfigToUI();
@@ -274,7 +276,7 @@ function applyStaticTranslations() {
         ['btn-share-ref-txt', t.btnShareRef], ['btn-copy-ref-txt', t.btnCopyRef], 
         ['payout-page-head', t.payoutPageHead], ['payout-page-sub', t.payoutPageSub],
         ['video-unlock-notice-title', t.videoUnlockNoticeTitle], ['video-unlock-notice-desc', t.videoUnlockNoticeDesc],
-        ['lbl-points-unit', t.unitPoints], ['lbl-back-home-txt', t.lblBackHome], ['btn-rules-modal-close', t.rulesDoneBtn],
+        ['lbl-back-home-txt', t.lblBackHome], ['btn-rules-modal-close', t.rulesDoneBtn],
         ['adult-warn-title', t.adultModalTitle], ['btn-adult-decline', t.btnAdultDecline], ['tg-modal-heading', t.tgModalHeading],
         ['tg-modal-desc-txt', t.tgModalDesc], ['lbl-tab-withdraw', t.lblTabWithdraw], ['lbl-tab-history', t.lblTabHistory],
         ['lbl-cur-bal', t.lblCurBal], ['lbl-pts-unit', t.unitPoints], ['lbl-taka-equiv', t.lblTakaEquiv], ['lbl-currency-symbol', t.currencySymbol],
@@ -361,7 +363,6 @@ function applyAdminConfigToUI() {
     if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
     if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
     
-    // কার্ডের ভেতরে থাকা পয়েন্ট বাটন টেক্সট
     if ($('ui-point-unlock-btn-txt')) $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} pt)`;
     
     if ($('lbl-min-bkash')) $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
@@ -410,10 +411,10 @@ function updateUserUI() {
     const pts = userData.balancePoints ?? (APP_CONFIG.initialPoints || 0);
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
-    $('profile-points-val').innerText = formatNumber(pts);
-    $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
-    $('payout-modal-pts').innerText = formatNumber(pts);
-    $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
+    if ($('profile-points-val')) $('profile-points-val').innerText = formatNumber(pts);
+    if ($('profile-ref-count')) $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
+    if ($('payout-modal-pts')) $('payout-modal-pts').innerText = formatNumber(pts);
+    if ($('payout-modal-tk')) $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
 }
 
 /* =================== AD HUB NAVIGATION =================== */
@@ -450,7 +451,7 @@ function openDedicatedAdScreen(network) {
         monetag: "Monetag Ads",
         onclicka: "Onclicka Ads"
     };
-    $('ded-screen-title').innerText = netNames[network] || "Reward Ads";
+    if ($('ded-screen-title')) $('ded-screen-title').innerText = netNames[network] || "Reward Ads";
 
     updateDedicatedAdScreenUI();
     updateTelegramBackButtonState();
@@ -476,14 +477,14 @@ function updateDedicatedAdScreenUI() {
     const pts = userData.balancePoints ?? 0;
     const t = I18N[APP_LANG];
 
-    $('ded-stat-balance').innerText = formatNumber(pts);
-    $('ded-stat-reward').innerText = formatNumber(reward);
-    $('ded-stat-watched').innerText = formatNumber(todayWatched);
-    $('ded-stat-limit').innerText = formatNumber(limit);
+    if ($('ded-stat-balance')) $('ded-stat-balance').innerText = formatNumber(pts);
+    if ($('ded-stat-reward')) $('ded-stat-reward').innerText = formatNumber(reward);
+    if ($('ded-stat-watched')) $('ded-stat-watched').innerText = formatNumber(todayWatched);
+    if ($('ded-stat-limit')) $('ded-stat-limit').innerText = formatNumber(limit);
 
-    $('ded-row-reward').innerText = `${formatNumber(reward)} ${t.unitPoints}`;
-    $('ded-row-limit').innerText = formatNumber(limit);
-    $('ded-row-remaining').innerText = formatNumber(Math.max(0, limit - todayWatched));
+    if ($('ded-row-reward')) $('ded-row-reward').innerText = `${formatNumber(reward)} ${t.unitPoints}`;
+    if ($('ded-row-limit')) $('ded-row-limit').innerText = formatNumber(limit);
+    if ($('ded-row-remaining')) $('ded-row-remaining').innerText = formatNumber(Math.max(0, limit - todayWatched));
 
     const pBar = $('ded-progress-bar'), pText = $('ded-progress-text');
     if (pBar) pBar.style.width = Math.min(100, Math.round((todayWatched / limit) * 100)) + "%";
@@ -510,7 +511,7 @@ function showOnclickaAd() {
         const showFn = window.onclickaShowMethod || window.show;
         if (typeof showFn === 'function') {
             showFn()
-                .then(() => resolve({ done:true, network: 'onclicka' }))
+                .then(() => resolve({ done: true, network: 'onclicka' }))
                 .catch(err => reject(err));
         } else if (window.initCdTma) {
             window.initCdTma({ id: APP_CONFIG.onclickaSpotId || 'Your Spot ID' })
@@ -640,7 +641,7 @@ async function verifyUserMembershipNow(customMsg = "") {
 
 function openTelegramMandatoryModal(customNotice) {
     triggerHaptic('warning');
-    if (customNotice) $('tg-modal-desc-txt').innerText = customNotice;
+    if (customNotice && $('tg-modal-desc-txt')) $('tg-modal-desc-txt').innerText = customNotice;
     $('telegram-mandatory-modal').style.display = 'flex';
     updateTelegramBackButtonState();
 }
@@ -736,6 +737,8 @@ function extractTelegramUser() {
         } catch(e) {}
     }
     if (!u || !u.id) {
+        const preloader = $('app-preloader');
+        if (preloader) preloader.style.display = 'none';
         document.body.innerHTML = `
             <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#050814; color:#fff; text-align:center; padding:20px;">
                 <i class="fa-brands fa-telegram" style="font-size:60px; color:var(--primary); margin-bottom:15px; filter: drop-shadow(0 0 15px var(--primary));"></i>
@@ -756,18 +759,28 @@ function hideAppPreloader() {
 }
 
 async function initApp() {
-    try { if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); db = firebase.firestore(); } catch(e) {}
+    try { 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); 
+        db = firebase.firestore(); 
+    } catch(e) {}
+    
     if (window.Telegram?.WebApp) {
         tg = window.Telegram.WebApp;
         try { tg.expand(); tg.ready(); setupTelegramBackButton(); } catch(e){}
     }
-    currentUser = extractTelegramUser();
+
+    try {
+        currentUser = extractTelegramUser();
+    } catch (e) {
+        return; // Guard screen displayed
+    }
+
     const uid = String(currentUser.id);
-    $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
-    $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
-    $('u-profile-id').innerText = formatNumber(uid);
-    $('ref-user-code').innerText = formatNumber(uid);
-    $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
+    if ($('u-profile-name')) $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
+    if ($('u-profile-handle')) $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
+    if ($('u-profile-id')) $('u-profile-id').innerText = formatNumber(uid);
+    if ($('ref-user-code')) $('ref-user-code').innerText = formatNumber(uid);
+    if ($('ref-share-url-box')) $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
 
     loadSavedProgress();
     applyStaticTranslations();
@@ -784,12 +797,12 @@ async function initApp() {
     setTimeout(hideAppPreloader, 600);
 }
 
-function initAdsgram() {
+function initAdsgram(retry = 0) {
     if (window.Adsgram) {
         try { adsgramRewardController = window.Adsgram.init({ blockId: APP_CONFIG.adsgramRewardBlockId || "46116" }); } catch(e) {}
         try { adsgramInterstitialController = window.Adsgram.init({ blockId: APP_CONFIG.adsgramInterstitialBlockId || "int-38278" }); } catch(e) {}
-    } else {
-        setTimeout(initAdsgram, 500);
+    } else if (retry < 10) {
+        setTimeout(() => initAdsgram(retry + 1), 500);
     }
 }
 
@@ -931,7 +944,7 @@ async function syncUserData() {
         ref.onSnapshot((doc) => {
             if (doc.exists) {
                 userData = { ...userData, ...doc.data() };
-                $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
+                if ($('banned-screen')) $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
                 updateUserUI();
                 if ($('dedicated-ad-view')?.style.display === 'block') updateDedicatedAdScreenUI();
             }
@@ -1057,7 +1070,7 @@ function isSeriesVideo(v) {
 function isAdultVideo(v) {
     if (isSeriesVideo(v)) return false;
     const type = (v.type || '').toLowerCase(), cat = (v.category || '').toLowerCase(), sec = (v.section || '').toLowerCase(), title = (v.title || '').toLowerCase();
-    if (['adult', '18+', '18+', 'endal', 'এন্ডাল'].includes(sec) || ['adult', '18', '18+', 'endal', 'এন্ডাল'].includes(type) || v.isAdult === true || v.adult === true) return true;
+    if (['adult', '18+', 'endal', 'এন্ডাল'].includes(sec) || ['adult', '18', '18+', 'endal', 'এন্ডাল'].includes(type) || v.isAdult === true || v.adult === true) return true;
     if (['movie', 'movies'].includes(sec) || ['movie', 'movies'].includes(type)) return false;
     const kws = ['adult', '18', '18+', '১৮+', 'endal', 'এন্ডাল', 'hot', 'viral', 'tiktok', 'desi', 'college', 'exclusive', 'boudi', 'bhabi', 'sex', 'bhabhi', 'বউদি', 'ভাবি', 'বাবা মেয়ে', 'মা ছেলে', 'ভাই বোন', 'এডাল্ট', 'গার্লফ্রেন্ড', 'টিকটকার', 'গরম', 'choti', 'baba meye', 'ma chele', 'bhai bon'];
     return kws.some(k => title.includes(k) || cat.includes(k));
@@ -1125,9 +1138,9 @@ function processVideoSnapshot(docs) {
         };
     }).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
-    $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
-    $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
-    $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
+    if ($('movie-total-count')) $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
+    if ($('series-total-count')) $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
+    if ($('adult-total-count')) $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
 
     renderAllCategoryChips();
     filterVideosUI();
@@ -1146,6 +1159,14 @@ function renderCategoryChipsForTab(section, containerId) {
             if (!type || type === section || type === 'all' || (section === 'movies' && (type === 'movie' || type === 'movies'))) {
                 set.add(name);
             }
+        }
+    });
+
+    // ভিডিও লিস্ট থেকেও ক্যাটাগরি স্বয়ংক্রিয়ভাবে যোগ করা
+    allLoadedVideos.forEach(v => {
+        const matchesSection = section === 'series' ? isSeriesVideo(v) : (section === 'adult' ? isAdultVideo(v) : isMovieVideo(v));
+        if (matchesSection && v.category) {
+            set.add(v.category);
         }
     });
 
@@ -1376,7 +1397,7 @@ function openSeriesEpisodesDrawer(seriesId) {
     const s = allLoadedVideos.find(v => v.id === seriesId);
     if (!s) return;
     activeSeriesForDrawer = s;
-    $('series-drawer-title').innerText = s.title;
+    if ($('series-drawer-title')) $('series-drawer-title').innerText = s.title;
 
     const list = $('series-episodes-list');
     list.innerHTML = "";
@@ -1445,10 +1466,10 @@ function openVideoDetailView(videoId, epIndex = null) {
         if (badgeText) badgeText.innerText = `${label} কনটেন্ট`;
     }
 
-    $('detail-poster-img').src = video.thumb;
-    $('detail-file-title').innerText = video.title;
-    $('detail-duration-badge').innerHTML = `<i class="fa-regular fa-clock"></i> ${video.duration || 'HD'}`;
-    $('detail-views-txt').innerText = `${formatNumber(video.views || 0)} ${I18N[APP_LANG].viewsWord}`;
+    if ($('detail-poster-img')) $('detail-poster-img').src = video.thumb;
+    if ($('detail-file-title')) $('detail-file-title').innerText = video.title;
+    if ($('detail-duration-badge')) $('detail-duration-badge').innerHTML = `<i class="fa-regular fa-clock"></i> ${video.duration || 'HD'}`;
+    if ($('detail-views-txt')) $('detail-views-txt').innerText = `${formatNumber(video.views || 0)} ${I18N[APP_LANG].viewsWord}`;
 
     updateDetailLikeUI();
     updateUnlockProgressUI();
@@ -1463,7 +1484,7 @@ function openVideoDetailView(videoId, epIndex = null) {
 function updateDetailLikeUI() {
     if (!activeDetailVideo) return;
     const isLiked = !!userLikedVideos[activeDetailVideo.id];
-    $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes || 0)} ${I18N[APP_LANG].likesWord}`;
+    if ($('detail-likes-txt')) $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes || 0)} ${I18N[APP_LANG].likesWord}`;
     $('detail-like-btn-action')?.classList.toggle('active-liked', isLiked);
 }
 
@@ -1508,7 +1529,7 @@ function closeVideoDetailView() {
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
-    const total = APP_CONFIG.unlockAdCount || 5;
+    const total = APP_CONFIG.unlockAdCount || 3;
     const done = videoAdProgressMap[vId] || 0;
     const remaining = Math.max(0, total - done);
     const userPts = userData.balancePoints ?? 0;
@@ -1524,13 +1545,17 @@ function updateUnlockProgressUI() {
 
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
 
+    const targetUrl = (activeDetailVideo.links?.[currentPlayingPartIndex]?.url || activeDetailVideo.url || '').trim();
+    const isTg = isTelegramUrl(targetUrl);
+    const playBtnText = isTg ? (APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram') : (APP_LANG === 'bn' ? 'ভিডিও চালু করুন' : 'Play Video');
+
     if (isUnlocked) {
         if (timerCard) timerCard.style.display = 'flex';
         startExpiryCountdown(vId);
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(total)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = "100%";
         
-        adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}`;
+        adBtn.innerHTML = `<i class="fa-solid ${isTg ? 'fa-paper-plane' : 'fa-circle-play'}"></i> ${playBtnText}`;
         if (pointBtn) {
             pointBtn.disabled = true; 
             pointBtn.style.opacity = "0.45";
@@ -1548,9 +1573,9 @@ function updateUnlockProgressUI() {
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = percent + "%";
 
-        adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}` :
+        adBtn.innerHTML = done >= total ? `<i class="fa-solid ${isTg ? 'fa-paper-plane' : 'fa-circle-play'}"></i> ${playBtnText}` :
                          (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}` :
-                         `<i class="fa-solid fa-lock"></i> ${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}`);
+                         `<i class="fa-solid fa-lock"></i> ${APP_LANG === 'bn' ? 'বিজ্ঞাপন দেখে আনলক করুন' : 'Unlock with Ads'}`);
     }
 }
 
@@ -1568,7 +1593,7 @@ function startExpiryCountdown(vId) {
         const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
         const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
         const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-        timer.innerText = `${formatNumber(h)}:${formatNumber(m)}:${formatNumber(s)}`;
+        if (timer) timer.innerText = `${formatNumber(h)}:${formatNumber(m)}:${formatNumber(s)}`;
     };
     update();
     if ((videoUnlockExpiryMap[vId] || 0) - Date.now() > 0) countdownTimerInterval = setInterval(update, 1000);
@@ -1643,22 +1668,47 @@ async function playMovie(videoObj) {
     openDirectPlayer(videoObj, currentPlayingPartIndex || 0);
 }
 
+function formatEmbedOrStreamUrl(rawUrl) {
+    if (!rawUrl) return "";
+    let u = rawUrl.trim();
+    // YouTube Watch URL to Embed
+    if (u.includes('youtube.com/watch?v=')) {
+        const id = u.split('v=')[1]?.split('&')[0];
+        if (id) return `https://www.youtube.com/embed/${id}?autoplay=1`;
+    }
+    // YouTube Short URL to Embed
+    if (u.includes('youtu.be/')) {
+        const id = u.split('youtu.be/')[1]?.split('?')[0];
+        if (id) return `https://www.youtube.com/embed/${id}?autoplay=1`;
+    }
+    // Google Drive URL to Preview
+    if (u.includes('drive.google.com/file/d/')) {
+        const id = u.split('/d/')[1]?.split('/')[0];
+        if (id) return `https://drive.google.com/file/d/${id}/preview`;
+    }
+    return u;
+}
+
 async function getPlayableStreamUrl(rawUrl, videoId) {
-    if (!APP_CONFIG.cloudflareStreamApi) return rawUrl;
+    const formattedUrl = formatEmbedOrStreamUrl(rawUrl);
+    if (['youtube.com/embed', 'drive.google.com'].some(x => formattedUrl.includes(x))) {
+        return formattedUrl;
+    }
+    if (!APP_CONFIG.cloudflareStreamApi) return formattedUrl;
     const apiBase = APP_CONFIG.cloudflareStreamApi.replace(/\/$/, '');
-    const endpoint = `${apiBase}?url=${encodeURIComponent(rawUrl)}&id=${encodeURIComponent(videoId || '')}`;
+    const endpoint = `${apiBase}?url=${encodeURIComponent(formattedUrl)}&id=${encodeURIComponent(videoId || '')}`;
     try {
         const res = await fetch(endpoint, { method: 'GET' });
         if (res.ok) {
             const contentType = res.headers.get("content-type") || "";
             if (contentType.includes("application/json")) {
                 const json = await res.json();
-                return json.streamUrl || json.url || json.playableUrl || json.link || rawUrl;
+                return json.streamUrl || json.url || json.playableUrl || json.link || formattedUrl;
             }
         }
         return endpoint;
     } catch (err) {
-        return rawUrl;
+        return formattedUrl;
     }
 }
 
@@ -1727,7 +1777,7 @@ function playStreamUrlInPlayer(url) {
         if (activeDetailVideo?.links && currentPlayingPartIndex < activeDetailVideo.links.length - 1) switchPlayerPart(currentPlayingPartIndex + 1);
     };
 
-    if (['drive.google.com', 'youtube.com/embed', 'embed'].some(x => url.includes(x))) {
+    if (['drive.google.com', 'youtube.com/embed', 'embed', 'player'].some(x => url.includes(x))) {
         v.pause(); v.removeAttribute('src'); v.load(); v.style.display = 'none';
         f.src = url; f.style.display = 'block';
     } else {
@@ -1812,10 +1862,10 @@ function closePayoutModal() { closePayoutView(); }
 function switchPayoutInnerTab(tab) {
     triggerHaptic('light');
     const isForm = tab === 'form';
-    $('tab-btn-withdraw-form').classList.toggle('active', isForm);
-    $('tab-btn-withdraw-history').classList.toggle('active', !isForm);
-    $('payout-form-view').style.display = isForm ? 'block' : 'none';
-    $('payout-history-view').style.display = isForm ? 'none' : 'block';
+    $('tab-btn-withdraw-form')?.classList.toggle('active', isForm);
+    $('tab-btn-withdraw-history')?.classList.toggle('active', !isForm);
+    if ($('payout-form-view')) $('payout-form-view').style.display = isForm ? 'block' : 'none';
+    if ($('payout-history-view')) $('payout-history-view').style.display = isForm ? 'none' : 'block';
     if ($('payout-balance-card-box')) $('payout-balance-card-box').style.display = isForm ? 'flex' : 'none';
     if (!isForm) loadWithdrawalHistory();
 }
@@ -1839,18 +1889,19 @@ function selectGateway(gw) {
     if ($('sim-operator-container')) $('sim-operator-container').style.display = (gw === 'Recharge') ? 'block' : 'none';
 
     const minPts = getGatewayMinPoints(gw), minTk = Math.round(minPts * (APP_CONFIG.pointsToTakaRate || 0.3)), t = I18N[APP_LANG];
-    $('payout-min-limit-alert').innerText = `${t.minWithdrawPrefix} ${formatNumber(minPts)} ${t.unitPoints} (${formatNumber(minTk)} ${t.currencySymbol})`;
+    if ($('payout-min-limit-alert')) $('payout-min-limit-alert').innerText = `${t.minWithdrawPrefix} ${formatNumber(minPts)} ${t.unitPoints} (${formatNumber(minTk)} ${t.currencySymbol})`;
 }
 
 function calculateWithdrawTakaPreview() {
-    const val = parseInt($('pay-amount').value), tag = $('payout-live-calc-tag');
+    const val = parseInt($('pay-amount')?.value), tag = $('payout-live-calc-tag');
+    if (!tag) return;
     tag.innerText = (!isNaN(val) && val > 0) ? `= ${formatNumber((Math.round(val * (APP_CONFIG.pointsToTakaRate || 0.3) * 100) / 100).toFixed(2))} ${I18N[APP_LANG].currencySymbol}` : '';
 }
 
 async function loadWithdrawalHistory() {
     const list = $('payout-history-list');
-    if (!db || !currentUser?.id) return;
-    list.innerHTML = "";
+    if (!db || !currentUser?.id || !list) return;
+    list.innerHTML = `<div style="text-align:center; padding:18px; color:#8ba2c4; font-weight:800;"><i class="fa-solid fa-spinner fa-spin"></i> লোড হচ্ছে...</div>`;
 
     try {
         const snap = await db.collection("withdrawals").where("userId", "==", String(currentUser.id)).limit(40).get();
@@ -1928,7 +1979,10 @@ async function submitWithdrawalRequest() {
 
         numInput.value = '';
         amountInput.value = '';
-        $('payout-live-calc-tag').innerText = '';
+        if ($('payout-live-calc-tag')) $('payout-live-calc-tag').innerText = '';
+
+        userData.balancePoints = Math.max(0, (userData.balancePoints || pts) - pts);
+        updateUserUI();
 
         triggerHaptic('success');
         showToast(data.message || "উত্তোলন রিকোয়েস্ট সফল হয়েছে!", "success");
@@ -1974,8 +2028,9 @@ function shareReferralLink() {
 function toggleSearchBox() {
     triggerHaptic('light');
     const s = $('search-container');
+    if (!s) return;
     s.style.display = s.style.display === 'none' ? 'block' : 'none';
-    if (s.style.display === 'block') $('video-search-input').focus();
+    if (s.style.display === 'block') $('video-search-input')?.focus();
 }
 
 function debouncedSearch() {

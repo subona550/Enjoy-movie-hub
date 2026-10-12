@@ -1,3 +1,7 @@
+/* ==========================================================================
+   ENJOY MOVIES ULTRA HD - COMPLETE PREMIUM STYLESHEET
+   ========================================================================== */
+
 :root { 
     --primary: #00e5ff; 
     --primary-glow: rgba(0, 229, 255, 0.65); 
@@ -23,9 +27,17 @@
     -webkit-user-select: none; 
 }
 
+/* স্মুথ স্ক্রলিং এবং মোবাইল স্ক্রলবার হাইড */
 html, body { 
     overscroll-behavior: none !important; 
     scroll-behavior: smooth; 
+}
+
+body::-webkit-scrollbar, 
+*::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    display: none;
 }
 
 body { 
@@ -34,7 +46,7 @@ body {
     font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif; 
     font-size: 16px; 
     font-weight: 700; 
-    padding-bottom: 125px !important; 
+    padding-bottom: calc(125px + env(safe-area-inset-bottom, 0px)) !important; 
     overflow-x: hidden; 
     min-height: 100vh; 
     -webkit-font-smoothing: antialiased;
@@ -160,14 +172,14 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     100% { opacity: 1; text-shadow: 0 0 18px rgba(0, 210, 255, 0.9); } 
 }
 
-/* =================== ANIMATIONS =================== */
+/* =================== ANIMATIONS & SHIMMER =================== */
 @keyframes subtleFadeUp { 
     from { opacity: 0; transform: translateY(8px); } 
     to { opacity: 1; transform: translateY(0); } 
 }
 
 .content-tab { 
-    animation: subtleFadeUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
+    animation: subtleFadeUp 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
 }
 
 @keyframes universalGlowSweep { 
@@ -203,20 +215,21 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
-.btn-unlock-blue, .btn-withdraw-green, .circle-btn, .nav-item, .btn-earn-gradient, .btn-share-ref, .btn-action-cyan, .btn-action-gold, .page-pill-btn, .sim-opt-pill, .cat-filter-pill, .ad-network-card, .btn-unlock-purple, .card-point-unlock-btn {
+/* বোতাম স্পর্শ ফিডব্যাক */
+.btn-unlock-blue, .btn-withdraw-green, .circle-btn, .nav-item, .btn-earn-gradient, .btn-share-ref, .btn-action-cyan, .btn-action-gold, .page-pill-btn, .sim-opt-pill, .cat-filter-pill, .ad-network-card, .btn-unlock-purple, .card-point-unlock-btn, .btn-browse-more-bottom {
     transition: transform 0.14s ease, filter 0.18s ease, box-shadow 0.2s ease; 
     position: relative; 
     font-weight: 800;
 }
 
-.btn-unlock-blue:active, .btn-withdraw-green:active, .circle-btn:active, .btn-earn-gradient:active, .btn-share-ref:active, .btn-action-cyan:active, .btn-action-gold:active, .sim-opt-pill:active, .cat-filter-pill:active, .ad-network-card:active, .btn-unlock-purple:active, .card-point-unlock-btn:active { 
+.btn-unlock-blue:active, .btn-withdraw-green:active, .circle-btn:active, .btn-earn-gradient:active, .btn-share-ref:active, .btn-action-cyan:active, .btn-action-gold:active, .sim-opt-pill:active, .cat-filter-pill:active, .ad-network-card:active, .btn-unlock-purple:active, .card-point-unlock-btn:active, .btn-browse-more-bottom:active { 
     transform: scale(0.96); 
 }
 
 /* =================== HEADER =================== */
 header { 
     background: rgba(8, 14, 30, 0.94); 
-    padding: 14px 14px; 
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px; 
     border-bottom: 1px solid rgba(0, 229, 255, 0.3); 
     position: sticky; 
     top: 0; 
@@ -325,7 +338,7 @@ header {
     transition: left 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
     display: flex; 
     flex-direction: column; 
-    padding: 22px 18px; 
+    padding: calc(20px + env(safe-area-inset-top, 0px)) 18px 22px; 
     overflow-y: auto; 
     border-right: 1px solid var(--card-border);
 }
@@ -450,7 +463,7 @@ header {
     gap: 11px; 
     padding: 10px 10px; 
     position: sticky;
-    top: 72px;
+    top: 68px;
     z-index: 990;
     background: rgba(5, 8, 20, 0.94);
     backdrop-filter: blur(14px);
@@ -630,11 +643,11 @@ header {
     box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
 }
 
-/* =================== ক্যাটাগরি সেকশন: পিউর ব্ল্যাক থিম =================== */
+/* =================== ক্যাটাগরি সেকশন =================== */
 .category-filter-section { 
     margin: 4px 10px 16px; 
     padding: 14px 14px; 
-    background: #01040a !important; /* সম্পূর্ণ পিউর ব্ল্যাক থিম */
+    background: #01040a !important;
     border: 1.5px solid rgba(0, 229, 255, 0.28); 
     border-radius: 20px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 0, 0, 0.95);
@@ -913,6 +926,18 @@ header {
     margin-left: auto; 
 }
 
+/* হাইলাইট করা কার্ড পালস অ্যানিমেশন */
+@keyframes cardNeonPulse {
+    0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); border-color: #00e5ff; }
+    50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.95), 0 0 20px #ffe000; border-color: #ffe000; }
+    100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); border-color: #00e5ff; }
+}
+
+.series-card-item.highlight-glow-pulse { 
+    animation: cardNeonPulse 1.2s infinite ease-in-out !important;
+    scroll-margin-top: 80px; 
+}
+
 /* =================== PAGINATION =================== */
 .pagination-container { 
     display: flex; 
@@ -973,7 +998,7 @@ header {
     border-radius: 26px 26px 0 0;
     border: 1px solid var(--card-border); 
     border-bottom: none; 
-    padding: 18px 14px 26px;
+    padding: 18px 14px calc(26px + env(safe-area-inset-bottom, 0px));
     box-shadow: 0 -10px 45px rgba(0, 229, 255, 0.2); 
     display: flex; 
     flex-direction: column; 
@@ -1110,12 +1135,6 @@ header {
     color: var(--primary); 
     font-size: 14px; 
     flex-shrink: 0; 
-}
-
-.series-card-item.highlight-glow-pulse { 
-    border-color: #00e5ff !important; 
-    box-shadow: 0 0 35px rgba(0, 229, 255, 0.9) !important; 
-    scroll-margin-top: 80px; 
 }
 
 /* =================== VIDEO UNLOCK DETAIL VIEW =================== */
@@ -1431,7 +1450,6 @@ header {
     text-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
-/* কার্ডের ভেতরে স্থাপিত পয়েন্ট আনলক বাটন */
 .card-point-unlock-btn {
     width: 100%;
     margin-top: 10px;
@@ -1521,11 +1539,6 @@ header {
     color: #fff;
     cursor: pointer;
     box-shadow: 0 8px 26px rgba(233, 64, 87, 0.45);
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
-}
-
-.btn-browse-more-bottom:active {
-    transform: scale(0.97);
 }
 
 .bbm-left {
@@ -1637,7 +1650,7 @@ header {
 }
 
 .inpage-header-nav { 
-    padding: 14px 16px; 
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 14px; 
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
@@ -2333,12 +2346,12 @@ header {
     display: flex; 
     justify-content: space-around; 
     align-items: center; 
-    padding: 10px 8px 14px; 
+    padding: 10px 8px calc(14px + env(safe-area-inset-bottom, 0px)); 
     z-index: 99999; 
     backdrop-filter: blur(18px); 
     -webkit-backdrop-filter: blur(18px); 
     box-shadow: 0 -8px 25px rgba(0,0,0,0.8), 0 0 15px rgba(0, 229, 255, 0.15); 
-    min-height: 74px;
+    min-height: calc(74px + env(safe-area-inset-bottom, 0px));
 }
 
 .nav-item { 
@@ -2438,7 +2451,7 @@ header {
     border: 1.5px solid var(--card-border); 
     border-radius: 14px; 
     color: #fff; 
-    font-size: 15px; 
+    font-size: 16px; /* মোবাইলে অটো-জুম প্রতিরোধ করে */
     font-weight: 800; 
     margin-bottom: 12px; 
     outline: none; 
@@ -2473,7 +2486,7 @@ header {
     color: #fff;
 }
 
-.top-toast.show { top: 16px; } 
+.top-toast.show { top: calc(16px + env(safe-area-inset-top, 0px)); } 
 .top-toast.err { border-color: #ff0844; color: #ff6b8b; box-shadow: 0 0 20px rgba(255, 8, 68, 0.5); } 
 .top-toast.succ { border-color: #00f260; color: #70ffad; box-shadow: 0 0 20px rgba(0, 242, 96, 0.5); }
 
