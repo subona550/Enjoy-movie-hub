@@ -203,13 +203,13 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
-.btn-unlock-blue, .btn-withdraw-green, .circle-btn, .nav-item, .btn-earn-gradient, .btn-share-ref, .btn-action-cyan, .btn-action-gold, .page-pill-btn, .sim-opt-pill, .cat-filter-pill, .ad-network-card, .btn-unlock-purple, .btn-unlock-teal {
+.btn-unlock-blue, .btn-withdraw-green, .circle-btn, .nav-item, .btn-earn-gradient, .btn-share-ref, .btn-action-cyan, .btn-action-gold, .page-pill-btn, .sim-opt-pill, .cat-filter-pill, .ad-network-card, .btn-unlock-purple, .card-point-unlock-btn {
     transition: transform 0.14s ease, filter 0.18s ease, box-shadow 0.2s ease; 
     position: relative; 
     font-weight: 800;
 }
 
-.btn-unlock-blue:active, .btn-withdraw-green:active, .circle-btn:active, .btn-earn-gradient:active, .btn-share-ref:active, .btn-action-cyan:active, .btn-action-gold:active, .sim-opt-pill:active, .cat-filter-pill:active, .ad-network-card:active, .btn-unlock-purple:active, .btn-unlock-teal:active { 
+.btn-unlock-blue:active, .btn-withdraw-green:active, .circle-btn:active, .btn-earn-gradient:active, .btn-share-ref:active, .btn-action-cyan:active, .btn-action-gold:active, .sim-opt-pill:active, .cat-filter-pill:active, .ad-network-card:active, .btn-unlock-purple:active, .card-point-unlock-btn:active { 
     transform: scale(0.96); 
 }
 
@@ -443,14 +443,14 @@ header {
     margin: 20px 4px 10px; 
 }
 
-/* =================== HERO & FEATURED (STICKY HERO UPGRADE) =================== */
+/* =================== HERO & FEATURED =================== */
 .hero-banner-grid { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
     gap: 11px; 
     padding: 10px 10px; 
     position: sticky;
-    top: 72px; /* হেডার এর ঠিক নিচে ফিক্সড থাকবে */
+    top: 72px;
     z-index: 990;
     background: rgba(5, 8, 20, 0.94);
     backdrop-filter: blur(14px);
@@ -630,16 +630,24 @@ header {
     box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
 }
 
-/* =================== CATEGORY FILTER =================== */
+/* =================== ক্যাটাগরি সেকশন: পিউর ব্ল্যাক থিম =================== */
 .category-filter-section { 
-    padding: 2px 10px 14px; 
+    margin: 4px 10px 16px; 
+    padding: 14px 14px; 
+    background: #01040a !important; /* সম্পূর্ণ পিউর ব্ল্যাক থিম */
+    border: 1.5px solid rgba(0, 229, 255, 0.28); 
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 0, 0, 0.95);
+    position: relative;
 }
 
 .category-filter-header { 
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
-    margin-bottom: 8px; 
+    margin-bottom: 10px; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 6px;
 }
 
 .category-filter-label { 
@@ -653,7 +661,7 @@ header {
 
 .category-filter-label i { 
     color: var(--primary); 
-    font-size: 12px; 
+    font-size: 13px; 
 }
 
 .category-pills-grid { 
@@ -664,13 +672,13 @@ header {
 }
 
 .cat-filter-pill {
-    background: #081226; 
-    border: 1.5px solid var(--card-border); 
+    background: #090f1d; 
+    border: 1.5px solid rgba(0, 229, 255, 0.2); 
     border-radius: 13px; 
     padding: 7px 14px;
     font-size: 13px; 
     font-weight: 800; 
-    color: #b0c4de; 
+    color: #cbd5e1; 
     cursor: pointer; 
     display: inline-flex; 
     align-items: center; 
@@ -1248,12 +1256,11 @@ header {
     text-shadow: 0 0 8px rgba(255, 224, 0, 0.6); 
 }
 
-/* =================== UPGRADED UNLOCK NOTICE (LARGER & PREMIUM) =================== */
 .custom-unlock-notice {
     background: linear-gradient(135deg, rgba(9, 20, 48, 0.95) 0%, rgba(13, 31, 71, 0.9) 100%);
     border: 1.5px solid rgba(0, 229, 255, 0.45);
     border-radius: 20px;
-    padding: 16px 16px; /* হালকা বড় প্যাডিং */
+    padding: 16px 16px;
     margin: 10px 10px 16px;
     display: flex;
     align-items: center;
@@ -1268,7 +1275,7 @@ header {
 }
 
 .cun-bell-icon {
-    width: 52px; /* বড় আইকন */
+    width: 52px;
     height: 52px;
     border-radius: 16px;
     background: linear-gradient(135deg, #0052d4 0%, #00e5ff 100%);
@@ -1276,7 +1283,7 @@ header {
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 23px; /* বড় ফন্ট */
+    font-size: 23px;
     flex-shrink: 0;
     box-shadow: 0 0 18px rgba(0, 229, 255, 0.65);
 }
@@ -1294,7 +1301,7 @@ header {
 }
 
 .cun-head-row h4 {
-    font-size: 17.5px; /* বড় টাইটেল */
+    font-size: 17.5px;
     font-weight: 900;
     color: #ffffff;
     text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
@@ -1314,7 +1321,7 @@ header {
 }
 
 .cun-meta p {
-    font-size: 13.5px; /* বড় স্পষ্ট বিবরণ */
+    font-size: 13.5px;
     color: #b0c4de;
     font-weight: 700;
     line-height: 1.45;
@@ -1329,12 +1336,12 @@ header {
     text-shadow: 0 2px 8px rgba(0,0,0,0.85);
 }
 
-/* =================== UPGRADED UNLOCK STATS SYSTEM (PREMIUM & LARGER) =================== */
+/* =================== UNLOCK STATS & CARDS =================== */
 .unlock-system-container {
     background: linear-gradient(180deg, #09132e 0%, #060c1d 100%);
     border: 1.5px solid rgba(168, 85, 247, 0.45);
     border-radius: 24px;
-    padding: 22px 16px; /* বড় প্যাডিং */
+    padding: 22px 16px;
     margin: 0 10px 18px;
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(168, 85, 247, 0.2);
 }
@@ -1362,13 +1369,13 @@ header {
 .usc-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px; /* কার্ডের মাঝে স্পেস বৃদ্ধি */
+    gap: 10px;
     margin-bottom: 20px;
 }
 
 .usc-stat-card {
     border-radius: 18px;
-    padding: 15px 8px; /* বড় ও প্রশস্থ কার্ড */
+    padding: 15px 8px 12px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -1384,8 +1391,9 @@ header {
 }
 
 .usc-stat-card.card-green {
-    background: linear-gradient(180deg, rgba(0, 242, 96, 0.22) 0%, rgba(10, 30, 22, 0.95) 100%);
-    border-color: rgba(0, 242, 96, 0.55);
+    background: linear-gradient(180deg, rgba(0, 242, 96, 0.24) 0%, rgba(10, 30, 22, 0.98) 100%);
+    border-color: rgba(0, 242, 96, 0.65);
+    padding-bottom: 10px;
 }
 
 .usc-stat-card.card-purple {
@@ -1394,13 +1402,13 @@ header {
 }
 
 .usc-icon-circle {
-    width: 44px; /* বড় আইকন বক্স */
+    width: 44px;
     height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px; /* বড় আইকন */
+    font-size: 18px;
     margin-bottom: 8px;
 }
 
@@ -1409,23 +1417,47 @@ header {
 .ico-purple { background: #b827fc; color: #fff; box-shadow: 0 0 12px rgba(184, 39, 252, 0.7); }
 
 .usc-stat-label {
-    font-size: 13px; /* বড় লেবেল */
+    font-size: 13px;
     font-weight: 800;
     color: #d0e1fd;
     margin-bottom: 5px;
 }
 
 .usc-stat-val {
-    font-size: 22px; /* বড় ও বোল্ড মান */
+    font-size: 22px;
     font-weight: 900;
     color: #ffffff;
     line-height: 1;
     text-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
+/* কার্ডের ভেতরে স্থাপিত পয়েন্ট আনলক বাটন */
+.card-point-unlock-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #00f260 0%, #00b4db 100%);
+    border: none;
+    color: #050814;
+    font-size: 12px;
+    font-weight: 900;
+    padding: 7px 4px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-shadow: 0 0 12px rgba(0, 242, 96, 0.6);
+    transition: transform 0.14s ease, filter 0.18s ease;
+}
+
+.card-point-unlock-btn:active {
+    transform: scale(0.95);
+}
+
 .usc-progress-track {
     width: 100%;
-    height: 10px; /* পুরু প্রগ্রেস ট্র্যাক */
+    height: 10px;
     background: #040814;
     border-radius: 12px;
     overflow: hidden;
@@ -1474,30 +1506,12 @@ header {
     align-items: center;
     justify-content: center;
     gap: 9px;
-    margin-bottom: 12px;
     box-shadow: 0 0 20px rgba(194, 24, 91, 0.5);
 }
 
-.btn-unlock-teal {
-    width: 100%;
-    background: linear-gradient(90deg, #0083b0 0%, #00b4db 50%, #00b09b 100%);
-    border: none;
-    color: #ffffff;
-    padding: 15px;
-    border-radius: 16px;
-    font-size: 16px;
-    font-weight: 900;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    box-shadow: 0 0 20px rgba(0, 180, 219, 0.5);
-}
-
-/* =================== BROWSE MORE BUTTON (REFINED SPACING) =================== */
+/* =================== BROWSE MORE BUTTON =================== */
 .btn-browse-more-bottom {
-    margin: 22px 10px 38px; /* ওপর থেকে পর্যাপ্ত স্পেসে হালকা নিচে সেট করা হয়েছে */
+    margin: 22px 10px 38px;
     background: linear-gradient(90deg, #8a2387 0%, #e94057 50%, #f27121 100%);
     border-radius: 18px;
     padding: 16px 20px;
@@ -2071,7 +2085,7 @@ header {
 .settings-detail-card {
     background: var(--card-bg); 
     border: 1.5px solid var(--card-border); 
-    border-radius: 20px;
+    border-radius: 20px; 
     padding: 18px 16px; 
     margin: 0 10px 14px; 
     box-shadow: 0 6px 20px rgba(0,0,0,0.6);
@@ -2487,7 +2501,7 @@ header {
     width: 76px; 
     height: 76px; 
     border-radius: 50%; 
-    background: rgba(255, 8, 68, 0.15);
+    background: rgba(255, 8, 68, 0.15); 
     border: 2px solid #ff0844; 
     color: #ff6b8b; 
     display: flex; 

@@ -125,6 +125,7 @@
         <button class="btn-unlock-blue" onclick="openVideoRulesModal()"><i class="fa-solid fa-circle-info"></i> <span id="btn-video-rules-txt">ভিডিও দেখার নিয়ম</span></button>
     </div>
 
+    <!-- কালো ব্যাকগ্রাউন্ড থিমে ক্যাটাগরি কন্টেইনার -->
     <div class="category-filter-section" id="movie-cat-section">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -160,6 +161,7 @@
         <p id="series-feature-desc">দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।</p>
     </div>
 
+    <!-- কালো ব্যাকগ্রাউন্ড থিমে ক্যাটাগরি কন্টেইনার -->
     <div class="category-filter-section" id="series-cat-section">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -195,6 +197,7 @@
         <p id="adult-feature-desc" style="margin-bottom:0;">আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।</p>
     </div>
 
+    <!-- কালো ব্যাকগ্রাউন্ড থিমে ক্যাটাগরি কন্টেইনার -->
     <div class="category-filter-section" id="adult-cat-section">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -484,25 +487,31 @@
         <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
     </div>
 
-    <!-- মূল আনলক বক্স (স্ক্রিনশটের মতো) -->
+    <!-- মূল আনলক বক্স -->
     <div class="unlock-system-container shimmer-card-effect">
         <div class="usc-header">
             <span class="usc-glow-dot"></span>
             <span>এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।</span>
         </div>
 
-        <!-- ৩টি স্ট্যাট কার্ড -->
+        <!-- ৩টি স্ট্যাট কার্ড (মাঝের পয়েন্ট কার্ডের ভেতরেই পয়েন্ট দিয়ে আনলকের বাটন যুক্ত করা হয়েছে) -->
         <div class="usc-stats-grid">
             <div class="usc-stat-card card-orange">
                 <div class="usc-icon-circle ico-orange"><i class="fa-solid fa-key"></i></div>
                 <div class="usc-stat-label">প্রয়োজন</div>
                 <div class="usc-stat-val" id="ui-req-ads-count">৫</div>
             </div>
-            <div class="usc-stat-card card-green">
+            
+            <div class="usc-stat-card card-green" id="card-points-unlock-container">
                 <div class="usc-icon-circle ico-green"><i class="fa-solid fa-coins"></i></div>
                 <div class="usc-stat-label">আমার পয়েন্ট</div>
                 <div class="usc-stat-val" id="ui-user-points-count">০</div>
+                <!-- কার্ডের ভেতরে পয়েন্ট আনলক বাটন -->
+                <button class="card-point-unlock-btn" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
+                    <i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">পয়েন্ট আনলক</span>
+                </button>
             </div>
+
             <div class="usc-stat-card card-purple">
                 <div class="usc-icon-circle ico-purple"><i class="fa-solid fa-hourglass-half"></i></div>
                 <div class="usc-stat-label">বাকি</div>
@@ -520,18 +529,13 @@
             <div class="usc-prog-sub">পয়েন্ট অথবা ads দিয়ে আনলক করুন।</div>
         </div>
 
-        <!-- বাটন ১: বিজ্ঞাপন আনলক বাটন -->
+        <!-- বিজ্ঞাপন আনলক বাটন (পয়েন্ট বাটন কার্ডের ভেতরে নেওয়ার কারণে এটি একমাত্র প্রধান বটম বাটন) -->
         <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
             <i class="fa-solid fa-lock"></i> <span id="btn-ad-remain-txt">ভিডিও আনলক করুন</span>
         </button>
-
-        <!-- বাটন ২: পয়েন্ট আনলক বাটন -->
-        <button class="btn-unlock-teal" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
-            <i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">আমার পয়েন্ট ব্যবহার করুন</span>
-        </button>
     </div>
 
-    <!-- নিচে স্ক্রিনশটের মতো পিংক গ্রেডিয়েন্ট ব্যাক বাটন -->
+    <!-- নিচে পিংক গ্রেডিয়েন্ট ব্যাক বাটন -->
     <div class="btn-browse-more-bottom" onclick="closeVideoDetailView()">
         <div class="bbm-left">
             <i class="fa-solid fa-film"></i>
@@ -640,7 +644,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
-<!-- External Custom JS (সঠিক নাম: app.js) -->
+<!-- External Custom JS -->
 <script src="app.js"></script>
 
 </body>

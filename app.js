@@ -32,7 +32,7 @@ const I18N = {
         payoutPageHead: "টাকা উত্তোলন", payoutPageSub: "বিকাশ, নগদ ও মোবাইল রিচার্জ",
         lblEarnStatBal: "বর্তমান পয়েন্ট", lblEarnStatRew: "প্রতি অ্যাড পয়েন্ট", lblEarnStatWatch: "দেখা বিজ্ঞাপন", lblEarnStatLim: "দৈনিক লিমিট",
         btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "ভিডিও আনলক", videoUnlockNoticeDesc: "বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।",
-        unlockDurationAdBadge: "২ ঘণ্টার জন্য ফ্রি", unlockDurationPtDesc: "২৪ ঘণ্টার জন্য আনলক থাকবে", btnAdWatchRemain: "বিজ্ঞাপন দেখুন", btnPointUnlock: "পয়েন্ট দিয়ে আনলক করুন",
+        unlockDurationAdBadge: "২ ঘণ্টার জন্য ফ্রি", unlockDurationPtDesc: "২৪ ঘণ্টার জন্য আনলক থাকবে", btnAdWatchRemain: "বিজ্ঞাপন দেখুন", btnPointUnlock: "পয়েন্ট আনলক",
         lblBackHome: "হোমে ফিরে যান", rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
         btnAdultConfirm: "আমি নিজ দায়িত্বে প্রবেশ করছি", btnAdultDecline: "না, সিনেমা লাইব্রেরিতে ফিরে যান", tgModalHeading: "চ্যানেলে জয়েন করা বাধ্যতামূলক",
         tgModalDesc: "ভিডিও আনলক করতে ও প্লে করতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকা বাধ্যতামূলক।", btnTgJoin: "চ্যানেলে জয়েন করুন", btnTgVerify: "আমি জয়েন করেছি",
@@ -65,7 +65,7 @@ const I18N = {
         payoutPageHead: "Withdraw Money", payoutPageSub: "bKash, Nagad & Mobile Recharge",
         lblEarnStatBal: "Current Points", lblEarnStatRew: "Points Per Ad", lblEarnStatWatch: "Watched Ads", lblEarnStatLim: "Daily Limit",
         btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", videoUnlockNoticeTitle: "Unlock Video", videoUnlockNoticeDesc: "Watch ads for free access or unlock permanently with points.",
-        unlockDurationAdBadge: "Free for 2 Hours", unlockDurationPtDesc: "Unlocked for 24 Hours", btnAdWatchRemain: "Watch Ad", btnPointUnlock: "Unlock with Points",
+        unlockDurationAdBadge: "Free for 2 Hours", unlockDurationPtDesc: "Unlocked for 24 Hours", btnAdWatchRemain: "Watch Ad", btnPointUnlock: "Point Unlock",
         lblBackHome: "Back to Home", rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
         btnAdultConfirm: "I Enter At My Own Risk", btnAdultDecline: "No, Back To Movies", tgModalHeading: "Telegram Channel Join Required",
         tgModalDesc: "You must be a member of our official Telegram channel to unlock and watch videos.", btnTgJoin: "Join Channel", btnTgVerify: "I Have Joined",
@@ -84,8 +84,7 @@ const I18N = {
 let APP_CONFIG = {
     appName: "ইনজ়য় মুভিজ", 
     appHeaderBadge: "সিনেমা", 
-    cloudflareStreamApi: "https://open-player-7bd4.rakibkdbb.workers.dev",
-    adsgramRewardBlockId: "46116", 
+ jscriptreStreamApi: "https://open-player-7bd4.rakibkdbb.workersscript adsgramRewardBlockId: "46116", 
     adsgramInterstitialBlockId: "int-38278",
     monetagZoneId: "11928576",
     monetagSdkName: "show_11928576",
@@ -152,6 +151,8 @@ let currentPageMap = { adult: 1, series: 1, movies: 1 };
 
 let userLikedVideos = {};
 try { userLikedVideos = JSON.parse(localStorage.getItem('app_user_liked_vids') || '{}'); } catch(e) { userLikedVideos = {}; }
+
+let lastVideoCardScrollPosition = 0, lastClickedVideoElementId = null;
 
 function getTodayBDDate() { return new Date(Date.now() + 21600000).toISOString().slice(0, 10); }
 
@@ -273,8 +274,6 @@ function applyStaticTranslations() {
         ['btn-share-ref-txt', t.btnShareRef], ['btn-copy-ref-txt', t.btnCopyRef], 
         ['payout-page-head', t.payoutPageHead], ['payout-page-sub', t.payoutPageSub],
         ['video-unlock-notice-title', t.videoUnlockNoticeTitle], ['video-unlock-notice-desc', t.videoUnlockNoticeDesc],
-        ['lbl-uac-ad-title', APP_LANG === 'bn' ? "বিজ্ঞাপন দেখে আনলক" : "Unlock by Watching Ads"], ['lbl-unlock-progress-txt', t.unlockProgressTxt],
-        ['lbl-uac-point-title', APP_LANG === 'bn' ? "পয়েন্ট দিয়ে সরাসরি আনলক" : "Unlock Instantly with Points"], ['lbl-cost-txt', APP_LANG === 'bn' ? "খরচ" : "Cost"],
         ['lbl-points-unit', t.unitPoints], ['lbl-back-home-txt', t.lblBackHome], ['btn-rules-modal-close', t.rulesDoneBtn],
         ['adult-warn-title', t.adultModalTitle], ['btn-adult-decline', t.btnAdultDecline], ['tg-modal-heading', t.tgModalHeading],
         ['tg-modal-desc-txt', t.tgModalDesc], ['lbl-tab-withdraw', t.lblTabWithdraw], ['lbl-tab-history', t.lblTabHistory],
@@ -302,7 +301,7 @@ function applyStaticTranslations() {
         ['movie-badge-feature', `<i class="fa-solid fa-film"></i> ${t.movieBadgeFeature}`],
         ['overview-bar-title', `<i class="fa-solid fa-chart-simple"></i> ${t.overviewBarTitle}`],
         ['earn-bar-title', `<i class="fa-solid fa-bolt"></i> ${t.earnBarTitle}`],
-        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> 3টি মাল্টিপল নেটওয়ার্ক`],
+        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> ৩টি মাল্টিপল নেটওয়ার্ক`],
         ['pill-badge-freecoins', `<i class="fa-solid fa-coins"></i> ফ্রি পয়েন্ট`],
         ['ref-bar-title', `<i class="fa-solid fa-shield-halved"></i> ${t.refBarTitle}`],
         ['ut-title-txt', `<i class="fa-solid fa-clock"></i> ${APP_LANG === 'bn' ? 'আনলক মেয়াদের বাকি:' : 'Unlock Time Remaining:'}`],
@@ -344,10 +343,6 @@ function isGatewayEnabled(gw) {
     return true;
 }
 
-// app.js এর উপরে এই দুটি ভ্যারিয়েবল ডিক্লেয়ার করে রাখা ভালো:
-let lastVideoCardScrollPosition = 0, lastClickedVideoElementId = null;
-
-// applyAdminConfigToUI ফাংশনটি এভাবে নিরাপদ (Safe) করে নিন:
 function applyAdminConfigToUI() {
     const t = I18N[APP_LANG];
     const m = $('maintenance-screen');
@@ -365,11 +360,9 @@ function applyAdminConfigToUI() {
 
     if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
     if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
-    if ($('ui-cost-points-badge')) $('ui-cost-points-badge').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
-    if ($('ui-point-unlock-btn-txt')) $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} ${t.unitPoints})`;
-    if ($('ui-ad-progress-desc')) $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(APP_CONFIG.unlockAdCount)}টি পূরণ করুন` : `Watch ${formatNumber(APP_CONFIG.unlockAdCount)} ads to complete`;
-    if ($('ui-ad-duration-badge')) $('ui-ad-duration-badge').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} ঘণ্টার জন্য ফ্রি` : `Free for ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} Hours`;
-    if ($('ui-point-duration-desc')) $('ui-point-duration-desc').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টার জন্য আনলক থাকবে` : `Unlocked for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} Hours`;
+    
+    // কার্ডের ভেতরে থাকা পয়েন্ট বাটন টেক্সট
+    if ($('ui-point-unlock-btn-txt')) $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} pt)`;
     
     if ($('lbl-min-bkash')) $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
     if ($('lbl-min-nagad')) $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
@@ -1429,7 +1422,6 @@ function openVideoDetailView(videoId, epIndex = null) {
     const video = allLoadedVideos.find(v => v.id === videoId);
     if (!video) return showToast(APP_LANG === 'bn' ? "ভিডিও পাওয়া যায়নি!" : "Video not found!", "error");
     
-    // ব্যাক আসার জন্য বর্তমান স্ক্রল ও ভিডিও আইডি সেভ রাখা হলো
     lastVideoCardScrollPosition = window.scrollY;
     lastClickedVideoElementId = `video-card-${videoId}`;
     
@@ -1495,7 +1487,6 @@ function closeVideoDetailView() {
     triggerHaptic('light');
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
     
-    // ডিটেইলস পেজ লুকিয়ে আগের ট্যাব ওপেন করা
     $('video-unlock-detail-view').style.display = 'none';
     $('main-header').style.display = 'block';
     
@@ -1505,7 +1496,6 @@ function closeVideoDetailView() {
 
     updateTelegramBackButtonState();
 
-    // একদম শুরুতে না গিয়ে ঠিক যেখানে ক্লিক করা হয়েছিল সেখানেই ফেরত যাওয়া
     setTimeout(() => {
         if (lastClickedVideoElementId && $(lastClickedVideoElementId)) {
             $(lastClickedVideoElementId).scrollIntoView({ behavior: 'instant', block: 'center' });
@@ -1528,7 +1518,6 @@ function updateUnlockProgressUI() {
     const adBtn = $('btn-unlock-ad-step');
     const pointBtn = $('btn-unlock-point-step');
 
-    // ৩টি নতুন কার্ডের মান সেট
     if ($('ui-req-ads-count')) $('ui-req-ads-count').innerText = formatNumber(total);
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(userPts);
     if ($('ui-remaining-ads-count')) $('ui-remaining-ads-count').innerText = formatNumber(isUnlocked ? 0 : remaining);
@@ -1542,12 +1531,18 @@ function updateUnlockProgressUI() {
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = "100%";
         
         adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}`;
-        pointBtn.disabled = true; 
-        pointBtn.style.opacity = "0.5";
+        if (pointBtn) {
+            pointBtn.disabled = true; 
+            pointBtn.style.opacity = "0.45";
+            pointBtn.innerHTML = `<i class="fa-solid fa-check"></i> ${APP_LANG === 'bn' ? 'আনলক আছে' : 'Unlocked'}`;
+        }
     } else {
         if (timerCard) timerCard.style.display = 'none';
-        pointBtn.disabled = false; 
-        pointBtn.style.opacity = "1";
+        if (pointBtn) {
+            pointBtn.disabled = false; 
+            pointBtn.style.opacity = "1";
+            pointBtn.innerHTML = `<i class="fa-solid fa-coins"></i> <span id="ui-point-unlock-btn-txt">${APP_LANG === 'bn' ? 'পয়েন্ট আনলক' : 'Point Unlock'} (${formatNumber(APP_CONFIG.unlockPointsCost || 5)} pt)</span>`;
+        }
         
         const percent = Math.min(100, Math.round((done / total) * 100));
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
@@ -1556,8 +1551,6 @@ function updateUnlockProgressUI() {
         adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}` :
                          (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}` :
                          `<i class="fa-solid fa-lock"></i> ${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}`);
-
-        pointBtn.innerHTML = `<i class="fa-solid fa-coins"></i> ${APP_LANG === 'bn' ? 'আমার পয়েন্ট ব্যবহার করুন' : 'Use My Points'} (${formatNumber(APP_CONFIG.unlockPointsCost || 5)} pt)`;
     }
 }
 
@@ -1589,7 +1582,7 @@ async function unlockVideoWithPoints() {
 
     btn.disabled = true; btn.style.pointerEvents = 'none';
     const oldHtml = btn.innerHTML;
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${APP_LANG === 'bn' ? 'যাচাই হচ্ছে...' : 'Verifying...'}`;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${APP_LANG === 'bn' ? 'যাচাই...' : 'Checking...'}`;
 
     const cost = APP_CONFIG.unlockPointsCost || 5;
     if ((userData.balancePoints ?? 0) < cost) {
@@ -1603,7 +1596,7 @@ async function unlockVideoWithPoints() {
     const vId = activeDetailVideo.id;
     if (isVideoCurrentlyUnlocked(vId)) { btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.innerHTML = oldHtml; return playMovie(activeDetailVideo); }
 
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${APP_LANG === 'bn' ? 'আনলক হচ্ছে...' : 'Unlocking...'}`;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${APP_LANG === 'bn' ? 'আনলক...' : 'Unlocking...'}`;
     const userRef = db.collection("users").doc(String(currentUser.id));
 
     try {
