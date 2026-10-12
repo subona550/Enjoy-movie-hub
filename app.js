@@ -20,10 +20,10 @@ const I18N = {
         seriesHero1: "নতুন সিরিজ", seriesHeroSub1: "ফুল সিজন", seriesHero2: "হট সিরিজ", seriesHeroSub2: "জনপ্রিয় সিরিজ",
         movieHero1: "নতুন সিনেমা", movieHeroSub1: "সর্বশেষ রিলিজ", movieHero2: "হট সিনেমা", movieHeroSub2: "জনপ্রিয় সিনেমা",
         adultFeatureTitle: "এন্ডাল ভিডিও লাইব্রেরি", adultFeatureDesc: "আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।",
-        adultBadgeFeature: "এন্ডাল বিশেষ কালেকশন", adultCountSub: "ভিডিও", tagUltraHd: "⚡ 1080p আল্ট্রা এইচডি",
+        adultBadgeFeature: "এন্ডাল বিশেষ কালেকশন", adultCountSub: "ভিডিও", tagUltraHd: "⚡ আল্ট্রা এইচডি",
         seriesBadgeFeature: "ওয়েব সিরিজ", seriesCountSub: "সিরিজ", seriesFeatureTitle: "সিরিজ লাইব্রেরি", seriesFeatureDesc: "দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।",
-        tagFullSeason: "⚡ 1080p ফুল সিজন", movieBadgeFeature: "মুভিজ", movieCountSub: "মুভি", movieFeatureTitle: "সিনেমা লাইব্রেরি", movieFeatureDesc: "আপনার পছন্দের সিনেমার উপর ক্লিক করে আনলক করে উপভোগ করুন।",
-        tagMovie: "⚡ 1080p সিনেমা", overviewBarTitle: "ব্যালেন্স ওভারভিউ", lblMyPoints: "আমার পয়েন্ট", lblActiveRef: "সক্রিয় রেফারেল",
+        tagFullSeason: "⚡ ফুল সিজন", movieBadgeFeature: "মুভিজ", movieCountSub: "মুভি", movieFeatureTitle: "সিনেমা লাইব্রেরি", movieFeatureDesc: "আপনার পছন্দের সিনেমার উপর ক্লিক করে আনলক করে উপভোগ করুন।",
+        tagMovie: "⚡ সিনেমা", overviewBarTitle: "ব্যালেন্স ওভারভিউ", lblMyPoints: "আমার পয়েন্ট", lblActiveRef: "সক্রিয় রেফারেল",
         profileWithdrawTitle: "টাকা উত্তোলন (বিকাশ/নগদ/রিচার্জ)", profileWithdrawSub: "সহজ ও দ্রুত পেমেন্ট রিকোয়েস্ট ও হিস্টোরি", btnOpenWithdraw: "উত্তোলন করুন",
         earnBarTitle: "পয়েন্ট আয় করুন", profileEarnTitle: "রিওয়ার্ড অ্যাড দেখে পয়েন্ট আয় করুন", profileEarnDesc: "বিজ্ঞাপন দেখে পয়েন্ট সংগ্রহ করে ভিডিও আনলক করুন অথবা টাকা উত্তোলন করুন।",
         pillInstant: "ইনস্ট্যান্ট পয়েন্ট", pillFreeCoins: "ফ্রি কয়েন", btnProfileEarnMore: "আরও পয়েন্ট আয় করুন", refBarTitle: "সিকিউর রেফারেল সিস্টেম",
@@ -31,9 +31,9 @@ const I18N = {
         btnShareRef: "শেয়ার করুন", btnCopyRef: "লিংক কপি",
         payoutPageHead: "টাকা উত্তোলন", payoutPageSub: "বিকাশ, নগদ ও মোবাইল রিচার্জ",
         lblEarnStatBal: "বর্তমান পয়েন্ট", lblEarnStatRew: "প্রতি অ্যাড পয়েন্ট", lblEarnStatWatch: "দেখা বিজ্ঞাপন", lblEarnStatLim: "দৈনিক লিমিট",
-        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "আনলক নোটিশ", videoUnlockNoticeDesc: "এই কনটেন্টটি ads অথবা points ব্যবহার করে আনলক করুন।",
-        btnAdWatchRemain: "ভিডিও আনলক করুন", btnPointUnlock: "আমার পয়েন্ট ব্যবহার করুন",
-        rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
+        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "ভিডিও আনলক", videoUnlockNoticeDesc: "বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।",
+        unlockDurationAdBadge: "২ ঘণ্টার জন্য ফ্রি", unlockDurationPtDesc: "২৪ ঘণ্টার জন্য আনলক থাকবে", btnAdWatchRemain: "বিজ্ঞাপন দেখুন", btnPointUnlock: "পয়েন্ট দিয়ে আনলক করুন",
+        lblBackHome: "হোমে ফিরে যান", rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
         btnAdultConfirm: "আমি নিজ দায়িত্বে প্রবেশ করছি", btnAdultDecline: "না, সিনেমা লাইব্রেরিতে ফিরে যান", tgModalHeading: "চ্যানেলে জয়েন করা বাধ্যতামূলক",
         tgModalDesc: "ভিডিও আনলক করতে ও প্লে করতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকা বাধ্যতামূলক।", btnTgJoin: "চ্যানেলে জয়েন করুন", btnTgVerify: "আমি জয়েন করেছি",
         lblTabWithdraw: "উত্তোলন", lblTabHistory: "হিস্টোরি", lblCurBal: "বর্তমান ব্যালেন্স", lblTakaEquiv: "টাকার পরিমাণ", lblChooseGw: "উত্তোলন মাধ্যম বেছে নিন:",
@@ -41,11 +41,10 @@ const I18N = {
         likesWord: "লাইক", viewsWord: "ভিউ", currencySymbol: "৳", uidPrefix: "আইডি:", emptyList: "কোনো ভিডিও বা তথ্য পাওয়া যায়নি!",
         bannedTitle: "আপনার একাউন্ট স্থগিত করা হয়েছে", bannedDesc: "অ্যাপের নিয়ম ভঙ্গের কারণে আপনার আইডিটি সাময়িক বা স্থায়ীভাবে ব্যান করা হয়েছে। বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।",
         bannedSupportBtn: "সাপোর্টে মেসেজ দিন", maintTitle: "অ্যাপ সাময়িক রক্ষণাবেক্ষণে আছে", maintDesc: "আমরা সিস্টেম আপডেট করছি। কিছুক্ষণ পর আবার চেষ্টা করুন।",
-        rechargeSummaryPrefix: "রিচার্জ:", bkashNagadSummaryPrefix: "বিকাশ/নগদ:", unlockProgressTxt: "প্রগ্রেস:",
+        rechargeSummaryPrefix: "রিচার্জ:", bkashNagadSummaryPrefix: "বিকাশ/নগদ:", unlockProgressTxt: "আনলক অগ্রগতি:", unlockCompletedTxt: "সম্পন্ন",
         minWithdrawPrefix: "নূন্যতম উত্তোলন:", inputPhonePlaceholder: "মোবাইল নম্বর দিন", inputAmountPlaceholder: "পয়েন্ট পরিমাণ দিন", adminNoticeTitle: "অ্যাডমিন নোটিশ",
         defaultWithdrawNotice: "উত্তোলন রিকোয়েস্ট দেওয়ার সর্বোচ্চ ২৪ ঘণ্টার মধ্যে পেমেন্ট কমপ্লিট করা হবে। সঠিক নম্বর প্রদান করুন।",
-        allCat: "সকল", catFilterLabel: "ক্যাটাগরি ফিল্টার",
-        watchVideoNow: "ভিডিও প্লে করুন"
+        allCat: "সকল", catFilterLabel: "ক্যাটাগরি ফিল্টার"
     },
     en: {
         appName: "Enjoy Movies", appHeaderBadge: "Movies", menuTitle: "Menu", drawerMovie: "Movies", drawerSeries: "Series", drawerAdult: "Endal",
@@ -54,10 +53,10 @@ const I18N = {
         seriesHero1: "New Series", seriesHeroSub1: "Full Seasons", seriesHero2: "Hot Series", seriesHeroSub2: "Top Ranked",
         movieHero1: "New Movies", movieHeroSub1: "Latest Releases", movieHero2: "Hot Movies", movieHeroSub2: "Popular Movies",
         adultFeatureTitle: "Endal Video Library", adultFeatureDesc: "Pick your preferred video, unlock for free by watching ads or directly with points.",
-        adultBadgeFeature: "Endal Special", adultCountSub: "Videos", tagUltraHd: "⚡ 1080p Ultra HD",
+        adultBadgeFeature: "Endal Special", adultCountSub: "Videos", tagUltraHd: "⚡ Ultra HD",
         seriesBadgeFeature: "Web Series", seriesCountSub: "Series", seriesFeatureTitle: "Series Library", seriesFeatureDesc: "Unlock all episodes of popular local and international web series instantly.",
-        tagFullSeason: "⚡ 1080p Full Season", movieBadgeFeature: "Movies", movieCountSub: "Movies", movieFeatureTitle: "Movie Library", movieFeatureDesc: "Click any movie below to unlock and start streaming instantly.",
-        tagMovie: "⚡ 1080p Movies", overviewBarTitle: "Balance Overview", lblMyPoints: "My Points", lblActiveRef: "Active Referrals",
+        tagFullSeason: "⚡ Full Season", movieBadgeFeature: "Movies", movieCountSub: "Movies", movieFeatureTitle: "Movie Library", movieFeatureDesc: "Click any movie below to unlock and start streaming instantly.",
+        tagMovie: "⚡ Movies", overviewBarTitle: "Balance Overview", lblMyPoints: "My Points", lblActiveRef: "Active Referrals",
         profileWithdrawTitle: "Withdraw Money (bKash/Nagad/Recharge)", profileWithdrawSub: "Fast and secure payment requests and complete history", btnOpenWithdraw: "Withdraw Now",
         earnBarTitle: "Earn Points", profileEarnTitle: "Earn Points by Watching Ads", profileEarnDesc: "Collect reward points by watching ads to unlock movies or cash out.",
         pillInstant: "Instant Points", pillFreeCoins: "Free Coins", btnProfileEarnMore: "Earn More Points", refBarTitle: "Secure Referral System",
@@ -65,9 +64,9 @@ const I18N = {
         btnShareRef: "Share Link", btnCopyRef: "Copy Link",
         payoutPageHead: "Withdraw Money", payoutPageSub: "bKash, Nagad & Mobile Recharge",
         lblEarnStatBal: "Current Points", lblEarnStatRew: "Points Per Ad", lblEarnStatWatch: "Watched Ads", lblEarnStatLim: "Daily Limit",
-        btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", videoUnlockNoticeTitle: "Unlock Notice", videoUnlockNoticeDesc: "Unlock this content using ads or points.",
-        btnAdWatchRemain: "Unlock Video", btnPointUnlock: "Use My Points",
-        rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
+        btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", videoUnlockNoticeTitle: "Unlock Video", videoUnlockNoticeDesc: "Watch ads for free access or unlock permanently with points.",
+        unlockDurationAdBadge: "Free for 2 Hours", unlockDurationPtDesc: "Unlocked for 24 Hours", btnAdWatchRemain: "Watch Ad", btnPointUnlock: "Unlock with Points",
+        lblBackHome: "Back to Home", rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
         btnAdultConfirm: "I Enter At My Own Risk", btnAdultDecline: "No, Back To Movies", tgModalHeading: "Telegram Channel Join Required",
         tgModalDesc: "You must be a member of our official Telegram channel to unlock and watch videos.", btnTgJoin: "Join Channel", btnTgVerify: "I Have Joined",
         lblTabWithdraw: "Withdraw", lblTabHistory: "History", lblCurBal: "Current Balance", lblTakaEquiv: "Amount in Cash", lblChooseGw: "Select Gateway:",
@@ -75,11 +74,10 @@ const I18N = {
         likesWord: "Likes", viewsWord: "Views", currencySymbol: "BDT", uidPrefix: "ID:", emptyList: "No videos or content available in this section!",
         bannedTitle: "Your Account Has Been Suspended", bannedDesc: "Your account is temporarily or permanently suspended due to violation of rules. Please contact support.",
         bannedSupportBtn: "Contact Support", maintTitle: "App Under Maintenance", maintDesc: "We are currently updating our systems. Please check back shortly.",
-        rechargeSummaryPrefix: "Recharge:", bkashNagadSummaryPrefix: "bKash/Nagad:", unlockProgressTxt: "Progress:",
+        rechargeSummaryPrefix: "Recharge:", bkashNagadSummaryPrefix: "bKash/Nagad:", unlockProgressTxt: "Unlock Progress:", unlockCompletedTxt: "Completed",
         minWithdrawPrefix: "Min Withdrawal:", inputPhonePlaceholder: "Enter mobile number", inputAmountPlaceholder: "Enter points amount", adminNoticeTitle: "Admin Notice",
         defaultWithdrawNotice: "Payments are processed within 24 hours of request. Ensure your number is correct.",
-        allCat: "All", catFilterLabel: "Category Filter",
-        watchVideoNow: "Watch Video Now"
+        allCat: "All", catFilterLabel: "Category Filter"
     }
 };
 
@@ -106,7 +104,7 @@ let APP_CONFIG = {
     appShortName: "TkEarning", 
     telegramChannel: "https://t.me/Ads_Earn_Pro",
     telegramChannelTitle: "টেলিগ্রাম", 
-    unlockAdCount: 5, 
+    unlockAdCount: 3, 
     unlockPointsCost: 5, 
     adRewardPoints: 2, 
     dailyAdLimit: 20, 
@@ -155,9 +153,6 @@ let currentPageMap = { adult: 1, series: 1, movies: 1 };
 let userLikedVideos = {};
 try { userLikedVideos = JSON.parse(localStorage.getItem('app_user_liked_vids') || '{}'); } catch(e) { userLikedVideos = {}; }
 
-let lastVideoCardScrollPosition = 0;
-let lastClickedVideoElementId = null;
-
 function getTodayBDDate() { return new Date(Date.now() + 21600000).toISOString().slice(0, 10); }
 
 function triggerHaptic(type = 'light') {
@@ -173,7 +168,6 @@ function triggerHaptic(type = 'light') {
     } catch (e) {}
 }
 
-/* FIX: Telegram Back Button include all modals */
 function setupTelegramBackButton() {
     if (!tg?.BackButton || backButtonInitialized) return;
     backButtonInitialized = true;
@@ -181,7 +175,6 @@ function setupTelegramBackButton() {
         triggerHaptic('light');
         if ($('web-player-modal')?.style.display === 'flex') return closeWebVideoPlayer();
         if ($('series-drawer-modal')?.style.display === 'flex') return closeSeriesDrawer();
-        if ($('telegram-mandatory-modal')?.style.display === 'flex') { $('telegram-mandatory-modal').style.display = 'none'; return updateTelegramBackButtonState(); }
         if ($('payout-view')?.style.display === 'block') return closePayoutView();
         if ($('rules-modal')?.style.display === 'flex') { $('rules-modal').style.display = 'none'; return updateTelegramBackButtonState(); }
         if ($('adult-warning-modal')?.style.display === 'flex') return declineAdultAge();
@@ -195,7 +188,6 @@ function setupTelegramBackButton() {
 function updateTelegramBackButtonState() {
     if (!tg?.BackButton) return;
     const isAnyOpen = $('series-drawer-modal')?.style.display === 'flex' || 
-        $('telegram-mandatory-modal')?.style.display === 'flex' ||
         $('payout-view')?.style.display === 'block' ||
         $('rules-modal')?.style.display === 'flex' || 
         $('adult-warning-modal')?.style.display === 'flex' ||
@@ -209,10 +201,9 @@ function updateTelegramBackButtonState() {
 
 function formatNumber(n) {
     if (n === undefined || n === null || n === '') return APP_LANG === 'bn' ? '০' : '0';
-    const numStr = typeof n === 'number' ? n.toLocaleString('en-US') : String(n);
-    if (APP_LANG === 'en') return numStr;
+    if (APP_LANG === 'en') return String(n);
     const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-    return numStr.replace(/\d/g, d => bn[d]);
+    return String(n).replace(/\d/g, d => bn[d]);
 }
 
 function getDeviceUUID() {
@@ -229,17 +220,16 @@ function getDeviceUUID() {
 
 function showToast(msg, type = 'info') {
     const t = $('top-toast');
-    if (!t) return;
     t.className = 'top-toast show ' + (type === 'error' ? 'err' : (type === 'success' ? 'succ' : ''));
-    if ($('toast-msg')) $('toast-msg').innerText = msg;
+    $('toast-msg').innerText = msg;
     triggerHaptic(type === 'error' ? 'error' : (type === 'success' ? 'success' : 'light'));
     setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 function toggleSidebarMenu(show) {
     triggerHaptic('light');
-    $('drawer-overlay')?.classList.toggle('open', show);
-    $('drawer-menu')?.classList.toggle('open', show);
+    $('drawer-overlay').classList.toggle('open', show);
+    $('drawer-menu').classList.toggle('open', show);
     updateTelegramBackButtonState();
 }
 
@@ -249,8 +239,8 @@ function changeAppLang(lang) {
     triggerHaptic('medium');
     APP_LANG = lang;
     localStorage.setItem('app_lang_choice', lang);
-    $('btn-lang-bn')?.classList.toggle('active', lang === 'bn');
-    $('btn-lang-en')?.classList.toggle('active', lang === 'en');
+    $('btn-lang-bn').classList.toggle('active', lang === 'bn');
+    $('btn-lang-en').classList.toggle('active', lang === 'en');
     document.documentElement.lang = lang;
     applyStaticTranslations();
     applyAdminConfigToUI();
@@ -261,10 +251,8 @@ function changeAppLang(lang) {
 
 function applyStaticTranslations() {
     const t = I18N[APP_LANG];
-    if (document.title && t.appName) document.title = t.appName;
-
     const txtMap = [
-        ['app-brand-title', t.appName], ['app-header-badge', t.appHeaderBadge],
+        ['page-head-title', t.appName], ['app-brand-title', t.appName], ['app-header-badge', t.appHeaderBadge],
         ['menu-title-txt', t.menuTitle], ['drawer-item-movie', t.drawerMovie], ['drawer-item-series', t.drawerSeries],
         ['drawer-item-adult', t.drawerAdult], ['drawer-item-profile', t.drawerProfile], ['menu-social-lbl', t.drawerSocial],
         ['menu-telegram-name', t.telegram], ['adult-hero-title1', t.adultHero1], ['adult-hero-sub1', t.adultHeroSub1],
@@ -285,13 +273,15 @@ function applyStaticTranslations() {
         ['btn-share-ref-txt', t.btnShareRef], ['btn-copy-ref-txt', t.btnCopyRef], 
         ['payout-page-head', t.payoutPageHead], ['payout-page-sub', t.payoutPageSub],
         ['video-unlock-notice-title', t.videoUnlockNoticeTitle], ['video-unlock-notice-desc', t.videoUnlockNoticeDesc],
-        ['btn-rules-modal-close', t.rulesDoneBtn], ['adult-warn-title', t.adultModalTitle], ['btn-adult-decline', t.btnAdultDecline],
-        ['tg-modal-heading', t.tgModalHeading], ['tg-modal-desc-txt', t.tgModalDesc], ['lbl-tab-withdraw', t.lblTabWithdraw],
-        ['lbl-tab-history', t.lblTabHistory], ['lbl-cur-bal', t.lblCurBal], ['lbl-pts-unit', t.unitPoints],
-        ['lbl-taka-equiv', t.lblTakaEquiv], ['lbl-currency-symbol', t.currencySymbol], ['lbl-choose-gw', t.lblChooseGw],
-        ['gw-title-bkash', APP_LANG === 'bn' ? "বিকাশ" : "bKash"], ['gw-title-nagad', APP_LANG === 'bn' ? "নগদ" : "Nagad"],
-        ['gw-title-recharge', APP_LANG === 'bn' ? "রিচার্জ" : "Recharge"], ['lbl-choose-sim', t.lblChooseSim],
-        ['lbl-admin-notice-title', t.adminNoticeTitle], ['btn-submit-payout', t.btnSubmitPayout], ['btn-player-close', t.btnClose],
+        ['lbl-uac-ad-title', APP_LANG === 'bn' ? "বিজ্ঞাপন দেখে আনলক" : "Unlock by Watching Ads"], ['lbl-unlock-progress-txt', t.unlockProgressTxt],
+        ['lbl-uac-point-title', APP_LANG === 'bn' ? "পয়েন্ট দিয়ে সরাসরি আনলক" : "Unlock Instantly with Points"], ['lbl-cost-txt', APP_LANG === 'bn' ? "খরচ" : "Cost"],
+        ['lbl-points-unit', t.unitPoints], ['lbl-back-home-txt', t.lblBackHome], ['btn-rules-modal-close', t.rulesDoneBtn],
+        ['adult-warn-title', t.adultModalTitle], ['btn-adult-decline', t.btnAdultDecline], ['tg-modal-heading', t.tgModalHeading],
+        ['tg-modal-desc-txt', t.tgModalDesc], ['lbl-tab-withdraw', t.lblTabWithdraw], ['lbl-tab-history', t.lblTabHistory],
+        ['lbl-cur-bal', t.lblCurBal], ['lbl-pts-unit', t.unitPoints], ['lbl-taka-equiv', t.lblTakaEquiv], ['lbl-currency-symbol', t.currencySymbol],
+        ['lbl-choose-gw', t.lblChooseGw], ['gw-title-bkash', APP_LANG === 'bn' ? "বিকাশ" : "bKash"], ['gw-title-nagad', APP_LANG === 'bn' ? "নগদ" : "Nagad"],
+        ['gw-title-recharge', APP_LANG === 'bn' ? "রিচার্জ" : "Recharge"], ['lbl-choose-sim', t.lblChooseSim], ['lbl-admin-notice-title', t.adminNoticeTitle],
+        ['btn-submit-payout', t.btnSubmitPayout], ['btn-player-close', t.btnClose],
         ['nav-lbl-movies', t.drawerMovie], ['nav-lbl-series', t.drawerSeries], ['nav-lbl-adult', t.drawerAdult],
         ['nav-lbl-profile', APP_LANG === 'bn' ? "প্রোফাইল" : "Profile"], ['banned-title', t.bannedTitle], ['banned-desc', t.bannedDesc],
         ['maint-title', t.maintTitle], ['maint-desc', t.maintDesc],
@@ -312,7 +302,7 @@ function applyStaticTranslations() {
         ['movie-badge-feature', `<i class="fa-solid fa-film"></i> ${t.movieBadgeFeature}`],
         ['overview-bar-title', `<i class="fa-solid fa-chart-simple"></i> ${t.overviewBarTitle}`],
         ['earn-bar-title', `<i class="fa-solid fa-bolt"></i> ${t.earnBarTitle}`],
-        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> ৩টি মাল্টিপল নেটওয়ার্ক`],
+        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> 3টি মাল্টিপল নেটওয়ার্ক`],
         ['pill-badge-freecoins', `<i class="fa-solid fa-coins"></i> ফ্রি পয়েন্ট`],
         ['ref-bar-title', `<i class="fa-solid fa-shield-halved"></i> ${t.refBarTitle}`],
         ['ut-title-txt', `<i class="fa-solid fa-clock"></i> ${APP_LANG === 'bn' ? 'আনলক মেয়াদের বাকি:' : 'Unlock Time Remaining:'}`],
@@ -335,22 +325,22 @@ function renderRulesList() {
     const l = $('rules-modal-content-list');
     if (!l) return;
     l.innerHTML = APP_LANG === 'bn' ? `
-        <div><b style="color:#00f260;">১. নির্বাচন:</b> যেকোনো ভিডিও কার্ডে ক্লিক করে ভেতরে প্রবেশ করুন।</div>
-        <div><b style="color:var(--primary);">২. বিজ্ঞাপন আনলক:</b> নির্দিষ্ট অ্যাড দেখে ভিডিওটি ফ্রিতে আনলক করুন।</div>
-        <div><b style="color:#ffe000;">৩. পয়েন্ট আনলক:</b> কোনো অ্যাড ছাড়া পয়েন্ট ব্যবহার করে তাৎক্ষণিক আনলক করুন।</div>
-        <div><b style="color:#ff0844;">৪. ডিভাইস পলিসি:</b> একই ফোনে একাধিক অ্যাকাউন্ট খোলা সম্পূর্ণ নিষিদ্ধ।</div>
+        <div><b style="color:#00f260;">১. নির্বাচন:</b> যেকোনো ভিডিও কার্ডে ক্লিক করুন।</div>
+        <div><b style="color:var(--primary);">২. বিজ্ঞাপন আনলক:</b> নির্দিষ্ট অ্যাড দেখে ভিডিও ফ্রি আনলক করুন।</div>
+        <div><b style="color:#ffe000;">৩. পয়েন্ট আনলক:</b> কোনো অ্যাড ছাড়া পয়েন্ট দিয়ে ২৪ ঘণ্টার জন্য আনলক করুন।</div>
+        <div><b style="color:#ff0844;">৪. ডিভাইস পলিসি:</b> একই ফোনে একাধিক রেফার করা নিষিদ্ধ সাথে উত্তোলন স্বয়ংক্রিয়ভাবে বাতিল হবে।</div>
     ` : `
         <div><b style="color:#00f260;">1. Select:</b> Click on any video card to open.</div>
-        <div><b style="color:var(--primary);">2. Ad Unlock:</b> Watch required ads to unlock videos for free.</div>
-        <div><b style="color:#ffe000;">3. Point Unlock:</b> Instantly unlock using reward points.</div>
-        <div><b style="color:#ff0844;">4. Device Policy:</b> Multiple accounts on the same device are prohibited.</div>
+        <div><b style="color:var(--primary);">2. Ad Unlock:</b> Watch required ads to unlock video free.</div>
+        <div><b style="color:#ffe000;">3. Point Unlock:</b> Instantly unlock for 24 hours using reward points.</div>
+        <div><b style="color:#ff0844;">4. Device Policy:</b> Multiple accounts or self-referrals on the same device are strictly prohibited.</div>
     `;
 }
 
 function isGatewayEnabled(gw) {
-    if (gw === 'bKash') return APP_CONFIG.enableBkash !== false;
-    if (gw === 'Nagad') return APP_CONFIG.enableNagad !== false;
-    if (gw === 'Recharge') return APP_CONFIG.enableRecharge !== false;
+    if (gw === 'bKash') return APP_CONFIG.enableBkash !== false && APP_CONFIG.bkashEnabled !== false;
+    if (gw === 'Nagad') return APP_CONFIG.enableNagad !== false && APP_CONFIG.nagadEnabled !== false;
+    if (gw === 'Recharge') return APP_CONFIG.enableRecharge !== false && APP_CONFIG.rechargeEnabled !== false;
     return true;
 }
 
@@ -358,30 +348,31 @@ function applyAdminConfigToUI() {
     const t = I18N[APP_LANG];
     const m = $('maintenance-screen');
     if (APP_CONFIG.maintenanceMode === true) {
-        if (m) {
-            m.style.display = 'flex';
-            $('maint-title').innerText = APP_CONFIG.maintenanceTitle || t.maintTitle;
-            $('maint-desc').innerText = APP_CONFIG.maintenanceNotice || t.maintDesc;
-        }
+        m.style.display = 'flex';
+        $('maint-title').innerText = APP_CONFIG.maintenanceTitle || t.maintTitle;
+        $('maint-desc').innerText = APP_CONFIG.maintenanceNotice || t.maintDesc;
         return;
-    } else { 
-        if (m) m.style.display = 'none'; 
-    }
+    } else { m.style.display = 'none'; }
 
     const bMin = APP_CONFIG.minWithdrawBkash || 100, nMin = APP_CONFIG.minWithdrawNagad || 100, rMin = APP_CONFIG.minWithdrawRecharge || 40;
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
-    if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
-    if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
-    if ($('lbl-min-bkash')) $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
-    if ($('lbl-min-nagad')) $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
-    if ($('lbl-min-recharge')) $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
-    if ($('ui-min-withdraw-summary')) $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
+    $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
+    $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
+    $('ui-cost-points-badge').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
+    $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} ${t.unitPoints})`;
+    $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(APP_CONFIG.unlockAdCount)}টি পূরণ করুন` : `Watch ${formatNumber(APP_CONFIG.unlockAdCount)} ads to complete`;
+    $('ui-ad-duration-badge').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} ঘণ্টার জন্য ফ্রি` : `Free for ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} Hours`;
+    $('ui-point-duration-desc').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টার জন্য আনলক থাকবে` : `Unlocked for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} Hours`;
+    $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
+    $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
+    $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
+    $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
 
     if ($('ui-payout-admin-notice')) $('ui-payout-admin-notice').innerText = APP_CONFIG.withdrawNotice || t.defaultWithdrawNotice;
     updateGatewaysAvailabilityUI();
 
-    if (currentUser?.id && $('ref-share-url-box')) {
+    if (currentUser?.id) {
         $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${currentUser.id}`;
     }
     updateUserUI();
@@ -419,20 +410,21 @@ function updateUserUI() {
     const pts = userData.balancePoints ?? (APP_CONFIG.initialPoints || 0);
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
-    if ($('profile-points-val')) $('profile-points-val').innerText = formatNumber(pts);
-    if ($('profile-ref-count')) $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
-    if ($('payout-modal-pts')) $('payout-modal-pts').innerText = formatNumber(pts);
-    if ($('payout-modal-tk')) $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
+    $('profile-points-val').innerText = formatNumber(pts);
+    $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
+    $('payout-modal-pts').innerText = formatNumber(pts);
+    $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
 }
 
+/* =================== AD HUB NAVIGATION =================== */
 function openEarnHubView() {
     triggerHaptic('light');
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
-    if ($('video-unlock-detail-view')) $('video-unlock-detail-view').style.display = 'none';
-    if ($('payout-view')) $('payout-view').style.display = 'none';
-    if ($('dedicated-ad-view')) $('dedicated-ad-view').style.display = 'none';
-    if ($('main-header')) $('main-header').style.display = 'none';
-    if ($('earn-hub-view')) $('earn-hub-view').style.display = 'block';
+    $('video-unlock-detail-view').style.display = 'none';
+    $('payout-view').style.display = 'none';
+    $('dedicated-ad-view').style.display = 'none';
+    $('main-header').style.display = 'none';
+    $('earn-hub-view').style.display = 'block';
 
     applyAdminConfigToUI();
     updateTelegramBackButtonState();
@@ -441,8 +433,8 @@ function openEarnHubView() {
 
 function closeEarnHubView() {
     triggerHaptic('light');
-    if ($('earn-hub-view')) $('earn-hub-view').style.display = 'none';
-    if ($('main-header')) $('main-header').style.display = 'block';
+    $('earn-hub-view').style.display = 'none';
+    $('main-header').style.display = 'block';
     if ($('tab-' + currentActiveTab)) $('tab-' + currentActiveTab).style.display = 'block';
     updateTelegramBackButtonState();
 }
@@ -450,11 +442,15 @@ function closeEarnHubView() {
 function openDedicatedAdScreen(network) {
     triggerHaptic('light');
     activeDedicatedNetwork = network;
-    if ($('earn-hub-view')) $('earn-hub-view').style.display = 'none';
-    if ($('dedicated-ad-view')) $('dedicated-ad-view').style.display = 'block';
+    $('earn-hub-view').style.display = 'none';
+    $('dedicated-ad-view').style.display = 'block';
 
-    const netNames = { adsgram: "Adsgram Ads", monetag: "Monetag Ads", onclicka: "Onclicka Ads" };
-    if ($('ded-screen-title')) $('ded-screen-title').innerText = netNames[network] || "Reward Ads";
+    const netNames = {
+        adsgram: "Adsgram Ads",
+        monetag: "Monetag Ads",
+        onclicka: "Onclicka Ads"
+    };
+    $('ded-screen-title').innerText = netNames[network] || "Reward Ads";
 
     updateDedicatedAdScreenUI();
     updateTelegramBackButtonState();
@@ -463,7 +459,7 @@ function openDedicatedAdScreen(network) {
 
 function closeDedicatedAdScreen() {
     triggerHaptic('light');
-    if ($('dedicated-ad-view')) $('dedicated-ad-view').style.display = 'none';
+    $('dedicated-ad-view').style.display = 'none';
     openEarnHubView();
 }
 
@@ -480,14 +476,14 @@ function updateDedicatedAdScreenUI() {
     const pts = userData.balancePoints ?? 0;
     const t = I18N[APP_LANG];
 
-    if ($('ded-stat-balance')) $('ded-stat-balance').innerText = formatNumber(pts);
-    if ($('ded-stat-reward')) $('ded-stat-reward').innerText = formatNumber(reward);
-    if ($('ded-stat-watched')) $('ded-stat-watched').innerText = formatNumber(todayWatched);
-    if ($('ded-stat-limit')) $('ded-stat-limit').innerText = formatNumber(limit);
+    $('ded-stat-balance').innerText = formatNumber(pts);
+    $('ded-stat-reward').innerText = formatNumber(reward);
+    $('ded-stat-watched').innerText = formatNumber(todayWatched);
+    $('ded-stat-limit').innerText = formatNumber(limit);
 
-    if ($('ded-row-reward')) $('ded-row-reward').innerText = `${formatNumber(reward)} ${t.unitPoints}`;
-    if ($('ded-row-limit')) $('ded-row-limit').innerText = formatNumber(limit);
-    if ($('ded-row-remaining')) $('ded-row-remaining').innerText = formatNumber(Math.max(0, limit - todayWatched));
+    $('ded-row-reward').innerText = `${formatNumber(reward)} ${t.unitPoints}`;
+    $('ded-row-limit').innerText = formatNumber(limit);
+    $('ded-row-remaining').innerText = formatNumber(Math.max(0, limit - todayWatched));
 
     const pBar = $('ded-progress-bar'), pText = $('ded-progress-text');
     if (pBar) pBar.style.width = Math.min(100, Math.round((todayWatched / limit) * 100)) + "%";
@@ -497,7 +493,7 @@ function updateDedicatedAdScreenUI() {
 function initOnclickaTma() {
     if (window.initCdTma) {
         try {
-            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || '6153127' })
+            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || 'Your Spot ID' })
                 .then(show => {
                     window.onclickaShowMethod = show;
                     window.show = show;
@@ -514,10 +510,10 @@ function showOnclickaAd() {
         const showFn = window.onclickaShowMethod || window.show;
         if (typeof showFn === 'function') {
             showFn()
-                .then(() => resolve({ done: true, network: 'onclicka' }))
+                .then(() => resolve({ done:true, network: 'onclicka' }))
                 .catch(err => reject(err));
         } else if (window.initCdTma) {
-            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || '6153127' })
+            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || 'Your Spot ID' })
                 .then(show => {
                     window.onclickaShowMethod = show;
                     window.show = show;
@@ -529,22 +525,6 @@ function showOnclickaAd() {
             reject(new Error("Onclicka TMA SDK is not loaded"));
         }
     });
-}
-
-/* FIX: Shared Anti-Fraud Referral Checker */
-async function checkAndTriggerReferralBonus(totalWatched) {
-    if (userData.referredBy && !userData.referralActivated && !userData.isSameDeviceFraud && totalWatched >= 3) {
-        if (db && currentUser?.id) {
-            const userRef = db.collection("users").doc(String(currentUser.id));
-            await db.collection("users").doc(String(userData.referredBy)).update({
-                balancePoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
-                referralEarnedPoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
-                totalReferrals: firebase.firestore.FieldValue.increment(1)
-            }).catch(()=>{});
-            await userRef.update({ referralActivated: true }).catch(()=>{});
-            userData.referralActivated = true;
-        }
-    }
 }
 
 async function watchSpecificNetworkAd() {
@@ -589,8 +569,15 @@ async function watchSpecificNetworkAd() {
                     lastAdDate: todayStr
                 }).catch(()=>{});
 
-                const totalSeen = (userData.dailyAdsWatched || 0) + (userData.videoAdsWatched || 0);
-                await checkAndTriggerReferralBonus(totalSeen);
+                const totalSeen = (userData.networkAdsWatched.adsgram || 0) + (userData.networkAdsWatched.monetag || 0) + (userData.networkAdsWatched.onclicka || 0);
+                if (userData.referredBy && !userData.referralActivated && !userData.isSameDeviceFraud && totalSeen >= 3) {
+                    await db.collection("users").doc(String(userData.referredBy)).update({
+                        balancePoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
+                        referralEarnedPoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
+                        totalReferrals: firebase.firestore.FieldValue.increment(1)
+                    });
+                    await userRef.update({ referralActivated: true });
+                }
             }
 
             if (window.confetti) window.confetti();
@@ -607,11 +594,11 @@ async function watchSpecificNetworkAd() {
     }
 }
 
-function openVideoRulesModal() { triggerHaptic('light'); if ($('rules-modal')) $('rules-modal').style.display = 'flex'; updateTelegramBackButtonState(); }
+function openVideoRulesModal() { triggerHaptic('light'); $('rules-modal').style.display = 'flex'; updateTelegramBackButtonState(); }
 
 function checkAdultAgePrompt() {
     if (localStorage.getItem('adult_18_confirmed_permanent') !== 'true') {
-        if ($('adult-warning-modal')) $('adult-warning-modal').style.display = 'flex';
+        $('adult-warning-modal').style.display = 'flex';
         updateTelegramBackButtonState();
     }
 }
@@ -619,38 +606,32 @@ function checkAdultAgePrompt() {
 function confirmAdultAge() {
     triggerHaptic('success');
     localStorage.setItem('adult_18_confirmed_permanent', 'true');
-    if ($('adult-warning-modal')) $('adult-warning-modal').style.display = 'none';
+    $('adult-warning-modal').style.display = 'none';
     showToast(APP_LANG === 'bn' ? "এন্ডাল সেকশনে স্বাগতম! (নিজ দায়িত্বে প্রবেশ করেছেন)" : "Welcome to Endal Section!", "success");
     updateTelegramBackButtonState();
 }
 
 function declineAdultAge() {
     triggerHaptic('warning');
-    if ($('adult-warning-modal')) $('adult-warning-modal').style.display = 'none';
+    $('adult-warning-modal').style.display = 'none';
     showToast(APP_LANG === 'bn' ? "আপনাকে সিনেমা লাইব্রেরিতে নেওয়া হয়েছে" : "Redirected to Movies Section", "info");
     switchNavTab('movies');
     updateTelegramBackButtonState();
 }
 
-/* FIX: Telegram Membership Check Fallback */
 async function checkTelegramMembershipRealtime(userId) {
-    if (!userId || String(userId).startsWith('guest_')) return { isMember: true };
+    if (!userId) return { isMember: false };
     try {
         const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), 5000);
+        const tid = setTimeout(() => controller.abort(), 6000);
         const res = await fetch(`https://tg-check.rakibkdbb.workers.dev?userId=${userId}`, { signal: controller.signal });
         clearTimeout(tid);
-        if (res.ok) {
-            return await res.json();
-        }
-        return { isMember: true };
-    } catch { 
-        return { isMember: true }; 
-    }
+        return res.ok ? await res.json() : { isMember: false };
+    } catch { return { isMember: false }; }
 }
 
 async function verifyUserMembershipNow(customMsg = "") {
-    if (!currentUser?.id) return true;
+    if (!currentUser?.id) return false;
     const check = await checkTelegramMembershipRealtime(currentUser.id);
     if (check.isMember) return true;
     openTelegramMandatoryModal(customMsg || I18N[APP_LANG].tgModalDesc);
@@ -659,8 +640,8 @@ async function verifyUserMembershipNow(customMsg = "") {
 
 function openTelegramMandatoryModal(customNotice) {
     triggerHaptic('warning');
-    if (customNotice && $('tg-modal-desc-txt')) $('tg-modal-desc-txt').innerText = customNotice;
-    if ($('telegram-mandatory-modal')) $('telegram-mandatory-modal').style.display = 'flex';
+    if (customNotice) $('tg-modal-desc-txt').innerText = customNotice;
+    $('telegram-mandatory-modal').style.display = 'flex';
     updateTelegramBackButtonState();
 }
 
@@ -678,7 +659,7 @@ async function verifyTelegramChannelJoin() {
     btn.innerHTML = oldHtml;
 
     if (res.isMember) {
-        if ($('telegram-mandatory-modal')) $('telegram-mandatory-modal').style.display = 'none';
+        $('telegram-mandatory-modal').style.display = 'none';
         updateTelegramBackButtonState();
         showToast(APP_LANG === 'bn' ? "অভিনন্দন! ভেরিফিকেশন সফল হয়েছে।" : "Congratulations! Verification successful.", "success");
         if (typeof pendingActionAfterJoin === 'function') {
@@ -696,20 +677,13 @@ function loadSavedProgress() {
     try { videoUnlockExpiryMap = JSON.parse(localStorage.getItem('user_video_unlock_expiry') || '{}'); } catch(e) {}
 }
 
-/* FIX: Save videoAdProgressMap in Firestore also */
 async function saveUnlockProgress() {
     try {
         const expJson = JSON.stringify(videoUnlockExpiryMap);
-        const progJson = JSON.stringify(videoAdProgressMap);
-        localStorage.setItem('user_video_ad_progress', progJson);
+        localStorage.setItem('user_video_ad_progress', JSON.stringify(videoAdProgressMap));
         localStorage.setItem('user_video_unlock_expiry', expJson);
         if (tg?.CloudStorage) tg.CloudStorage.setItem('user_video_unlock_expiry', expJson);
-        if (db && currentUser?.id) {
-            await db.collection("users").doc(String(currentUser.id)).set({ 
-                unlockedExpiryMap: videoUnlockExpiryMap,
-                adProgressMap: videoAdProgressMap 
-            }, { merge: true }).catch(()=>{});
-        }
+        if (db && currentUser?.id) await db.collection("users").doc(String(currentUser.id)).set({ unlockedExpiryMap: videoUnlockExpiryMap }, { merge: true }).catch(()=>{});
     } catch(e) {}
 }
 
@@ -762,11 +736,13 @@ function extractTelegramUser() {
         } catch(e) {}
     }
     if (!u || !u.id) {
-        return {
-            id: "guest_" + Math.floor(100000 + Math.random() * 900000),
-            first_name: "Guest User",
-            username: "guest"
-        };
+        document.body.innerHTML = `
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#050814; color:#fff; text-align:center; padding:20px;">
+                <i class="fa-brands fa-telegram" style="font-size:60px; color:var(--primary); margin-bottom:15px; filter: drop-shadow(0 0 15px var(--primary));"></i>
+                <h2 style="font-size:22px; margin-bottom:10px; font-weight:900;">শুধুমাত্র টেলিগ্রামে চলবে</h2>
+                <p style="font-size:15px; color:#8ba2c4; max-width:300px; line-height:1.5; font-weight:700;">এই অ্যাপটি ব্যবহারের জন্য দয়া করে আমাদের অফিসিয়াল টেলিগ্রাম বট থেকে প্রবেশ করুন।</p>
+            </div>`;
+        throw new Error("Unauthorized: Opened outside Telegram");
     }
     return u;
 }
@@ -775,30 +751,23 @@ function hideAppPreloader() {
     const preloader = $('app-preloader');
     if (preloader) {
         preloader.classList.add('hide-loader');
-        setTimeout(() => { preloader.style.display = 'none'; }, 450);
+        setTimeout(() => { preloader.style.display = 'none'; }, 550);
     }
 }
 
 async function initApp() {
-    try {
-        if (window.firebase && !firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        if (window.firebase) db = firebase.firestore();
-    } catch(e) {
-        console.error("Firebase init failed:", e);
-    }
-
+    try { if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); db = firebase.firestore(); } catch(e) {}
     if (window.Telegram?.WebApp) {
         tg = window.Telegram.WebApp;
         try { tg.expand(); tg.ready(); setupTelegramBackButton(); } catch(e){}
     }
-
     currentUser = extractTelegramUser();
     const uid = String(currentUser.id);
-    if ($('u-profile-name')) $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
-    if ($('u-profile-handle')) $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
-    if ($('u-profile-id')) $('u-profile-id').innerText = formatNumber(uid);
-    if ($('ref-user-code')) $('ref-user-code').innerText = formatNumber(uid);
-    if ($('ref-share-url-box')) $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
+    $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
+    $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
+    $('u-profile-id').innerText = formatNumber(uid);
+    $('ref-user-code').innerText = formatNumber(uid);
+    $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
 
     loadSavedProgress();
     applyStaticTranslations();
@@ -812,7 +781,7 @@ async function initApp() {
         if (document.hidden) { const v = $('in-app-video-element'); if (v && !v.paused) v.pause(); }
     });
 
-    setTimeout(hideAppPreloader, 500);
+    setTimeout(hideAppPreloader, 600);
 }
 
 function initAdsgram() {
@@ -824,6 +793,7 @@ function initAdsgram() {
     }
 }
 
+// ================== AD ENGINES ==================
 let adWatchCounter = 0;
 
 function showMonetagAd() {
@@ -949,8 +919,6 @@ async function syncUserData() {
         } else {
             userData = snap.data();
             if (userData.unlockedExpiryMap) videoUnlockExpiryMap = { ...videoUnlockExpiryMap, ...userData.unlockedExpiryMap };
-            if (userData.adProgressMap) videoAdProgressMap = { ...videoAdProgressMap, ...userData.adProgressMap };
-
             if (userData.lastAdDate !== todayStr) {
                 userData.dailyAdsWatched = 0; 
                 userData.videoAdsWatched = 0; 
@@ -963,7 +931,7 @@ async function syncUserData() {
         ref.onSnapshot((doc) => {
             if (doc.exists) {
                 userData = { ...userData, ...doc.data() };
-                if ($('banned-screen')) $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
+                $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
                 updateUserUI();
                 if ($('dedicated-ad-view')?.style.display === 'block') updateDedicatedAdScreenUI();
             }
@@ -998,14 +966,13 @@ function startButtonCooldown(btnId, defaultText, seconds = null) {
     }, 1000);
 }
 
-/* FIX: Added Referral Bonus Activation on Video Unlock Ads */
 async function watchVideoUnlockAd() {
     if (!activeDetailVideo) return;
     const btn = $('btn-unlock-ad-step');
     if (!btn || btn.classList.contains('btn-disabled-state') || btn.disabled) return;
     triggerHaptic('medium');
 
-    const vId = activeDetailVideo.id, total = APP_CONFIG.unlockAdCount || 5;
+    const vId = activeDetailVideo.id, total = APP_CONFIG.unlockAdCount || 3;
     if (!isVideoCurrentlyUnlocked(vId) && (videoAdProgressMap[vId] || 0) >= total) {
         videoAdProgressMap[vId] = 0; saveUnlockProgress(); updateUnlockProgressUI();
     }
@@ -1032,19 +999,14 @@ async function watchVideoUnlockAd() {
             adWatchCounter++;
             videoAdProgressMap[vId] = (videoAdProgressMap[vId] || 0) + 1;
             saveUnlockProgress();
-
-            if (db && currentUser?.id) {
+            try {
                 const userRef = db.collection("users").doc(String(currentUser.id));
                 await userRef.update({
                     videoAdsWatched: firebase.firestore.FieldValue.increment(1),
                     totalVideoAdsWatched: firebase.firestore.FieldValue.increment(1),
                     lastAdDate: getTodayBDDate()
-                }).catch(()=>{});
-
-                userData.videoAdsWatched = (userData.videoAdsWatched || 0) + 1;
-                const totalSeen = (userData.dailyAdsWatched || 0) + (userData.videoAdsWatched || 0);
-                await checkAndTriggerReferralBonus(totalSeen);
-            }
+                });
+            } catch {}
 
             updateUnlockProgressUI();
             if (videoAdProgressMap[vId] >= total) {
@@ -1081,10 +1043,10 @@ function extractVideoLinks(data) {
     let formatted = rawList.map((item, idx) => {
         const partName = `${I18N[APP_LANG].partPrefix} ${formatNumber(idx + 1)}`;
         const defaultThumb = data.thumb || data.thumbnail || data.poster || '';
-        return typeof item === 'string' ? { name: partName, part: partName, duration: data.duration || '1080p HD', views: Number(data.views || 0), url: item.trim(), thumb: defaultThumb }
-                                        : { name: item.name || item.title || partName, part: item.part || partName, duration: item.duration || data.duration || '1080p HD', views: Number(item.views || data.views || 0), thumb: item.thumb || item.thumbnail || defaultThumb, url: (item.url || item.link || '').trim() };
+        return typeof item === 'string' ? { name: partName, part: partName, duration: data.duration || 'HD', views: Number(data.views || 0), url: item.trim(), thumb: defaultThumb }
+                                        : { name: item.name || item.title || partName, part: item.part || partName, duration: item.duration || data.duration || 'HD', views: Number(item.views || data.views || 0), thumb: item.thumb || item.thumbnail || defaultThumb, url: (item.url || item.link || '').trim() };
     });
-    return formatted.length ? formatted : [{ name: `${I18N[APP_LANG].partPrefix} ${formatNumber(1)}`, duration: "1080p HD", views: Number(data.views || 0), url: "", thumb: data.thumb || '' }];
+    return formatted.length ? formatted : [{ name: `${I18N[APP_LANG].partPrefix} ${formatNumber(1)}`, duration: "HD", views: Number(data.views || 0), url: "", thumb: data.thumb || '' }];
 }
 
 function isSeriesVideo(v) {
@@ -1095,9 +1057,9 @@ function isSeriesVideo(v) {
 function isAdultVideo(v) {
     if (isSeriesVideo(v)) return false;
     const type = (v.type || '').toLowerCase(), cat = (v.category || '').toLowerCase(), sec = (v.section || '').toLowerCase(), title = (v.title || '').toLowerCase();
-    if (['adult', '18+', 'endal', 'এন্ডাল'].includes(sec) || ['adult', '18', '18+', 'endal', 'এন্ডাল'].includes(type) || v.isAdult === true || v.adult === true) return true;
+    if (['adult', '18+', '18+', 'endal', 'এন্ডাল'].includes(sec) || ['adult', '18', '18+', 'endal', 'এন্ডাল'].includes(type) || v.isAdult === true || v.adult === true) return true;
     if (['movie', 'movies'].includes(sec) || ['movie', 'movies'].includes(type)) return false;
-    const kws = ['adult', '18', '18+', '১৮+', 'endal', 'এন্ডাল', 'hot', 'viral', 'tiktok', 'desi', 'college', 'exclusive', 'boudi', 'bhabi', 'sex', 'bhabhi', 'বউদি', 'ভাবি', 'এডাল্ট', 'গার্লফ্রেন্ড', 'টিকটকার', 'গরম', 'choti'];
+    const kws = ['adult', '18', '18+', '১৮+', 'endal', 'এন্ডাল', 'hot', 'viral', 'tiktok', 'desi', 'college', 'exclusive', 'boudi', 'bhabi', 'sex', 'bhabhi', 'বউদি', 'ভাবি', 'বাবা মেয়ে', 'মা ছেলে', 'ভাই বোন', 'এডাল্ট', 'গার্লফ্রেন্ড', 'টিকটকার', 'গরম', 'choti', 'baba meye', 'ma chele', 'bhai bon'];
     return kws.some(k => title.includes(k) || cat.includes(k));
 }
 
@@ -1105,24 +1067,48 @@ function isMovieVideo(v) { return !isSeriesVideo(v) && !isAdultVideo(v); }
 
 function formatTimeAgo(dateObj) {
     if (!dateObj) return APP_LANG === 'bn' ? 'এইমাত্র' : 'Just now';
+
     let past = 0;
     try {
-        if (typeof dateObj === 'number') past = dateObj < 1e11 ? dateObj * 1000 : dateObj;
-        else if (dateObj?.toDate) past = dateObj.toDate().getTime();
-        else if (dateObj?.seconds) past = dateObj.seconds * 1000;
-        else if (dateObj instanceof Date) past = dateObj.getTime();
-        else past = new Date(dateObj).getTime() || 0;
-    } catch (e) { past = 0; }
+        if (typeof dateObj === 'number') {
+            past = dateObj < 1e11 ? dateObj * 1000 : dateObj;
+        } else if (dateObj && typeof dateObj.toDate === 'function') {
+            past = dateObj.toDate().getTime();
+        } else if (dateObj && dateObj.seconds) {
+            past = dateObj.seconds * 1000;
+        } else if (dateObj instanceof Date) {
+            past = dateObj.getTime();
+        } else {
+            const parsed = new Date(dateObj).getTime();
+            past = isNaN(parsed) ? 0 : parsed;
+        }
+    } catch (e) {
+        past = 0;
+    }
 
     if (!past) return APP_LANG === 'bn' ? 'এইমাত্র' : 'Just now';
+
     const diffSec = Math.max(0, Math.floor((Date.now() - past) / 1000));
+
     if (diffSec < 60) return APP_LANG === 'bn' ? 'এইমাত্র' : 'Just now';
+
     const diffM = Math.floor(diffSec / 60);
-    if (diffM < 60) return APP_LANG === 'bn' ? `${formatNumber(diffM)} মিনিট আগে` : `${diffM} min ago`;
+    if (diffM < 60) return APP_LANG === 'bn' ? `${formatNumber(diffM)} মিনিট আগে` : `${diffM} min${diffM > 1 ? 's' : ''} ago`;
+
     const diffH = Math.floor(diffSec / 3600);
-    if (diffH < 24) return APP_LANG === 'bn' ? `${formatNumber(diffH)} ঘণ্টা আগে` : `${diffH} hour ago`;
+    if (diffH < 24) return APP_LANG === 'bn' ? `${formatNumber(diffH)} ঘণ্টা আগে` : `${diffH} hour${diffH > 1 ? 's' : ''} ago`;
+
     const diffDays = Math.floor(diffSec / 86400);
-    return APP_LANG === 'bn' ? `${formatNumber(diffDays)} দিন আগে` : `${diffDays} days ago`;
+    if (diffDays < 7) return APP_LANG === 'bn' ? `${formatNumber(diffDays)} দিন আগে` : `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+
+    const diffWeeks = Math.floor(diffDays / 7);
+    if (diffDays < 30) return APP_LANG === 'bn' ? `${formatNumber(diffWeeks)} সপ্তাহ আগে` : `${diffWeeks} week${diffWeeks > 1 ? 's' : ''} ago`;
+
+    const diffMonths = Math.floor(diffDays / 30);
+    if (diffDays < 365) return APP_LANG === 'bn' ? `${formatNumber(diffMonths)} মাস আগে` : `${diffMonths} month${diffMonths > 1 ? 's' : ''} ago`;
+
+    const diffYears = Math.floor(diffDays / 365);
+    return APP_LANG === 'bn' ? `${formatNumber(diffYears)} বছর আগে` : `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
 }
 
 function processVideoSnapshot(docs) {
@@ -1130,8 +1116,8 @@ function processVideoSnapshot(docs) {
         const data = d.data(), links = extractVideoLinks(data);
         return {
             id: d.id, ...data, title: data.title || data.name || (APP_LANG === 'bn' ? 'ভিডিও' : 'Video'),
-            thumb: data.thumb || data.thumbnail || data.poster || 'https://via.placeholder.com/800x450?text=1080p+Ultra+HD',
-            duration: data.duration || '1080p HD', url: links[0]?.url || data.url || '', links, views: Number(data.views || 0),
+            thumb: data.thumb || data.thumbnail || data.poster || 'https://via.placeholder.com/600x450?text=HD+Video',
+            duration: data.duration || 'HD', url: links[0]?.url || data.url || '', links, views: Number(data.views || 0),
             likes: Number(data.likes || 0), season: data.season || 'S5',
             timeAgo: data.timeAgo || formatTimeAgo(data.createdAt || data.timestamp || data.date),
             section: (data.section || '').toLowerCase(), type: (data.type || '').toLowerCase(), 
@@ -1139,9 +1125,9 @@ function processVideoSnapshot(docs) {
         };
     }).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
-    if ($('movie-total-count')) $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
-    if ($('series-total-count')) $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
-    if ($('adult-total-count')) $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
+    $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
+    $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
+    $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
 
     renderAllCategoryChips();
     filterVideosUI();
@@ -1156,8 +1142,10 @@ function renderCategoryChipsForTab(section, containerId) {
     adminCreatedCategories.forEach(cat => {
         const name = (cat.name || cat.title || '').trim();
         const type = (cat.type || cat.section || '').toLowerCase();
-        if (name && (!type || type === section || type === 'all' || (section === 'movies' && (type === 'movie' || type === 'movies')))) {
-            set.add(name);
+        if (name) {
+            if (!type || type === section || type === 'all' || (section === 'movies' && (type === 'movie' || type === 'movies'))) {
+                set.add(name);
+            }
         }
     });
 
@@ -1181,9 +1169,8 @@ function renderCategoryChipsForTab(section, containerId) {
 
     set.forEach(catName => {
         const isActive = activeCat.toLowerCase() === catName.toLowerCase();
-        const safeCat = catName.replace(/'/g, "\\'");
         html += `
-            <div class="cat-filter-pill ${isActive ? 'active' : ''}" onclick="selectCategoryChip('${section}', '${safeCat}', this)">
+            <div class="cat-filter-pill ${isActive ? 'active' : ''}" onclick="selectCategoryChip('${section}', '${catName.replace(/'/g, "\\'")}', this)">
                 <i class="fa-solid fa-tag"></i> <span>${catName}</span>
             </div>
         `;
@@ -1354,22 +1341,20 @@ function renderVideosForGrid(type, list) {
             <span class="series-chip-pill ${isLiked ? 'active-liked' : ''}" id="card-like-chip-${v.id}" onclick="toggleCardLike(event, '${v.id}')"><i class="fa-solid fa-thumbs-up"></i> <span id="card-like-count-${v.id}">${likesStr}</span></span>
             ${isSeries ? `<span class="series-chip-pill"><i class="fa-solid fa-bars-staggered"></i> ${formatNumber(epCount)} ${t.partPrefix}</span><span class="series-chip-pill pill-season"><i class="fa-solid fa-clapperboard"></i> ${v.season || 'S5'}</span>` : 
              (type === 'adult' ? `<span class="series-chip-pill pill-season"><i class="fa-solid fa-fire"></i> ${epCount > 1 ? formatNumber(epCount) + ' ' + t.partPrefix : (APP_LANG === 'bn' ? 'হট' : 'Hot')}</span>` :
-             `<span class="series-chip-pill pill-season"><i class="fa-solid fa-film"></i> ${epCount > 1 ? formatNumber(epCount) + ' ' + t.partPrefix : '1080p HD'}</span>`)}
+             `<span class="series-chip-pill pill-season"><i class="fa-solid fa-film"></i> ${epCount > 1 ? formatNumber(epCount) + ' ' + t.partPrefix : 'HD'}</span>`)}
         `;
-
-        const safeTitle = encodeURIComponent(v.title).replace(/'/g, "%27");
 
         return `
         <div class="series-card-item" id="video-card-${v.id}" onclick="${isSeries ? `openSeriesEpisodesDrawer('${v.id}')` : `openVideoDetailView('${v.id}')`}">
             <div class="series-thumb-container">
-                <div class="series-thumb-badge-blue"><i class="fa-solid fa-circle-play"></i> ${v.duration || '1080p HD'}</div>
-                <img src="${v.thumb}" onerror="this.src='https://via.placeholder.com/800x450?text=Enjoy+Movies+1080p'" loading="lazy" decoding="async">
+                <div class="series-thumb-badge-blue"><i class="fa-solid fa-circle-play"></i> ${v.duration || 'HD'}</div>
+                <img src="${v.thumb}" onerror="this.src='https://via.placeholder.com/600x450?text=Enjoy+Movies'" loading="lazy" decoding="async">
                 ${rightBadge}
             </div>
-            <div class="series-info-body">
+            <div class="series-info-body shimmer-card-effect">
                 <div class="series-title-row">
                     <div class="series-main-title">${v.title}</div>
-                    <div class="series-share-btn" onclick="shareVideoItem(event, '${v.id}', '${safeTitle}')"><i class="fa-solid fa-share-nodes"></i></div>
+                    <div class="series-share-btn" onclick="shareVideoItem(event, '${v.id}', '${encodeURIComponent(v.title)}')"><i class="fa-solid fa-share-nodes"></i></div>
                 </div>
                 <div class="series-meta-row"><div class="series-chips-group">${metaChips}</div><div class="series-time-ago">${timeAgoStr}</div></div>
             </div>
@@ -1381,8 +1366,7 @@ function shareVideoItem(event, videoId, encodedTitle) {
     event?.stopPropagation();
     triggerHaptic('medium');
     const shareUrl = `https://t.me/${APP_CONFIG.botUsername || "Ret2_bot"}/${APP_CONFIG.appShortName || "TkEarning"}?startapp=vid_${videoId}`;
-    const cleanTitle = decodeURIComponent(encodedTitle || 'ভিডিও');
-    const msg = APP_LANG === 'bn' ? `🔥 ${cleanTitle} সরাসরি দেখুন এখনই!` : `🔥 Watch ${cleanTitle} right now!`;
+    const msg = APP_LANG === 'bn' ? `🔥 ${decodeURIComponent(encodedTitle || 'ভিডিও')} সরাসরি দেখুন এখনই!` : `🔥 Watch ${decodeURIComponent(encodedTitle || 'Video')} right now!`;
     openTelegramDirect(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(msg)}`);
 }
 
@@ -1392,12 +1376,11 @@ function openSeriesEpisodesDrawer(seriesId) {
     const s = allLoadedVideos.find(v => v.id === seriesId);
     if (!s) return;
     activeSeriesForDrawer = s;
-    if ($('series-drawer-title')) $('series-drawer-title').innerText = s.title;
+    $('series-drawer-title').innerText = s.title;
 
     const list = $('series-episodes-list');
-    if (!list) return;
     list.innerHTML = "";
-    if ($('series-drawer-modal')) $('series-drawer-modal').style.display = 'flex';
+    $('series-drawer-modal').style.display = 'flex';
     updateTelegramBackButtonState();
 
     const links = s.links || extractVideoLinks(s), t = I18N[APP_LANG];
@@ -1405,12 +1388,12 @@ function openSeriesEpisodesDrawer(seriesId) {
         <div class="episode-item-card" onclick="selectEpisodeFromDrawer(${idx})">
             <div class="ep-left-wrap">
                 <div class="ep-thumb-box">
-                    <img src="${ep.thumb || s.thumb}" onerror="this.src='https://via.placeholder.com/160x100?text=EP'" loading="lazy" decoding="async">
+                    <img src="${ep.thumb || s.thumb}" onerror="this.src='https://via.placeholder.com/120x90?text=EP'" loading="lazy" decoding="async">
                     <span class="ep-badge-label">${t.partPrefix} ${formatNumber(idx + 1)}</span>
                 </div>
                 <div class="ep-details">
                     <h4>${s.title} - ${ep.name || `${t.partPrefix} ${formatNumber(idx + 1)}`}</h4>
-                    <p>${ep.duration || '1080p HD'} • ${APP_LANG === 'bn' ? `সিজন ${formatNumber(s.season?.replace(/\D/g, '') || 5)}` : `Season ${s.season?.replace(/\D/g, '') || 5}`} • ${formatNumber(ep.views || 0)} ${t.viewsWord}</p>
+                    <p>${ep.duration || 'HD'} • ${APP_LANG === 'bn' ? `সিজন ${formatNumber(s.season?.replace(/\D/g, '') || 5)}` : `Season ${s.season?.replace(/\D/g, '') || 5}`} • ${formatNumber(ep.views || 0)} ${t.viewsWord}</p>
                 </div>
             </div>
             <div class="ep-arrow-btn"><i class="fa-solid fa-chevron-right"></i></div>
@@ -1420,7 +1403,7 @@ function openSeriesEpisodesDrawer(seriesId) {
 
 function closeSeriesDrawer() { 
     triggerHaptic('light'); 
-    if ($('series-drawer-modal')) $('series-drawer-modal').style.display = 'none'; 
+    $('series-drawer-modal').style.display = 'none'; 
     activeSeriesForDrawer = null; 
     updateTelegramBackButtonState(); 
 }
@@ -1439,6 +1422,7 @@ function openVideoDetailView(videoId, epIndex = null) {
     const video = allLoadedVideos.find(v => v.id === videoId);
     if (!video) return showToast(APP_LANG === 'bn' ? "ভিডিও পাওয়া যায়নি!" : "Video not found!", "error");
     
+    // ব্যাক আসার জন্য বর্তমান স্ক্রল ও ভিডিও আইডি সেভ রাখা হলো
     lastVideoCardScrollPosition = window.scrollY;
     lastClickedVideoElementId = `video-card-${videoId}`;
     
@@ -1457,22 +1441,22 @@ function openVideoDetailView(videoId, epIndex = null) {
     if (badge) {
         const isAd = isAdultVideo(video) || currentActiveTab === 'adult', isSer = isSeriesVideo(video) || currentActiveTab === 'series';
         const label = APP_LANG === 'bn' ? (isAd ? 'এন্ডাল' : (isSer ? 'সিরিজ' : 'মুভি')) : (isAd ? 'Endal' : (isSer ? 'Series' : 'Movie'));
-        badge.innerHTML = `<i class="fa-solid ${isAd ? 'fa-fire' : (isSer ? 'fa-layer-group' : 'fa-clapperboard')}"></i> ⚡ 1080p ${label}`;
-        badge.style.background = isAd ? 'var(--grad-red)' : (isSer ? 'var(--grad-purple-pink)' : '#2563eb');
-        if (badgeText) badgeText.innerText = `1080p ফুল এইচডি ${label} কনটেন্ট`;
+        badge.innerHTML = `<i class="fa-solid ${isAd ? 'fa-fire' : (isSer ? 'fa-layer-group' : 'fa-clapperboard')}"></i> ${label}`;
+        badge.style.background = isAd ? 'var(--grad-red)' : (isSer ? 'var(--grad-purple-pink)' : 'var(--grad-blue)');
+        if (badgeText) badgeText.innerText = `${label} কনটেন্ট`;
     }
 
-    if ($('detail-poster-img')) $('detail-poster-img').src = video.thumb;
-    if ($('detail-file-title')) $('detail-file-title').innerText = video.title;
-    if ($('detail-duration-badge')) $('detail-duration-badge').innerHTML = `<i class="fa-solid fa-video"></i> 1080P • ${video.duration || 'FULL HD'}`;
-    if ($('detail-views-txt')) $('detail-views-txt').innerText = `${formatNumber(video.views || 0)} ${I18N[APP_LANG].viewsWord}`;
+    $('detail-poster-img').src = video.thumb;
+    $('detail-file-title').innerText = video.title;
+    $('detail-duration-badge').innerHTML = `<i class="fa-regular fa-clock"></i> ${video.duration || 'HD'}`;
+    $('detail-views-txt').innerText = `${formatNumber(video.views || 0)} ${I18N[APP_LANG].viewsWord}`;
 
     updateDetailLikeUI();
     updateUnlockProgressUI();
 
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
-    if ($('main-header')) $('main-header').style.display = 'none';
-    if ($('video-unlock-detail-view')) $('video-unlock-detail-view').style.display = 'block';
+    $('main-header').style.display = 'none';
+    $('video-unlock-detail-view').style.display = 'block';
     updateTelegramBackButtonState();
     window.scrollTo({ top: 0, behavior: 'instant' });
 }
@@ -1480,7 +1464,7 @@ function openVideoDetailView(videoId, epIndex = null) {
 function updateDetailLikeUI() {
     if (!activeDetailVideo) return;
     const isLiked = !!userLikedVideos[activeDetailVideo.id];
-    if ($('detail-likes-txt')) $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes || 0)} ${I18N[APP_LANG].likesWord}`;
+    $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes || 0)} ${I18N[APP_LANG].likesWord}`;
     $('detail-like-btn-action')?.classList.toggle('active-liked', isLiked);
 }
 
@@ -1504,8 +1488,9 @@ function closeVideoDetailView() {
     triggerHaptic('light');
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
     
-    if ($('video-unlock-detail-view')) $('video-unlock-detail-view').style.display = 'none';
-    if ($('main-header')) $('main-header').style.display = 'block';
+    // ডিটেইলস পেজ লুকিয়ে আগের ট্যাব ওপেন করা
+    $('video-unlock-detail-view').style.display = 'none';
+    $('main-header').style.display = 'block';
     
     if ($('tab-' + currentActiveTab)) {
         $('tab-' + currentActiveTab).style.display = 'block';
@@ -1513,6 +1498,7 @@ function closeVideoDetailView() {
 
     updateTelegramBackButtonState();
 
+    // একদম শুরুতে না গিয়ে ঠিক যেখানে ক্লিক করা হয়েছিল সেখানেই ফেরত যাওয়া
     setTimeout(() => {
         if (lastClickedVideoElementId && $(lastClickedVideoElementId)) {
             $(lastClickedVideoElementId).scrollIntoView({ behavior: 'instant', block: 'center' });
@@ -1535,6 +1521,7 @@ function updateUnlockProgressUI() {
     const adBtn = $('btn-unlock-ad-step');
     const pointBtn = $('btn-unlock-point-step');
 
+    // ৩টি নতুন কার্ডের মান সেট
     if ($('ui-req-ads-count')) $('ui-req-ads-count').innerText = formatNumber(total);
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(userPts);
     if ($('ui-remaining-ads-count')) $('ui-remaining-ads-count').innerText = formatNumber(isUnlocked ? 0 : remaining);
@@ -1547,29 +1534,28 @@ function updateUnlockProgressUI() {
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(total)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = "100%";
         
-        if (adBtn) adBtn.innerHTML = `<i class="fa-solid fa-circle-play"></i> <span>${I18N[APP_LANG].watchVideoNow}</span>`;
-        if (pointBtn) { pointBtn.disabled = true; pointBtn.style.opacity = "0.5"; }
+        adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}`;
+        pointBtn.disabled = true; 
+        pointBtn.style.opacity = "0.5";
     } else {
         if (timerCard) timerCard.style.display = 'none';
-        if (pointBtn) { pointBtn.disabled = false; pointBtn.style.opacity = "1"; }
+        pointBtn.disabled = false; 
+        pointBtn.style.opacity = "1";
         
         const percent = Math.min(100, Math.round((done / total) * 100));
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = percent + "%";
 
-        if (adBtn) {
-            adBtn.innerHTML = done >= total ? `<i class="fa-solid fa-circle-play"></i> <span>${I18N[APP_LANG].watchVideoNow}</span>` :
-                             (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> <span>${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}</span>` :
-                             `<i class="fa-solid fa-lock"></i> <span>${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}</span>`);
-        }
+        adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}` :
+                         (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}` :
+                         `<i class="fa-solid fa-lock"></i> ${APP_LANG === 'bn' ? 'ভিডিও আনলক করুন' : 'Unlock Video'}`);
 
-        if (pointBtn) pointBtn.innerHTML = `<span class="btn-inner-coin-circle"><i class="fa-solid fa-coins"></i></span> <span>${APP_LANG === 'bn' ? 'আমার পয়েন্ট ব্যবহার করুন' : 'Use My Points'}</span>`;
+        pointBtn.innerHTML = `<i class="fa-solid fa-coins"></i> ${APP_LANG === 'bn' ? 'আমার পয়েন্ট ব্যবহার করুন' : 'Use My Points'} (${formatNumber(APP_CONFIG.unlockPointsCost || 5)} pt)`;
     }
 }
 
 function startExpiryCountdown(vId) {
     const timer = $('unlock-remaining-countdown');
-    if (!timer) return;
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
     const update = () => {
         const diff = (videoUnlockExpiryMap[vId] || 0) - Date.now();
@@ -1641,7 +1627,7 @@ function executeUnlockSuccess(type = 'ad') {
     setTimeout(() => playMovie(activeDetailVideo), 800);
 }
 
-/* =================== STREAM PLAYER =================== */
+/* =================== CLOUDFLARE WORKER STREAM PLAYER =================== */
 async function playMovie(videoObj) {
     if (!videoObj) return;
     pendingActionAfterJoin = () => playMovie(videoObj);
@@ -1691,9 +1677,9 @@ async function openDirectPlayer(videoObj, startIndex = 0) {
         return openTelegramDirect(rawTargetUrl); 
     }
 
-    if ($('web-player-title')) $('web-player-title').innerText = `${videoObj.title} - ${links[currentPlayingPartIndex].name || ''}`;
+    $('web-player-title').innerText = `${videoObj.title} - ${links[currentPlayingPartIndex].name || ''}`;
     renderPlayerPartsBar(links, currentPlayingPartIndex);
-    if ($('web-player-modal')) $('web-player-modal').style.display = 'flex';
+    $('web-player-modal').style.display = 'flex';
     updateTelegramBackButtonState();
 
     showToast(APP_LANG === 'bn' ? "ভিডিও প্রস্তুত হচ্ছে..." : "Loading stream...", "info");
@@ -1724,7 +1710,7 @@ async function switchPlayerPart(idx) {
         return openTelegramDirect(rawTargetUrl); 
     }
 
-    if ($('web-player-title')) $('web-player-title').innerText = `${video.title} - ${video.links[idx].name || ''}`;
+    $('web-player-title').innerText = `${video.title} - ${video.links[idx].name || ''}`;
     renderPlayerPartsBar(video.links, idx);
 
     let playableUrl = await getPlayableStreamUrl(rawTargetUrl, video.id);
@@ -1763,7 +1749,7 @@ function closeWebVideoPlayer() {
     if (v) { v.pause(); v.removeAttribute('src'); v.onended = null; v.load(); }
     if (f) f.src = "";
     if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-    if ($('web-player-modal')) $('web-player-modal').style.display = 'none';
+    $('web-player-modal').style.display = 'none';
     updateTelegramBackButtonState();
 }
 
@@ -1771,12 +1757,12 @@ function switchNavTab(tabName, el) {
     triggerHaptic('light');
     currentActiveTab = tabName;
     
-    if ($('earn-hub-view')) $('earn-hub-view').style.display = 'none';
-    if ($('dedicated-ad-view')) $('dedicated-ad-view').style.display = 'none';
-    if ($('payout-view')) $('payout-view').style.display = 'none';
-    if ($('series-drawer-modal')) $('series-drawer-modal').style.display = 'none';
-    if ($('video-unlock-detail-view')) $('video-unlock-detail-view').style.display = 'none';
-    if ($('main-header')) $('main-header').style.display = 'block';
+    $('earn-hub-view').style.display = 'none';
+    $('dedicated-ad-view').style.display = 'none';
+    closePayoutView();
+    closeSeriesDrawer();
+    $('video-unlock-detail-view').style.display = 'none';
+    $('main-header').style.display = 'block';
     if (tabName === 'adult') checkAdultAgePrompt();
 
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
@@ -1796,15 +1782,15 @@ function switchNavTab(tabName, el) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* =================== PAYOUT HANDLERS =================== */
+/* =================== IN-PAGE PAYOUT VIEW HANDLERS =================== */
 function openPayoutView() {
     triggerHaptic('light');
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
-    if ($('video-unlock-detail-view')) $('video-unlock-detail-view').style.display = 'none';
-    if ($('earn-hub-view')) $('earn-hub-view').style.display = 'none';
-    if ($('dedicated-ad-view')) $('dedicated-ad-view').style.display = 'none';
-    if ($('main-header')) $('main-header').style.display = 'none';
-    if ($('payout-view')) $('payout-view').style.display = 'block';
+    $('video-unlock-detail-view').style.display = 'none';
+    $('earn-hub-view').style.display = 'none';
+    $('dedicated-ad-view').style.display = 'none';
+    $('main-header').style.display = 'none';
+    $('payout-view').style.display = 'block';
     updateUserUI(); 
     switchPayoutInnerTab('form'); 
     updateGatewaysAvailabilityUI(); 
@@ -1814,19 +1800,22 @@ function openPayoutView() {
 
 function closePayoutView() {
     triggerHaptic('light');
-    if ($('payout-view')) $('payout-view').style.display = 'none';
-    if ($('main-header')) $('main-header').style.display = 'block';
+    $('payout-view').style.display = 'none';
+    $('main-header').style.display = 'block';
     if ($('tab-' + currentActiveTab)) $('tab-' + currentActiveTab).style.display = 'block';
     updateTelegramBackButtonState();
 }
 
+function openPayoutMethodsModal() { openPayoutView(); }
+function closePayoutModal() { closePayoutView(); }
+
 function switchPayoutInnerTab(tab) {
     triggerHaptic('light');
     const isForm = tab === 'form';
-    $('tab-btn-withdraw-form')?.classList.toggle('active', isForm);
-    $('tab-btn-withdraw-history')?.classList.toggle('active', !isForm);
-    if ($('payout-form-view')) $('payout-form-view').style.display = isForm ? 'block' : 'none';
-    if ($('payout-history-view')) $('payout-history-view').style.display = isForm ? 'none' : 'block';
+    $('tab-btn-withdraw-form').classList.toggle('active', isForm);
+    $('tab-btn-withdraw-history').classList.toggle('active', !isForm);
+    $('payout-form-view').style.display = isForm ? 'block' : 'none';
+    $('payout-history-view').style.display = isForm ? 'none' : 'block';
     if ($('payout-balance-card-box')) $('payout-balance-card-box').style.display = isForm ? 'flex' : 'none';
     if (!isForm) loadWithdrawalHistory();
 }
@@ -1850,25 +1839,22 @@ function selectGateway(gw) {
     if ($('sim-operator-container')) $('sim-operator-container').style.display = (gw === 'Recharge') ? 'block' : 'none';
 
     const minPts = getGatewayMinPoints(gw), minTk = Math.round(minPts * (APP_CONFIG.pointsToTakaRate || 0.3)), t = I18N[APP_LANG];
-    if ($('payout-min-limit-alert')) {
-        $('payout-min-limit-alert').innerText = `${t.minWithdrawPrefix} ${formatNumber(minPts)} ${t.unitPoints} (${formatNumber(minTk)} ${t.currencySymbol})`;
-    }
+    $('payout-min-limit-alert').innerText = `${t.minWithdrawPrefix} ${formatNumber(minPts)} ${t.unitPoints} (${formatNumber(minTk)} ${t.currencySymbol})`;
 }
 
 function calculateWithdrawTakaPreview() {
     const val = parseInt($('pay-amount').value), tag = $('payout-live-calc-tag');
-    if (!tag) return;
     tag.innerText = (!isNaN(val) && val > 0) ? `= ${formatNumber((Math.round(val * (APP_CONFIG.pointsToTakaRate || 0.3) * 100) / 100).toFixed(2))} ${I18N[APP_LANG].currencySymbol}` : '';
 }
 
 async function loadWithdrawalHistory() {
     const list = $('payout-history-list');
-    if (!db || !currentUser?.id || !list) return;
+    if (!db || !currentUser?.id) return;
     list.innerHTML = "";
 
     try {
         const snap = await db.collection("withdrawals").where("userId", "==", String(currentUser.id)).limit(40).get();
-        if (snap.empty) { list.innerHTML = `<div style="text-align:center; padding:22px; color:#cbd5e1; font-size:14px; font-weight:700;">${APP_LANG === 'bn' ? 'কোনো হিস্টোরি পাওয়া যায়নি!' : 'No history found!'}</div>`; return; }
+        if (snap.empty) { list.innerHTML = `<div style="text-align:center; padding:22px; color:#8ba2c4; font-size:14px; font-weight:800;">${APP_LANG === 'bn' ? 'কোনো হিস্টোরি পাওয়া যায়নি!' : 'No history found!'}</div>`; return; }
 
         let items = [];
         snap.forEach(d => items.push({ id: d.id, ...d.data() }));
@@ -1879,16 +1865,16 @@ async function loadWithdrawalHistory() {
             const statusClass = s.includes('approve') ? 'status-approved' : (s.includes('reject') ? 'status-rejected' : 'status-pending');
             const gw = item.gateway === 'Recharge' || item.gateway === 'রিচার্জ' ? (APP_LANG === 'bn' ? `রিচার্জ (${item.operator || ''})` : `Recharge (${item.operator || ''})`) : (item.gateway === 'bKash' ? (APP_LANG === 'bn' ? 'বিকাশ' : 'bKash') : (APP_LANG === 'bn' ? 'নগদ' : 'Nagad'));
             return `
-            <div class="history-card-item" style="flex-direction:column; align-items:stretch; gap:6px;">
+            <div class="history-card-item shimmer-card-effect" style="flex-direction:column; align-items:stretch; gap:6px;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div class="hci-left">
-                        <div style="font-size:13.5px; font-weight:800; color:var(--primary); margin-bottom:2px;"><i class="fa-solid fa-user"></i> ${item.userName || currentUser.first_name || 'User'} <span style="font-size:12px; color:#cbd5e1;">${item.userUsername ? `@${item.userUsername}` : ''}</span></div>
-                        <h5 style="font-size:15px; color:#fff; font-weight:800; margin: 2px 0;">${gw} - ${item.number}</h5>
-                        <p style="font-size:13px; color:#cbd5e1; font-weight:600;">${formatNumber(item.points || 0)} ${I18N[APP_LANG].unitPoints}</p>
+                        <div style="font-size:13px; font-weight:800; color:var(--primary); margin-bottom:2px;"><i class="fa-solid fa-user"></i> ${item.userName || currentUser.first_name || 'User'} <span style="font-size:11px; color:#8ba2c4;">${item.userUsername ? `@${item.userUsername}` : ''}</span></div>
+                        <h5 style="font-size:14.5px; color:#fff; font-weight:900; margin: 2px 0;">${gw} - ${item.number}</h5>
+                        <p style="font-size:12px; color:#8ba2c4; font-weight:700;">${formatNumber(item.points || 0)} ${I18N[APP_LANG].unitPoints}</p>
                     </div>
-                    <div class="hci-right"><div style="font-size:16px; font-weight:800; color:#00f260; text-shadow:0 0 8px rgba(0,242,96,0.5);">${I18N[APP_LANG].currencySymbol} ${formatNumber(item.amountBDT)}</div><span class="hci-status-badge ${statusClass}">${item.status}</span></div>
+                    <div class="hci-right"><div style="font-size:16px; font-weight:900; color:#00f260; text-shadow:0 0 8px rgba(0,242,96,0.5);">${I18N[APP_LANG].currencySymbol} ${formatNumber(item.amountBDT)}</div><span class="hci-status-badge ${statusClass}">${item.status}</span></div>
                 </div>
-                <div style="border-top:1px dashed rgba(255,255,255,0.12); padding-top:6px; display:flex; justify-content:space-between; font-size:12.5px; color:#cbd5e1; font-weight:600;">
+                <div style="border-top:1px dashed rgba(255,255,255,0.08); padding-top:6px; display:flex; justify-content:space-between; font-size:12px; color:#8ba2c4; font-weight:700;">
                     <span>রেফার: <b style="color:var(--primary);">${formatNumber(item.totalReferralsSnapshot ?? 0)}</b> (আয়: <b style="color:#ffe000;">${formatNumber(item.refEarnedSnapshot ?? 0)}</b> pt)</span>
                     <span>অবশিষ্ট ব্যালেন্স: <b style="color:#00f260;">${item.remainingBalanceSnapshot !== undefined ? formatNumber(item.remainingBalanceSnapshot) : '---'}</b> pt</span>
                 </div>
@@ -1922,10 +1908,11 @@ async function submitWithdrawalRequest() {
 
         const response = await fetch(WORKER_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
                 initData: window.Telegram?.WebApp?.initData || "",
-                userId: String(currentUser.id),
                 gateway: currentSelectedGateway,
                 operator: (currentSelectedGateway === 'Recharge') ? selectedSimOperator : null,
                 number: num,
@@ -1987,9 +1974,8 @@ function shareReferralLink() {
 function toggleSearchBox() {
     triggerHaptic('light');
     const s = $('search-container');
-    if (!s) return;
     s.style.display = s.style.display === 'none' ? 'block' : 'none';
-    if (s.style.display === 'block') $('video-search-input')?.focus();
+    if (s.style.display === 'block') $('video-search-input').focus();
 }
 
 function debouncedSearch() {
