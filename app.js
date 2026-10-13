@@ -102,13 +102,10 @@ let APP_CONFIG = {
     adsgramInterstitialBlockId: "int-38278",
     monetagZoneId: "11928576",
     monetagSdkName: "show_11928576",
-    onclickaSpotId: "6153127",
     adsgramDailyLimit: 10,
     adsgramRewardPoints: 2,
     monetagDailyLimit: 10,
     monetagRewardPoints: 2,
-    onclickaDailyLimit: 10,
-    onclickaRewardPoints: 2,
     adNetwork: "both",
     adModeVideo: "alternate",
     adModeEarn: "reward",
@@ -158,7 +155,6 @@ let adminCreatedCategories = [];
 let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 let activeDedicatedNetwork = 'adsgram';
 let isTgMemberVerified = false;
-window.onclickaShowMethod = null;
 
 const ITEMS_PER_PAGE = 10;
 let currentPageMap = { adult: 1, series: 1, movies: 1 };
@@ -316,7 +312,7 @@ function applyStaticTranslations() {
         ['movie-badge-feature', `<i class="fa-solid fa-film"></i> ${t.movieBadgeFeature}`],
         ['overview-bar-title', `<i class="fa-solid fa-chart-simple"></i> ${t.overviewBarTitle}`],
         ['earn-bar-title', `<i class="fa-solid fa-bolt"></i> ${t.earnBarTitle}`],
-        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> ৩টি মাল্টিপল নেটওয়ার্ক`],
+        ['pill-badge-instant', `<i class="fa-solid fa-circle-check"></i> ২টি মাল্টিপল নেটওয়ার্ক`],
         ['pill-badge-freecoins', `<i class="fa-solid fa-coins"></i> ফ্রি পয়েন্ট`],
         ['ref-bar-title', `<i class="fa-solid fa-shield-halved"></i> ${t.refBarTitle}`],
         ['ut-title-txt', `<i class="fa-solid fa-clock"></i> ${APP_LANG === 'bn' ? 'আনলক মেয়াদের বাকি:' : 'Unlock Time Remaining:'}`],
@@ -399,8 +395,6 @@ function applyAdminConfigToUI() {
     if ($('hub-reward-adsgram')) $('hub-reward-adsgram').innerText = `${formatNumber(APP_CONFIG.adsgramRewardPoints || 2)} pt`;
     if ($('hub-limit-monetag')) $('hub-limit-monetag').innerText = `দৈনিক ${formatNumber(APP_CONFIG.monetagDailyLimit || 10)}টি অ্যাড`;
     if ($('hub-reward-monetag')) $('hub-reward-monetag').innerText = `${formatNumber(APP_CONFIG.monetagRewardPoints || 2)} pt`;
-    if ($('hub-limit-onclicka')) $('hub-limit-onclicka').innerText = `দৈনিক ${formatNumber(APP_CONFIG.onclickaDailyLimit || 10)}টি অ্যাড`;
-    if ($('hub-reward-onclicka')) $('hub-reward-onclicka').innerText = `${formatNumber(APP_CONFIG.onclickaRewardPoints || 2)} pt`;
 
     if ($('dedicated-ad-view')?.style.display === 'block') {
         updateDedicatedAdScreenUI();
@@ -536,8 +530,7 @@ async function openDedicatedAdScreen(network) {
 
     const netNames = {
         adsgram: "Adsgram Ads",
-        monetag: "Monetag Ads",
-        onclicka: "Onclicka Ads"
+        monetag: "Monetag Ads"
     };
     if ($('ded-screen-title')) $('ded-screen-title').innerText = netNames[network] || "Reward Ads";
 
@@ -579,41 +572,6 @@ function updateDedicatedAdScreenUI() {
     if (pText) pText.innerText = `${formatNumber(todayWatched)} / ${formatNumber(limit)} ${t.doneToday}`;
 }
 
-function initOnclickaTma() {
-    if (window.initCdTma) {
-        try {
-            window.initCdTma({ id: Number(APP_CONFIG.onclickaSpotId) || 6153127 })
-                .then(show => {
-                    window.onclickaShowMethod = show;
-                    window.show = show;
-                })
-                .catch(() => {});
-        } catch (err) {}
-    }
-}
-
-function showOnclickaAd() {
-    return new Promise((resolve, reject) => {
-        const showFn = window.onclickaShowMethod || window.show;
-        if (typeof showFn === 'function') {
-            showFn()
-                .then(() => resolve({ done: true, network: 'onclicka' }))
-                .catch(err => reject(err));
-        } else if (window.initCdTma) {
-            window.initCdTma({ id: Number(APP_CONFIG.onclickaSpotId) || 6153127 })
-                .then(show => {
-                    window.onclickaShowMethod = show;
-                    window.show = show;
-                    return show();
-                })
-                .then(() => resolve({ done: true, network: 'onclicka' }))
-                .catch(err => reject(err));
-        } else {
-            reject(new Error("Onclicka TMA SDK is not loaded"));
-        }
-    });
-}
-
 // ================== সুরক্ষিত বিজ্ঞাপন ক্লেইম (MASTER WORKER API) ==================
 async function watchSpecificNetworkAd() {
     const btn = $('btn-watch-dedicated-ad');
@@ -642,7 +600,6 @@ async function watchSpecificNetworkAd() {
         let res = null;
         if (net === 'adsgram') res = await showAdsgramAd(adsgramRewardController || adsgramInterstitialController, true);
         else if (net === 'monetag') res = await showMonetagAd();
-        else if (net === 'onclicka') res = await showOnclickaAd();
 
         if (res && (res.done === true || res === true)) {
             triggerHaptic('success');
@@ -828,7 +785,6 @@ function listenToAdminConfig() {
         if (doc.exists) { 
             APP_CONFIG = { ...APP_CONFIG, ...doc.data() }; 
             initAdsgram();
-            initOnclickaTma();
             applyAdminConfigToUI(); 
         }
     }, () => {});
@@ -909,7 +865,6 @@ async function initApp() {
     loadSettingsAndVideos();
     await syncUserData();
     initAdsgram();
-    initOnclickaTma();
 
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) { const v = $('in-app-video-element'); if (v && !v.paused) v.pause(); }
@@ -969,10 +924,9 @@ function getAdExecutionSequence(purpose = 'video', stepIndex = 0) {
     const adsgramRewardItem = { name: 'Adsgram Reward', run: () => showAdsgramAd(adsgramRewardController || adsgramInterstitialController, true) };
     const adsgramInterItem = { name: 'Adsgram Interstitial', run: () => showAdsgramAd(adsgramInterstitialController || adsgramRewardController, false) };
     const monetagItem = { name: 'Monetag Rewarded Interstitial', run: () => showMonetagAd() };
-    const onclickaItem = { name: 'Onclicka TMA', run: () => showOnclickaAd() };
 
     if (adNet === 'monetag' || mode === 'monetag_only') {
-        sequence = [monetagItem, adsgramRewardItem, onclickaItem, adsgramInterItem];
+        sequence = [monetagItem, adsgramRewardItem, adsgramInterItem];
     } else if (adNet === 'adsgram') {
         if (mode === 'interstitial') sequence = [adsgramInterItem, adsgramRewardItem, monetagItem];
         else if (mode === 'reward') sequence = [adsgramRewardItem, adsgramInterItem, monetagItem];
@@ -983,16 +937,15 @@ function getAdExecutionSequence(purpose = 'video', stepIndex = 0) {
     } else {
         const count = (purpose === 'video' ? stepIndex : adWatchCounter);
         if (mode === 'alternate' || mode === 'swap') {
-            const mod = count % 3;
-            if (mod === 0) sequence = [monetagItem, adsgramRewardItem, onclickaItem, adsgramInterItem];
-            else if (mod === 1) sequence = [adsgramInterItem, onclickaItem, monetagItem, adsgramRewardItem];
-            else sequence = [adsgramRewardItem, monetagItem, onclickaItem, adsgramInterItem];
+            const mod = count % 2;
+            if (mod === 0) sequence = [monetagItem, adsgramRewardItem, adsgramInterItem];
+            else sequence = [adsgramRewardItem, monetagItem, adsgramInterItem];
         } else if (mode === 'random' || mode === 'mixed') {
-            sequence = [monetagItem, adsgramRewardItem, onclickaItem, adsgramInterItem].sort(() => Math.random() - 0.5);
+            sequence = [monetagItem, adsgramRewardItem, adsgramInterItem].sort(() => Math.random() - 0.5);
         } else if (mode === 'interstitial') {
-            sequence = [adsgramInterItem, monetagItem, onclickaItem, adsgramRewardItem];
+            sequence = [adsgramInterItem, monetagItem, adsgramRewardItem];
         } else {
-            sequence = [adsgramRewardItem, monetagItem, onclickaItem, adsgramInterItem];
+            sequence = [adsgramRewardItem, monetagItem, adsgramInterItem];
         }
     }
     return sequence.filter(Boolean);
@@ -1046,7 +999,7 @@ async function syncUserData() {
                 selfEarnedPoints: 0, referralEarnedPoints: 0, dailyAdsWatched: 0, videoAdsWatched: 0, totalVideoAdsWatched: 0,
                 dailyAdsLimit: APP_CONFIG.dailyAdLimit || 20, lastAdDate: todayStr, totalReferrals: 0, referredBy,
                 referralActivated: false, deviceId, isSameDeviceFraud: isSameDeviceDetected, status: 'active',
-                networkAdsWatched: { adsgram: 0, monetag: 0, onclicka: 0 },
+                networkAdsWatched: { adsgram: 0, monetag: 0 },
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
             await ref.set(newUser);

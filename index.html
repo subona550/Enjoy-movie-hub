@@ -9,7 +9,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script defer src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://libtl.com/sdk.js" data-zone="11928576" data-sdk="show_11928576"></script>
-    <script src="https://js.onclckvd.com/in-stream-ad-admanager/tma.js"></script>
     
     <!-- Third-Party Helpers -->
     <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -280,7 +279,7 @@
             </div>
         </div>
         <div class="ad-earn-pills-row">
-            <span class="earn-pill pill-gold" id="pill-badge-instant"><i class="fa-solid fa-circle-check"></i> ৩টি মাল্টিপল নেটওয়ার্ক</span>
+            <span class="earn-pill pill-gold" id="pill-badge-instant"><i class="fa-solid fa-circle-check"></i> ২টি মাল্টিপল নেটওয়ার্ক</span>
             <span class="earn-pill pill-cyan" id="pill-badge-freecoins"><i class="fa-solid fa-coins"></i> ফ্রি পয়েন্ট</span>
         </div>
         <button class="btn-earn-gradient" onclick="openEarnHubView()" id="btn-profile-earn-more"><i class="fa-solid fa-bolt"></i> <span id="btn-profile-earn-more-txt">আরও পয়েন্ট আয় করুন</span></button>
@@ -304,7 +303,7 @@
     </div>
 </div>
 
-<!-- ================= 9. VIEW: AD HUB (অ্যাকাউন্ট ভেরিফাই হলে নোটিশ ও লক পুরোপুরি Hide হবে) ================= -->
+<!-- ================= 9. VIEW: AD HUB ================= -->
 <div id="earn-hub-view" class="content-tab">
     <div class="inpage-header-nav">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -316,7 +315,7 @@
         </div>
     </div>
     
-    <!-- ভেরিফিকেশন ব্যানার: অ্যাকাউন্ট ভেরিফাই হলে এটি সাথে সাথে সম্পূর্ণ Hide হয়ে যাবে -->
+    <!-- ভেরিফিকেশন ব্যানার -->
     <div id="earn-hub-tg-banner" class="featured-card shimmer-card-effect" style="margin: 14px 12px 10px; border-color: rgba(0, 136, 204, 0.6); background: linear-gradient(145deg, #07172e 0%, #050b18 100%);">
         <div class="featured-top-row" style="margin-bottom: 8px;">
             <span class="pill-tag-outline" style="border-color: #0088cc; color: #00c6ff; background: rgba(0, 136, 204, 0.15);">
@@ -340,10 +339,10 @@
         </div>
     </div>
 
-    <!-- অ্যাড নেটওয়ার্ক কন্টেইনার (লক/ব্লার র‍্যাপার: ভেরিফাই হলে লক হাইড ও ব্লার দূর হবে) -->
+    <!-- অ্যাড নেটওয়ার্ক কন্টেইনার -->
     <div id="earn-hub-networks-container" style="position: relative; margin-top: 6px;">
         
-        <!-- লকড ওভারলে নোটিশ (ভেরিফাই হলে হাইড হয়ে যাবে) -->
+        <!-- লকড ওভারলে নোটিশ -->
         <div id="earn-hub-lock-overlay" style="position: absolute; inset: 0; background: rgba(5, 8, 20, 0.78); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10; border-radius: 20px; margin: 0 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1.5px dashed rgba(255, 255, 255, 0.2);">
             <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255, 8, 68, 0.15); border: 2px solid #ff0844; color: #ff0844; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 10px; box-shadow: 0 0 16px rgba(255, 8, 68, 0.4);">
                 <i class="fa-solid fa-lock"></i>
@@ -352,7 +351,7 @@
             <p style="font-size: 13px; color: #8ba2c4; font-weight: 700; max-width: 260px;">উপরে থাকা বাটনে ক্লিক করে টেলিগ্রাম চ্যানেলে জয়েন ও ভেরিফাই সম্পন্ন করুন।</p>
         </div>
 
-        <!-- অ্যাড নেটওয়ার্ক ৩টি কার্ড -->
+        <!-- অ্যাড নেটওয়ার্ক কার্ড (Adsgram ও Monetag) -->
         <div id="earn-hub-grid-cards" class="ad-hub-grid" style="filter: blur(6px); opacity: 0.4; pointer-events: none; transition: all 0.35s ease;">
             
             <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('adsgram')">
@@ -375,17 +374,6 @@
                     </div>
                 </div>
                 <div class="ad-net-badge" style="border-color:#ff0844; color:#ff6b8b; background:rgba(255,8,68,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-monetag">২ pt</span></div>
-            </div>
-
-            <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('onclicka')">
-                <div class="ad-net-card-left">
-                    <div class="ad-net-square-icon sq-icon-onclicka"><i class="fa-solid fa-coins"></i></div>
-                    <div class="ad-net-meta">
-                        <h4>Onclicka Ads</h4>
-                        <p id="hub-limit-onclicka">দৈনিক ১০টি অ্যাড</p>
-                    </div>
-                </div>
-                <div class="ad-net-badge" style="border-color:#ffe000; color:#ffe000; background:rgba(255,224,0,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-onclicka">২ pt</span></div>
             </div>
 
         </div>

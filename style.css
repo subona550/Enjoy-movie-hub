@@ -1824,7 +1824,7 @@ header#main-header {
     gap: 7px;
 }
 
-/* =================== ১২. অ্যাড হাব (ভেরিফাই হলে নোটিশ ও লক HIDE হবে) =================== */
+/* =================== ১২. অ্যাড হাব =================== */
 #earn-hub-view, #dedicated-ad-view, #payout-view { 
     display: none; 
     animation: subtleFadeUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
@@ -1844,7 +1844,6 @@ header#main-header {
     z-index: 1000;
 }
 
-/* ভেরিফাই সম্পন্ন হলে সম্পূর্ণ নোটিশ ও ব্যানার ১০০% হাইড হবে */
 .earn-hub-unlocked #earn-hub-tg-banner {
     display: none !important;
 }
@@ -1853,7 +1852,6 @@ header#main-header {
     display: none !important;
 }
 
-/* ভেরিফাই হলে ব্লার দূর হবে এবং কার্ডগুলো অ্যাক্টিভ হবে */
 .earn-hub-unlocked #earn-hub-grid-cards {
     filter: none !important;
     opacity: 1 !important;
@@ -1908,13 +1906,6 @@ header#main-header {
     background: linear-gradient(135deg, #ff0844 0%, #ff6b8b 100%);
     border: 1.5px solid rgba(255, 8, 68, 0.6);
     box-shadow: 0 0 16px rgba(255, 8, 68, 0.45);
-}
-
-.sq-icon-onclicka {
-    background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
-    border: 1.5px solid rgba(255, 210, 0, 0.6);
-    box-shadow: 0 0 16px rgba(255, 210, 0, 0.45);
-    color: #050814 !important;
 }
 
 .ad-net-meta h4 { font-size: 16.5px; font-weight: 900; color: #fff; margin-bottom: 3px; }
