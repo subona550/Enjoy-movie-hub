@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ENJOY MOVIES ULTRA HD - COMPLETE ENGINE CONTROLLER (app.js)
+   ENJOY MOVIES ULTRA HD - COMPLETE 100/100 ENGINE CONTROLLER (app.js)
    ========================================================================== */
 
 const $ = id => document.getElementById(id);
@@ -502,7 +502,7 @@ function updateDedicatedAdScreenUI() {
 function initOnclickaTma() {
     if (window.initCdTma) {
         try {
-            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || '6153127' })
+            window.initCdTma({ id: Number(APP_CONFIG.onclickaSpotId) || 6153127 })
                 .then(show => {
                     window.onclickaShowMethod = show;
                     window.show = show;
@@ -520,7 +520,7 @@ function showOnclickaAd() {
                 .then(() => resolve({ done: true, network: 'onclicka' }))
                 .catch(err => reject(err));
         } else if (window.initCdTma) {
-            window.initCdTma({ id: APP_CONFIG.onclickaSpotId || '6153127' })
+            window.initCdTma({ id: Number(APP_CONFIG.onclickaSpotId) || 6153127 })
                 .then(show => {
                     window.onclickaShowMethod = show;
                     window.show = show;
@@ -582,8 +582,8 @@ async function watchSpecificNetworkAd() {
                         balancePoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
                         referralEarnedPoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
                         totalReferrals: firebase.firestore.FieldValue.increment(1)
-                    });
-                    await userRef.update({ referralActivated: true });
+                    }).catch(()=>{});
+                    await userRef.update({ referralActivated: true }).catch(()=>{});
                 }
             }
 
@@ -682,6 +682,21 @@ async function verifyTelegramChannelJoin() {
 function loadSavedProgress() {
     try { videoAdProgressMap = JSON.parse(localStorage.getItem('user_video_ad_progress') || '{}'); } catch(e) {}
     try { videoUnlockExpiryMap = JSON.parse(localStorage.getItem('user_video_unlock_expiry') || '{}'); } catch(e) {}
+    
+    // মেয়াদোত্তীর্ণ কী-গুলো ক্লিনআপ
+    const now = Date.now();
+    let hasChanged = false;
+    Object.keys(videoUnlockExpiryMap).forEach(vId => {
+        if (videoUnlockExpiryMap[vId] && now >= videoUnlockExpiryMap[vId]) {
+            delete videoUnlockExpiryMap[vId];
+            delete videoAdProgressMap[vId];
+            hasChanged = true;
+        }
+    });
+    if (hasChanged) {
+        localStorage.setItem('user_video_ad_progress', JSON.stringify(videoAdProgressMap));
+        localStorage.setItem('user_video_unlock_expiry', JSON.stringify(videoUnlockExpiryMap));
+    }
 }
 
 async function saveUnlockProgress() {
@@ -855,29 +870,30 @@ function getAdExecutionSequence(purpose = 'video', stepIndex = 0) {
     const adsgramRewardItem = { name: 'Adsgram Reward', run: () => showAdsgramAd(adsgramRewardController || adsgramInterstitialController, true) };
     const adsgramInterItem = { name: 'Adsgram Interstitial', run: () => showAdsgramAd(adsgramInterstitialController || adsgramRewardController, false) };
     const monetagItem = { name: 'Monetag Rewarded Interstitial', run: () => showMonetagAd() };
+    const onclickaItem = { name: 'Onclicka TMA', run: () => showOnclickaAd() };
 
     if (adNet === 'monetag' || mode === 'monetag_only') {
-        sequence = [monetagItem, adsgramRewardItem, adsgramInterItem];
+        sequence = [monetagItem, adsgramRewardItem, onclickaItem, adsgramInterItem];
     } else if (adNet === 'adsgram') {
-        if (mode === 'interstitial') sequence = [adsgramInterItem, adsgramRewardItem];
-        else if (mode === 'reward') sequence = [adsgramRewardItem, adsgramInterItem];
+        if (mode === 'interstitial') sequence = [adsgramInterItem, adsgramRewardItem, monetagItem];
+        else if (mode === 'reward') sequence = [adsgramRewardItem, adsgramInterItem, monetagItem];
         else {
             const isStepEven = ((purpose === 'video' ? stepIndex : adWatchCounter) % 2 === 0);
-            sequence = isStepEven ? [adsgramInterItem, adsgramRewardItem] : [adsgramRewardItem, adsgramInterItem];
+            sequence = isStepEven ? [adsgramInterItem, adsgramRewardItem, monetagItem] : [adsgramRewardItem, adsgramInterItem, monetagItem];
         }
     } else {
         const count = (purpose === 'video' ? stepIndex : adWatchCounter);
         if (mode === 'alternate' || mode === 'swap') {
             const mod = count % 3;
-            if (mod === 0) sequence = [monetagItem, adsgramRewardItem, adsgramInterItem];
-            else if (mod === 1) sequence = [adsgramInterItem, monetagItem, adsgramRewardItem];
-            else sequence = [adsgramRewardItem, monetagItem, adsgramInterItem];
+            if (mod === 0) sequence = [monetagItem, adsgramRewardItem, onclickaItem, adsgramInterItem];
+            else if (mod === 1) sequence = [adsgramInterItem, onclickaItem, monetagItem, adsgramRewardItem];
+            else sequence = [adsgramRewardItem, monetagItem, onclickaItem, adsgramInterItem];
         } else if (mode === 'random' || mode === 'mixed') {
-            sequence = [monetagItem, adsgramRewardItem, adsgramInterItem].sort(() => Math.random() - 0.5);
+            sequence = [monetagItem, adsgramRewardItem, onclickaItem, adsgramInterItem].sort(() => Math.random() - 0.5);
         } else if (mode === 'interstitial') {
-            sequence = [adsgramInterItem, monetagItem, adsgramRewardItem];
+            sequence = [adsgramInterItem, monetagItem, onclickaItem, adsgramRewardItem];
         } else {
-            sequence = [adsgramRewardItem, monetagItem, adsgramInterItem];
+            sequence = [adsgramRewardItem, monetagItem, onclickaItem, adsgramInterItem];
         }
     }
     return sequence.filter(Boolean);
@@ -980,7 +996,13 @@ function startButtonCooldown(btnId, defaultText, seconds = null) {
             clearInterval(timer);
             btn.disabled = false;
             btn.classList.remove('btn-disabled-state');
-            btn.innerHTML = defaultText;
+            
+            // স্পেশাল সিনক্রোনাইজেশন: ভিডিও আনলক বাটনের ক্ষেত্রে সঠিক স্টেট রিস্টোর করা
+            if (btnId === 'btn-unlock-ad-step') {
+                updateUnlockProgressUI();
+            } else {
+                btn.innerHTML = defaultText;
+            }
             triggerHaptic('light');
         }
     }, 1000);
@@ -1136,16 +1158,16 @@ async function watchVideoUnlockAd() {
             } else {
                 showToast(APP_LANG === 'bn' ? `বিজ্ঞাপন সম্পন্ন! বাকি ${formatNumber(total - videoAdProgressMap[vId])} টি` : `Ad completed! ${total - videoAdProgressMap[vId]} left`, "success");
             }
-            startButtonCooldown('btn-unlock-ad-step', $('btn-unlock-ad-step').innerHTML, APP_CONFIG.adCooldownSeconds || 5);
+            startButtonCooldown('btn-unlock-ad-step', null, APP_CONFIG.adCooldownSeconds || 5);
         } else {
             updateUnlockProgressUI();
             showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন সম্পূর্ণ দেখলে আনলক হবে!" : "Watch full ad to unlock!", "error");
-            startButtonCooldown('btn-unlock-ad-step', $('btn-unlock-ad-step').innerHTML, APP_CONFIG.adCooldownSeconds || 4);
+            startButtonCooldown('btn-unlock-ad-step', null, APP_CONFIG.adCooldownSeconds || 4);
         }
     } catch (err) {
         updateUnlockProgressUI();
         showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন লোড হতে ব্যর্থ হয়েছে!" : "Ad failed to load!", "error");
-        startButtonCooldown('btn-unlock-ad-step', $('btn-unlock-ad-step').innerHTML, APP_CONFIG.adCooldownSeconds || 4);
+        startButtonCooldown('btn-unlock-ad-step', null, APP_CONFIG.adCooldownSeconds || 4);
     }
 }
 
@@ -1323,7 +1345,7 @@ function processVideoSnapshot(docs) {
             likes: Number(data.likes || 0), season: data.season || 'S5',
             timeAgo: data.timeAgo || formatTimeAgo(data.createdAt || data.timestamp || data.date),
             section: (data.section || '').toLowerCase(), type: (data.type || '').toLowerCase(), 
-            category: (data.category || data.cat || '').trim()
+            category: Array.isArray(data.category) ? data.category.join(', ') : (data.category || data.cat || '').trim()
         };
     }).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
@@ -1336,7 +1358,6 @@ function processVideoSnapshot(docs) {
     if (!hasHandledInitialTargetVideo) handleDeepLinkVideoScroll();
 }
 
-// শুধুমাত্র অ্যাডমিনের ক্রিয়েট করা ক্যাটাগরি রেন্ডার করা হবে
 function renderCategoryChipsForTab(section, containerId) {
     const container = $(containerId);
     if (!container) return;
@@ -2101,8 +2122,15 @@ function filterVideosUI() {
             });
         }
 
-        if (['adult_hot', 'top_rated', 'trending'].includes(activeHeroFilterTags[sectionName])) {
+        const currentHeroTag = activeHeroFilterTags[sectionName];
+        if (['adult_hot', 'top_rated', 'trending'].includes(currentHeroTag)) {
             list = [...list].sort((a, b) => ((b.views || 0) + (b.likes || 0)) - ((a.views || 0) + (a.likes || 0)));
+        } else {
+            list = [...list].sort((a, b) => {
+                const tA = a.createdAt?.seconds || a.timestamp?.seconds || (typeof a.createdAt === 'number' ? a.createdAt : 0);
+                const tB = b.createdAt?.seconds || b.timestamp?.seconds || (typeof b.createdAt === 'number' ? b.createdAt : 0);
+                return tB - tA;
+            });
         }
 
         if (q) {
