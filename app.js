@@ -1,8 +1,12 @@
 /* ==========================================================================
-   ENJOY MOVIES ULTRA HD - COMPLETE 100/100 MASTER CONTROLLER (app.js)
+   ENJOY MOVIES ULTRA HD - COMPLETE MASTER CONTROLLER (app.js)
+   Secured with Master Cloudflare Worker: security-3a8b.rakibkdbb.workers.dev
    ========================================================================== */
 
 const $ = id => document.getElementById(id);
+
+// মাস্টার ব্যাকএন্ড API এন্ডপয়েন্ট
+const MASTER_API = "https://security-3a8b.rakibkdbb.workers.dev";
 
 // ১. ফায়ারবেস কনফিগারেশন
 const firebaseConfig = {
@@ -93,7 +97,7 @@ const I18N = {
 let APP_CONFIG = {
     appName: "ইনজ়য় মুভিজ", 
     appHeaderBadge: "সিনেমা", 
-    cloudflareStreamApi: "https://open-player-7bd4.rakibkdbb.workers.dev", 
+    cloudflareStreamApi: `${MASTER_API}/api/stream`, 
     adsgramRewardBlockId: "46116", 
     adsgramInterstitialBlockId: "int-38278",
     monetagZoneId: "11928576",
@@ -153,7 +157,7 @@ let activeHeroFilterTags = { adult: 'adult_new', series: 'new_series', movies: '
 let adminCreatedCategories = [];
 let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 let activeDedicatedNetwork = 'adsgram';
-let isTgMemberVerified = false; // টেলিগ্রাম মেম্বারশিপ স্টেট
+let isTgMemberVerified = false;
 window.onclickaShowMethod = null;
 
 const ITEMS_PER_PAGE = 10;
@@ -430,7 +434,7 @@ function updateUserUI() {
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(pts);
 }
 
-/* =================== AD HUB & TELEGRAM LOCK LOGIC (INSTANT HIDE) =================== */
+/* =================== AD HUB & TELEGRAM LOCK LOGIC =================== */
 function updateEarnHubLockUI() {
     const t = I18N[APP_LANG];
     const hubView = $('earn-hub-view');
@@ -442,12 +446,9 @@ function updateEarnHubLockUI() {
 
     if (isTgMemberVerified) {
         if (hubView) hubView.classList.add('earn-hub-unlocked');
-        
-        // অ্যাকাউন্ট ভেরিফাই হলে নোটিশ ও লক সাথে সাথে স্ক্রিন থেকে ১০০% Hide হবে
         if (tgBanner) tgBanner.style.setProperty('display', 'none', 'important');
         if (lockOverlay) lockOverlay.style.setProperty('display', 'none', 'important');
 
-        // অ্যাড কার্ড ব্লার মুক্ত ও সক্রিয় হবে
         if (gridCards) {
             gridCards.style.filter = 'none';
             gridCards.style.opacity = '1';
@@ -467,8 +468,6 @@ function updateEarnHubLockUI() {
         }
     } else {
         if (hubView) hubView.classList.remove('earn-hub-unlocked');
-        
-        // ভেরিফাই না থাকলে নোটিশ ও লক দৃশ্যমান থাকবে
         if (tgBanner) tgBanner.style.display = 'block';
         if (lockOverlay) lockOverlay.style.display = 'flex';
 
@@ -505,7 +504,6 @@ async function openEarnHubView() {
     updateTelegramBackButtonState();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // স্বয়ংক্রিয় ব্যাকগ্রাউন্ড ভেরিফিকেশন চেক
     if (currentUser?.id && !isTgMemberVerified) {
         const check = await checkTelegramMembershipRealtime(currentUser.id);
         if (check.isMember) {
@@ -526,7 +524,6 @@ function closeEarnHubView() {
 async function openDedicatedAdScreen(network) {
     triggerHaptic('light');
 
-    // ব্লার প্রটেকশন সিকিউরিটি চেক
     if (!isTgMemberVerified) {
         triggerHaptic('error');
         showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন দেখার আগে টেলিগ্রাম চ্যানেলে জয়েন করে ভেরিফাই করুন!" : "Join channel and verify before viewing ads!", "error");
@@ -617,6 +614,7 @@ function showOnclickaAd() {
     });
 }
 
+// ================== সুরক্ষিত বিজ্ঞাপন ক্লেইম (MASTER WORKER API) ==================
 async function watchSpecificNetworkAd() {
     const btn = $('btn-watch-dedicated-ad');
     if (!btn || btn.classList.contains('btn-disabled-state') || btn.disabled) return;
@@ -648,39 +646,34 @@ async function watchSpecificNetworkAd() {
 
         if (res && (res.done === true || res === true)) {
             triggerHaptic('success');
-            const todayStr = getTodayBDDate();
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${APP_LANG === 'bn' ? 'পয়েন্ট জমা হচ্ছে...' : 'Verifying reward...'}`;
 
-            if (!userData.networkAdsWatched) userData.networkAdsWatched = {};
-            userData.networkAdsWatched[net] = (userData.networkAdsWatched[net] || 0) + 1;
-            userData.dailyAdsWatched = (userData.dailyAdsWatched || 0) + 1;
-            userData.balancePoints = (userData.balancePoints || 0) + reward;
-            userData.selfEarnedPoints = (userData.selfEarnedPoints || 0) + reward;
+            // সার্ভার-সাইড ক্লাউডফ্লেয়ার মাস্টার ওয়ার্কারের মাধ্যমে নিরাপদ ক্লেইম
+            const claimRes = await fetch(`${MASTER_API}/api/claim-ad-reward`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    initData: window.Telegram?.WebApp?.initData || "",
+                    network: net
+                })
+            });
 
-            if (db && currentUser?.id) {
-                const userRef = db.collection("users").doc(String(currentUser.id));
-                await userRef.update({
-                    balancePoints: firebase.firestore.FieldValue.increment(reward),
-                    selfEarnedPoints: firebase.firestore.FieldValue.increment(reward),
-                    dailyAdsWatched: firebase.firestore.FieldValue.increment(1),
-                    [`networkAdsWatched.${net}`]: firebase.firestore.FieldValue.increment(1),
-                    lastAdDate: todayStr
-                }).catch(()=>{});
+            const claimData = await claimRes.json();
 
-                const totalSeen = (userData.networkAdsWatched.adsgram || 0) + (userData.networkAdsWatched.monetag || 0) + (userData.networkAdsWatched.onclicka || 0);
-                if (userData.referredBy && !userData.referralActivated && !userData.isSameDeviceFraud && totalSeen >= 3) {
-                    await db.collection("users").doc(String(userData.referredBy)).update({
-                        balancePoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
-                        referralEarnedPoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
-                        totalReferrals: firebase.firestore.FieldValue.increment(1)
-                    }).catch(()=>{});
-                    await userRef.update({ referralActivated: true }).catch(()=>{});
-                }
+            if (claimRes.ok && claimData.success) {
+                if (!userData.networkAdsWatched) userData.networkAdsWatched = {};
+                userData.networkAdsWatched[net] = (userData.networkAdsWatched[net] || 0) + 1;
+                userData.dailyAdsWatched = (userData.dailyAdsWatched || 0) + 1;
+                userData.balancePoints = (userData.balancePoints || 0) + (claimData.reward || reward);
+                userData.selfEarnedPoints = (userData.selfEarnedPoints || 0) + (claimData.reward || reward);
+
+                if (window.confetti) window.confetti();
+                showToast(APP_LANG === 'bn' ? `🎉 আপনি ${formatNumber(claimData.reward || reward)} পয়েন্ট পেয়েছেন!` : `🎉 You earned ${formatNumber(claimData.reward || reward)} points!`, "success");
+                updateDedicatedAdScreenUI();
+                updateUserUI();
+            } else {
+                showToast(claimData.error || (APP_LANG === 'bn' ? "পয়েন্ট যোগ হতে ব্যর্থ হয়েছে!" : "Failed to claim points!"), "error");
             }
-
-            if (window.confetti) window.confetti();
-            showToast(APP_LANG === 'bn' ? `🎉 আপনি ${formatNumber(reward)} পয়েন্ট পেয়েছেন!` : `🎉 You earned ${formatNumber(reward)} points!`, "success");
-            updateDedicatedAdScreenUI();
-            updateUserUI();
         } else {
             showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন সম্পূর্ণ না দেখলে পয়েন্ট যোগ হবে না!" : "Watch full ad to earn points!", "error");
         }
@@ -716,12 +709,13 @@ function declineAdultAge() {
     updateTelegramBackButtonState();
 }
 
+// মাস্টার ওয়ার্কার দিয়ে লাইভ টেলিগ্রাম চ্যানেল মেম্বারশিপ যাচাই
 async function checkTelegramMembershipRealtime(userId) {
     if (!userId) return { isMember: false };
     try {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 6000);
-        const res = await fetch(`https://tg-check.rakibkdbb.workers.dev?userId=${userId}`, { signal: controller.signal });
+        const res = await fetch(`${MASTER_API}/api/check-membership?userId=${userId}`, { signal: controller.signal });
         clearTimeout(tid);
         return res.ok ? await res.json() : { isMember: false };
     } catch { return { isMember: false }; }
@@ -770,7 +764,7 @@ async function verifyTelegramChannelJoin() {
 
     if (res.isMember) {
         isTgMemberVerified = true;
-        updateEarnHubLockUI(); // নোটিশ ও লক সরাসরি ইনস্ট্যান্ট হাইড হবে
+        updateEarnHubLockUI();
         $('telegram-mandatory-modal').style.display = 'none';
         updateTelegramBackButtonState();
         showToast(APP_LANG === 'bn' ? "🎉 ভেরিফিকেশন সফল! অ্যাড নেটওয়ার্ক আনলক হয়েছে।" : "🎉 Verification successful! Ad networks unlocked.", "success");
@@ -811,7 +805,6 @@ async function saveUnlockProgress() {
         localStorage.setItem('user_video_ad_progress', JSON.stringify(videoAdProgressMap));
         localStorage.setItem('user_video_unlock_expiry', expJson);
         if (tg?.CloudStorage) tg.CloudStorage.setItem('user_video_unlock_expiry', expJson);
-        if (db && currentUser?.id) await db.collection("users").doc(String(currentUser.id)).set({ unlockedExpiryMap: videoUnlockExpiryMap }, { merge: true }).catch(()=>{});
     } catch(e) {}
 }
 
@@ -1061,13 +1054,6 @@ async function syncUserData() {
         } else {
             userData = snap.data();
             if (userData.unlockedExpiryMap) videoUnlockExpiryMap = { ...videoUnlockExpiryMap, ...userData.unlockedExpiryMap };
-            if (userData.lastAdDate !== todayStr) {
-                userData.dailyAdsWatched = 0; 
-                userData.videoAdsWatched = 0; 
-                userData.networkAdsWatched = { adsgram: 0, monetag: 0, onclicka: 0 };
-                userData.lastAdDate = todayStr;
-                ref.update({ dailyAdsWatched: 0, videoAdsWatched: 0, networkAdsWatched: userData.networkAdsWatched, lastAdDate: todayStr }).catch(()=>{});
-            }
         }
 
         ref.onSnapshot((doc) => {
@@ -1242,14 +1228,6 @@ async function watchVideoUnlockAd() {
             adWatchCounter++;
             videoAdProgressMap[vId] = (videoAdProgressMap[vId] || 0) + 1;
             saveUnlockProgress();
-            try {
-                const userRef = db.collection("users").doc(String(currentUser.id));
-                await userRef.update({
-                    videoAdsWatched: firebase.firestore.FieldValue.increment(1),
-                    totalVideoAdsWatched: firebase.firestore.FieldValue.increment(1),
-                    lastAdDate: getTodayBDDate()
-                });
-            } catch {}
 
             updateUnlockProgressUI();
             if (videoAdProgressMap[vId] >= total) {
@@ -2093,7 +2071,6 @@ async function loadWithdrawalHistory() {
                     <div class="hci-right"><div style="font-size:16px; font-weight:900; color:#00f260; text-shadow:0 0 8px rgba(0,242,96,0.5);">${I18N[APP_LANG].currencySymbol} ${formatNumber(item.amountBDT)}</div><span class="hci-status-badge ${statusClass}">${item.status}</span></div>
                 </div>
                 <div style="border-top:1px dashed rgba(255,255,255,0.08); padding-top:6px; display:flex; justify-content:space-between; font-size:12px; color:#8ba2c4; font-weight:700;">
-                    <span>রেফার: <b style="color:var(--primary);">${formatNumber(item.totalReferralsSnapshot ?? 0)}</b> (আয়: <b style="color:#ffe000;">${formatNumber(item.refEarnedSnapshot ?? 0)}</b> pt)</span>
                     <span>অবশিষ্ট ব্যালেন্স: <b style="color:#00f260;">${item.remainingBalanceSnapshot !== undefined ? formatNumber(item.remainingBalanceSnapshot) : '---'}</b> pt</span>
                 </div>
             </div>`;
@@ -2101,6 +2078,7 @@ async function loadWithdrawalHistory() {
     } catch { list.innerHTML = `<div style="text-align:center; padding:18px; color:#ff0844; font-weight:800;">হিস্টোরি লোড হতে সমস্যা হয়েছে</div>`; }
 }
 
+// মাস্টার ওয়ার্কার দিয়ে সুরক্ষিত উইথড্রয়াল সাবমিট
 async function submitWithdrawalRequest() {
     triggerHaptic('medium');
 
@@ -2122,9 +2100,7 @@ async function submitWithdrawalRequest() {
     btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> সার্ভার যাচাই করছে...`;
 
     try {
-        const WORKER_URL = "https://withdraw-api-e843.rakibkdbb.workers.dev/api/request-withdrawal";
-
-        const response = await fetch(WORKER_URL, {
+        const response = await fetch(`${MASTER_API}/api/request-withdrawal`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -2248,5 +2224,5 @@ function filterVideosUI() {
     renderVideosForGrid('adult', filterSection('adult', isAdultVideo));
 }
 
-// অ্যাপ স্টার্টআপ বুটস্ট্র্যাপ
+// অ্যাপ বুটস্ট্র্যাপ
 document.addEventListener('DOMContentLoaded', initApp);
