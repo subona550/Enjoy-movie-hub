@@ -148,6 +148,10 @@ let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 let activeDedicatedNetwork = 'adsgram';
 let isTgMemberVerified = false;
 
+// শেষ দেখা ভিডিও এবং স্ক্রল পজিশন ধরে রাখার স্টেট
+let lastListScrollY = 0;
+let lastOpenedVideoId = null;
+
 const ITEMS_PER_PAGE = 10;
 let currentPageMap = { adult: 1, series: 1, movies: 1 };
 let userLikedVideos = {};
@@ -619,7 +623,7 @@ function shareVideoItem(event, videoId, encodedTitle) {
     }
 }
 
-// =================== অ্যাড হাব ও ভিউ হ্যান্ডলার (আপডেট) ===================
+// =================== অ্যাড হাব ও ভিউ হ্যান্ডলার ===================
 function updateEarnHubLockUI() {
     const hubView = $('earn-hub-view');
     const lock = $('earn-hub-lock-overlay');
@@ -652,7 +656,7 @@ function openEarnHubView() {
     $('video-unlock-detail-view').style.display = 'none';
     $('payout-view').style.display = 'none';
     $('dedicated-ad-view').style.display = 'none';
-    $('main-header').style.display = 'none'; // ডাবল হেডার বন্ধ করতে
+    $('main-header').style.display = 'none';
     $('earn-hub-view').style.display = 'block';
     updateEarnHubLockUI();
     updateTelegramBackButtonState();
@@ -660,7 +664,7 @@ function openEarnHubView() {
 
 function closeEarnHubView() {
     $('earn-hub-view').style.display = 'none';
-    $('main-header').style.display = 'block'; // মূল হেডার আবার ফেরত আনতে
+    $('main-header').style.display = 'block';
     if ($('tab-' + currentActiveTab)) $('tab-' + currentActiveTab).style.display = 'block';
     updateTelegramBackButtonState();
 }
@@ -804,9 +808,18 @@ function formatEmbedOrStreamUrl(rawUrl) {
     return u;
 }
 
-function isSeriesVideo(v) { return (v.section || '').toLowerCase() === 'series' || (v.type || '').toLowerCase() === 'series'; }
-function isAdultVideo(v) { return (v.section || '').toLowerCase() === 'adult' || (v.type || '').toLowerCase() === 'adult'; }
-function isMovieVideo(v) { return !isSeriesVideo(v) && !isAdultVideo(v); }
+// বাংলা ও ইংরেজি উভয় ভ্যালু নিখুঁতভাবে শনাক্তকরণ
+function isSeriesVideo(v) {
+    const s = ((v.section || v.type || '') + '').toLowerCase().trim();
+    return s === 'series' || s === 'সিরিজ' || s === 'web series' || s === 'ওয়েব সিরিজ';
+}
+function isAdultVideo(v) {
+    const s = ((v.section || v.type || '') + '').toLowerCase().trim();
+    return s === 'adult' || s === 'এন্ডাল' || s === '18+' || s === 'hot';
+}
+function isMovieVideo(v) { 
+    return !isSeriesVideo(v) && !isAdultVideo(v); 
+}
 
 function isVideoCurrentlyUnlocked(videoId) {
     return !!(videoId && videoUnlockExpiryMap[videoId] && Date.now() < videoUnlockExpiryMap[videoId]);
@@ -1010,21 +1023,45 @@ function selectEpisodeFromDrawer(epIndex) {
     openVideoDetailView(s.id, epIndex);
 }
 
-// =================== ফিল্টার ও ক্যাটাগরি হ্যান্ডলার ===================
+// =================== ফিল্টার ও ক্যাটাগরি হ্যান্ডলার (১০০% নির্ভুল ফিল্টারিং) ===================
 function renderAllCategoryChips() {
     ['movies', 'series', 'adult'].forEach(sec => {
         const tabKey = sec === 'movies' ? 'movie' : sec;
         const c = $(`${tabKey}-category-chips`);
         const sectionWrapper = $(`${tabKey}-cat-section`);
-        if (sectionWrapper) sectionWrapper.style.display = 'block';
+
+        // শুধুমাত্র এই সেকশনের ক্যাটাগরিগুলো ফিল্টার করা
+        const sectionCats = adminCreatedCategories.filter(cat => {
+            const catSec = ((cat.section || cat.type || '') + '').toLowerCase().trim();
+            if (catSec) {
+                if (sec === 'movies') return ['movies', 'movie', 'মুভি', 'মুভিজ', 'cinema'].includes(catSec);
+                if (sec === 'series') return ['series', 'সিরিজ', 'web series', 'ওয়েব সিরিজ'].includes(catSec);
+                if (sec === 'adult') return ['adult', 'এন্ডাল', '18+', 'hot'].includes(catSec);
+                return false;
+            }
+            // সেকশন নির্ধারণ না থাকলে ভিডিওর সাথে মিলিয়ে ফিল্টার করা
+            const catName = ((cat.name || cat.title || '') + '').toLowerCase().trim();
+            if (!catName) return false;
+            const vids = allLoadedVideos.filter(sec === 'movies' ? isMovieVideo : (sec === 'series' ? isSeriesVideo : isAdultVideo));
+            return vids.some(v => {
+                const cName = Array.isArray(v.category) ? v.category.join(' ').toLowerCase() : String(v.category || '').toLowerCase();
+                return cName.includes(catName);
+            });
+        });
+
+        // ক্যাটাগরি থাকলে বার দেখাবে, না থাকলে লুকিয়ে রাখবে
+        if (sectionWrapper) {
+            sectionWrapper.style.display = sectionCats.length > 0 ? 'block' : 'none';
+        }
 
         if (c) {
             c.innerHTML = `
                 <div class="cat-filter-pill ${activeSelectedCategory[sec] === 'all' ? 'active' : ''}" onclick="selectCategoryChip('${sec}', 'all', this)">
-                    <i class="fa-solid fa-shapes"></i> <span>সকল</span>
+                    <i class="fa-solid fa-shapes"></i> <span>${APP_LANG === 'bn' ? 'সকল' : 'All'}</span>
                 </div>
             `;
-            adminCreatedCategories.forEach(cat => {
+
+            sectionCats.forEach(cat => {
                 const name = cat.name || cat.title || '';
                 if (!name) return;
                 const isActive = activeSelectedCategory[sec] === name;
@@ -1080,7 +1117,10 @@ function filterVideosUI() {
 
         const currentCat = activeSelectedCategory[sectionName];
         if (currentCat && currentCat !== 'all') {
-            list = list.filter(v => (v.category || '').toLowerCase().includes(currentCat.toLowerCase()));
+            list = list.filter(v => {
+                const c = Array.isArray(v.category) ? v.category.join(' ').toLowerCase() : String(v.category || '').toLowerCase();
+                return c.includes(currentCat.toLowerCase());
+            });
         }
 
         const tag = activeHeroFilterTags[sectionName];
@@ -1131,8 +1171,9 @@ function renderVideosForGrid(type, list) {
 
     renderPaginationUI(type, totalPages, curPage);
 
+    // প্রতিটি কার্ডে ইউনিক ID যুক্ত করা হয়েছে যাতে back করলে নির্বিঘ্নে ফিরে যাওয়া যায়
     grid.innerHTML = visible.map(v => `
-        <div class="series-card-item" onclick="${type === 'series' ? `openSeriesEpisodesDrawer('${v.id}')` : `openVideoDetailView('${v.id}')`}">
+        <div id="vid-card-${v.id}" class="series-card-item" onclick="${type === 'series' ? `openSeriesEpisodesDrawer('${v.id}')` : `openVideoDetailView('${v.id}')`}">
             <div class="series-thumb-container">
                 <img src="${v.thumb}" loading="lazy">
                 <div class="series-thumb-badge-blue">${v.duration || 'HD'}</div>
@@ -1147,9 +1188,13 @@ function renderVideosForGrid(type, list) {
     `).join('');
 }
 
+// ডিটেইল ভিউ ওপেন করার সময় স্ক্রল পজিশন ও আইডি সংরক্ষণ
 function openVideoDetailView(videoId, epIndex = 0) {
     const video = allLoadedVideos.find(v => v.id === videoId);
     if (!video) return;
+
+    lastListScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    lastOpenedVideoId = videoId;
 
     activeDetailVideo = video;
     currentPlayingPartIndex = epIndex;
@@ -1175,15 +1220,28 @@ function openVideoDetailView(videoId, epIndex = 0) {
     $('main-header').style.display = 'none';
     $('video-unlock-detail-view').style.display = 'block';
     updateTelegramBackButtonState();
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo(0, 0);
 }
 
+// ব্যাক করলে আগের স্ক্রল পজিশন এবং এক্স্যাক্ট ভিডিও কার্ডের কাছে ফেরত যাওয়া
 function closeVideoDetailView() {
     if (countdownTimerInterval) clearInterval(countdownTimerInterval);
     $('video-unlock-detail-view').style.display = 'none';
     $('main-header').style.display = 'block';
     if ($('tab-' + currentActiveTab)) $('tab-' + currentActiveTab).style.display = 'block';
     updateTelegramBackButtonState();
+
+    // DOM সম্পূর্ণ রেন্ডার হওয়ার পর কার্ডের মাঝখানে স্ক্রল করে নিয়ে যাবে
+    setTimeout(() => {
+        if (lastOpenedVideoId) {
+            const cardEl = document.getElementById(`vid-card-${lastOpenedVideoId}`);
+            if (cardEl) {
+                cardEl.scrollIntoView({ behavior: 'auto', block: 'center' });
+                return;
+            }
+        }
+        window.scrollTo(0, lastListScrollY);
+    }, 20);
 }
 
 function switchNavTab(tabName, el) {
@@ -1330,6 +1388,7 @@ async function initApp() {
             if ($('series-total-count')) $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
             if ($('adult-total-count')) $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
 
+            renderAllCategoryChips();
             filterVideosUI();
         });
     }
