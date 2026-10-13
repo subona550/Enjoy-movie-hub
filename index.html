@@ -285,7 +285,7 @@
     </div>
 </div>
 
-<!-- ================= 9. VIEW: AD HUB ================= -->
+<!-- ================= 9. VIEW: AD HUB (টেলিগ্রাম ভেরিফিকেশন ও ব্লার সুরক্ষা সহ) ================= -->
 <div id="earn-hub-view" class="content-tab">
     <div class="inpage-header-nav">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -297,38 +297,78 @@
         </div>
     </div>
     
-    <div class="ad-hub-grid">
-        <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('adsgram')">
-            <div class="ad-net-card-left">
-                <div class="ad-net-square-icon sq-icon-adsgram"><i class="fa-solid fa-play"></i></div>
-                <div class="ad-net-meta">
-                    <h4>Adsgram Ads</h4>
-                    <p id="hub-limit-adsgram">দৈনিক ১০টি অ্যাড</p>
-                </div>
+    <!-- ১. টেলিগ্রাম চ্যানেলে বাধ্যতামূলক জয়েন ও ভেরিফিকেশন ব্যানার -->
+    <div id="earn-hub-tg-banner" class="featured-card shimmer-card-effect" style="margin: 14px 12px 10px; border-color: rgba(0, 136, 204, 0.6); background: linear-gradient(145deg, #07172e 0%, #050b18 100%);">
+        <div class="featured-top-row" style="margin-bottom: 8px;">
+            <span class="pill-tag-outline" style="border-color: #0088cc; color: #00c6ff; background: rgba(0, 136, 204, 0.15);">
+                <i class="fa-brands fa-telegram"></i> টেলিগ্রাম ভেরিফিকেশন
+            </span>
+            <span id="hub-verification-status-badge" class="badge-vip" style="background: rgba(255, 8, 68, 0.15); color: #ff0844; border-color: #ff0844;">
+                <i class="fa-solid fa-lock"></i> অপ্রমাণিত
+            </span>
+        </div>
+        <h3 style="font-size: 16.5px; color: #ffffff; font-weight: 900; margin-bottom: 6px;">অ্যাড দেখার পূর্বে চ্যানেল জয়েন আবশ্যক</h3>
+        <p style="font-size: 13px; color: #8ba2c4; line-height: 1.5; margin-bottom: 14px; font-weight: 700;">
+            অ্যাড দেখে পয়েন্ট আয় করতে প্রথমে আমাদের অফিসিয়াল টেলিগ্রাম চ্যানেলে যুক্ত হয়ে অ্যাকাউন্ট ভেরিফাই করুন। চ্যানেল ভেরিফাই না করা পর্যন্ত নিচের অ্যাড নেটওয়ার্কগুলো আনলক হবে না।
+        </p>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-action-cyan" onclick="goToTelegramChannel()" style="flex: 1.1; background: linear-gradient(135deg, #0088cc 0%, #29b6f6 100%); color:#fff; box-shadow: 0 0 14px rgba(0, 136, 204, 0.45); padding: 12px; font-size: 14px; border-radius: 12px; border:none; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+                <i class="fa-brands fa-telegram"></i> চ্যানেলে জয়েন করুন
+            </button>
+            <button class="btn-withdraw-green" id="btn-hub-verify-tg" onclick="verifyTelegramChannelJoin()" style="flex: 1; padding: 12px; font-size: 14px; border-radius: 12px; font-weight:900; justify-content:center;">
+                <i class="fa-solid fa-check-double"></i> ভেরিফাই করুন
+            </button>
+        </div>
+    </div>
+
+    <!-- ২. অ্যাড নেটওয়ার্ক কন্টেইনার (লক/ব্লার র‍্যাপার সহ) -->
+    <div id="earn-hub-networks-container" style="position: relative; margin-top: 6px;">
+        
+        <!-- লকড ওভারলে নোটিশ (চ্যানেলে জয়েন না থাকলে ভিজিবল থাকবে) -->
+        <div id="earn-hub-lock-overlay" style="position: absolute; inset: 0; background: rgba(5, 8, 20, 0.75); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10; border-radius: 20px; margin: 0 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1.5px dashed rgba(255, 255, 255, 0.2);">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255, 8, 68, 0.15); border: 2px solid #ff0844; color: #ff0844; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 10px; box-shadow: 0 0 16px rgba(255, 8, 68, 0.4);">
+                <i class="fa-solid fa-lock"></i>
             </div>
-            <div class="ad-net-badge"><i class="fa-solid fa-gift"></i> <span id="hub-reward-adsgram">২ pt</span></div>
+            <h4 style="font-size: 16px; color: #fff; font-weight: 900; margin-bottom: 4px;">অ্যাড নেটওয়ার্ক লক করা আছে</h4>
+            <p style="font-size: 13px; color: #8ba2c4; font-weight: 700; max-width: 260px;">উপরে থাকা বাটনে ক্লিক করে টেলিগ্রাম চ্যানেলে জয়েন ও ভেরিফাই সম্পন্ন করুন।</p>
         </div>
 
-        <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('monetag')">
-            <div class="ad-net-card-left">
-                <div class="ad-net-square-icon sq-icon-monetag"><i class="fa-solid fa-bolt"></i></div>
-                <div class="ad-net-meta">
-                    <h4>Monetag Ads</h4>
-                    <p id="hub-limit-monetag">দৈনিক ১০টি অ্যাড</p>
+        <!-- অ্যাড নেটওয়ার্ক গ্রিড (ব্লার এফেক্ট যুক্ত) -->
+        <div id="earn-hub-grid-cards" class="ad-hub-grid" style="filter: blur(6px); opacity: 0.4; pointer-events: none; transition: all 0.3s ease;">
+            
+            <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('adsgram')">
+                <div class="ad-net-card-left">
+                    <div class="ad-net-square-icon sq-icon-adsgram"><i class="fa-solid fa-play"></i></div>
+                    <div class="ad-net-meta">
+                        <h4>Adsgram Ads</h4>
+                        <p id="hub-limit-adsgram">দৈনিক ১০টি অ্যাড</p>
+                    </div>
                 </div>
+                <div class="ad-net-badge"><i class="fa-solid fa-gift"></i> <span id="hub-reward-adsgram">২ pt</span></div>
             </div>
-            <div class="ad-net-badge" style="border-color:#ff0844; color:#ff6b8b; background:rgba(255,8,68,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-monetag">২ pt</span></div>
-        </div>
 
-        <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('onclicka')">
-            <div class="ad-net-card-left">
-                <div class="ad-net-square-icon sq-icon-onclicka"><i class="fa-solid fa-coins"></i></div>
-                <div class="ad-net-meta">
-                    <h4>Onclicka Ads</h4>
-                    <p id="hub-limit-onclicka">দৈনিক ১০টি অ্যাড</p>
+            <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('monetag')">
+                <div class="ad-net-card-left">
+                    <div class="ad-net-square-icon sq-icon-monetag"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="ad-net-meta">
+                        <h4>Monetag Ads</h4>
+                        <p id="hub-limit-monetag">দৈনিক ১০টি অ্যাড</p>
+                    </div>
                 </div>
+                <div class="ad-net-badge" style="border-color:#ff0844; color:#ff6b8b; background:rgba(255,8,68,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-monetag">২ pt</span></div>
             </div>
-            <div class="ad-net-badge" style="border-color:#ffe000; color:#ffe000; background:rgba(255,224,0,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-onclicka">২ pt</span></div>
+
+            <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('onclicka')">
+                <div class="ad-net-card-left">
+                    <div class="ad-net-square-icon sq-icon-onclicka"><i class="fa-solid fa-coins"></i></div>
+                    <div class="ad-net-meta">
+                        <h4>Onclicka Ads</h4>
+                        <p id="hub-limit-onclicka">দৈনিক ১০টি অ্যাড</p>
+                    </div>
+                </div>
+                <div class="ad-net-badge" style="border-color:#ffe000; color:#ffe000; background:rgba(255,224,0,0.15);"><i class="fa-solid fa-gift"></i> <span id="hub-reward-onclicka">২ pt</span></div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -440,7 +480,7 @@
     </div>
 </div>
 
-<!-- ================= 12. VIEW: VIDEO UNLOCK & DETAILS (REVOLUTIONIZED ULTRA-HD) ================= -->
+<!-- ================= 12. VIEW: VIDEO UNLOCK & DETAILS ================= -->
 <div id="video-unlock-detail-view">
     
     <!-- শীর্ষ প্রিমিয়াম নোটিশ কার্ড -->
@@ -482,7 +522,7 @@
     <!-- ভিডিও টাইটেল -->
     <h2 class="unlock-movie-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</h2>
 
-    <!-- আনলক মেয়াদের লাইভ টাইমার (ভিডিও আনলক থাকলে প্রদর্শন করবে) -->
+    <!-- আনলক মেয়াদের লাইভ টাইমার -->
     <div class="unlocked-timer-badge" id="unlock-status-timer-card" style="display:none;">
         <div class="ut-title" id="ut-title-txt"><i class="fa-solid fa-clock"></i> আনলক মেয়াদের বাকি:</div>
         <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
@@ -495,10 +535,8 @@
             <span>অ্যাড দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে আনলক করুন:</span>
         </div>
 
-        <!-- ৩টি স্ট্যাটাস কার্ড: আনলক কস্ট, ইউজারের পয়েন্ট, অ্যাড প্রগ্রেস -->
+        <!-- ৩টি স্ট্যাটাস কার্ড -->
         <div class="usc-stats-grid">
-            
-            <!-- কার্ড ১: আনলক পয়েন্ট কস্ট -->
             <div class="usc-stat-card card-point-unlock">
                 <div class="usc-card-top-indicator"><i class="fa-solid fa-bolt"></i> ইনস্ট্যান্ট</div>
                 <div class="usc-icon-circle ico-point"><i class="fa-solid fa-key"></i></div>
@@ -507,7 +545,6 @@
                 <div class="usc-stat-sub-badge badge-gold"><i class="fa-solid fa-clock"></i> ২৪ ঘণ্টা মেয়াদ</div>
             </div>
 
-            <!-- কার্ড ২: ব্যবহারকারীর লাইভ ব্যালেন্স -->
             <div class="usc-stat-card card-user-balance">
                 <div class="usc-card-top-indicator"><i class="fa-solid fa-wallet"></i> ওয়ালেট</div>
                 <div class="usc-icon-circle ico-balance"><i class="fa-solid fa-coins"></i></div>
@@ -516,7 +553,6 @@
                 <div class="usc-stat-sub-badge"><i class="fa-solid fa-circle-check"></i> জমা কয়েন</div>
             </div>
 
-            <!-- কার্ড ৩: অ্যাড কাউন্টার -->
             <div class="usc-stat-card card-ad-progress">
                 <div class="usc-card-top-indicator"><i class="fa-solid fa-film"></i> ফ্রি আনলক</div>
                 <div class="usc-icon-circle ico-ad"><i class="fa-solid fa-hourglass-half"></i></div>
@@ -524,7 +560,6 @@
                 <div class="usc-stat-val"><span id="ui-remaining-ads-count">৩</span><small>/<span id="ui-req-ads-count">৩</span></small></div>
                 <div class="usc-stat-sub-badge badge-ads"><i class="fa-solid fa-clock"></i> ২ ঘণ্টা মেয়াদ</div>
             </div>
-
         </div>
 
         <!-- প্রগ্রেস ট্র্যাক বার -->
@@ -537,7 +572,7 @@
             <div class="usc-prog-sub">সম্পূর্ণ বিজ্ঞাপন দেখলে ২ ঘণ্টার জন্য ভিডিও ফ্রিতে আনলক হবে।</div>
         </div>
 
-        <!-- বাটন ১: বিজ্ঞাপন দেখে আনলক করুন -->
+        <!-- আনলক বাটন গ্রুপ -->
         <div class="unlock-action-group">
             <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
                 <div class="btn-inner-content">
@@ -547,7 +582,6 @@
                 <span class="btn-duration-tag" id="ui-ad-duration-badge"><i class="fa-regular fa-clock"></i> ২ ঘণ্টার জন্য ফ্রি</span>
             </button>
 
-            <!-- বাটন ২: পয়েন্ট দিয়ে সরাসরি আনলক বাটন (বিজ্ঞাপন বাটনের নিচে) -->
             <button class="btn-unlock-gold-direct" id="btn-unlock-point-step" onclick="unlockVideoWithPoints()">
                 <div class="btn-inner-content">
                     <i class="fa-solid fa-coins"></i> 

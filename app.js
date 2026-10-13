@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ENJOY MOVIES ULTRA HD - COMPLETE 100/100 ENGINE CONTROLLER (app.js)
+   ENJOY MOVIES ULTRA HD - COMPLETE 100/100 MASTER CONTROLLER (app.js)
    ========================================================================== */
 
 const $ = id => document.getElementById(id);
@@ -50,7 +50,8 @@ const I18N = {
         rechargeSummaryPrefix: "রিচার্জ:", bkashNagadSummaryPrefix: "বিকাশ/নগদ:", unlockProgressTxt: "আনলক অগ্রগতি:", unlockCompletedTxt: "সম্পন্ন",
         minWithdrawPrefix: "নূন্যতম উত্তোলন:", inputPhonePlaceholder: "মোবাইল নম্বর দিন", inputAmountPlaceholder: "পয়েন্ট পরিমাণ দিন", adminNoticeTitle: "অ্যাডমিন নোটিশ",
         defaultWithdrawNotice: "উত্তোলন রিকোয়েস্ট দেওয়ার সর্বোচ্চ ২৪ ঘণ্টার মধ্যে পেমেন্ট কমপ্লিট করা হবে। সঠিক নম্বর প্রদান করুন।",
-        allCat: "সকল", catFilterLabel: "ক্যাটাগরি ফিল্টার"
+        allCat: "সকল", catFilterLabel: "ক্যাটাগরি ফিল্টার",
+        hubUnverifiedBadge: "অপ্রমাণিত", hubVerifiedBadge: "ভেরিফাইড", hubVerifyBtnTxt: "ভেরিফাই করুন"
     },
     en: {
         appName: "Enjoy Movies", appHeaderBadge: "Movies", menuTitle: "Menu", drawerMovie: "Movies", drawerSeries: "Series", drawerAdult: "Endal",
@@ -83,7 +84,8 @@ const I18N = {
         rechargeSummaryPrefix: "Recharge:", bkashNagadSummaryPrefix: "bKash/Nagad:", unlockProgressTxt: "Unlock Progress:", unlockCompletedTxt: "Completed",
         minWithdrawPrefix: "Min Withdrawal:", inputPhonePlaceholder: "Enter mobile number", inputAmountPlaceholder: "Enter points amount", adminNoticeTitle: "Admin Notice",
         defaultWithdrawNotice: "Payments are processed within 24 hours of request. Ensure your number is correct.",
-        allCat: "All", catFilterLabel: "Category Filter"
+        allCat: "All", catFilterLabel: "Category Filter",
+        hubUnverifiedBadge: "Unverified", hubVerifiedBadge: "Verified", hubVerifyBtnTxt: "Verify Now"
     }
 };
 
@@ -151,6 +153,7 @@ let activeHeroFilterTags = { adult: 'adult_new', series: 'new_series', movies: '
 let adminCreatedCategories = [];
 let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 let activeDedicatedNetwork = 'adsgram';
+let isTgMemberVerified = false; // টেলিগ্রাম মেম্বারশিপ স্টেট
 window.onclickaShowMethod = null;
 
 const ITEMS_PER_PAGE = 10;
@@ -254,6 +257,7 @@ function changeAppLang(lang) {
     applyAdminConfigToUI();
     renderAllCategoryChips();
     filterVideosUI();
+    updateEarnHubLockUI();
     showToast(lang === 'bn' ? "ভাষা বাংলায় রূপান্তর করা হয়েছে" : "Language switched to English", "success");
 }
 
@@ -425,8 +429,43 @@ function updateUserUI() {
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(pts);
 }
 
-/* =================== AD HUB NAVIGATION =================== */
-function openEarnHubView() {
+/* =================== AD HUB & TELEGRAM LOCK LOGIC =================== */
+function updateEarnHubLockUI() {
+    const t = I18N[APP_LANG];
+    const hubView = $('earn-hub-view');
+    const badge = $('hub-verification-status-badge');
+    const verifyBtn = $('btn-hub-verify-tg');
+
+    if (isTgMemberVerified) {
+        if (hubView) hubView.classList.add('earn-hub-unlocked');
+        if (badge) {
+            badge.style.background = 'rgba(0, 242, 96, 0.15)';
+            badge.style.color = '#00f260';
+            badge.style.borderColor = '#00f260';
+            badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${t.hubVerifiedBadge}`;
+        }
+        if (verifyBtn) {
+            verifyBtn.innerHTML = `<i class="fa-solid fa-check"></i> ${t.hubVerifiedBadge}`;
+            verifyBtn.style.opacity = '0.7';
+            verifyBtn.disabled = true;
+        }
+    } else {
+        if (hubView) hubView.classList.remove('earn-hub-unlocked');
+        if (badge) {
+            badge.style.background = 'rgba(255, 8, 68, 0.15)';
+            badge.style.color = '#ff0844';
+            badge.style.borderColor = '#ff0844';
+            badge.innerHTML = `<i class="fa-solid fa-lock"></i> ${t.hubUnverifiedBadge}`;
+        }
+        if (verifyBtn) {
+            verifyBtn.innerHTML = `<i class="fa-solid fa-check-double"></i> ${t.hubVerifyBtnTxt}`;
+            verifyBtn.style.opacity = '1';
+            verifyBtn.disabled = false;
+        }
+    }
+}
+
+async function openEarnHubView() {
     triggerHaptic('light');
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
     $('video-unlock-detail-view').style.display = 'none';
@@ -438,6 +477,15 @@ function openEarnHubView() {
     applyAdminConfigToUI();
     updateTelegramBackButtonState();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // স্বয়ংক্রিয় ব্যাকগ্রাউন্ড ভেরিফিকেশন চেক
+    if (currentUser?.id && !isTgMemberVerified) {
+        const check = await checkTelegramMembershipRealtime(currentUser.id);
+        if (check.isMember) {
+            isTgMemberVerified = true;
+            updateEarnHubLockUI();
+        }
+    }
 }
 
 function closeEarnHubView() {
@@ -448,8 +496,16 @@ function closeEarnHubView() {
     updateTelegramBackButtonState();
 }
 
-function openDedicatedAdScreen(network) {
+async function openDedicatedAdScreen(network) {
     triggerHaptic('light');
+
+    // ব্লার প্রটেকশন সিকিউরিটি চেক
+    if (!isTgMemberVerified) {
+        triggerHaptic('error');
+        showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন দেখার আগে টেলিগ্রাম চ্যানেলে জয়েন করে ভেরিফাই করুন!" : "Join channel and verify before viewing ads!", "error");
+        return;
+    }
+
     activeDedicatedNetwork = network;
     $('earn-hub-view').style.display = 'none';
     $('dedicated-ad-view').style.display = 'block';
@@ -537,6 +593,13 @@ function showOnclickaAd() {
 async function watchSpecificNetworkAd() {
     const btn = $('btn-watch-dedicated-ad');
     if (!btn || btn.classList.contains('btn-disabled-state') || btn.disabled) return;
+
+    if (!isTgMemberVerified) {
+        triggerHaptic('error');
+        showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন দেখার আগে টেলিগ্রাম চ্যানেলে জয়েন করুন!" : "Join telegram channel first!", "error");
+        return;
+    }
+
     triggerHaptic('medium');
 
     const net = activeDedicatedNetwork;
@@ -640,7 +703,11 @@ async function checkTelegramMembershipRealtime(userId) {
 async function verifyUserMembershipNow(customMsg = "") {
     if (!currentUser?.id) return false;
     const check = await checkTelegramMembershipRealtime(currentUser.id);
-    if (check.isMember) return true;
+    if (check.isMember) {
+        isTgMemberVerified = true;
+        updateEarnHubLockUI();
+        return true;
+    }
     openTelegramMandatoryModal(customMsg || I18N[APP_LANG].tgModalDesc);
     return false;
 }
@@ -656,25 +723,38 @@ function goToTelegramChannel() { triggerHaptic('medium'); openTelegramDirect(APP
 
 async function verifyTelegramChannelJoin() {
     triggerHaptic('medium');
-    const btn = $('btn-verify-tg-status');
-    const oldHtml = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${APP_LANG === 'bn' ? 'যাচাই হচ্ছে...' : 'Verifying...'}`;
+    const modalBtn = $('btn-verify-tg-status');
+    const hubBtn = $('btn-hub-verify-tg');
 
-    const res = await checkTelegramMembershipRealtime(currentUser.id);
-    btn.disabled = false;
-    btn.innerHTML = oldHtml;
+    const setBtnsLoading = (loading) => {
+        if (modalBtn) {
+            modalBtn.disabled = loading;
+            modalBtn.innerHTML = loading ? `<i class="fa-solid fa-spinner fa-spin"></i> ${APP_LANG === 'bn' ? 'যাচাই হচ্ছে...' : 'Verifying...'}` : `<i class="fa-solid fa-check-double"></i> ${I18N[APP_LANG].btnTgVerify}`;
+        }
+        if (hubBtn) {
+            hubBtn.disabled = loading;
+            hubBtn.innerHTML = loading ? `<i class="fa-solid fa-spinner fa-spin"></i>` : `<i class="fa-solid fa-check-double"></i> ${I18N[APP_LANG].hubVerifyBtnTxt}`;
+        }
+    };
+
+    setBtnsLoading(true);
+    const res = await checkTelegramMembershipRealtime(currentUser?.id);
+    setBtnsLoading(false);
 
     if (res.isMember) {
+        isTgMemberVerified = true;
+        updateEarnHubLockUI();
         $('telegram-mandatory-modal').style.display = 'none';
         updateTelegramBackButtonState();
-        showToast(APP_LANG === 'bn' ? "অভিনন্দন! ভেরিফিকেশন সফল হয়েছে।" : "Congratulations! Verification successful.", "success");
+        showToast(APP_LANG === 'bn' ? "🎉 ভেরিফিকেশন সফল! অ্যাড নেটওয়ার্ক আনলক হয়েছে।" : "🎉 Verification successful! Ad networks unlocked.", "success");
         if (typeof pendingActionAfterJoin === 'function') {
             const act = pendingActionAfterJoin;
             pendingActionAfterJoin = null;
             act();
         }
     } else {
+        isTgMemberVerified = false;
+        updateEarnHubLockUI();
         showToast(APP_LANG === 'bn' ? "আপনি এখনো চ্যানেলে যুক্ত হননি! আগে জয়েন করুন।" : "You have not joined the channel yet! Please join first.", "error");
     }
 }
@@ -683,7 +763,6 @@ function loadSavedProgress() {
     try { videoAdProgressMap = JSON.parse(localStorage.getItem('user_video_ad_progress') || '{}'); } catch(e) {}
     try { videoUnlockExpiryMap = JSON.parse(localStorage.getItem('user_video_unlock_expiry') || '{}'); } catch(e) {}
     
-    // মেয়াদোত্তীর্ণ কী-গুলো ক্লিনআপ
     const now = Date.now();
     let hasChanged = false;
     Object.keys(videoUnlockExpiryMap).forEach(vId => {
@@ -734,7 +813,6 @@ function listenToAdminConfig() {
         }
     }, () => {});
 
-    // শুধুমাত্র অ্যাডমিনের তৈরি ক্যাটাগরি কালেকশন শোনা হবে
     db.collection("categories").onSnapshot((snapshot) => {
         if (!snapshot.empty) {
             adminCreatedCategories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -806,6 +884,7 @@ async function initApp() {
 
     loadSavedProgress();
     applyStaticTranslations();
+    updateEarnHubLockUI();
     listenToAdminConfig();
     loadSettingsAndVideos();
     await syncUserData();
@@ -997,7 +1076,6 @@ function startButtonCooldown(btnId, defaultText, seconds = null) {
             btn.disabled = false;
             btn.classList.remove('btn-disabled-state');
             
-            // স্পেশাল সিনক্রোনাইজেশন: ভিডিও আনলক বাটনের ক্ষেত্রে সঠিক স্টেট রিস্টোর করা
             if (btnId === 'btn-unlock-ad-step') {
                 updateUnlockProgressUI();
             } else {
@@ -1008,7 +1086,7 @@ function startButtonCooldown(btnId, defaultText, seconds = null) {
     }, 1000);
 }
 
-// ================== আনলক প্রগ্রেস, মেয়াদ ও টাইমার কন্ট্রোল ==================
+// ================== আনলক প্রগ্রেস ও মেয়াদের টাইমার ==================
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
@@ -1026,7 +1104,6 @@ function updateUnlockProgressUI() {
     const adHours = Number(APP_CONFIG.adUnlockDurationHours) || 2;
     const pointHours = Number(APP_CONFIG.pointsUnlockDurationHours) || 24;
 
-    // মেয়াদের ব্যাজ আপডেট
     if ($('ui-ad-duration-badge')) {
         $('ui-ad-duration-badge').innerHTML = `<i class="fa-regular fa-clock"></i> ${formatNumber(adHours)} ${APP_LANG === 'bn' ? 'ঘণ্টার জন্য ফ্রি' : 'Hours Free'}`;
     }
@@ -1034,13 +1111,8 @@ function updateUnlockProgressUI() {
         $('ui-point-duration-badge').innerHTML = `<i class="fa-solid fa-bolt"></i> ${formatNumber(pointHours)} ${APP_LANG === 'bn' ? 'ঘণ্টার ফুল এক্সেস' : 'Hours Access'}`;
     }
 
-    // কার্ড ১: আনলক খরচ
     if ($('ui-point-cost-preview')) $('ui-point-cost-preview').innerHTML = `${formatNumber(unlockCost)} <small>pt</small>`;
-    
-    // কার্ড ২: ব্যালেন্স
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(userPts);
-
-    // কার্ড ৩: বাকি অ্যাড
     if ($('ui-req-ads-count')) $('ui-req-ads-count').innerText = formatNumber(total);
     if ($('ui-remaining-ads-count')) $('ui-remaining-ads-count').innerText = formatNumber(isUnlocked ? 0 : remaining);
 
