@@ -70,17 +70,17 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     font-weight: 900; 
 }
 
-/* =================== ১. অ্যাপ প্রি-লোডার =================== */
+/* =================== ১. আল্ট্রা ১০০/১০০ মাস্টার প্রি-লোডার =================== */
 #app-preloader {
     position: fixed; 
     inset: 0;
-    background: #05070f radial-gradient(circle at center, #0e1b3d 0%, #05070f 85%);
+    background: #030611 radial-gradient(circle at center, #0a1738 0%, #02050e 85%);
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
     align-items: center; 
     z-index: 999999999; 
-    transition: opacity 0.45s cubic-bezier(0.2, 0.9, 0.3, 1), visibility 0.45s ease;
+    transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.3, 1), visibility 0.5s ease;
 }
 
 #app-preloader.hide-loader { 
@@ -91,10 +91,11 @@ b, strong, h1, h2, h3, h4, h5, h6 {
 
 .preloader-bg-glow {
     position: absolute; 
-    width: 320px; 
-    height: 320px;
-    background: radial-gradient(circle, rgba(0, 229, 255, 0.22) 0%, transparent 70%); 
+    width: 360px; 
+    height: 360px;
+    background: radial-gradient(circle, rgba(0, 229, 255, 0.28) 0%, rgba(123, 31, 162, 0.15) 45%, transparent 70%); 
     pointer-events: none;
+    animation: pulseAmbient 4s ease-in-out infinite alternate;
 }
 
 .preloader-content { 
@@ -105,10 +106,11 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
+/* অরবিটাল ট্রিপল রিং লোডার ইঞ্জিন */
 .ring-wrapper { 
     position: relative; 
-    width: 130px; 
-    height: 130px; 
+    width: 145px; 
+    height: 145px; 
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -116,61 +118,174 @@ b, strong, h1, h2, h3, h4, h5, h6 {
 
 .outer-ring {
     position: absolute; 
-    width: 125px; 
-    height: 125px; 
+    width: 140px; 
+    height: 140px; 
     border-radius: 50%; 
-    border: 3.5px dotted #00d2ff;
-    animation: spinClockwise 7s linear infinite; 
-    box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+    border: 3.5px dashed rgba(0, 229, 255, 0.75);
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    animation: spinClockwise 5.5s linear infinite; 
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5), inset 0 0 15px rgba(0, 229, 255, 0.25);
+}
+
+.middle-ring {
+    position: absolute; 
+    width: 110px; 
+    height: 110px; 
+    border-radius: 50%; 
+    border: 3px dotted #ff0844;
+    border-left-color: transparent;
+    border-right-color: #ffe000;
+    animation: spinCounter 4s linear infinite; 
+    box-shadow: 0 0 20px rgba(255, 8, 68, 0.45);
 }
 
 .inner-ring {
     position: absolute; 
-    width: 98px; 
-    height: 98px; 
+    width: 86px; 
+    height: 86px; 
     border-radius: 50%; 
-    border: 3px dotted #ff8c37;
-    animation: spinCounter 5s linear infinite; 
-    box-shadow: 0 0 16px rgba(255, 140, 55, 0.5);
+    border: 2.5px solid transparent;
+    border-top: 2.5px solid #00f260;
+    border-bottom: 2.5px solid #00e5ff;
+    animation: spinClockwise 2.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
 }
 
+/* অরবিটাল পার্টিকেল ডট */
+.orbital-dot {
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    animation: spinClockwise 3s linear infinite;
+}
+
+.orbital-dot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: #00e5ff;
+    border-radius: 50%;
+    box-shadow: 0 0 14px #00e5ff, 0 0 25px #00e5ff;
+}
+
+/* সেন্টার প্লে কোর */
 .center-circle {
     position: relative; 
-    width: 72px; 
-    height: 72px; 
+    width: 62px; 
+    height: 62px; 
     border-radius: 50%;
-    background: linear-gradient(135deg, #7928ca 0%, #3b82f6 50%, #00d2ff 100%);
+    background: linear-gradient(135deg, #091c42 0%, #17326e 50%, #00e5ff 100%);
     display: flex; 
     justify-content: center; 
     align-items: center;
-    box-shadow: 0 0 26px rgba(59, 130, 246, 0.75); 
-    animation: pulsePreloader 1.8s ease-in-out infinite alternate;
+    box-shadow: 0 0 28px rgba(0, 229, 255, 0.8), inset 0 0 14px rgba(255, 255, 255, 0.4); 
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    animation: pulseCore 1.8s ease-in-out infinite alternate;
 }
 
-.letter { 
-    color: #ffffff; 
-    font-size: 36px; 
-    font-weight: 900; 
-    font-family: 'Plus Jakarta Sans', sans-serif; 
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
+.center-play-icon {
+    font-size: 24px;
+    color: #ffffff;
+    margin-left: 4px;
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.9));
+}
+
+/* বটের নামের ফ্রস্টেড গ্লাস কার্ড ও ব্লার স্টাইলিশ লুক */
+.preloader-bot-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(9, 20, 48, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid rgba(0, 229, 255, 0.35);
+    border-radius: 30px;
+    padding: 8px 18px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65), 0 0 22px rgba(0, 229, 255, 0.22), inset 0 0 12px rgba(0, 229, 255, 0.12);
+    animation: floatBotBadge 3s ease-in-out infinite alternate;
+}
+
+.bot-badge-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #00f260;
+    box-shadow: 0 0 10px #00f260, 0 0 18px #00f260;
+    animation: blinkDot 1.4s infinite;
 }
 
 .bot-title {
-    color: #e2e8f0; 
-    font-size: 19px; 
+    color: #ffffff; 
+    font-size: 18px; 
     font-weight: 900; 
-    letter-spacing: 2px; 
+    letter-spacing: 2.2px; 
     text-transform: uppercase;
     font-family: 'Plus Jakarta Sans', sans-serif; 
-    text-shadow: 0 0 14px rgba(0, 210, 255, 0.8);
+    text-shadow: 0 0 14px rgba(0, 229, 255, 0.85), 0 2px 4px rgba(0,0,0,0.8);
 }
 
+.bot-version-tag {
+    font-size: 10px;
+    font-weight: 900;
+    color: #ffe000;
+    background: rgba(255, 224, 0, 0.16);
+    border: 1px solid rgba(255, 224, 0, 0.5);
+    padding: 2px 7px;
+    border-radius: 8px;
+    letter-spacing: 0.8px;
+}
+
+/* প্রফেশনাল মাইক্রো লোডার বার */
+.preloader-status-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    width: 170px;
+}
+
+.preloader-line-track {
+    width: 100%;
+    height: 3.5px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.preloader-line-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 45%;
+    background: var(--grad-blue);
+    border-radius: 6px;
+    box-shadow: 0 0 10px var(--primary);
+    animation: indeterminateProgress 1.6s ease-in-out infinite;
+}
+
+.preloader-hint-txt {
+    font-size: 11.5px;
+    color: #7b94b8;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* প্রি-লোডার কি-ফ্রেমস */
 @keyframes spinClockwise { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes spinCounter { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
-@keyframes pulsePreloader { 
-    0% { transform: scale(0.95); box-shadow: 0 0 18px rgba(59, 130, 246, 0.4); } 
-    100% { transform: scale(1.06); box-shadow: 0 0 32px rgba(0, 210, 255, 0.95); } 
-}
+@keyframes pulseAmbient { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.15); opacity: 1; } }
+@keyframes pulseCore { 0% { transform: scale(0.94); box-shadow: 0 0 18px rgba(0, 229, 255, 0.5); } 100% { transform: scale(1.05); box-shadow: 0 0 32px rgba(0, 229, 255, 1); } }
+@keyframes floatBotBadge { 0% { transform: translateY(0px); } 100% { transform: translateY(-4px); } }
+@keyframes blinkDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes indeterminateProgress { 0% { left: -45%; width: 35%; } 50% { width: 60%; } 100% { left: 105%; width: 35%; } }
 
 /* =================== ২. ট্রানজিশন ও শিমার এফেক্ট =================== */
 @keyframes subtleFadeUp { 
@@ -210,7 +325,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
-/* হাইলাইট করা ভিডিও পালস অ্যানিমেশন */
 .highlight-glow-pulse {
     border-color: #00e5ff !important;
     box-shadow: 0 0 35px #00e5ff, inset 0 0 15px #00e5ff !important;
@@ -1151,7 +1265,7 @@ header#main-header {
     font-family: 'Plus Jakarta Sans', monospace; 
 }
 
-/* =================== ১০. আনলক কন্ট্রোল হাব (৩টি কার্ড) =================== */
+/* =================== ১০. আনলক কন্ট্রোল হাব =================== */
 .unlock-system-container {
     background: linear-gradient(180deg, #09132e 0%, #060c1d 100%);
     border: 1.8px solid rgba(0, 229, 255, 0.45);
@@ -1710,7 +1824,7 @@ header#main-header {
     gap: 7px;
 }
 
-/* =================== ১২. অ্যাড হাব (টেলিগ্রাম জয়েন ও ব্লার প্রটেকশন) =================== */
+/* =================== ১২. অ্যাড হাব (ভেরিফাই হলে নোটিশ ও লক HIDE হবে) =================== */
 #earn-hub-view, #dedicated-ad-view, #payout-view { 
     display: none; 
     animation: subtleFadeUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
@@ -1730,16 +1844,16 @@ header#main-header {
     z-index: 1000;
 }
 
-/* টেলিগ্রাম ভেরিফিকেশন ব্যানার */
-#earn-hub-tg-banner {
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* ভেরিফাই সম্পন্ন হলে সম্পূর্ণ নোটিশ ও ব্যানার ১০০% হাইড হবে */
+.earn-hub-unlocked #earn-hub-tg-banner {
+    display: none !important;
 }
 
-/* আনলকড স্টেট হলে ওভারলে লুকিয়ে যাবে এবং ব্লার চলে যাবে */
 .earn-hub-unlocked #earn-hub-lock-overlay {
     display: none !important;
 }
 
+/* ভেরিফাই হলে ব্লার দূর হবে এবং কার্ডগুলো অ্যাক্টিভ হবে */
 .earn-hub-unlocked #earn-hub-grid-cards {
     filter: none !important;
     opacity: 1 !important;
@@ -2152,7 +2266,6 @@ header#main-header {
 
 .btn-unlock-blue:active { transform: scale(0.97); }
 
-/* সিরিজ এপিসোড ড্রয়ার */
 .series-drawer-modal {
     display: none; 
     position: fixed; 

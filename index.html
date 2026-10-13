@@ -26,16 +26,35 @@
 </head>
 <body>
 
-<!-- ================= 1. PRELOADER SCREEN ================= -->
+<!-- ================= 1. ULTRA 100/100 PREMIUM PRELOADER SCREEN ================= -->
 <div id="app-preloader">
     <div class="preloader-bg-glow"></div>
     <div class="preloader-content">
+        <!-- সাইবার পাঙ্ক অরবিটাল মাল্টি-রিং লোডার -->
         <div class="ring-wrapper">
             <div class="outer-ring"></div>
+            <div class="middle-ring"></div>
             <div class="inner-ring"></div>
-            <div class="center-circle"><span class="letter">R</span></div>
+            <div class="orbital-dot"></div>
+            <div class="center-circle">
+                <i class="fa-solid fa-play center-play-icon"></i>
+            </div>
         </div>
-        <div class="bot-title">Ret2_bot</div>
+
+        <!-- প্রিমিয়াম ফ্রস্টেড গ্লাস ও ব্লার স্টাইলিশ বটের নাম -->
+        <div class="preloader-bot-card">
+            <span class="bot-badge-dot"></span>
+            <div class="bot-title" id="preloader-bot-name">Ret2_bot</div>
+            <span class="bot-version-tag">PRO V2</span>
+        </div>
+
+        <!-- প্রফেশনাল মাইক্রো লোডিং বার ও স্ট্যাটাস -->
+        <div class="preloader-status-wrap">
+            <div class="preloader-line-track">
+                <div class="preloader-line-fill"></div>
+            </div>
+            <small class="preloader-hint-txt">সিস্টেম সংযোগ হচ্ছে...</small>
+        </div>
     </div>
 </div>
 
@@ -126,7 +145,7 @@
         <button class="btn-unlock-blue" onclick="openVideoRulesModal()"><i class="fa-solid fa-circle-info"></i> <span id="btn-video-rules-txt">ভিডিও দেখার নিয়ম</span></button>
     </div>
 
-    <!-- অ্যাডমিন ক্যাটাগরি ফিল্টার -->
+    <!-- ক্যাটাগরি ফিল্টার -->
     <div class="category-filter-section" id="movie-cat-section" style="display:none;">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -162,7 +181,7 @@
         <p id="series-feature-desc">দেশি ও বিদেশি সকল জনপ্রিয় ওয়েব সিরিজের অল এপিসোড সরাসরি আনলক করুন।</p>
     </div>
 
-    <!-- অ্যাডমিন ক্যাটাগরি ফিল্টার -->
+    <!-- ক্যাটাগরি ফিল্টার -->
     <div class="category-filter-section" id="series-cat-section" style="display:none;">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -198,7 +217,7 @@
         <p id="adult-feature-desc" style="margin-bottom:0;">আপনার পছন্দের ভিডিও নির্বাচন করে ফ্রিতে অ্যাড দেখে অথবা পয়েন্ট দিয়ে আনলক করে উপভোগ করুন।</p>
     </div>
 
-    <!-- অ্যাডমিন ক্যাটাগরি ফিল্টার -->
+    <!-- ক্যাটাগরি ফিল্টার -->
     <div class="category-filter-section" id="adult-cat-section" style="display:none;">
         <div class="category-filter-header">
             <span class="category-filter-label"><i class="fa-solid fa-tags"></i> <span class="lbl-cat-select">ক্যাটাগরি ফিল্টার</span></span>
@@ -285,7 +304,7 @@
     </div>
 </div>
 
-<!-- ================= 9. VIEW: AD HUB (টেলিগ্রাম ভেরিফিকেশন ও ব্লার সুরক্ষা সহ) ================= -->
+<!-- ================= 9. VIEW: AD HUB (অ্যাকাউন্ট ভেরিফাই হলে নোটিশ ও লক পুরোপুরি Hide হবে) ================= -->
 <div id="earn-hub-view" class="content-tab">
     <div class="inpage-header-nav">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -297,7 +316,7 @@
         </div>
     </div>
     
-    <!-- ১. টেলিগ্রাম চ্যানেলে বাধ্যতামূলক জয়েন ও ভেরিফিকেশন ব্যানার -->
+    <!-- ভেরিফিকেশন ব্যানার: অ্যাকাউন্ট ভেরিফাই হলে এটি সাথে সাথে সম্পূর্ণ Hide হয়ে যাবে -->
     <div id="earn-hub-tg-banner" class="featured-card shimmer-card-effect" style="margin: 14px 12px 10px; border-color: rgba(0, 136, 204, 0.6); background: linear-gradient(145deg, #07172e 0%, #050b18 100%);">
         <div class="featured-top-row" style="margin-bottom: 8px;">
             <span class="pill-tag-outline" style="border-color: #0088cc; color: #00c6ff; background: rgba(0, 136, 204, 0.15);">
@@ -321,11 +340,11 @@
         </div>
     </div>
 
-    <!-- ২. অ্যাড নেটওয়ার্ক কন্টেইনার (লক/ব্লার র‍্যাপার সহ) -->
+    <!-- অ্যাড নেটওয়ার্ক কন্টেইনার (লক/ব্লার র‍্যাপার: ভেরিফাই হলে লক হাইড ও ব্লার দূর হবে) -->
     <div id="earn-hub-networks-container" style="position: relative; margin-top: 6px;">
         
-        <!-- লকড ওভারলে নোটিশ (চ্যানেলে জয়েন না থাকলে ভিজিবল থাকবে) -->
-        <div id="earn-hub-lock-overlay" style="position: absolute; inset: 0; background: rgba(5, 8, 20, 0.75); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10; border-radius: 20px; margin: 0 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1.5px dashed rgba(255, 255, 255, 0.2);">
+        <!-- লকড ওভারলে নোটিশ (ভেরিফাই হলে হাইড হয়ে যাবে) -->
+        <div id="earn-hub-lock-overlay" style="position: absolute; inset: 0; background: rgba(5, 8, 20, 0.78); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10; border-radius: 20px; margin: 0 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1.5px dashed rgba(255, 255, 255, 0.2);">
             <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255, 8, 68, 0.15); border: 2px solid #ff0844; color: #ff0844; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 10px; box-shadow: 0 0 16px rgba(255, 8, 68, 0.4);">
                 <i class="fa-solid fa-lock"></i>
             </div>
@@ -333,8 +352,8 @@
             <p style="font-size: 13px; color: #8ba2c4; font-weight: 700; max-width: 260px;">উপরে থাকা বাটনে ক্লিক করে টেলিগ্রাম চ্যানেলে জয়েন ও ভেরিফাই সম্পন্ন করুন।</p>
         </div>
 
-        <!-- অ্যাড নেটওয়ার্ক গ্রিড (ব্লার এফেক্ট যুক্ত) -->
-        <div id="earn-hub-grid-cards" class="ad-hub-grid" style="filter: blur(6px); opacity: 0.4; pointer-events: none; transition: all 0.3s ease;">
+        <!-- অ্যাড নেটওয়ার্ক ৩টি কার্ড -->
+        <div id="earn-hub-grid-cards" class="ad-hub-grid" style="filter: blur(6px); opacity: 0.4; pointer-events: none; transition: all 0.35s ease;">
             
             <div class="ad-network-card shimmer-card-effect" onclick="openDedicatedAdScreen('adsgram')">
                 <div class="ad-net-card-left">
@@ -482,8 +501,6 @@
 
 <!-- ================= 12. VIEW: VIDEO UNLOCK & DETAILS ================= -->
 <div id="video-unlock-detail-view">
-    
-    <!-- শীর্ষ প্রিমিয়াম নোটিশ কার্ড -->
     <div class="custom-unlock-notice">
         <div class="cun-left">
             <div class="cun-bell-icon"><i class="fa-solid fa-bell"></i></div>
@@ -497,7 +514,6 @@
         </div>
     </div>
 
-    <!-- থাম্বনেইল পোস্টার ও সোশাল বাটন কার্ড -->
     <div class="poster-outer-wrapper">
         <div class="poster-card">
             <div class="poster-media-wrap">
@@ -519,23 +535,19 @@
         </div>
     </div>
 
-    <!-- ভিডিও টাইটেল -->
     <h2 class="unlock-movie-title" id="detail-file-title">ভিডিও লোড হচ্ছে...</h2>
 
-    <!-- আনলক মেয়াদের লাইভ টাইমার -->
     <div class="unlocked-timer-badge" id="unlock-status-timer-card" style="display:none;">
         <div class="ut-title" id="ut-title-txt"><i class="fa-solid fa-clock"></i> আনলক মেয়াদের বাকি:</div>
         <div class="ut-countdown" id="unlock-remaining-countdown">০০:০০:০০</div>
     </div>
 
-    <!-- মূল আনলক কন্ট্রোল হাব -->
     <div class="unlock-system-container shimmer-card-effect">
         <div class="usc-header">
             <span class="usc-glow-dot"></span>
             <span>অ্যাড দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে আনলক করুন:</span>
         </div>
 
-        <!-- ৩টি স্ট্যাটাস কার্ড -->
         <div class="usc-stats-grid">
             <div class="usc-stat-card card-point-unlock">
                 <div class="usc-card-top-indicator"><i class="fa-solid fa-bolt"></i> ইনস্ট্যান্ট</div>
@@ -562,7 +574,6 @@
             </div>
         </div>
 
-        <!-- প্রগ্রেস ট্র্যাক বার -->
         <div class="usc-progress-track">
             <div class="usc-progress-fill" id="unlock-p-bar"></div>
         </div>
@@ -572,7 +583,6 @@
             <div class="usc-prog-sub">সম্পূর্ণ বিজ্ঞাপন দেখলে ২ ঘণ্টার জন্য ভিডিও ফ্রিতে আনলক হবে।</div>
         </div>
 
-        <!-- আনলক বাটন গ্রুপ -->
         <div class="unlock-action-group">
             <button class="btn-unlock-purple" id="btn-unlock-ad-step" onclick="watchVideoUnlockAd()">
                 <div class="btn-inner-content">
@@ -592,7 +602,6 @@
         </div>
     </div>
 
-    <!-- নিচে প্রিমিয়াম ব্রাউজ আরো দেখুন বাটন -->
     <div class="btn-browse-more-bottom" onclick="closeVideoDetailView()">
         <div class="bbm-left">
             <i class="fa-solid fa-clapperboard"></i>
@@ -600,7 +609,6 @@
         </div>
         <i class="fa-solid fa-chevron-right bbm-arrow"></i>
     </div>
-
 </div>
 
 <!-- ================= 13. DRAWER: SERIES EPISODES ================= -->

@@ -369,6 +369,7 @@ function applyAdminConfigToUI() {
     const bMin = APP_CONFIG.minWithdrawBkash || 100, nMin = APP_CONFIG.minWithdrawNagad || 100, rMin = APP_CONFIG.minWithdrawRecharge || 40;
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
+    if ($('preloader-bot-name')) $('preloader-bot-name').innerText = APP_CONFIG.botUsername || "Ret2_bot";
     if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
     if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
     
@@ -429,15 +430,30 @@ function updateUserUI() {
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(pts);
 }
 
-/* =================== AD HUB & TELEGRAM LOCK LOGIC =================== */
+/* =================== AD HUB & TELEGRAM LOCK LOGIC (INSTANT HIDE) =================== */
 function updateEarnHubLockUI() {
     const t = I18N[APP_LANG];
     const hubView = $('earn-hub-view');
+    const tgBanner = $('earn-hub-tg-banner');
+    const lockOverlay = $('earn-hub-lock-overlay');
+    const gridCards = $('earn-hub-grid-cards');
     const badge = $('hub-verification-status-badge');
     const verifyBtn = $('btn-hub-verify-tg');
 
     if (isTgMemberVerified) {
         if (hubView) hubView.classList.add('earn-hub-unlocked');
+        
+        // অ্যাকাউন্ট ভেরিফাই হলে নোটিশ ও লক সাথে সাথে স্ক্রিন থেকে ১০০% Hide হবে
+        if (tgBanner) tgBanner.style.setProperty('display', 'none', 'important');
+        if (lockOverlay) lockOverlay.style.setProperty('display', 'none', 'important');
+
+        // অ্যাড কার্ড ব্লার মুক্ত ও সক্রিয় হবে
+        if (gridCards) {
+            gridCards.style.filter = 'none';
+            gridCards.style.opacity = '1';
+            gridCards.style.pointerEvents = 'auto';
+        }
+
         if (badge) {
             badge.style.background = 'rgba(0, 242, 96, 0.15)';
             badge.style.color = '#00f260';
@@ -451,6 +467,17 @@ function updateEarnHubLockUI() {
         }
     } else {
         if (hubView) hubView.classList.remove('earn-hub-unlocked');
+        
+        // ভেরিফাই না থাকলে নোটিশ ও লক দৃশ্যমান থাকবে
+        if (tgBanner) tgBanner.style.display = 'block';
+        if (lockOverlay) lockOverlay.style.display = 'flex';
+
+        if (gridCards) {
+            gridCards.style.filter = 'blur(6px)';
+            gridCards.style.opacity = '0.4';
+            gridCards.style.pointerEvents = 'none';
+        }
+
         if (badge) {
             badge.style.background = 'rgba(255, 8, 68, 0.15)';
             badge.style.color = '#ff0844';
@@ -743,7 +770,7 @@ async function verifyTelegramChannelJoin() {
 
     if (res.isMember) {
         isTgMemberVerified = true;
-        updateEarnHubLockUI();
+        updateEarnHubLockUI(); // নোটিশ ও লক সরাসরি ইনস্ট্যান্ট হাইড হবে
         $('telegram-mandatory-modal').style.display = 'none';
         updateTelegramBackButtonState();
         showToast(APP_LANG === 'bn' ? "🎉 ভেরিফিকেশন সফল! অ্যাড নেটওয়ার্ক আনলক হয়েছে।" : "🎉 Verification successful! Ad networks unlocked.", "success");
@@ -895,7 +922,7 @@ async function initApp() {
         if (document.hidden) { const v = $('in-app-video-element'); if (v && !v.paused) v.pause(); }
     });
 
-    setTimeout(hideAppPreloader, 600);
+    setTimeout(hideAppPreloader, 650);
 }
 
 function initAdsgram(retry = 0) {
