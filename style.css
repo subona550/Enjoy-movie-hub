@@ -23,7 +23,7 @@
     --grad-gold: linear-gradient(135deg, #ffe000 0%, #ff8c00 100%);
     --grad-purple: linear-gradient(135deg, #8a2387 0%, #e94057 50%, #f27121 100%);
     --grad-purple-pink: linear-gradient(90deg, #b224ef 0%, #7579ff 100%);
-    --grad-unlock-ad: linear-gradient(90deg, #7b1fa2 0%, #c2185b 100%);
+    --grad-unlock-ad: linear-gradient(135deg, #7b1fa2 0%, #c2185b 50%, #ff0844 100%);
     
     /* নিয়ন শ্যাডো সিস্টেম */
     --neon-blue-glow: 0 0 25px rgba(0, 229, 255, 0.45);
@@ -70,7 +70,51 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     font-weight: 900; 
 }
 
-/* =================== ১. আল্ট্রা ১০০/১০০ মাস্টার প্রি-লোডার =================== */
+/* =================== বাটন মোটা ও প্রিমিয়াম অ্যানিমেশন (NEW) =================== */
+.btn-bold-fat {
+    font-weight: 900 !important;
+    letter-spacing: 0.3px;
+    border-radius: 16px !important;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.btn-bold-fat:active {
+    transform: scale(0.97) !important;
+}
+
+/* বাটনের ভেতর চলমান শিমার লাইট রে অ্যানিমেশন */
+.btn-animated-shine {
+    position: relative;
+    overflow: hidden !important;
+}
+
+.btn-animated-shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 45%;
+    height: 200%;
+    background: linear-gradient(
+        60deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(25deg);
+    animation: btnShineSweep 2.8s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes btnShineSweep {
+    0% { left: -70%; }
+    40%, 100% { left: 140%; }
+}
+
+/* =================== ১. আল্ট্রা মাস্টার প্রি-লোডার =================== */
 #app-preloader {
     position: fixed; 
     inset: 0;
@@ -106,7 +150,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
-/* অরবিটাল ট্রিপল রিং লোডার ইঞ্জিন */
 .ring-wrapper { 
     position: relative; 
     width: 145px; 
@@ -151,7 +194,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     animation: spinClockwise 2.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
 }
 
-/* অরবিটাল পার্টিকেল ডট */
 .orbital-dot {
     position: absolute;
     width: 130px;
@@ -173,7 +215,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 14px #00e5ff, 0 0 25px #00e5ff;
 }
 
-/* সেন্টার প্লে কোর */
 .center-circle {
     position: relative; 
     width: 62px; 
@@ -195,7 +236,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.9));
 }
 
-/* বটের নামের ফ্রস্টেড গ্লাস কার্ড ও ব্লার স্টাইলিশ লুক */
 .preloader-bot-card {
     display: inline-flex;
     align-items: center;
@@ -240,7 +280,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     letter-spacing: 0.8px;
 }
 
-/* প্রফেশনাল মাইক্রো লোডার বার */
 .preloader-status-wrap {
     display: flex;
     flex-direction: column;
@@ -278,7 +317,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     letter-spacing: 0.5px;
 }
 
-/* প্রি-লোডার কি-ফ্রেমস */
 @keyframes spinClockwise { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes spinCounter { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
 @keyframes pulseAmbient { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.15); opacity: 1; } }
@@ -325,17 +363,6 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     z-index: 2; 
 }
 
-.highlight-glow-pulse {
-    border-color: #00e5ff !important;
-    box-shadow: 0 0 35px #00e5ff, inset 0 0 15px #00e5ff !important;
-    animation: pulseBorder 1s ease-in-out infinite alternate;
-}
-
-@keyframes pulseBorder {
-    0% { transform: scale(1); filter: brightness(1); }
-    100% { transform: scale(1.02); filter: brightness(1.2); }
-}
-
 /* =================== ৩. মেইন হেডার =================== */
 header#main-header { 
     background: rgba(8, 14, 30, 0.95); 
@@ -362,8 +389,8 @@ header#main-header {
 }
 
 .circle-btn {
-    width: 42px; 
-    height: 42px; 
+    width: 44px; 
+    height: 44px; 
     border-radius: 50%; 
     background: #0f1933; 
     border: 1.5px solid var(--card-border);
@@ -387,9 +414,9 @@ header#main-header {
 }
 
 .brand-logo-icon {
-    width: 40px; 
-    height: 40px; 
-    border-radius: 12px; 
+    width: 42px; 
+    height: 42px; 
+    border-radius: 13px; 
     background: var(--grad-blue);
     display: flex; 
     align-items: center; 
@@ -488,8 +515,8 @@ header#main-header {
     display: flex; 
     align-items: center; 
     gap: 14px; 
-    padding: 13px 15px; 
-    border-radius: 14px;
+    padding: 14px 16px; 
+    border-radius: 15px;
     background: #0d1733; 
     border: 1px solid rgba(255, 255, 255, 0.08); 
     color: #f1f5f9; 
@@ -530,8 +557,8 @@ header#main-header {
 
 .drawer-lang-btn {
     flex: 1; 
-    padding: 10px 8px; 
-    border-radius: 10px; 
+    padding: 11px 8px; 
+    border-radius: 12px; 
     border: none; 
     font-size: 13.5px; 
     font-weight: 800;
@@ -571,7 +598,7 @@ header#main-header {
 .hero-card {
     border-radius: 20px; 
     padding: 14px; 
-    min-height: 80px; 
+    min-height: 82px; 
     display: flex; 
     align-items: center; 
     gap: 12px;
@@ -584,7 +611,6 @@ header#main-header {
 }
 
 .hero-card:active { transform: scale(0.97); }
-
 .hero-blue { background: linear-gradient(135deg, #091a3e 0%, #132a61 100%); } 
 .hero-teal { background: linear-gradient(135deg, #062835 0%, #0d465c 100%); } 
 
@@ -633,8 +659,8 @@ header#main-header {
 }
 
 .hero-icon-box {
-    width: 42px; 
-    height: 42px; 
+    width: 44px; 
+    height: 44px; 
     border-radius: 13px; 
     background: rgba(255, 255, 255, 0.12);
     display: flex; 
@@ -694,7 +720,7 @@ header#main-header {
     color: var(--primary);
     font-size: 13px; 
     font-weight: 900; 
-    padding: 5px 14px; 
+    padding: 6px 15px; 
     border-radius: 20px; 
     display: inline-flex; 
     align-items: center; 
@@ -774,7 +800,7 @@ header#main-header {
     color: var(--primary); 
     font-size: 11.5px; 
     font-weight: 900; 
-    padding: 3px 11px; 
+    padding: 4px 12px; 
     border-radius: 14px; 
 }
 
@@ -815,8 +841,8 @@ header#main-header {
 .cat-filter-pill {
     background: #081022; 
     border: 1.5px solid rgba(0, 229, 255, 0.22); 
-    border-radius: 12px; 
-    padding: 8px 14px;
+    border-radius: 13px; 
+    padding: 9px 15px;
     font-size: 13px; 
     font-weight: 800; 
     color: #cbd5e1; 
@@ -836,11 +862,11 @@ header#main-header {
     box-shadow: 0 0 14px var(--primary-glow) !important;
 }
 
-/* =================== ৭. ভিডিও কার্ড গ্রিড =================== */
+/* =================== ৭. ভিডিও কার্ড গ্রিড ও মেটা ডিটেইলস (UPDATED) =================== */
 .video-grid { 
     display: flex; 
     flex-direction: column; 
-    gap: 15px; 
+    gap: 16px; 
     padding: 0 8px !important; 
     margin-bottom: 22px; 
     width: 100%; 
@@ -859,7 +885,7 @@ header#main-header {
     cursor: pointer; 
     contain: content; 
     width: 100%;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .series-card-item:active { transform: scale(0.98); }
@@ -884,30 +910,16 @@ header#main-header {
     filter: contrast(1.08) brightness(1.05) saturate(1.12); 
 }
 
-.series-thumb-badge-yellow {
-    position: absolute; 
-    bottom: 10px; 
-    right: 10px; 
-    background: #ffe000; 
-    color: #050814;
-    font-size: 12.5px; 
-    font-weight: 900; 
-    padding: 4px 11px; 
-    border-radius: 10px; 
-    box-shadow: 0 0 12px rgba(255, 224, 0, 0.7); 
-    z-index: 3;
-}
-
 .series-thumb-badge-blue {
     position: absolute; 
     top: 10px; 
     left: 10px; 
     background: rgba(5, 12, 28, 0.92);
-    border: 1px solid var(--primary); 
+    border: 1.5px solid var(--primary); 
     color: var(--primary); 
     font-size: 11.5px; 
     font-weight: 900;
-    padding: 3px 10px; 
+    padding: 4px 10px; 
     border-radius: 8px; 
     z-index: 3; 
     display: flex; 
@@ -917,10 +929,10 @@ header#main-header {
 }
 
 .series-info-body { 
-    padding: 12px 14px 14px; 
+    padding: 14px 15px 15px; 
     display: flex; 
     flex-direction: column; 
-    gap: 8px; 
+    gap: 10px; 
     background: linear-gradient(180deg, #09132d 0%, #060b1b 100%); 
 }
 
@@ -928,14 +940,14 @@ header#main-header {
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    gap: 8px; 
+    gap: 10px; 
 }
 
 .series-main-title { 
-    font-size: 16px; 
+    font-size: 16.5px; 
     font-weight: 900; 
     color: #ffffff; 
-    line-height: 1.3; 
+    line-height: 1.35; 
     flex: 1; 
     white-space: nowrap; 
     overflow: hidden; 
@@ -943,50 +955,50 @@ header#main-header {
 }
 
 .series-share-btn {
-    width: 35px; 
-    height: 35px; 
-    border-radius: 10px; 
+    width: 38px; 
+    height: 38px; 
+    border-radius: 11px; 
     background: var(--grad-blue);
     display: flex; 
     align-items: center; 
     justify-content: center; 
     color: #fff; 
-    font-size: 13.5px; 
+    font-size: 14px; 
     flex-shrink: 0; 
     cursor: pointer; 
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.45);
     transition: transform 0.15s ease;
 }
 
 .series-share-btn:active { transform: scale(0.9); }
 
+/* ভিডিও কার্ডের নিচের মেটা রো: লাইক, ভিউ এবং আপলোড সময় (NEW) */
 .series-meta-row { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    flex-wrap: wrap; 
-    gap: 6px; 
+    gap: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .series-chips-group { 
     display: flex; 
     align-items: center; 
-    gap: 6px; 
-    flex-wrap: wrap; 
+    gap: 8px; 
 }
 
 .series-chip-pill {
-    background: #0f1c3d; 
-    border: 1px solid rgba(0, 229, 255, 0.25); 
+    background: rgba(15, 28, 61, 0.85); 
+    border: 1px solid rgba(0, 229, 255, 0.28); 
     border-radius: 9px;
-    padding: 4px 8px; 
+    padding: 5px 9px; 
     font-size: 12px; 
     font-weight: 800; 
     color: #d0e1fd; 
     display: inline-flex; 
     align-items: center; 
     gap: 5px; 
-    cursor: pointer;
 }
 
 .series-chip-pill i { color: var(--primary); font-size: 11.5px; }
@@ -998,9 +1010,20 @@ header#main-header {
 
 .series-time-ago { 
     font-size: 12px; 
-    font-weight: 700; 
-    color: var(--text-sub); 
-    margin-left: auto; 
+    font-weight: 800; 
+    color: #8ba2c4; 
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.series-time-ago i {
+    color: #00f260;
+    font-size: 10px;
 }
 
 .empty-video-card { 
@@ -1027,9 +1050,9 @@ header#main-header {
 }
 
 .page-pill-btn {
-    min-width: 40px; 
-    height: 40px; 
-    border-radius: 11px; 
+    min-width: 42px; 
+    height: 42px; 
+    border-radius: 12px; 
     background: #0c152e; 
     border: 1.5px solid var(--card-border);
     color: #b0c4de; 
@@ -1039,7 +1062,7 @@ header#main-header {
     align-items: center; 
     justify-content: center; 
     cursor: pointer; 
-    padding: 0 9px;
+    padding: 0 10px;
     transition: all 0.15s ease;
 }
 
@@ -1083,15 +1106,15 @@ header#main-header {
 }
 
 .cun-bell-icon {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 14px;
     background: var(--grad-blue);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 20px;
+    font-size: 21px;
     flex-shrink: 0;
     box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
 }
@@ -1175,8 +1198,8 @@ header#main-header {
     color: #fff; 
     font-size: 12.5px; 
     font-weight: 900; 
-    padding: 4px 12px; 
-    border-radius: 9px; 
+    padding: 5px 13px; 
+    border-radius: 10px; 
     display: inline-flex; 
     align-items: center; 
     gap: 6px; 
@@ -1188,12 +1211,12 @@ header#main-header {
     bottom: 12px; 
     right: 12px; 
     background: rgba(5, 12, 28, 0.92); 
-    border: 1px solid var(--primary); 
+    border: 1.5px solid var(--primary); 
     color: var(--primary); 
     font-size: 12.5px; 
     font-weight: 900; 
-    padding: 4px 11px; 
-    border-radius: 8px; 
+    padding: 5px 12px; 
+    border-radius: 9px; 
     display: inline-flex; 
     align-items: center; 
     gap: 6px; 
@@ -1203,7 +1226,7 @@ header#main-header {
     display: flex; 
     justify-content: space-around; 
     align-items: center; 
-    padding: 12px 10px; 
+    padding: 13px 10px; 
     background: #070e20; 
     border-top: 1px solid rgba(255, 255, 255, 0.08); 
     gap: 6px; 
@@ -1212,24 +1235,23 @@ header#main-header {
 .poster-pill-btn { 
     background: #0e1a3b; 
     border: 1.5px solid var(--card-border); 
-    border-radius: 12px; 
-    padding: 8px 14px; 
-    font-size: 13px; 
+    border-radius: 13px; 
+    padding: 10px 16px; 
+    font-size: 13.5px; 
     font-weight: 900; 
     color: #d0e1fd; 
     display: inline-flex; 
     align-items: center; 
-    gap: 6px; 
+    gap: 7px; 
     cursor: pointer;
     transition: all 0.15s ease;
 }
 
 .poster-pill-btn:active { transform: scale(0.93); }
-
-.poster-pill-btn i { color: var(--primary); font-size: 13px; }
+.poster-pill-btn i { color: var(--primary); font-size: 13.5px; }
 
 .unlock-movie-title {
-    font-size: 20px; 
+    font-size: 21px; 
     font-weight: 900; 
     color: #ffffff; 
     line-height: 1.4; 
@@ -1237,20 +1259,27 @@ header#main-header {
     text-shadow: 0 2px 8px rgba(0,0,0,0.85);
 }
 
+/* =================== ১০. আনলক লাইভ কাউন্টডাউন ব্যাজ (UPDATED) =================== */
 .unlocked-timer-badge { 
     margin: 0 10px 16px; 
-    background: rgba(0, 242, 96, 0.12); 
+    background: linear-gradient(135deg, rgba(0, 242, 96, 0.15) 0%, rgba(5, 28, 20, 0.95) 100%); 
     border: 1.8px solid #00f260; 
-    border-radius: 16px; 
-    padding: 14px 18px; 
+    border-radius: 18px; 
+    padding: 16px 20px; 
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
-    box-shadow: 0 0 18px rgba(0, 242, 96, 0.35); 
+    box-shadow: 0 0 22px rgba(0, 242, 96, 0.45); 
+    animation: timerPulseGlow 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes timerPulseGlow {
+    0% { box-shadow: 0 0 15px rgba(0, 242, 96, 0.35); }
+    100% { box-shadow: 0 0 28px rgba(0, 242, 96, 0.65); }
 }
 
 .ut-title { 
-    font-size: 14.5px; 
+    font-size: 15px; 
     font-weight: 900; 
     color: #00f260; 
     display: flex; 
@@ -1259,13 +1288,15 @@ header#main-header {
 }
 
 .ut-countdown { 
-    font-size: 19px; 
+    font-size: 21px; 
     font-weight: 900; 
     color: #ffe000; 
     font-family: 'Plus Jakarta Sans', monospace; 
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255, 224, 0, 0.8);
 }
 
-/* =================== ১০. আনলক কন্ট্রোল হাব =================== */
+/* =================== ১১. আনলক কন্ট্রোল হাব ও টুইন বাটন (UPDATED) =================== */
 .unlock-system-container {
     background: linear-gradient(180deg, #09132e 0%, #060c1d 100%);
     border: 1.8px solid rgba(0, 229, 255, 0.45);
@@ -1279,36 +1310,36 @@ header#main-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 14.5px;
+    font-size: 15px;
     font-weight: 800;
     color: #d0e1fd;
     margin-bottom: 16px;
 }
 
 .usc-glow-dot {
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: #00e5ff;
-    box-shadow: 0 0 10px #00e5ff;
+    box-shadow: 0 0 12px #00e5ff;
 }
 
 .usc-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
+    gap: 10px;
     margin-bottom: 18px;
 }
 
 .usc-stat-card {
-    border-radius: 16px;
+    border-radius: 17px;
     padding: 14px 6px 12px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    min-height: 144px;
+    min-height: 146px;
     position: relative;
     border: 1.5px solid rgba(255, 255, 255, 0.08);
 }
@@ -1318,7 +1349,7 @@ header#main-header {
     top: -9px;
     font-size: 9.5px;
     font-weight: 900;
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 8px;
     text-transform: uppercase;
     display: flex;
@@ -1354,14 +1385,14 @@ header#main-header {
 }
 
 .usc-icon-circle {
-    width: 38px;
-    height: 38px;
+    width: 40px; 
+    height: 40px; 
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    margin-top: 3px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 17px; 
+    margin-top: 3px; 
     margin-bottom: 5px;
 }
 
@@ -1377,7 +1408,7 @@ header#main-header {
 }
 
 .usc-stat-val {
-    font-size: 20px;
+    font-size: 21px;
     font-weight: 900;
     color: #ffffff;
     line-height: 1.1;
@@ -1436,7 +1467,7 @@ header#main-header {
 }
 
 .usc-prog-count {
-    font-size: 15.5px;
+    font-size: 16px;
     font-weight: 900;
     color: #ffffff;
     margin-bottom: 3px;
@@ -1451,62 +1482,60 @@ header#main-header {
 .unlock-action-group {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 13px;
     width: 100%;
 }
 
+/* বিজ্ঞাপন দেখে ফ্রি আনলক বাটন */
 .btn-unlock-purple {
     width: 100%;
     background: var(--grad-unlock-ad);
     border: none;
     color: #ffffff;
-    padding: 15px 16px;
-    border-radius: 16px;
-    font-size: 15.5px;
-    font-weight: 900;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 0 22px rgba(194, 24, 91, 0.55);
-    transition: all 0.15s ease;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    font-size: 16px;
+    box-shadow: 0 0 25px rgba(255, 8, 68, 0.55);
 }
 
-.btn-unlock-purple:active { transform: scale(0.97); filter: brightness(1.15); }
-
+/* পয়েন্ট দিয়ে সরাসরি আনলক বাটন */
 .btn-unlock-gold-direct {
     width: 100%;
     background: var(--grad-gold);
     border: none;
     color: #050814;
-    padding: 15px 16px;
-    border-radius: 16px;
-    font-size: 15.5px;
-    font-weight: 900;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 0 22px rgba(255, 224, 0, 0.55);
-    transition: all 0.15s ease;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    font-size: 16px;
+    box-shadow: 0 0 25px rgba(255, 224, 0, 0.55);
 }
-
-.btn-unlock-gold-direct:active { transform: scale(0.97); filter: brightness(1.15); }
 
 .btn-inner-content {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 11px;
+}
+
+.btn-inner-content i {
+    font-size: 18px;
 }
 
 .btn-duration-tag {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(0, 0, 0, 0.38);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     color: #fff;
     font-size: 11.5px;
-    font-weight: 800;
-    padding: 4px 9px;
-    border-radius: 9px;
+    font-weight: 900;
+    padding: 5px 10px;
+    border-radius: 10px;
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -1523,17 +1552,14 @@ header#main-header {
     margin: 20px 10px 36px;
     background: var(--grad-purple);
     border-radius: 18px;
-    padding: 15px 18px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: #fff;
     cursor: pointer;
     box-shadow: 0 8px 26px rgba(233, 64, 87, 0.45);
-    transition: transform 0.15s ease;
 }
-
-.btn-browse-more-bottom:active { transform: scale(0.97); }
 
 .bbm-left {
     display: flex;
@@ -1543,7 +1569,7 @@ header#main-header {
     font-weight: 900;
 }
 
-/* =================== ১১. প্রোফাইল ও উইথড্র ব্যানার =================== */
+/* =================== ১২. প্রোফাইল ও উইথড্র ব্যানার =================== */
 .profile-user-card {
     margin: 14px 10px 14px; 
     background: var(--card-bg); 
@@ -1557,14 +1583,14 @@ header#main-header {
 }
 
 .profile-avatar-wrap {
-    width: 56px; 
-    height: 56px; 
+    width: 58px; 
+    height: 58px; 
     border-radius: 50%;
     background: linear-gradient(135deg, #0052d4, #00e5ff);
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-size: 24px; 
+    font-size: 25px; 
     color: #fff; 
     position: relative; 
     flex-shrink: 0;
@@ -1575,11 +1601,11 @@ header#main-header {
     position: absolute; 
     bottom: 2px; 
     right: 2px; 
-    width: 13px; 
-    height: 13px;
+    width: 14px; 
+    height: 14px;
     border-radius: 50%; 
     background: #00f260; 
-    border: 2px solid #081126;
+    border: 2.5px solid #081126;
     box-shadow: 0 0 8px #00f260;
 }
 
@@ -1592,7 +1618,7 @@ header#main-header {
 }
 
 .profile-meta h3 { 
-    font-size: 17px; 
+    font-size: 17.5px; 
     font-weight: 900; 
     color: #fff; 
     display: flex; 
@@ -1641,15 +1667,15 @@ header#main-header {
 .stat-card-lbl { font-size: 12.5px; font-weight: 800; color: var(--text-sub); margin-top: 5px; }
 
 .stat-circle-icon {
-    width: 40px; 
-    height: 40px; 
-    border-radius: 12px; 
+    width: 42px; 
+    height: 42px; 
+    border-radius: 13px; 
     background: rgba(255, 224, 0, 0.15);
     color: #ffe000; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-size: 18px; 
+    font-size: 19px; 
     flex-shrink: 0;
 }
 
@@ -1668,20 +1694,20 @@ header#main-header {
 
 .wb-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .wb-icon {
-    width: 42px; 
-    height: 42px; 
-    border-radius: 12px; 
+    width: 44px; 
+    height: 44px; 
+    border-radius: 13px; 
     background: rgba(0, 242, 96, 0.15);
     border: 1px solid #00f260; 
     color: #00f260; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-size: 19px; 
+    font-size: 20px; 
     flex-shrink: 0; 
 }
 
-.wb-title h4 { font-size: 15px; font-weight: 900; color: #fff; }
+.wb-title h4 { font-size: 15.5px; font-weight: 900; color: #fff; }
 .wb-title p { font-size: 12px; color: var(--text-sub); margin-top: 2px; font-weight: 700; }
 
 .wb-bottom-row {
@@ -1694,25 +1720,18 @@ header#main-header {
     padding-top: 12px;
 }
 
-.wb-min-info { font-size: 13px; color: #ffe000; font-weight: 800; }
+.wb-min-info { font-size: 13.5px; color: #ffe000; font-weight: 800; }
 
 .btn-withdraw-green {
     background: var(--grad-green); 
     border: none; 
     color: #050814; 
-    padding: 11px 18px; 
-    border-radius: 13px; 
-    font-size: 14px; 
-    font-weight: 900; 
     cursor: pointer; 
     display: inline-flex; 
     align-items: center; 
     gap: 7px; 
-    box-shadow: 0 0 16px rgba(0, 242, 96, 0.45);
-    transition: all 0.15s ease;
+    box-shadow: 0 0 18px rgba(0, 242, 96, 0.45);
 }
-
-.btn-withdraw-green:active { transform: scale(0.96); }
 
 .profile-large-card {
     margin: 0 10px 14px; 
@@ -1724,28 +1743,28 @@ header#main-header {
 
 .ad-earn-top-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .ad-earn-icon-square {
-    width: 42px; 
-    height: 42px; 
-    border-radius: 12px; 
+    width: 44px; 
+    height: 44px; 
+    border-radius: 13px; 
     background: rgba(0, 229, 255, 0.15);
     border: 1px solid var(--primary); 
     color: var(--primary); 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-size: 19px; 
+    font-size: 20px; 
     flex-shrink: 0; 
 }
 
-.ad-earn-text-group h3 { font-size: 15.5px; font-weight: 900; color: #fff; }
+.ad-earn-text-group h3 { font-size: 16px; font-weight: 900; color: #fff; }
 .ad-earn-text-group p { font-size: 12px; color: var(--text-sub); margin-top: 3px; font-weight: 700; line-height: 1.4; }
 
 .ad-earn-pills-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
 .earn-pill { 
     font-size: 11.5px; 
     font-weight: 800; 
-    padding: 4px 10px; 
-    border-radius: 9px; 
+    padding: 5px 11px; 
+    border-radius: 10px; 
     display: inline-flex; 
     align-items: center; 
     gap: 5px; 
@@ -1759,39 +1778,33 @@ header#main-header {
     background: var(--grad-blue); 
     border: none; 
     color: #fff; 
-    padding: 14px 16px; 
-    border-radius: 14px; 
-    font-size: 15px; 
-    font-weight: 900; 
     cursor: pointer; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     gap: 8px; 
-    box-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
-    transition: all 0.15s ease;
+    font-size: 15.5px;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.45);
 }
-
-.btn-earn-gradient:active { transform: scale(0.96); }
 
 .ref-info-line {
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 10px 0;
+    padding: 11px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
-    font-size: 13px; 
+    font-size: 13.5px; 
     color: #d0e1fd; 
     font-weight: 800;
 }
 
-.ref-info-line b { color: #ffe000; font-size: 14px; }
+.ref-info-line b { color: #ffe000; font-size: 14.5px; }
 
 .ref-code-value {
     background: #060b18; 
     border: 1px solid var(--card-border); 
-    padding: 4px 11px;
-    border-radius: 9px; 
+    padding: 5px 12px;
+    border-radius: 10px; 
     cursor: pointer; 
     display: inline-flex; 
     align-items: center; 
@@ -1801,9 +1814,9 @@ header#main-header {
 .ref-link-box {
     background: #060b18; 
     border: 1.5px solid var(--card-border); 
-    border-radius: 11px;
-    padding: 10px 12px; 
-    margin-top: 6px; 
+    border-radius: 12px;
+    padding: 11px 13px; 
+    margin-top: 8px; 
     font-size: 12px; 
     color: var(--primary);
     font-weight: 700; 
@@ -1812,19 +1825,16 @@ header#main-header {
 }
 
 .btn-share-ref {
-    padding: 12px 14px; 
-    border-radius: 13px; 
-    font-size: 14px; 
-    font-weight: 900; 
     border: none;
     cursor: pointer; 
     display: inline-flex; 
     align-items: center; 
     justify-content: center; 
     gap: 7px;
+    font-size: 14.5px;
 }
 
-/* =================== ১২. অ্যাড হাব =================== */
+/* =================== ১৩. অ্যাড হাব ও নেটওয়ার্ক সিলেক্টর =================== */
 #earn-hub-view, #dedicated-ad-view, #payout-view { 
     display: none; 
     animation: subtleFadeUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; 
@@ -1844,14 +1854,8 @@ header#main-header {
     z-index: 1000;
 }
 
-.earn-hub-unlocked #earn-hub-tg-banner {
-    display: none !important;
-}
-
-.earn-hub-unlocked #earn-hub-lock-overlay {
-    display: none !important;
-}
-
+.earn-hub-unlocked #earn-hub-tg-banner { display: none !important; }
+.earn-hub-unlocked #earn-hub-lock-overlay { display: none !important; }
 .earn-hub-unlocked #earn-hub-grid-cards {
     filter: none !important;
     opacity: 1 !important;
@@ -1881,12 +1885,11 @@ header#main-header {
 }
 
 .ad-network-card:active { transform: scale(0.97); }
-
 .ad-net-card-left { display: flex; align-items: center; gap: 14px; }
 
 .ad-net-square-icon {
-    width: 50px; 
-    height: 50px; 
+    width: 52px; 
+    height: 52px; 
     border-radius: 14px; 
     display: flex; 
     align-items: center; 
@@ -1915,16 +1918,16 @@ header#main-header {
     background: rgba(0, 229, 255, 0.15); 
     border: 1.5px solid var(--primary); 
     color: var(--primary);
-    font-size: 11.5px; 
+    font-size: 12px; 
     font-weight: 900; 
-    padding: 5px 11px; 
-    border-radius: 11px; 
+    padding: 6px 12px; 
+    border-radius: 12px; 
     display: inline-flex; 
     align-items: center; 
     gap: 5px;
 }
 
-/* =================== ১৩. ডেডিকেটেড অ্যাড ভিউ =================== */
+/* =================== ১৪. ডেডিকেটেড অ্যাড ভিউ =================== */
 .earn-stats-2x2 { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
@@ -1946,13 +1949,13 @@ header#main-header {
 .earn-stat-title { font-size: 12.5px; font-weight: 800; color: var(--text-sub); margin-top: 5px; }
 
 .stat-rounded-icon { 
-    width: 40px; 
-    height: 40px; 
-    border-radius: 12px; 
+    width: 42px; 
+    height: 42px; 
+    border-radius: 13px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-size: 18px; 
+    font-size: 19px; 
     flex-shrink: 0; 
 }
 
@@ -1973,7 +1976,7 @@ header#main-header {
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 10px 0;
+    padding: 11px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
     font-size: 13.5px; 
     color: var(--text-sub); 
@@ -1984,7 +1987,7 @@ header#main-header {
 
 .sd-progress-track { 
     width: 100%; 
-    height: 8px; 
+    height: 9px; 
     background: #060b18; 
     border-radius: 8px; 
     margin-top: 14px; 
@@ -2001,19 +2004,19 @@ header#main-header {
 
 .sd-progress-foot { 
     text-align: center; 
-    margin-top: 8px; 
+    margin-top: 9px; 
     font-size: 13px; 
     font-weight: 800; 
     color: var(--text-sub); 
 }
 
-/* =================== ১৪. পে-আউট (টাকা উত্তোলন) স্ক্রিন =================== */
+/* =================== ১৫. পে-আউট (উত্তোলন) স্ক্রিন =================== */
 .payout-page-wrapper { padding: 12px 10px; }
 
 .payout-switch-tabs { 
     display: flex; 
     background: #060b18; 
-    border-radius: 14px; 
+    border-radius: 16px; 
     padding: 5px; 
     gap: 8px; 
     margin-bottom: 14px; 
@@ -2022,20 +2025,17 @@ header#main-header {
 
 .payout-tab-btn { 
     flex: 1; 
-    padding: 11px 8px; 
     border: none; 
     background: transparent; 
     color: var(--text-sub); 
-    font-size: 14.5px; 
-    font-weight: 900; 
-    border-radius: 10px; 
+    font-size: 15px; 
     cursor: pointer; 
 }
 
 .payout-tab-btn.active { 
     background: var(--grad-blue); 
     color: #fff; 
-    box-shadow: 0 0 12px var(--primary-glow); 
+    box-shadow: 0 0 14px var(--primary-glow); 
 }
 
 .payout-balance-card { 
@@ -2049,8 +2049,8 @@ header#main-header {
     align-items: center; 
 }
 
-.pbc-left b { font-size: 19px; color: #ffe000; font-weight: 900; } 
-.pbc-right b { font-size: 19px; color: #00f260; font-weight: 900; }
+.pbc-left b { font-size: 20px; color: #ffe000; font-weight: 900; } 
+.pbc-right b { font-size: 20px; color: #00f260; font-weight: 900; }
 
 .gateway-grid-select { 
     display: grid; 
@@ -2062,8 +2062,8 @@ header#main-header {
 .gateway-opt-card { 
     background: #070e20; 
     border: 1.5px solid var(--card-border); 
-    border-radius: 16px; 
-    padding: 14px 6px; 
+    border-radius: 17px; 
+    padding: 15px 6px; 
     text-align: center; 
     cursor: pointer; 
     position: relative; 
@@ -2073,34 +2073,15 @@ header#main-header {
 .gateway-opt-card.active { 
     border-color: var(--primary); 
     background: rgba(0, 229, 255, 0.14); 
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.35); 
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.35); 
     transform: translateY(-2px); 
-}
-
-.gateway-opt-card.gw-disabled { 
-    opacity: 0.45; 
-    filter: grayscale(0.85); 
-    cursor: not-allowed; 
-    border-color: rgba(255, 8, 68, 0.3) !important; 
-}
-
-.gw-off-badge { 
-    position: absolute; 
-    top: 4px; 
-    right: 4px; 
-    background: #ff0844; 
-    color: #fff; 
-    font-size: 9px; 
-    font-weight: 900; 
-    padding: 2px 6px; 
-    border-radius: 5px; 
 }
 
 .sim-opt-pill {
     background: #081126; 
     border: 1.5px solid var(--card-border); 
-    border-radius: 12px; 
-    padding: 10px 4px; 
+    border-radius: 13px; 
+    padding: 11px 4px; 
     font-size: 13px; 
     font-weight: 800; 
     color: var(--text-sub); 
@@ -2139,7 +2120,7 @@ header#main-header {
 .status-approved { background: rgba(0, 242, 96, 0.15); color: #00f260; border: 1px solid #00f260; }
 .status-rejected { background: rgba(255, 8, 68, 0.15); color: #ff6b8b; border: 1px solid #ff0844; }
 
-/* =================== ১৫. বটম ডক নেভিগেশন =================== */
+/* =================== ১৬. বটম ডক নেভিগেশন =================== */
 .bottom-nav {
     position: fixed; 
     bottom: 0; 
@@ -2192,7 +2173,7 @@ header#main-header {
     box-shadow: 0 0 16px rgba(0, 229, 255, 0.6); 
 }
 
-/* =================== ১৬. মোডাল, পপআপ ও শিট =================== */
+/* =================== ১৭. মোডাল ও পপআপ =================== */
 .modal-wrap {
     display: none; 
     position: fixed; 
@@ -2223,39 +2204,28 @@ header#main-header {
     background: var(--grad-blue);
     border: none;
     color: #ffffff;
-    padding: 13px 18px;
-    font-size: 15px;
-    font-weight: 900;
-    border-radius: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-size: 15px;
     box-shadow: 0 0 18px var(--primary-glow);
-    transition: all 0.15s ease;
 }
-
-.btn-action-cyan:active { transform: scale(0.96); }
 
 .btn-unlock-blue {
     width: 100%;
     background: var(--grad-blue);
     border: none;
     color: #fff;
-    padding: 14px 16px;
-    border-radius: 15px;
-    font-size: 15px;
-    font-weight: 900;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-size: 15px;
     box-shadow: 0 8px 24px rgba(0, 229, 255, 0.45);
 }
-
-.btn-unlock-blue:active { transform: scale(0.97); }
 
 .series-drawer-modal {
     display: none; 
@@ -2361,7 +2331,6 @@ header#main-header {
 
 .ep-details { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .ep-details h4 { font-size: 14px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ep-details p { font-size: 11.5px; font-weight: 700; color: var(--text-sub); }
 .ep-arrow-btn { 
     width: 34px; 
     height: 34px; 
@@ -2400,13 +2369,13 @@ header#main-header {
     box-shadow: 0 0 10px var(--primary-glow); 
 }
 
-/* =================== ১৭. ইনপুট ও সিস্টেম টোস্ট =================== */
+/* =================== ১৮. ইনপুট ও সিস্টেম টোস্ট =================== */
 .premium-input { 
     width: 100%; 
-    padding: 13px 14px; 
+    padding: 14px 15px; 
     background: #060b18; 
     border: 1.5px solid var(--card-border); 
-    border-radius: 13px; 
+    border-radius: 14px; 
     color: #fff; 
     font-size: 15px; 
     font-weight: 800; 
@@ -2416,7 +2385,7 @@ header#main-header {
 
 .premium-input:focus { 
     border-color: var(--primary); 
-    box-shadow: 0 0 12px rgba(0, 229, 255, 0.4); 
+    box-shadow: 0 0 14px rgba(0, 229, 255, 0.4); 
 }
 
 .top-toast {
@@ -2428,15 +2397,15 @@ header#main-header {
     max-width: 360px;
     background: #0d1938; 
     border: 1.5px solid var(--primary); 
-    padding: 12px 16px; 
-    border-radius: 14px;
+    padding: 13px 18px; 
+    border-radius: 15px;
     z-index: 9999999; 
     box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(0,229,255,0.4); 
     transition: top 0.25s ease;
     display: flex; 
     align-items: center; 
     gap: 10px; 
-    font-size: 13.5px; 
+    font-size: 14px; 
     font-weight: 800; 
     color: #fff;
 }
@@ -2444,13 +2413,6 @@ header#main-header {
 .top-toast.show { top: calc(16px + env(safe-area-inset-top, 0px)); } 
 .top-toast.err { border-color: #ff0844; color: #ff6b8b; box-shadow: 0 0 20px rgba(255, 8, 68, 0.5); } 
 .top-toast.succ { border-color: #00f260; color: #70ffad; box-shadow: 0 0 20px rgba(0, 242, 96, 0.5); }
-
-.btn-disabled-state { 
-    opacity: 0.55 !important; 
-    cursor: not-allowed !important; 
-    pointer-events: none !important; 
-    filter: grayscale(0.5) !important; 
-}
 
 #banned-screen, #maintenance-screen { 
     display: none; 
