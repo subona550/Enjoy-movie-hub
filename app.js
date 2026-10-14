@@ -133,7 +133,8 @@ let APP_CONFIG = {
     maintenanceMode: false,
     enableBkash: true, 
     enableNagad: true, 
-    enableRecharge: true
+    enableRecharge: true,
+    adminNotice: ""
 };
 
 let db = null, tg = null, currentUser = null, userData = {};
@@ -149,7 +150,7 @@ let adminCreatedCategories = [];
 let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 let activeDedicatedNetwork = 'adsgram';
 
-// মেমোরি থেকে ভেরিফিকেশন স্ট্যাটাস রিস্টোর (যদি পূর্বে ভেরিফাই করা থাকে)
+// মেমোরি থেকে ভেরিফিকেশন স্ট্যাটাস রিস্টোর
 let isTgMemberVerified = localStorage.getItem('tg_member_verified') === 'true';
 
 let lastListScrollY = 0;
@@ -161,6 +162,15 @@ let userLikedVideos = {};
 try { userLikedVideos = JSON.parse(localStorage.getItem('app_user_liked_vids') || '{}'); } catch(e) { userLikedVideos = {}; }
 
 // =================== ইউটিলিটি ফাংশন ===================
+function getDeviceUUID() {
+    let id = localStorage.getItem('app_device_uuid');
+    if (!id) {
+        id = 'dev_' + Math.random().toString(36).substring(2, 12) + Date.now().toString(36);
+        localStorage.setItem('app_device_uuid', id);
+    }
+    return id;
+}
+
 function triggerHaptic(type = 'light') {
     try {
         if (tg?.HapticFeedback) {
@@ -208,7 +218,7 @@ function formatNumber(n) {
     return String(n).replace(/\d/g, d => bn[d]);
 }
 
-// ১০০% নির্ভুল Time-Ago ফাংশন (০ মাস বা ভুল হিসাব সম্পূর্ণ ফিক্সড)
+// ১০০% নির্ভুল Time-Ago ফাংশন
 function formatTimeAgo(timestamp) {
     if (!timestamp) return I18N[APP_LANG].justNow;
     
@@ -249,29 +259,18 @@ function formatTimeAgo(timestamp) {
 
     const t = I18N[APP_LANG];
 
-    // মিনিটের হিসাব
     if (minutes < 1) return t.justNow;
     if (minutes < 60) return `${formatNumber(minutes)} ${t.minutesAgo}`;
-
-    // ঘণ্টার হিসাব (১ থেকে ২৩ ঘণ্টা)
     if (hours < 24) return `${formatNumber(hours)} ${t.hoursAgo}`;
-
-    // দিনের হিসাব (১ থেকে ৬ দিন)
     if (days < 7) return `${formatNumber(days)} ${t.daysAgo}`;
-
-    // সপ্তাহের হিসাব (৭ থেকে ২৯ দিন = ১ থেকে ৪ সপ্তাহ)
     if (days < 30) {
         const weeks = Math.max(1, Math.floor(days / 7));
         return `${formatNumber(weeks)} ${t.weeksAgo}`;
     }
-
-    // মাসের হিসাব (৩০ থেকে ৩৬৪ দিন = ১ থেকে ১১ মাস)
     if (days < 365) {
         const months = Math.max(1, Math.floor(days / 30));
         return `${formatNumber(months)} ${t.monthsAgo}`;
     }
-
-    // বছরের হিসাব (৩৬৫ দিন বা তার বেশি)
     const years = Math.max(1, Math.floor(days / 365));
     return `${formatNumber(years)} ${t.yearsAgo}`;
 }
@@ -313,13 +312,13 @@ function renderRulesList() {
     if (!l) return;
     l.innerHTML = APP_LANG === 'bn' ? `
         <div><b style="color:#00f260;">১. ভিডিও নির্বাচন:</b> পছন্দের যেকোনো মুভি বা সিরিজ কার্ডে ক্লিক করুন।</div>
-        <div><b style="color:var(--primary);">২. ফ্রি অ্যাড আনলক:</b> নির্দিষ্ট ৩টি বিজ্ঞাপন দেখলে ভিডিও ২ ঘণ্টার জন্য সম্পূর্ণ ফ্রি আনলক থাকবে।</div>
-        <div><b style="color:#ffe000;">৩. পয়েন্ট দিয়ে সরাসরি আনলক:</b> অ্যাড ছাড়া পয়েন্ট দিয়ে আনলক করলে ভিডিও টানা ২৪ ঘণ্টা আনলক থাকবে।</div>
+        <div><b style="color:var(--primary);">২. ফ্রি অ্যাড আনলক:</b> নির্দিষ্ট ${formatNumber(APP_CONFIG.unlockAdCount || 3)}টি বিজ্ঞাপন দেখলে ভিডিও ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} ঘণ্টার জন্য সম্পূর্ণ ফ্রি আনলক থাকবে।</div>
+        <div><b style="color:#ffe000;">৩. পয়েন্ট দিয়ে সরাসরি আনলক:</b> অ্যাড ছাড়া পয়েন্ট দিয়ে আনলক করলে ভিডিও টানা ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টা আনলক থাকবে।</div>
         <div><b style="color:#ff0844;">৪. মেয়াদ ও নিয়ম:</b> মেয়াদ শেষ হলে পুনরায় আনলক করতে হবে। কোনো ভিপিএন বা ফেক রেফার গ্রহণযোগ্য নয়।</div>
     ` : `
         <div><b style="color:#00f260;">1. Select Video:</b> Choose your preferred movie or series.</div>
-        <div><b style="color:var(--primary);">2. Free Ad Unlock:</b> Watch 3 ads to unlock free access for 2 hours.</div>
-        <div><b style="color:#ffe000;">3. Point Unlock:</b> Unlock directly with points for 24-hour access.</div>
+        <div><b style="color:var(--primary);">2. Free Ad Unlock:</b> Watch ${formatNumber(APP_CONFIG.unlockAdCount || 3)} ads to unlock free access for ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} hours.</div>
+        <div><b style="color:#ffe000;">3. Point Unlock:</b> Unlock directly with points for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)}-hour access.</div>
         <div><b style="color:#ff0844;">4. Policy:</b> VPN and multi-account referrals will lead to permanent ban.</div>
     `;
 }
@@ -366,6 +365,28 @@ function applyAdminConfigToUI() {
     const t = I18N[APP_LANG];
     const bMin = APP_CONFIG.minWithdrawBkash || 100, nMin = APP_CONFIG.minWithdrawNagad || 100, rMin = APP_CONFIG.minWithdrawRecharge || 40;
 
+    // ১. মেইনটেন্যান্স স্ক্রিন লাইভ কন্ট্রোল
+    const maintScreen = $('maintenance-screen');
+    if (maintScreen) {
+        maintScreen.style.display = APP_CONFIG.maintenanceMode ? 'flex' : 'none';
+    }
+
+    // ২. লাইভ অ্যাডমিন নোটিশ সিঙ্ক
+    if ($('ui-payout-admin-notice') && APP_CONFIG.adminNotice) {
+        $('ui-payout-admin-notice').innerText = APP_CONFIG.adminNotice;
+    }
+
+    // ৩. গেটওয়ে সক্রিয়/বন্ধ ব্যাজ লাইভ আপডেট
+    if ($('gw-badge-bkash')) $('gw-badge-bkash').style.display = APP_CONFIG.enableBkash === false ? 'inline-block' : 'none';
+    if ($('gw-badge-nagad')) $('gw-badge-nagad').style.display = APP_CONFIG.enableNagad === false ? 'inline-block' : 'none';
+    if ($('gw-badge-recharge')) $('gw-badge-recharge').style.display = APP_CONFIG.enableRecharge === false ? 'inline-block' : 'none';
+
+    // ৪. আর্ন হাব কার্ডের রিয়েলটাইম লিমিট ও পয়েন্ট আপডেট
+    if ($('hub-limit-adsgram')) $('hub-limit-adsgram').innerText = `দৈনিক ${formatNumber(APP_CONFIG.adsgramDailyLimit || 10)}টি অ্যাড`;
+    if ($('hub-reward-adsgram')) $('hub-reward-adsgram').innerText = `${formatNumber(APP_CONFIG.adsgramRewardPoints || 2)} pt`;
+    if ($('hub-limit-monetag')) $('hub-limit-monetag').innerText = `দৈনিক ${formatNumber(APP_CONFIG.monetagDailyLimit || 10)}টি অ্যাড`;
+    if ($('hub-reward-monetag')) $('hub-reward-monetag').innerText = `${formatNumber(APP_CONFIG.monetagRewardPoints || 2)} pt`;
+
     if ($('preloader-bot-name')) $('preloader-bot-name').innerText = APP_CONFIG.botUsername || "Ret2_bot";
     if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
     if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
@@ -385,6 +406,12 @@ function applyAdminConfigToUI() {
 }
 
 function updateUserUI() {
+    // ইউজার ব্যান স্ট্যাটাস লাইভ চেক
+    const banScreen = $('banned-screen');
+    if (banScreen) {
+        banScreen.style.display = userData.isBanned ? 'flex' : 'none';
+    }
+
     const pts = userData.balancePoints ?? 0;
     const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
@@ -465,7 +492,7 @@ async function unlockVideoWithPoints() {
 
         userData.balancePoints = data.newBalance;
         videoUnlockExpiryMap[activeDetailVideo.id] = data.expiry || (Date.now() + ((APP_CONFIG.pointsUnlockDurationHours || 24) * 3600000));
-        videoAdProgressMap[activeDetailVideo.id] = 0; // পয়েন্ট দিয়ে আনলক হলে অ্যাড কাউন্টার রিসেট
+        videoAdProgressMap[activeDetailVideo.id] = 0;
         saveUnlockProgress();
 
         updateUserUI();
@@ -519,12 +546,11 @@ async function watchVideoUnlockAd() {
     }
 }
 
-// আর্ন হাবে অ্যাড দেখে পয়েন্ট আয় (চ্যানেল ভেরিফিকেশন ছাড়া ব্লক থাকবে)
+// আর্ন হাবে অ্যাড দেখে পয়েন্ট আয়
 async function watchSpecificNetworkAd() {
     const btn = $('btn-watch-dedicated-ad');
     if (!btn || btn.disabled) return;
 
-    // সিকিউরিটি চেক: যদি চ্যানেল ভেরিফাইড না থাকে তবে কাজ করতে পারবে না
     if (!isTgMemberVerified) {
         showToast("প্রথমে চ্যানেলে জয়েন হয়ে ভেরিফাই সম্পন্ন করুন!", "error");
         openEarnHubView();
@@ -579,9 +605,24 @@ async function watchSpecificNetworkAd() {
 async function submitWithdrawalRequest() {
     triggerHaptic('medium');
 
+    // গেটওয়ে চালু আছে কি না পরীক্ষা
+    if (currentSelectedGateway === 'bKash' && APP_CONFIG.enableBkash === false) {
+        return showToast(APP_LANG === 'bn' ? "বিকাশ উত্তোলন সাময়িক বন্ধ আছে!" : "bKash withdrawal is disabled!", "error");
+    }
+    if (currentSelectedGateway === 'Nagad' && APP_CONFIG.enableNagad === false) {
+        return showToast(APP_LANG === 'bn' ? "নগদ উত্তোলন সাময়িক বন্ধ আছে!" : "Nagad withdrawal is disabled!", "error");
+    }
+    if (currentSelectedGateway === 'Recharge' && APP_CONFIG.enableRecharge === false) {
+        return showToast(APP_LANG === 'bn' ? "রিচার্জ উত্তোলন সাময়িক বন্ধ আছে!" : "Recharge withdrawal is disabled!", "error");
+    }
+
     const num = $('pay-number')?.value.trim();
     const pts = Number($('pay-amount')?.value);
-    const minPts = APP_CONFIG.minWithdrawPoints || 40;
+    
+    let minPts = APP_CONFIG.minWithdrawPoints || 40;
+    if (currentSelectedGateway === 'bKash') minPts = APP_CONFIG.minWithdrawBkash || 100;
+    else if (currentSelectedGateway === 'Nagad') minPts = APP_CONFIG.minWithdrawNagad || 100;
+    else if (currentSelectedGateway === 'Recharge') minPts = APP_CONFIG.minWithdrawRecharge || 40;
 
     if (!num) return showToast("মোবাইল নম্বর দিন!", "error");
     if (!pts || pts < minPts) return showToast(`নূন্যতম উত্তোলন ${formatNumber(minPts)} পয়েন্ট!`, "error");
@@ -635,7 +676,6 @@ async function checkTelegramMembershipRealtime(userId) {
     } catch { return { isMember: false }; }
 }
 
-// চ্যানেল ভেরিফিকেশন (একবার ভেরিফাই হলে পারমানেন্টলি সেভ থাকবে)
 async function verifyTelegramChannelJoin() {
     triggerHaptic('medium');
     const btn = $('btn-hub-verify-tg');
@@ -648,7 +688,7 @@ async function verifyTelegramChannelJoin() {
         const res = await checkTelegramMembershipRealtime(currentUser?.id);
         if (res && res.isMember) {
             isTgMemberVerified = true;
-            localStorage.setItem('tg_member_verified', 'true'); // চিরস্থায়ী সংরক্ষণ
+            localStorage.setItem('tg_member_verified', 'true');
             updateEarnHubLockUI();
             if ($('telegram-mandatory-modal')) $('telegram-mandatory-modal').style.display = 'none';
             updateTelegramBackButtonState();
@@ -669,7 +709,6 @@ async function verifyTelegramChannelJoin() {
     }
 }
 
-// ব্যাকগ্রাউন্ডে নিশ্চিত করা যে ইউজার চ্যানেল থেকে লিভ নিয়েছে কি না
 async function syncTelegramMembershipStatus() {
     if (!currentUser?.id) return;
     try {
@@ -679,11 +718,9 @@ async function syncTelegramMembershipStatus() {
             localStorage.setItem('tg_member_verified', 'true');
         } else {
             isTgMemberVerified = false;
-            localStorage.removeItem('tg_member_verified'); // লিভ নিলে ভেরিফিকেশন বাতিল
+            localStorage.removeItem('tg_member_verified');
         }
-    } catch (e) {
-        // নেটওয়ার্ক ইস্যু হলে পূর্বের লোকাল স্টোরেজের স্টেট বহাল থাকবে
-    }
+    } catch (e) {}
     updateEarnHubLockUI();
 }
 
@@ -700,7 +737,6 @@ function openTelegramMandatoryModal() {
     updateTelegramBackButtonState();
 }
 
-// =================== শেয়ার ও কপি ফাংশন ===================
 function copyReferCode() {
     navigator.clipboard?.writeText(String(currentUser?.id || ''));
     showToast("রেফারেল কোড কপি হয়েছে!", "success");
@@ -733,7 +769,6 @@ function shareVideoItem(event, videoId, encodedTitle) {
     }
 }
 
-// =================== অ্যাড হাব ও ভিউ হ্যান্ডলার ===================
 function updateEarnHubLockUI() {
     const hubView = $('earn-hub-view');
     const lock = $('earn-hub-lock-overlay');
@@ -784,10 +819,8 @@ function openEarnHubView() {
     $('main-header').style.display = 'none';
     $('earn-hub-view').style.display = 'block';
     
-    // তাৎক্ষণিক পূর্বের স্টেট দেখাবে এবং ব্যাকগ্রাউন্ডে ভেরিফাই নিশ্চিত করবে
     updateEarnHubLockUI();
     syncTelegramMembershipStatus();
-
     updateTelegramBackButtonState();
 }
 
@@ -829,7 +862,6 @@ function updateDedicatedAdScreenUI() {
     if ($('ded-stat-watched')) $('ded-stat-watched').innerText = formatNumber(watched);
     if ($('ded-stat-limit')) $('ded-stat-limit').innerText = formatNumber(limit);
 
-    // নিচের সেটিংস কার্ড ও প্রগ্রেস বার লাইভ আপডেট
     if ($('ded-row-reward')) $('ded-row-reward').innerText = `${formatNumber(reward)} ${I18N[APP_LANG].unitPoints}`;
     if ($('ded-row-limit')) $('ded-row-limit').innerText = formatNumber(limit);
     if ($('ded-row-remaining')) $('ded-row-remaining').innerText = formatNumber(remaining);
@@ -850,7 +882,6 @@ function updateDedicatedAdScreenUI() {
     }
 }
 
-// =================== উইথড্র স্ক্রিন ও হিস্টোরি ===================
 function selectSimOperator(operator, el) {
     selectedSimOperator = operator;
     document.querySelectorAll('.sim-opt-pill').forEach(p => p.classList.remove('active'));
@@ -860,10 +891,20 @@ function selectSimOperator(operator, el) {
 function calculateWithdrawTakaPreview() {
     const pts = Number($('pay-amount')?.value) || 0;
     const tag = $('payout-live-calc-tag');
-    if (tag) tag.innerText = pts > 0 ? `= ${(pts * 0.3).toFixed(2)} ৳` : '';
+    if (tag) tag.innerText = pts > 0 ? `= ${(pts * (APP_CONFIG.pointsToTakaRate || 0.3)).toFixed(2)} ৳` : '';
 }
 
 function selectGateway(gw) {
+    if (gw === 'bKash' && APP_CONFIG.enableBkash === false) {
+        return showToast(APP_LANG === 'bn' ? "বিকাশ উত্তোলন সাময়িক বন্ধ আছে!" : "bKash withdrawal is disabled!", "warning");
+    }
+    if (gw === 'Nagad' && APP_CONFIG.enableNagad === false) {
+        return showToast(APP_LANG === 'bn' ? "নগদ উত্তোলন সাময়িক বন্ধ আছে!" : "Nagad withdrawal is disabled!", "warning");
+    }
+    if (gw === 'Recharge' && APP_CONFIG.enableRecharge === false) {
+        return showToast(APP_LANG === 'bn' ? "রিচার্জ উত্তোলন সাময়িক বন্ধ আছে!" : "Recharge withdrawal is disabled!", "warning");
+    }
+
     currentSelectedGateway = gw;
     ['bKash', 'Nagad', 'Recharge'].forEach(g => $(`gw-card-${g}`)?.classList.toggle('active', g === gw));
     if ($('sim-operator-container')) $('sim-operator-container').style.display = (gw === 'Recharge') ? 'block' : 'none';
@@ -894,36 +935,45 @@ function closePayoutView() {
     updateTelegramBackButtonState();
 }
 
-async function loadWithdrawalHistory() {
+// রিয়েল-টাইম উইথড্রয়াল হিস্টোরি লিসেনার (অপ্টিমাইজড ও অটো-সিঙ্ক)
+let withdrawHistoryUnsubscribe = null;
+
+function loadWithdrawalHistory() {
     const list = $('payout-history-list');
     if (!db || !currentUser?.id || !list) return;
-    list.innerHTML = `<div style="text-align:center; padding:18px; color:#8ba2c4;"><i class="fa-solid fa-spinner fa-spin"></i> লোড হচ্ছে...</div>`;
 
-    try {
-        const snap = await db.collection("withdrawals").where("userId", "==", String(currentUser.id)).limit(20).get();
-        if (snap.empty) {
-            list.innerHTML = `<div style="text-align:center; padding:20px; color:#8ba2c4;">কোনো হিস্টোরি পাওয়া যায়নি!</div>`;
-            return;
-        }
-
-        let items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        items.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
-
-        list.innerHTML = items.map(item => `
-            <div class="history-card-item">
-                <div>
-                    <h5 style="color:#fff; font-size:14px; margin-bottom:3px;">${item.gateway} - ${item.number}</h5>
-                    <small style="color:#8ba2c4;">${formatNumber(item.points)} পয়েন্ট</small>
-                </div>
-                <div style="text-align:right;">
-                    <div style="color:#00f260; font-weight:900;">৳ ${formatNumber(item.amountBDT)}</div>
-                    <span class="hci-status-badge status-${(item.status || 'pending').toLowerCase()}">${item.status}</span>
-                </div>
-            </div>
-        `).join('');
-    } catch {
-        list.innerHTML = `<div style="text-align:center; padding:18px; color:#ff0844;">হিস্টোরি লোড হতে সমস্যা হয়েছে</div>`;
+    // পূর্বের কোনো লিসেনার চালু থাকলে সেটি বন্ধ করা হচ্ছে
+    if (withdrawHistoryUnsubscribe) {
+        withdrawHistoryUnsubscribe();
     }
+
+    withdrawHistoryUnsubscribe = db.collection("withdrawals")
+      .where("userId", "==", String(currentUser.id))
+      .limit(20)
+      .onSnapshot(snap => {
+          if (snap.empty) {
+              list.innerHTML = `<div style="text-align:center; padding:20px; color:#8ba2c4;">কোনো হিস্টোরি পাওয়া যায়নি!</div>`;
+              return;
+          }
+
+          let items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          items.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+          list.innerHTML = items.map(item => `
+              <div class="history-card-item">
+                  <div>
+                      <h5 style="color:#fff; font-size:14px; margin-bottom:3px;">${item.gateway} - ${item.number} ${item.operator ? `(${item.operator})` : ''}</h5>
+                      <small style="color:#8ba2c4;">${formatNumber(item.points)} পয়েন্ট</small>
+                  </div>
+                  <div style="text-align:right;">
+                      <div style="color:#00f260; font-weight:900;">৳ ${formatNumber(item.amountBDT)}</div>
+                      <span class="hci-status-badge status-${(item.status || 'pending').toLowerCase()}">${item.status}</span>
+                  </div>
+              </div>
+          `).join('');
+      }, err => {
+          list.innerHTML = `<div style="text-align:center; padding:18px; color:#ff0844;">হিস্টোরি লোড হতে সমস্যা হয়েছে</div>`;
+      });
 }
 
 function switchPayoutInnerTab(tab) {
@@ -979,13 +1029,12 @@ function isMovieVideo(v) {
     return !isSeriesVideo(v) && !isAdultVideo(v); 
 }
 
-// মেয়াদ উত্তীর্ণ হলে স্বয়ংক্রিয় ক্লিনআপ এবং প্রগ্রেস বার রিসেট
 function checkAndCleanExpiredUnlock(videoId) {
     if (!videoId) return false;
     if (videoUnlockExpiryMap[videoId]) {
         if (Date.now() >= videoUnlockExpiryMap[videoId]) {
             delete videoUnlockExpiryMap[videoId];
-            videoAdProgressMap[videoId] = 0; // ১০০% নিশ্চিত প্রগ্রেস বার ০ হবে
+            videoAdProgressMap[videoId] = 0;
             saveUnlockProgress();
             return false;
         }
@@ -1016,7 +1065,6 @@ function executeUnlockSuccess(type) {
     setTimeout(() => playMovie(activeDetailVideo), 800);
 }
 
-// লাইভ কাউন্টডাউন এবং মেয়াদ শেষ হওয়ার সাথে সাথে প্রগ্রেস বার রিসেট
 function startExpiryCountdown(vId) {
     if (countdownTimerInterval) clearInterval(countdownTimerInterval);
     const timer = $('unlock-remaining-countdown');
@@ -1026,7 +1074,7 @@ function startExpiryCountdown(vId) {
         if (diff <= 0) {
             clearInterval(countdownTimerInterval);
             delete videoUnlockExpiryMap[vId];
-            videoAdProgressMap[vId] = 0; // মেয়াদ শেষ হলে প্রগ্রেস সাথে সাথে রিসেট
+            videoAdProgressMap[vId] = 0;
             saveUnlockProgress();
             updateUnlockProgressUI();
             showToast(APP_LANG === 'bn' ? "ভিডিওর আনলক মেয়াদ শেষ হয়েছে!" : "Unlock duration expired!", "info");
@@ -1042,7 +1090,6 @@ function startExpiryCountdown(vId) {
     countdownTimerInterval = setInterval(update, 1000);
 }
 
-// আনলক বাটন ও UI প্রগ্রেস বার আপডেট (রিসেট বাগ ফিক্সড)
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
@@ -1052,8 +1099,9 @@ function updateUnlockProgressUI() {
     const pointBtn = $('btn-unlock-point-step');
 
     const total = APP_CONFIG.unlockAdCount || 3;
+    const adDurationHrs = APP_CONFIG.adUnlockDurationHours || 2;
+    const ptDurationHrs = APP_CONFIG.pointsUnlockDurationHours || 24;
 
-    // যদি আনলক না থাকে অথচ কোনো কারণে অ্যাড ৩/৩ হয়ে ছিল, তবে সাথে সাথে ০ তে রিসেট হবে
     if (!isUnlocked && (videoAdProgressMap[vId] || 0) >= total) {
         videoAdProgressMap[vId] = 0;
         saveUnlockProgress();
@@ -1102,11 +1150,10 @@ function updateUnlockProgressUI() {
                     <i class="fa-solid fa-coins"></i> 
                     <span id="ui-point-unlock-btn-txt">${I18N[APP_LANG].btnPointUnlock}</span>
                 </div>
-                <span class="btn-duration-tag duration-tag-gold" id="ui-point-duration-badge"><i class="fa-solid fa-bolt"></i> ২৪ ঘণ্টার ফুল এক্সেস</span>
+                <span class="btn-duration-tag duration-tag-gold" id="ui-point-duration-badge"><i class="fa-solid fa-bolt"></i> ${formatNumber(ptDurationHrs)} ঘণ্টার ফুল এক্সেস</span>
             `;
         }
 
-        // প্রগ্রেস পার্সেন্টেজ হিসাব
         const p = Math.min(100, Math.round((done / total) * 100));
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = `${p}%`;
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
@@ -1119,7 +1166,7 @@ function updateUnlockProgressUI() {
                     <i class="fa-solid fa-film"></i> 
                     <span>বিজ্ঞাপন দেখে ফ্রিতে আনলক (${formatNumber(done)}/${formatNumber(total)})</span>
                 </div>
-                <span class="btn-duration-tag" id="ui-ad-duration-badge"><i class="fa-regular fa-clock"></i> ২ ঘণ্টার জন্য ফ্রি</span>
+                <span class="btn-duration-tag" id="ui-ad-duration-badge"><i class="fa-regular fa-clock"></i> ${formatNumber(adDurationHrs)} ঘণ্টার জন্য ফ্রি</span>
             `;
         }
     }
@@ -1128,38 +1175,30 @@ function updateUnlockProgressUI() {
 function toggleDetailVideoLike() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
-    
-    // ইউজার পূর্বে লাইক দিয়েছে কি না তা সরাসরি চেক করা
     const alreadyLiked = !!userLikedVideos[vId];
     
     if (alreadyLiked) {
-        // পূর্বে লাইক দেওয়া থাকলে লাইক তুলে নেওয়া (মাইনাস ১)
         userLikedVideos[vId] = false;
         activeDetailVideo.likes = Math.max(0, (activeDetailVideo.likes || 0) - 1);
     } else {
-        // লাইক না দেওয়া থাকলে নতুন লাইক যোগ করা (প্লাস ১)
         userLikedVideos[vId] = true;
         activeDetailVideo.likes = (activeDetailVideo.likes || 0) + 1;
-        triggerHaptic('success'); // ভাইব্রেশন ফিডব্যাক
+        triggerHaptic('success');
     }
     
-    // লোকাল স্টোরেজে সেভ
     localStorage.setItem('app_user_liked_vids', JSON.stringify(userLikedVideos));
     
-    // ১. ডিটেইলস স্ক্রিনের লাইক সংখ্যা ও বাটন আপডেট
     if ($('detail-likes-txt')) {
         $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes)} ${I18N[APP_LANG].likesWord}`;
     }
     $('detail-like-btn-action')?.classList.toggle('active-liked', !alreadyLiked);
     
-    // ২. মেইন লিস্টের কার্ডে থাকা লাইক কাউন্টার ও আইকন কালার আপডেট
     const cardLikeEl = $(`card-like-cnt-${vId}`);
     if (cardLikeEl) {
         cardLikeEl.innerText = formatNumber(activeDetailVideo.likes);
     }
     $(`card-like-pill-${vId}`)?.classList.toggle('active-liked', !alreadyLiked);
 
-    // ৩. ফায়ারবেস ডাটাবেসে লাইক কাউন্ট আপডেট
     if (db) {
         db.collection("videos").doc(vId).update({
             likes: firebase.firestore.FieldValue.increment(alreadyLiked ? -1 : 1)
@@ -1234,7 +1273,6 @@ function closeWebVideoPlayer() {
     updateTelegramBackButtonState();
 }
 
-// =================== সিরিজ ড্রয়ার হ্যান্ডলার ===================
 let activeSeriesForDrawer = null;
 function openSeriesEpisodesDrawer(seriesId) {
     const s = allLoadedVideos.find(v => v.id === seriesId);
@@ -1277,7 +1315,6 @@ function selectEpisodeFromDrawer(epIndex) {
     openVideoDetailView(s.id, epIndex);
 }
 
-// =================== ফিল্টার ও ক্যাটাগরি হ্যান্ডলার ===================
 function renderAllCategoryChips() {
     ['movies', 'series', 'adult'].forEach(sec => {
         const tabKey = sec === 'movies' ? 'movie' : sec;
@@ -1406,7 +1443,6 @@ function goToPaginationPage(type, pageNum) {
     filterVideosUI();
 }
 
-// ভিডিও গ্রিড রেন্ডারার
 function renderVideosForGrid(type, list) {
     const grid = $(`${type === 'movies' ? 'movie' : type}-list-grid`);
     if (!grid) return;
@@ -1570,7 +1606,6 @@ function extractTelegramUser() {
     return u;
 }
 
-// =================== অ্যাড ইনিশিয়ালাইজার ===================
 function showMonetagAd() {
     return new Promise((resolve) => {
         const sdkName = APP_CONFIG.monetagSdkName || 'show_11928576';
@@ -1623,7 +1658,6 @@ async function initApp() {
     applyAdminConfigToUI();
     initAdsgram();
 
-    // অ্যাপ স্টার্ট হওয়ার সাথে সাথে ব্যাকগ্রাউন্ডে নিশ্চিত হওয়া যে সে মেম্বার আছে কি না
     syncTelegramMembershipStatus();
 
     // ফায়ারবেস কনফিগারেশন লিসেনার
@@ -1647,10 +1681,10 @@ async function initApp() {
                 return {
                     id: d.id,
                     ...data,
+                    category: data.category || '',
                     thumb: data.thumb || data.thumbnail || data.poster || 'https://via.placeholder.com/600x450',
                     views: Number(data.views || 0),
                     likes: Number(data.likes || 0),
-                    // সকল সম্ভাব্য তারিখ/টাইমস্ট্যাম্প ফিল্ড সাপোর্ট
                     createdAt: data.createdAt || data.timestamp || data.date || data.uploadDate || data.created_at || data.time || data.publishedAt || null,
                     links: extractVideoLinks(data)
                 };
