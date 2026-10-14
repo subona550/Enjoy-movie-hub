@@ -1128,19 +1128,43 @@ function updateUnlockProgressUI() {
 function toggleDetailVideoLike() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
-    const isLiked = !userLikedVideos[vId];
-    userLikedVideos[vId] = !isLiked;
-    activeDetailVideo.likes = Math.max(0, (activeDetailVideo.likes || 0) + (isLiked ? -1 : 1));
+    
+    // ইউজার পূর্বে লাইক দিয়েছে কি না তা সরাসরি চেক করা
+    const alreadyLiked = !!userLikedVideos[vId];
+    
+    if (alreadyLiked) {
+        // পূর্বে লাইক দেওয়া থাকলে লাইক তুলে নেওয়া (মাইনাস ১)
+        userLikedVideos[vId] = false;
+        activeDetailVideo.likes = Math.max(0, (activeDetailVideo.likes || 0) - 1);
+    } else {
+        // লাইক না দেওয়া থাকলে নতুন লাইক যোগ করা (প্লাস ১)
+        userLikedVideos[vId] = true;
+        activeDetailVideo.likes = (activeDetailVideo.likes || 0) + 1;
+        triggerHaptic('success'); // ভাইব্রেশন ফিডব্যাক
+    }
+    
+    // লোকাল স্টোরেজে সেভ
     localStorage.setItem('app_user_liked_vids', JSON.stringify(userLikedVideos));
     
-    if ($('detail-likes-txt')) $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes)} ${I18N[APP_LANG].likesWord}`;
-    $('detail-like-btn-action')?.classList.toggle('active-liked', !isLiked);
+    // ১. ডিটেইলস স্ক্রিনের লাইক সংখ্যা ও বাটন আপডেট
+    if ($('detail-likes-txt')) {
+        $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes)} ${I18N[APP_LANG].likesWord}`;
+    }
+    $('detail-like-btn-action')?.classList.toggle('active-liked', !alreadyLiked);
     
+    // ২. মেইন লিস্টের কার্ডে থাকা লাইক কাউন্টার ও আইকন কালার আপডেট
     const cardLikeEl = $(`card-like-cnt-${vId}`);
-    if (cardLikeEl) cardLikeEl.innerText = formatNumber(activeDetailVideo.likes);
-    $(`card-like-pill-${vId}`)?.classList.toggle('active-liked', !isLiked);
+    if (cardLikeEl) {
+        cardLikeEl.innerText = formatNumber(activeDetailVideo.likes);
+    }
+    $(`card-like-pill-${vId}`)?.classList.toggle('active-liked', !alreadyLiked);
 
-    if (db) db.collection("videos").doc(vId).update({ likes: firebase.firestore.FieldValue.increment(isLiked ? -1 : 1) }).catch(()=>{});
+    // ৩. ফায়ারবেস ডাটাবেসে লাইক কাউন্ট আপডেট
+    if (db) {
+        db.collection("videos").doc(vId).update({
+            likes: firebase.firestore.FieldValue.increment(alreadyLiked ? -1 : 1)
+        }).catch(err => console.error("Like update failed:", err));
+    }
 }
 
 function renderPlayerParts(links, activeIndex) {

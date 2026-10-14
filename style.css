@@ -2441,3 +2441,14 @@ header#main-header {
     margin-bottom: 16px; 
     box-shadow: 0 0 20px rgba(255, 8, 68, 0.4);
 }
+
+/* ডিটেইল ভিউর লাইক বাটন অ্যাক্টিভ স্টাইল */
+.poster-pill-btn.active-liked {
+    border-color: #ff0844 !important;
+    color: #ff4e50 !important;
+}
+
+.poster-pill-btn.active-liked i {
+    color: #ff0844 !important;
+    text-shadow: 0 0 10px #ff0844;
+}
