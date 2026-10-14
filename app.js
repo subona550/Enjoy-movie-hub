@@ -208,7 +208,7 @@ function formatNumber(n) {
     return String(n).replace(/\d/g, d => bn[d]);
 }
 
-// ১০০% নির্ভুল টাইম এগো লজিক (সব ধরনের ফায়ারবেস ফিল্ড ও ফরম্যাট সাপোর্ট করে)
+// ১০০% নির্ভুল Time-Ago ফাংশন (০ মাস বা ভুল হিসাব সম্পূর্ণ ফিক্সড)
 function formatTimeAgo(timestamp) {
     if (!timestamp) return I18N[APP_LANG].justNow;
     
@@ -246,28 +246,34 @@ function formatTimeAgo(timestamp) {
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-    const weeks = Math.floor(days / 7);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
 
     const t = I18N[APP_LANG];
 
+    // মিনিটের হিসাব
     if (minutes < 1) return t.justNow;
     if (minutes < 60) return `${formatNumber(minutes)} ${t.minutesAgo}`;
-    if (hours < 24) return `${formatNumber(hours)} ${t.hoursAgo}`;
-    if (days < 7) return `${formatNumber(days)} ${t.daysAgo}`;
-    if (weeks < 4) return `${formatNumber(weeks)} ${t.weeksAgo}`;
-    if (months < 12) return `${formatNumber(months)} ${t.monthsAgo}`;
-    return `${formatNumber(years)} ${t.yearsAgo}`;
-}
 
-function getDeviceUUID() {
-    let devId = localStorage.getItem('app_device_fingerprint_secure');
-    if (!devId) {
-        devId = 'dev_' + Math.random().toString(36).substring(2, 12);
-        localStorage.setItem('app_device_fingerprint_secure', devId);
+    // ঘণ্টার হিসাব (১ থেকে ২৩ ঘণ্টা)
+    if (hours < 24) return `${formatNumber(hours)} ${t.hoursAgo}`;
+
+    // দিনের হিসাব (১ থেকে ৬ দিন)
+    if (days < 7) return `${formatNumber(days)} ${t.daysAgo}`;
+
+    // সপ্তাহের হিসাব (৭ থেকে ২৯ দিন = ১ থেকে ৪ সপ্তাহ)
+    if (days < 30) {
+        const weeks = Math.max(1, Math.floor(days / 7));
+        return `${formatNumber(weeks)} ${t.weeksAgo}`;
     }
-    return devId;
+
+    // মাসের হিসাব (৩০ থেকে ৩৬৪ দিন = ১ থেকে ১১ মাস)
+    if (days < 365) {
+        const months = Math.max(1, Math.floor(days / 30));
+        return `${formatNumber(months)} ${t.monthsAgo}`;
+    }
+
+    // বছরের হিসাব (৩৬৫ দিন বা তার বেশি)
+    const years = Math.max(1, Math.floor(days / 365));
+    return `${formatNumber(years)} ${t.yearsAgo}`;
 }
 
 function showToast(msg, type = 'info') {
@@ -812,10 +818,36 @@ function closeDedicatedAdScreen() {
 
 function updateDedicatedAdScreenUI() {
     const pts = userData.balancePoints ?? 0;
+    const watched = userData.dailyAdsWatched || 0;
+    const limit = (activeDedicatedNetwork === 'adsgram' ? APP_CONFIG.adsgramDailyLimit : APP_CONFIG.monetagDailyLimit) || 10;
+    const reward = (activeDedicatedNetwork === 'adsgram' ? APP_CONFIG.adsgramRewardPoints : APP_CONFIG.monetagRewardPoints) || 2;
+    const remaining = Math.max(0, limit - watched);
+    const percent = Math.min(100, Math.round((watched / limit) * 100));
+
     if ($('ded-stat-balance')) $('ded-stat-balance').innerText = formatNumber(pts);
-    if ($('ded-stat-reward')) $('ded-stat-reward').innerText = formatNumber(2);
-    if ($('ded-stat-watched')) $('ded-stat-watched').innerText = formatNumber(userData.dailyAdsWatched || 0);
-    if ($('ded-stat-limit')) $('ded-stat-limit').innerText = formatNumber(10);
+    if ($('ded-stat-reward')) $('ded-stat-reward').innerText = formatNumber(reward);
+    if ($('ded-stat-watched')) $('ded-stat-watched').innerText = formatNumber(watched);
+    if ($('ded-stat-limit')) $('ded-stat-limit').innerText = formatNumber(limit);
+
+    // নিচের সেটিংস কার্ড ও প্রগ্রেস বার লাইভ আপডেট
+    if ($('ded-row-reward')) $('ded-row-reward').innerText = `${formatNumber(reward)} ${I18N[APP_LANG].unitPoints}`;
+    if ($('ded-row-limit')) $('ded-row-limit').innerText = formatNumber(limit);
+    if ($('ded-row-remaining')) $('ded-row-remaining').innerText = formatNumber(remaining);
+    if ($('ded-progress-bar')) $('ded-progress-bar').style.width = `${percent}%`;
+    if ($('ded-progress-text')) $('ded-progress-text').innerText = `${formatNumber(watched)} / ${formatNumber(limit)} ${I18N[APP_LANG].doneToday}`;
+
+    const btn = $('btn-watch-dedicated-ad');
+    if (btn) {
+        if (remaining <= 0) {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${I18N[APP_LANG].doneToday}`;
+        } else {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.innerHTML = `<i class="fa-solid fa-play"></i> ${I18N[APP_LANG].btnWatchReward}`;
+        }
+    }
 }
 
 // =================== উইথড্র স্ক্রিন ও হিস্টোরি ===================
