@@ -148,9 +148,10 @@ let activeHeroFilterTags = { adult: 'adult_new', series: 'new_series', movies: '
 let adminCreatedCategories = [];
 let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 let activeDedicatedNetwork = 'adsgram';
-let isTgMemberVerified = false;
 
-// শেষ দেখা ভিডিও এবং স্ক্রল পজিশন
+// মেমোরি থেকে ভেরিফিকেশন স্ট্যাটাস রিস্টোর (যদি পূর্বে ভেরিফাই করা থাকে)
+let isTgMemberVerified = localStorage.getItem('tg_member_verified') === 'true';
+
 let lastListScrollY = 0;
 let lastOpenedVideoId = null;
 
@@ -207,22 +208,39 @@ function formatNumber(n) {
     return String(n).replace(/\d/g, d => bn[d]);
 }
 
-// ১ থেকে ২৪ ঘণ্টার পর দিন, ৭ দিন পর সপ্তাহ, কয়েক সপ্তাহ পর মাস হিসাবের Time Ago
+// ১০০% নির্ভুল টাইম এগো লজিক (সব ধরনের ফায়ারবেস ফিল্ড ও ফরম্যাট সাপোর্ট করে)
 function formatTimeAgo(timestamp) {
     if (!timestamp) return I18N[APP_LANG].justNow;
     
     let time = 0;
-    if (typeof timestamp === 'object' && timestamp.seconds) {
-        time = timestamp.seconds * 1000;
-    } else if (timestamp instanceof Date) {
-        time = timestamp.getTime();
-    } else if (typeof timestamp === 'number') {
-        time = timestamp;
-    } else {
-        time = new Date(timestamp).getTime();
+    try {
+        if (typeof timestamp === 'object') {
+            if (typeof timestamp.toDate === 'function') {
+                time = timestamp.toDate().getTime();
+            } else if (typeof timestamp.toMillis === 'function') {
+                time = timestamp.toMillis();
+            } else if (timestamp.seconds !== undefined) {
+                time = timestamp.seconds * 1000;
+            } else if (timestamp._seconds !== undefined) {
+                time = timestamp._seconds * 1000;
+            } else if (timestamp instanceof Date) {
+                time = timestamp.getTime();
+            }
+        } else if (typeof timestamp === 'number') {
+            time = timestamp < 10000000000 ? timestamp * 1000 : timestamp;
+        } else if (typeof timestamp === 'string') {
+            const num = Number(timestamp);
+            if (!isNaN(num) && num > 0) {
+                time = num < 10000000000 ? num * 1000 : num;
+            } else {
+                time = new Date(timestamp).getTime();
+            }
+        }
+    } catch (e) {
+        return I18N[APP_LANG].justNow;
     }
 
-    if (isNaN(time) || time <= 0) return I18N[APP_LANG].justNow;
+    if (!time || isNaN(time) || time <= 0) return I18N[APP_LANG].justNow;
 
     const diff = Math.max(0, Date.now() - time);
     const minutes = Math.floor(diff / 60000);
@@ -341,7 +359,6 @@ function applyStaticTranslations() {
 function applyAdminConfigToUI() {
     const t = I18N[APP_LANG];
     const bMin = APP_CONFIG.minWithdrawBkash || 100, nMin = APP_CONFIG.minWithdrawNagad || 100, rMin = APP_CONFIG.minWithdrawRecharge || 40;
-    const rate = APP_CONFIG.pointsToTakaRate || 0.3;
 
     if ($('preloader-bot-name')) $('preloader-bot-name').innerText = APP_CONFIG.botUsername || "Ret2_bot";
     if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
@@ -442,6 +459,7 @@ async function unlockVideoWithPoints() {
 
         userData.balancePoints = data.newBalance;
         videoUnlockExpiryMap[activeDetailVideo.id] = data.expiry || (Date.now() + ((APP_CONFIG.pointsUnlockDurationHours || 24) * 3600000));
+        videoAdProgressMap[activeDetailVideo.id] = 0; // পয়েন্ট দিয়ে আনলক হলে অ্যাড কাউন্টার রিসেট
         saveUnlockProgress();
 
         updateUserUI();
@@ -495,9 +513,17 @@ async function watchVideoUnlockAd() {
     }
 }
 
+// আর্ন হাবে অ্যাড দেখে পয়েন্ট আয় (চ্যানেল ভেরিফিকেশন ছাড়া ব্লক থাকবে)
 async function watchSpecificNetworkAd() {
     const btn = $('btn-watch-dedicated-ad');
     if (!btn || btn.disabled) return;
+
+    // সিকিউরিটি চেক: যদি চ্যানেল ভেরিফাইড না থাকে তবে কাজ করতে পারবে না
+    if (!isTgMemberVerified) {
+        showToast("প্রথমে চ্যানেলে জয়েন হয়ে ভেরিফাই সম্পন্ন করুন!", "error");
+        openEarnHubView();
+        return;
+    }
 
     triggerHaptic('medium');
     btn.disabled = true;
@@ -603,18 +629,56 @@ async function checkTelegramMembershipRealtime(userId) {
     } catch { return { isMember: false }; }
 }
 
+// চ্যানেল ভেরিফিকেশন (একবার ভেরিফাই হলে পারমানেন্টলি সেভ থাকবে)
 async function verifyTelegramChannelJoin() {
     triggerHaptic('medium');
-    const res = await checkTelegramMembershipRealtime(currentUser?.id);
-    if (res.isMember) {
-        isTgMemberVerified = true;
-        updateEarnHubLockUI();
-        $('telegram-mandatory-modal').style.display = 'none';
-        updateTelegramBackButtonState();
-        showToast("চ্যানেল ভেরিফিকেশন সফল হয়েছে!", "success");
-    } else {
-        showToast("আপনি এখনো চ্যানেলে যুক্ত হননি!", "error");
+    const btn = $('btn-hub-verify-tg');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> যাচাই হচ্ছে...`;
     }
+
+    try {
+        const res = await checkTelegramMembershipRealtime(currentUser?.id);
+        if (res && res.isMember) {
+            isTgMemberVerified = true;
+            localStorage.setItem('tg_member_verified', 'true'); // চিরস্থায়ী সংরক্ষণ
+            updateEarnHubLockUI();
+            if ($('telegram-mandatory-modal')) $('telegram-mandatory-modal').style.display = 'none';
+            updateTelegramBackButtonState();
+            showToast("চ্যানেল ভেরিফিকেশন সফল হয়েছে!", "success");
+        } else {
+            isTgMemberVerified = false;
+            localStorage.removeItem('tg_member_verified');
+            updateEarnHubLockUI();
+            showToast("আপনি এখনো চ্যানেলে যুক্ত হননি বা লিভ নিয়েছেন!", "error");
+        }
+    } catch(e) {
+        showToast("ভেরিফিকেশনে সমস্যা হয়েছে, আবার চেষ্টা করুন!", "error");
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-check-double"></i> ${I18N[APP_LANG].hubVerifyBtnTxt}`;
+        }
+    }
+}
+
+// ব্যাকগ্রাউন্ডে নিশ্চিত করা যে ইউজার চ্যানেল থেকে লিভ নিয়েছে কি না
+async function syncTelegramMembershipStatus() {
+    if (!currentUser?.id) return;
+    try {
+        const res = await checkTelegramMembershipRealtime(currentUser.id);
+        if (res && res.isMember) {
+            isTgMemberVerified = true;
+            localStorage.setItem('tg_member_verified', 'true');
+        } else {
+            isTgMemberVerified = false;
+            localStorage.removeItem('tg_member_verified'); // লিভ নিলে ভেরিফিকেশন বাতিল
+        }
+    } catch (e) {
+        // নেটওয়ার্ক ইস্যু হলে পূর্বের লোকাল স্টোরেজের স্টেট বহাল থাকবে
+    }
+    updateEarnHubLockUI();
 }
 
 function goToTelegramChannel() {
@@ -669,9 +733,24 @@ function updateEarnHubLockUI() {
     const lock = $('earn-hub-lock-overlay');
     const cards = $('earn-hub-grid-cards');
     const tgBanner = $('earn-hub-tg-banner');
+    const statusBadge = $('hub-verification-status-badge');
 
     if (hubView) {
         hubView.classList.toggle('earn-hub-unlocked', isTgMemberVerified);
+    }
+
+    if (statusBadge) {
+        if (isTgMemberVerified) {
+            statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${I18N[APP_LANG].hubVerifiedBadge}`;
+            statusBadge.style.background = 'rgba(0, 242, 96, 0.15)';
+            statusBadge.style.color = '#00f260';
+            statusBadge.style.borderColor = '#00f260';
+        } else {
+            statusBadge.innerHTML = `<i class="fa-solid fa-lock"></i> ${I18N[APP_LANG].hubUnverifiedBadge}`;
+            statusBadge.style.background = 'rgba(255, 8, 68, 0.15)';
+            statusBadge.style.color = '#ff0844';
+            statusBadge.style.borderColor = '#ff0844';
+        }
     }
 
     if (lock && cards) {
@@ -698,7 +777,11 @@ function openEarnHubView() {
     $('dedicated-ad-view').style.display = 'none';
     $('main-header').style.display = 'none';
     $('earn-hub-view').style.display = 'block';
+    
+    // তাৎক্ষণিক পূর্বের স্টেট দেখাবে এবং ব্যাকগ্রাউন্ডে ভেরিফাই নিশ্চিত করবে
     updateEarnHubLockUI();
+    syncTelegramMembershipStatus();
+
     updateTelegramBackButtonState();
 }
 
@@ -710,6 +793,10 @@ function closeEarnHubView() {
 }
 
 function openDedicatedAdScreen(network) {
+    if (!isTgMemberVerified) {
+        showToast("প্রথমে চ্যানেলে জয়েন হয়ে ভেরিফাই সম্পন্ন করুন!", "error");
+        return;
+    }
     activeDedicatedNetwork = network;
     $('earn-hub-view').style.display = 'none';
     $('dedicated-ad-view').style.display = 'block';
@@ -860,8 +947,23 @@ function isMovieVideo(v) {
     return !isSeriesVideo(v) && !isAdultVideo(v); 
 }
 
+// মেয়াদ উত্তীর্ণ হলে স্বয়ংক্রিয় ক্লিনআপ এবং প্রগ্রেস বার রিসেট
+function checkAndCleanExpiredUnlock(videoId) {
+    if (!videoId) return false;
+    if (videoUnlockExpiryMap[videoId]) {
+        if (Date.now() >= videoUnlockExpiryMap[videoId]) {
+            delete videoUnlockExpiryMap[videoId];
+            videoAdProgressMap[videoId] = 0; // ১০০% নিশ্চিত প্রগ্রেস বার ০ হবে
+            saveUnlockProgress();
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
 function isVideoCurrentlyUnlocked(videoId) {
-    return !!(videoId && videoUnlockExpiryMap[videoId] && Date.now() < videoUnlockExpiryMap[videoId]);
+    return checkAndCleanExpiredUnlock(videoId);
 }
 
 function loadSavedProgress() {
@@ -882,7 +984,7 @@ function executeUnlockSuccess(type) {
     setTimeout(() => playMovie(activeDetailVideo), 800);
 }
 
-// লাইভ কাউন্টডাউন এবং মেয়াদ শেষ হলে সাথে সাথে বাটন রিসেট
+// লাইভ কাউন্টডাউন এবং মেয়াদ শেষ হওয়ার সাথে সাথে প্রগ্রেস বার রিসেট
 function startExpiryCountdown(vId) {
     if (countdownTimerInterval) clearInterval(countdownTimerInterval);
     const timer = $('unlock-remaining-countdown');
@@ -892,9 +994,9 @@ function startExpiryCountdown(vId) {
         if (diff <= 0) {
             clearInterval(countdownTimerInterval);
             delete videoUnlockExpiryMap[vId];
-            delete videoAdProgressMap[vId];
+            videoAdProgressMap[vId] = 0; // মেয়াদ শেষ হলে প্রগ্রেস সাথে সাথে রিসেট
             saveUnlockProgress();
-            updateUnlockProgressUI(); // মেয়াদ শেষ হলে বাটন ও UI রিসেট হবে
+            updateUnlockProgressUI();
             showToast(APP_LANG === 'bn' ? "ভিডিওর আনলক মেয়াদ শেষ হয়েছে!" : "Unlock duration expired!", "info");
             return;
         }
@@ -908,7 +1010,7 @@ function startExpiryCountdown(vId) {
     countdownTimerInterval = setInterval(update, 1000);
 }
 
-// আনলক বাটন ও UI প্রগ্রেস আপডেট
+// আনলক বাটন ও UI প্রগ্রেস বার আপডেট (রিসেট বাগ ফিক্সড)
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
@@ -917,8 +1019,15 @@ function updateUnlockProgressUI() {
     const adBtn = $('btn-unlock-ad-step');
     const pointBtn = $('btn-unlock-point-step');
 
-    const done = videoAdProgressMap[vId] || 0;
     const total = APP_CONFIG.unlockAdCount || 3;
+
+    // যদি আনলক না থাকে অথচ কোনো কারণে অ্যাড ৩/৩ হয়ে ছিল, তবে সাথে সাথে ০ তে রিসেট হবে
+    if (!isUnlocked && (videoAdProgressMap[vId] || 0) >= total) {
+        videoAdProgressMap[vId] = 0;
+        saveUnlockProgress();
+    }
+
+    const done = videoAdProgressMap[vId] || 0;
 
     if ($('ui-point-cost-preview')) $('ui-point-cost-preview').innerHTML = `${formatNumber(APP_CONFIG.unlockPointsCost || 5)} <small>pt</small>`;
     if ($('ui-user-points-count')) $('ui-user-points-count').innerText = formatNumber(userData.balancePoints || 0);
@@ -931,14 +1040,12 @@ function updateUnlockProgressUI() {
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = '100%';
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(total)}/${formatNumber(total)}`;
         
-        // পয়েন্ট বাটন ডিসেবল থাকবে
         if (pointBtn) { 
             pointBtn.disabled = true; 
             pointBtn.style.opacity = '0.5';
             pointBtn.classList.remove('btn-animated-shine');
         }
 
-        // অ্যাড আনলক বাটন প্লে বাটনে রূপান্তরিত হবে
         if (adBtn) {
             adBtn.disabled = false;
             adBtn.classList.add('btn-animated-shine');
@@ -954,7 +1061,6 @@ function updateUnlockProgressUI() {
         if (timerCard) timerCard.style.display = 'none';
         if (countdownTimerInterval) clearInterval(countdownTimerInterval);
 
-        // আনলক রিসেট: পয়েন্ট বাটন সক্রিয়
         if (pointBtn) { 
             pointBtn.disabled = false; 
             pointBtn.style.opacity = '1';
@@ -968,11 +1074,11 @@ function updateUnlockProgressUI() {
             `;
         }
 
+        // প্রগ্রেস পার্সেন্টেজ হিসাব
         const p = Math.min(100, Math.round((done / total) * 100));
         if ($('unlock-p-bar')) $('unlock-p-bar').style.width = `${p}%`;
         if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)}/${formatNumber(total)}`;
 
-        // বিজ্ঞাপন দেখে আনলক বাটন রিসেট
         if (adBtn) {
             adBtn.disabled = false;
             adBtn.classList.add('btn-animated-shine');
@@ -990,7 +1096,7 @@ function updateUnlockProgressUI() {
 function toggleDetailVideoLike() {
     if (!activeDetailVideo) return;
     const vId = activeDetailVideo.id;
-    const isLiked = !!userLikedVideos[vId];
+    const isLiked = !userLikedVideos[vId];
     userLikedVideos[vId] = !isLiked;
     activeDetailVideo.likes = Math.max(0, (activeDetailVideo.likes || 0) + (isLiked ? -1 : 1));
     localStorage.setItem('app_user_liked_vids', JSON.stringify(userLikedVideos));
@@ -998,7 +1104,6 @@ function toggleDetailVideoLike() {
     if ($('detail-likes-txt')) $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes)} ${I18N[APP_LANG].likesWord}`;
     $('detail-like-btn-action')?.classList.toggle('active-liked', !isLiked);
     
-    // ভিডিও গ্রিডের স্পেসিফিক কার্ডে লাইক সংখ্যা আপডেট
     const cardLikeEl = $(`card-like-cnt-${vId}`);
     if (cardLikeEl) cardLikeEl.innerText = formatNumber(activeDetailVideo.likes);
     $(`card-like-pill-${vId}`)?.classList.toggle('active-liked', !isLiked);
@@ -1245,7 +1350,7 @@ function goToPaginationPage(type, pageNum) {
     filterVideosUI();
 }
 
-// ভিডিও কার্ডে লাইক, ভিউ এবং আপলোড Time-Ago যুক্ত রেন্ডারার
+// ভিডিও গ্রিড রেন্ডারার
 function renderVideosForGrid(type, list) {
     const grid = $(`${type === 'movies' ? 'movie' : type}-list-grid`);
     if (!grid) return;
@@ -1278,7 +1383,6 @@ function renderVideosForGrid(type, list) {
                         <div class="series-share-btn" onclick="shareVideoItem(event, '${v.id}', '${encodeURIComponent(v.title)}')"><i class="fa-solid fa-share-nodes"></i></div>
                     </div>
                     
-                    <!-- ভিডিওর নিচে লাইক, ভিউ এবং ডায়নামিক Time-Ago বার -->
                     <div class="series-meta-row">
                         <div class="series-chips-group">
                             <span class="series-chip-pill ${isLiked ? 'active-liked' : ''}" id="card-like-pill-${v.id}">
@@ -1298,7 +1402,6 @@ function renderVideosForGrid(type, list) {
     }).join('');
 }
 
-// ডিটেইল ভিউ ওপেন করার সময় স্ক্রল পজিশন ও আইডি সংরক্ষণ
 function openVideoDetailView(videoId, epIndex = 0) {
     const video = allLoadedVideos.find(v => v.id === videoId);
     if (!video) return;
@@ -1464,6 +1567,9 @@ async function initApp() {
     applyAdminConfigToUI();
     initAdsgram();
 
+    // অ্যাপ স্টার্ট হওয়ার সাথে সাথে ব্যাকগ্রাউন্ডে নিশ্চিত হওয়া যে সে মেম্বার আছে কি না
+    syncTelegramMembershipStatus();
+
     // ফায়ারবেস কনফিগারেশন লিসেনার
     if (db) {
         db.collection("settings").doc("app_config").onSnapshot(doc => {
@@ -1488,7 +1594,8 @@ async function initApp() {
                     thumb: data.thumb || data.thumbnail || data.poster || 'https://via.placeholder.com/600x450',
                     views: Number(data.views || 0),
                     likes: Number(data.likes || 0),
-                    createdAt: data.createdAt || data.timestamp || data.date || null,
+                    // সকল সম্ভাব্য তারিখ/টাইমস্ট্যাম্প ফিল্ড সাপোর্ট
+                    createdAt: data.createdAt || data.timestamp || data.date || data.uploadDate || data.created_at || data.time || data.publishedAt || null,
                     links: extractVideoLinks(data)
                 };
             });
