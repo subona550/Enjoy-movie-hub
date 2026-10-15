@@ -118,8 +118,8 @@ let APP_CONFIG = {
     minWithdrawBkash: 100, 
     minWithdrawNagad: 100, 
     minWithdrawRecharge: 40,
-    pointsToTakaRate: 0.25,              // ১ পয়েন্ট = ০.২৫ টাকা (১০০ pt = ২৫ ৳)
-    minSelfEarnedWithdrawRatio: 0.70,    // ৭০% নিজস্ব বিজ্ঞাপন আয় বাধ্যতামূলক
+    pointsToTakaRate: 0.25,
+    minSelfEarnedWithdrawRatio: 0.70,
     adUnlockDurationHours: 2, 
     pointsUnlockDurationHours: 12, 
     maintenanceMode: false,
@@ -154,6 +154,35 @@ let currentPageMap = { adult: 1, series: 1, movies: 1 };
 
 let userLikedVideos = {};
 try { userLikedVideos = JSON.parse(localStorage.getItem('app_user_liked_vids') || '{}'); } catch(e) { userLikedVideos = {}; }
+
+/* =================== TELEGRAM STRICT ACCESS VALIDATION =================== */
+function isRunningInsideTelegram() {
+    const tgApp = window.Telegram?.WebApp;
+    if (!tgApp) return false;
+    
+    const hasInitData = typeof tgApp.initData === 'string' && tgApp.initData.trim().length > 0;
+    const hasUser = !!tgApp.initDataUnsafe?.user?.id;
+    const platform = (tgApp.platform || '').toLowerCase();
+    const isKnownPlatform = platform !== '' && platform !== 'unknown';
+
+    return (hasInitData || hasUser) && isKnownPlatform;
+}
+
+function enforceTelegramOnlyAccess() {
+    if (!isRunningInsideTelegram()) {
+        hideAppPreloader();
+        const blockScreen = $('browser-block-screen');
+        if (blockScreen) {
+            blockScreen.style.display = 'flex';
+        }
+        if ($('main-header')) $('main-header').style.display = 'none';
+        document.querySelectorAll('.content-tab').forEach(el => el.style.display = 'none');
+        const bottomNav = document.querySelector('.bottom-nav');
+        if (bottomNav) bottomNav.style.display = 'none';
+        return false;
+    }
+    return true;
+}
 
 function getTodayBDDate() { return new Date(Date.now() + 21600000).toISOString().slice(0, 10); }
 
@@ -719,17 +748,10 @@ function extractTelegramUser() {
             if (raw) u = JSON.parse(raw); 
         } catch(e) {}
     }
+    
+    // টেলিগ্রামের বাইরে কোনো ফেক গেস্ট আইডি রিটার্ন হবে না
     if (!u || !u.id) {
-        let storedGuestId = localStorage.getItem('app_guest_id');
-        if (!storedGuestId) {
-            storedGuestId = String(Math.floor(10000000 + Math.random() * 90000000));
-            localStorage.setItem('app_guest_id', storedGuestId);
-        }
-        return {
-            id: storedGuestId,
-            first_name: "ব্যবহারকারী",
-            username: "user"
-        };
+        return null;
     }
     return u;
 }
@@ -743,6 +765,12 @@ function hideAppPreloader() {
 }
 
 async function initApp() {
+    // ১. প্রথমে কঠোরভাবে টেলিগ্রাম পরিবেশ যাচাই
+    if (!enforceTelegramOnlyAccess()) {
+        console.warn("Access Blocked: Browser detected. Telegram App required.");
+        return;
+    }
+
     const safetyTimer = setTimeout(() => {
         hideAppPreloader();
     }, 2500);
@@ -760,6 +788,11 @@ async function initApp() {
     }
 
     currentUser = extractTelegramUser();
+    if (!currentUser) {
+        enforceTelegramOnlyAccess();
+        return;
+    }
+
     const uid = String(currentUser.id);
     if ($('u-profile-name')) $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
     if ($('u-profile-handle')) $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";

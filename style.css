@@ -51,6 +51,53 @@ b, strong, h1, h2, h3, h4, h5, h6 {
     text-overflow: ellipsis;
 }
 
+/* =================== BROWSER BLOCK SCREEN (টেলিগ্রাম বাধ্যতামূলক স্ক্রিন) =================== */
+#browser-block-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #030612 radial-gradient(circle at center, #0a1f48 0%, #030612 85%);
+    z-index: 1000000005;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px 20px;
+}
+
+.browser-block-icon-circle {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: rgba(0, 136, 204, 0.16);
+    border: 2px solid #0088cc;
+    color: #24a1de;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 35px rgba(0, 136, 204, 0.55), inset 0 0 15px rgba(0, 136, 204, 0.3);
+    animation: corePulse 2s infinite ease-in-out;
+}
+
+#browser-block-title {
+    font-size: 22px;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-weight: 900;
+    text-shadow: 0 0 12px rgba(0, 229, 255, 0.45);
+}
+
+#browser-block-desc {
+    font-size: 14.5px;
+    color: #8ba2c4;
+    line-height: 1.6;
+    max-width: 320px;
+    margin-bottom: 24px;
+    font-weight: 700;
+}
+
 /* =================== আধুনিক মডেল গ্লাস প্রি-লোডার =================== */
 #app-preloader {
     position: fixed; 
@@ -638,7 +685,7 @@ header {
     justify-content: center; 
     font-size: 20px; 
     color: #fff; 
-    flex-shrink: 0;
+    flex-shrink: 0; 
     box-shadow: 0 0 12px rgba(255,255,255,0.25);
 }
 
@@ -684,7 +731,7 @@ header {
 .pill-tag-outline {
     background: rgba(0, 229, 255, 0.12); 
     border: 1.5px solid var(--primary); 
-    color: var(--primary);
+    color: var(--primary); 
     font-size: 13px; 
     font-weight: 900; 
     padding: 6px 15px; 
@@ -1998,7 +2045,7 @@ header {
     font-size: 26px; 
     color: #fff; 
     position: relative; 
-    flex-shrink: 0;
+    flex-shrink: 0; 
     box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
 }
 
@@ -2445,7 +2492,7 @@ header {
 .sim-opt-pill.active {
     background: var(--grad-blue) !important; 
     border-color: var(--primary) !important; 
-    color: #ffffff !important;
+    color: #ffffff !important; 
     font-weight: 900 !important; 
     box-shadow: 0 0 14px var(--primary-glow) !important;
 }
@@ -2580,7 +2627,7 @@ header {
     top: 0; 
     left: 0; 
     width: 100%; 
-    height: 100%;
+    height: 100%; 
     background: rgba(2, 5, 14, 0.9); 
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px); 
