@@ -30,9 +30,12 @@ const I18N = {
         btnShareRef: "শেয়ার করুন", btnCopyRef: "লিংক কপি",
         payoutPageHead: "টাকা উত্তোলন", payoutPageSub: "বিকাশ, নগদ ও মোবাইল রিচার্জ",
         lblEarnStatBal: "বর্তমান পয়েন্ট", lblEarnStatRew: "প্রতি অ্যাড পয়েন্ট", lblEarnStatWatch: "দেখা বিজ্ঞাপন", lblEarnStatLim: "দৈনিক লিমিট",
-        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", videoUnlockNoticeTitle: "ভিডিও আনলক", videoUnlockNoticeDesc: "বিজ্ঞাপন দেখে ফ্রিতে অথবা পয়েন্ট দিয়ে সরাসরি ভিডিওটি চালু করুন।",
-        unlockDurationAdBadge: "২ ঘণ্টার জন্য ফ্রি", unlockDurationPtDesc: "২৪ ঘণ্টার জন্য আনলক থাকবে", btnAdWatchRemain: "বিজ্ঞাপন দেখুন", btnPointUnlock: "পয়েন্ট দিয়ে আনলক করুন",
-        lblBackHome: "হোমে ফিরে যান", rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
+        btnWatchReward: "বিজ্ঞাপন দেখে পয়েন্ট নিন", doneToday: "আজ সম্পন্ন হয়েছে", 
+        videoUnlockNoticeTitle: "ভিডিও আনলক নোটিশ", 
+        videoUnlockNoticeDesc: "বিজ্ঞাপন দেখে সম্পূর্ণ ফ্রিতে অথবা আপনার অর্জিত পয়েন্ট দিয়ে সাথে সাথে এই ভিডিওটি আনলক করে উপভোগ করুন।",
+        unlockDurationAdBadge: "২ ঘণ্টার জন্য ফ্রি", unlockDurationPtDesc: "২৪ ঘণ্টার জন্য সরাসরি আনলক থাকবে", 
+        btnAdWatchRemain: "বিজ্ঞাপন দেখে ফ্রি আনলক", btnPointUnlock: "পয়েন্ট দিয়ে সরাসরি আনলক",
+        lblBackHome: "তালিকায় ফিরে যান", rulesTitle: "ভিডিও দেখার নিয়ম", rulesDoneBtn: "বুঝেছি, ধন্যবাদ", adultModalTitle: "এন্ডাল সতর্কতা ও দায়মুক্তি নোটিশ",
         btnAdultConfirm: "আমি নিজ দায়িত্বে প্রবেশ করছি", btnAdultDecline: "না, সিনেমা লাইব্রেরিতে ফিরে যান", tgModalHeading: "চ্যানেলে জয়েন করা বাধ্যতামূলক",
         tgModalDesc: "ভিডিও আনলক করতে ও প্লে করতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকা বাধ্যতামূলক।", btnTgJoin: "চ্যানেলে জয়েন করুন", btnTgVerify: "আমি জয়েন করেছি",
         lblTabWithdraw: "উত্তোলন", lblTabHistory: "হিস্টোরি", lblCurBal: "বর্তমান ব্যালেন্স", lblTakaEquiv: "টাকার পরিমাণ", lblChooseGw: "উত্তোলন মাধ্যম বেছে নিন:",
@@ -63,9 +66,12 @@ const I18N = {
         btnShareRef: "Share Link", btnCopyRef: "Copy Link",
         payoutPageHead: "Withdraw Money", payoutPageSub: "bKash, Nagad & Mobile Recharge",
         lblEarnStatBal: "Current Points", lblEarnStatRew: "Points Per Ad", lblEarnStatWatch: "Watched Ads", lblEarnStatLim: "Daily Limit",
-        btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", videoUnlockNoticeTitle: "Unlock Video", videoUnlockNoticeDesc: "Watch ads for free access or unlock permanently with points.",
-        unlockDurationAdBadge: "Free for 2 Hours", unlockDurationPtDesc: "Unlocked for 24 Hours", btnAdWatchRemain: "Watch Ad", btnPointUnlock: "Unlock with Points",
-        lblBackHome: "Back to Home", rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
+        btnWatchReward: "Watch Ad & Collect Points", doneToday: "completed today", 
+        videoUnlockNoticeTitle: "Unlock Video Notice", 
+        videoUnlockNoticeDesc: "Watch ads for free access or unlock instantly with reward points.",
+        unlockDurationAdBadge: "Free for 2 Hours", unlockDurationPtDesc: "Unlocked for 24 Hours", 
+        btnAdWatchRemain: "Watch Ad for Free Unlock", btnPointUnlock: "Direct Unlock with Points",
+        lblBackHome: "Back to List", rulesTitle: "Video Watching Rules", rulesDoneBtn: "Understood, Thanks", adultModalTitle: "Endal Warning & Disclaimer",
         btnAdultConfirm: "I Enter At My Own Risk", btnAdultDecline: "No, Back To Movies", tgModalHeading: "Telegram Channel Join Required",
         tgModalDesc: "You must be a member of our official Telegram channel to unlock and watch videos.", btnTgJoin: "Join Channel", btnTgVerify: "I Have Joined",
         lblTabWithdraw: "Withdraw", lblTabHistory: "History", lblCurBal: "Current Balance", lblTakaEquiv: "Amount in Cash", lblChooseGw: "Select Gateway:",
@@ -112,8 +118,8 @@ let APP_CONFIG = {
     minWithdrawBkash: 100, 
     minWithdrawNagad: 100, 
     minWithdrawRecharge: 40,
-    pointsToTakaRate: 0.3, 
-    minSelfEarnedWithdrawRatio: 0.6, 
+    pointsToTakaRate: 0.25,              // ১ পয়েন্ট = ০.২৫ টাকা (১০০ pt = ২৫ ৳)
+    minSelfEarnedWithdrawRatio: 0.70,    // ৭০% নিজস্ব বিজ্ঞাপন আয় বাধ্যতামূলক
     adUnlockDurationHours: 2, 
     pointsUnlockDurationHours: 12, 
     maintenanceMode: false,
@@ -141,7 +147,7 @@ let adminCreatedCategories = [];
 let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 
 let activeDedicatedNetwork = 'adsgram';
-let lastSelectedVideoCardId = null; // ব্যাক বাটনে স্ক্রল পজিশন ধরে রাখার জন্য
+let lastSelectedVideoCardId = null;
 
 const ITEMS_PER_PAGE = 10;
 let currentPageMap = { adult: 1, series: 1, movies: 1 };
@@ -270,9 +276,8 @@ function applyStaticTranslations() {
         ['btn-share-ref-txt', t.btnShareRef], ['btn-copy-ref-txt', t.btnCopyRef], 
         ['payout-page-head', t.payoutPageHead], ['payout-page-sub', t.payoutPageSub],
         ['video-unlock-notice-title', t.videoUnlockNoticeTitle], ['video-unlock-notice-desc', t.videoUnlockNoticeDesc],
-        ['lbl-uac-ad-title', APP_LANG === 'bn' ? "বিজ্ঞাপন দেখে আনলক" : "Unlock by Watching Ads"], ['lbl-unlock-progress-txt', t.unlockProgressTxt],
-        ['lbl-uac-point-title', APP_LANG === 'bn' ? "পয়েন্ট দিয়ে সরাসরি আনলক" : "Unlock Instantly with Points"], ['lbl-cost-txt', APP_LANG === 'bn' ? "খরচ" : "Cost"],
-        ['lbl-points-unit', t.unitPoints], ['lbl-back-home-txt', t.lblBackHome], ['btn-rules-modal-close', t.rulesDoneBtn],
+        ['lbl-unlock-progress-txt', t.unlockProgressTxt],
+        ['lbl-back-home-txt', t.lblBackHome], ['btn-rules-modal-close', t.rulesDoneBtn],
         ['adult-warn-title', t.adultModalTitle], ['btn-adult-decline', t.btnAdultDecline], ['tg-modal-heading', t.tgModalHeading],
         ['tg-modal-desc-txt', t.tgModalDesc], ['lbl-tab-withdraw', t.lblTabWithdraw], ['lbl-tab-history', t.lblTabHistory],
         ['lbl-cur-bal', t.lblCurBal], ['lbl-pts-unit', t.unitPoints], ['lbl-taka-equiv', t.lblTakaEquiv], ['lbl-currency-symbol', t.currencySymbol],
@@ -291,6 +296,9 @@ function applyStaticTranslations() {
 
     txtMap.forEach(([id, val]) => { const el = $(id); if (el && val !== undefined) el.innerText = val; });
     document.querySelectorAll('.lbl-cat-select').forEach(el => el.innerText = t.catFilterLabel);
+
+    const botTitleEl = document.querySelector('.bot-title-colorful');
+    if (botTitleEl && APP_CONFIG.botUsername) botTitleEl.innerText = APP_CONFIG.botUsername;
 
     renderRulesList();
 }
@@ -329,24 +337,24 @@ function applyAdminConfigToUI() {
     } else { m.style.display = 'none'; }
 
     const bMin = APP_CONFIG.minWithdrawBkash || 100, nMin = APP_CONFIG.minWithdrawNagad || 100, rMin = APP_CONFIG.minWithdrawRecharge || 40;
-    const rate = APP_CONFIG.pointsToTakaRate || 0.3;
+    const rate = APP_CONFIG.pointsToTakaRate || 0.25;
 
-    $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
-    $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
-    $('ui-cost-points-badge').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
-    $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock} (${formatNumber(APP_CONFIG.unlockPointsCost)} ${t.unitPoints})`;
-    $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(APP_CONFIG.unlockAdCount)}টি পূরণ করুন` : `Watch ${formatNumber(APP_CONFIG.unlockAdCount)} ads to complete`;
-    $('ui-ad-duration-badge').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} ঘণ্টার জন্য ফ্রি` : `Free for ${formatNumber(APP_CONFIG.adUnlockDurationHours || 2)} Hours`;
-    $('ui-point-duration-desc').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টার জন্য আনলক থাকবে` : `Unlocked for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} Hours`;
-    $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
-    $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
-    $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
-    $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
+    if ($('ui-referral-bonus-txt')) $('ui-referral-bonus-txt').innerText = `${formatNumber(APP_CONFIG.referralBonus)} ${t.unitPoints}`;
+    if ($('ui-signup-bonus-txt')) $('ui-signup-bonus-txt').innerText = `${formatNumber(APP_CONFIG.signupBonus)} ${t.unitPoints}`;
+    if ($('ui-cost-points-badge')) $('ui-cost-points-badge').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
+    if ($('ui-cost-points-badge-btn')) $('ui-cost-points-badge-btn').innerText = formatNumber(APP_CONFIG.unlockPointsCost);
+    if ($('ui-point-unlock-btn-txt')) $('ui-point-unlock-btn-txt').innerText = `${t.btnPointUnlock}`;
+    if ($('ui-ad-progress-desc')) $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(APP_CONFIG.unlockAdCount)}টি পূরণ করুন` : `Watch ${formatNumber(APP_CONFIG.unlockAdCount)} ads to complete`;
+    if ($('ui-point-duration-desc')) $('ui-point-duration-desc').innerText = APP_LANG === 'bn' ? `${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} ঘণ্টার জন্য সরাসরি আনলক থাকবে` : `Unlocked for ${formatNumber(APP_CONFIG.pointsUnlockDurationHours || 24)} Hours`;
+    if ($('lbl-min-bkash')) $('lbl-min-bkash').innerText = `${formatNumber(bMin)} ${t.unitPoints} (${formatNumber(Math.round(bMin * rate))}${t.currencySymbol})`;
+    if ($('lbl-min-nagad')) $('lbl-min-nagad').innerText = `${formatNumber(nMin)} ${t.unitPoints} (${formatNumber(Math.round(nMin * rate))}${t.currencySymbol})`;
+    if ($('lbl-min-recharge')) $('lbl-min-recharge').innerText = `${formatNumber(rMin)} ${t.unitPoints} (${formatNumber(Math.round(rMin * rate))}${t.currencySymbol})`;
+    if ($('ui-min-withdraw-summary')) $('ui-min-withdraw-summary').innerText = `${t.rechargeSummaryPrefix} ${formatNumber(Math.round(rMin * rate))} ${t.currencySymbol} | ${t.bkashNagadSummaryPrefix} ${formatNumber(Math.round(bMin * rate))} ${t.currencySymbol}`;
 
     if ($('ui-payout-admin-notice')) $('ui-payout-admin-notice').innerText = APP_CONFIG.withdrawNotice || t.defaultWithdrawNotice;
     updateGatewaysAvailabilityUI();
 
-    if (currentUser?.id) {
+    if (currentUser?.id && $('ref-share-url-box')) {
         $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${currentUser.id}`;
     }
     updateUserUI();
@@ -380,15 +388,15 @@ function updateGatewaysAvailabilityUI() {
 
 function updateUserUI() {
     const pts = userData.balancePoints ?? (APP_CONFIG.initialPoints || 0);
-    const rate = APP_CONFIG.pointsToTakaRate || 0.3;
+    const rate = APP_CONFIG.pointsToTakaRate || 0.25;
 
-    $('profile-points-val').innerText = formatNumber(pts);
-    $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
-    $('payout-modal-pts').innerText = formatNumber(pts);
-    $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
+    if ($('profile-points-val')) $('profile-points-val').innerText = formatNumber(pts);
+    if ($('profile-ref-count')) $('profile-ref-count').innerText = formatNumber(userData.totalReferrals ?? 0);
+    if ($('payout-modal-pts')) $('payout-modal-pts').innerText = formatNumber(pts);
+    if ($('payout-modal-tk')) $('payout-modal-tk').innerText = formatNumber((pts * rate).toFixed(2));
 }
 
-/* =================== আর্নিং হাব ও টেলিগ্রাম চ্যানেল লক =================== */
+/* =================== আর্নিং হাব ও টেলিগ্রাম লক =================== */
 async function openEarnHubView() {
     triggerHaptic('light');
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
@@ -547,8 +555,8 @@ async function watchSpecificNetworkAd() {
                         balancePoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
                         referralEarnedPoints: firebase.firestore.FieldValue.increment(APP_CONFIG.referralBonus || 20),
                         totalReferrals: firebase.firestore.FieldValue.increment(1)
-                    });
-                    await userRef.update({ referralActivated: true });
+                    }).catch(()=>{});
+                    await userRef.update({ referralActivated: true }).catch(()=>{});
                 }
             }
 
@@ -696,62 +704,83 @@ function listenToAdminConfig() {
 
 function extractTelegramUser() {
     let u = null;
-    if (window.Telegram?.WebApp?.initDataUnsafe?.user) u = window.Telegram.WebApp.initDataUnsafe.user;
-    else if (window.Telegram?.WebApp?.initData) {
-        try { const raw = new URLSearchParams(window.Telegram.WebApp.initData).get('user'); if (raw) u = JSON.parse(raw); } catch(e) {}
+    if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+        u = window.Telegram.WebApp.initDataUnsafe.user;
+    } else if (window.Telegram?.WebApp?.initData) {
+        try { 
+            const raw = new URLSearchParams(window.Telegram.WebApp.initData).get('user'); 
+            if (raw) u = JSON.parse(raw); 
+        } catch(e) {}
     }
     if (!u && window.location.hash) {
         try {
             const innerP = new URLSearchParams(new URLSearchParams(window.location.hash.substring(1)).get('tgWebAppData'));
-            const raw = innerP.get('user'); if (raw) u = JSON.parse(raw);
+            const raw = innerP.get('user'); 
+            if (raw) u = JSON.parse(raw); 
         } catch(e) {}
     }
     if (!u || !u.id) {
-        document.body.innerHTML = `
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#050814; color:#fff; text-align:center; padding:20px;">
-                <i class="fa-brands fa-telegram" style="font-size:60px; color:var(--primary); margin-bottom:15px; filter: drop-shadow(0 0 15px var(--primary));"></i>
-                <h2 style="font-size:22px; margin-bottom:10px; font-weight:900;">শুধুমাত্র টেলিগ্রামে চলবে</h2>
-                <p style="font-size:15px; color:#8ba2c4; max-width:300px; line-height:1.5; font-weight:700;">এই অ্যাপটি ব্যবহারের জন্য দয়া করে আমাদের অফিসিয়াল টেলিগ্রাম বট থেকে প্রবেশ করুন।</p>
-            </div>`;
-        throw new Error("Unauthorized: Opened outside Telegram");
+        let storedGuestId = localStorage.getItem('app_guest_id');
+        if (!storedGuestId) {
+            storedGuestId = String(Math.floor(10000000 + Math.random() * 90000000));
+            localStorage.setItem('app_guest_id', storedGuestId);
+        }
+        return {
+            id: storedGuestId,
+            first_name: "ব্যবহারকারী",
+            username: "user"
+        };
     }
     return u;
 }
 
 function hideAppPreloader() {
     const preloader = $('app-preloader');
-    if (preloader) {
+    if (preloader && preloader.style.display !== 'none') {
         preloader.classList.add('hide-loader');
-        setTimeout(() => { preloader.style.display = 'none'; }, 550);
+        setTimeout(() => { preloader.style.display = 'none'; }, 450);
     }
 }
 
 async function initApp() {
-    try { if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); db = firebase.firestore(); } catch(e) {}
+    const safetyTimer = setTimeout(() => {
+        hideAppPreloader();
+    }, 2500);
+
+    try { 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); 
+        db = firebase.firestore(); 
+    } catch(e) {
+        console.warn("Firebase Init Error:", e);
+    }
+
     if (window.Telegram?.WebApp) {
         tg = window.Telegram.WebApp;
         try { tg.expand(); tg.ready(); setupTelegramBackButton(); } catch(e){}
     }
+
     currentUser = extractTelegramUser();
     const uid = String(currentUser.id);
-    $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
-    $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
-    $('u-profile-id').innerText = formatNumber(uid);
-    $('ref-user-code').innerText = formatNumber(uid);
-    $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
+    if ($('u-profile-name')) $('u-profile-name').innerText = currentUser.first_name || (APP_LANG === 'bn' ? "ব্যবহারকারী" : "User");
+    if ($('u-profile-handle')) $('u-profile-handle').innerText = currentUser.username ? "@" + currentUser.username : "@user";
+    if ($('u-profile-id')) $('u-profile-id').innerText = formatNumber(uid);
+    if ($('ref-user-code')) $('ref-user-code').innerText = formatNumber(uid);
+    if ($('ref-share-url-box')) $('ref-share-url-box').innerText = `https://t.me/${APP_CONFIG.botUsername}/${APP_CONFIG.appShortName}?startapp=${uid}`;
 
     loadSavedProgress();
     applyStaticTranslations();
     listenToAdminConfig();
     loadSettingsAndVideos();
-    await syncUserData();
+    
+    syncUserData().catch(() => {});
     initAdsgram();
 
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) { const v = $('in-app-video-element'); if (v && !v.paused) v.pause(); }
     });
 
-    setTimeout(hideAppPreloader, 600);
+    clearTimeout(safetyTimer);
+    setTimeout(hideAppPreloader, 350);
 }
 
 function initAdsgram() {
@@ -848,7 +877,7 @@ async function executeAdFlow(purpose = 'video', stepIndex = 0) {
 }
 
 async function syncUserData() {
-    if (!db || !currentUser?.id) return;
+    if (!db || !currentUser?.id) { updateUserUI(); return; }
     try {
         const uid = String(currentUser.id);
         const ref = db.collection("users").doc(uid);
@@ -899,7 +928,7 @@ async function syncUserData() {
         ref.onSnapshot((doc) => {
             if (doc.exists) {
                 userData = { ...userData, ...doc.data() };
-                $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
+                if ($('banned-screen')) $('banned-screen').style.display = userData.status === 'banned' ? 'flex' : 'none';
                 updateUserUI();
                 if ($('dedicated-ad-view')?.style.display === 'block') updateDedicatedAdScreenUI();
             }
@@ -908,7 +937,7 @@ async function syncUserData() {
     } catch (e) { updateUserUI(); }
 }
 
-function startButtonCooldown(btnId, defaultText, seconds = null) {
+function startButtonCooldown(btnId, defaultContent, seconds = null) {
     const btn = $(btnId);
     if (!btn) return;
     btn.disabled = true;
@@ -928,7 +957,11 @@ function startButtonCooldown(btnId, defaultText, seconds = null) {
             clearInterval(timer);
             btn.disabled = false;
             btn.classList.remove('btn-disabled-state');
-            btn.innerHTML = defaultText;
+            if (btnId === 'btn-unlock-ad-step') {
+                updateUnlockProgressUI();
+            } else if (defaultContent) {
+                btn.innerHTML = defaultContent;
+            }
             triggerHaptic('light');
         }
     }, 1000);
@@ -982,16 +1015,16 @@ async function watchVideoUnlockAd() {
             } else {
                 showToast(APP_LANG === 'bn' ? `বিজ্ঞাপন সম্পন্ন! বাকি ${formatNumber(total - videoAdProgressMap[vId])} টি` : `Ad completed! ${total - videoAdProgressMap[vId]} left`, "success");
             }
-            startButtonCooldown('btn-unlock-ad-step', $('btn-unlock-ad-step').innerHTML, APP_CONFIG.adCooldownSeconds || 5);
+            startButtonCooldown('btn-unlock-ad-step', null, APP_CONFIG.adCooldownSeconds || 5);
         } else {
             updateUnlockProgressUI();
             showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন সম্পূর্ণ দেখলে আনলক হবে!" : "Watch full ad to unlock!", "error");
-            startButtonCooldown('btn-unlock-ad-step', $('btn-unlock-ad-step').innerHTML, APP_CONFIG.adCooldownSeconds || 4);
+            startButtonCooldown('btn-unlock-ad-step', null, APP_CONFIG.adCooldownSeconds || 4);
         }
     } catch (err) {
         updateUnlockProgressUI();
         showToast(APP_LANG === 'bn' ? "বিজ্ঞাপন লোড হতে ব্যর্থ হয়েছে!" : "Ad failed to load!", "error");
-        startButtonCooldown('btn-unlock-ad-step', $('btn-unlock-ad-step').innerHTML, APP_CONFIG.adCooldownSeconds || 4);
+        startButtonCooldown('btn-unlock-ad-step', null, APP_CONFIG.adCooldownSeconds || 4);
     }
 }
 
@@ -1092,9 +1125,9 @@ function processVideoSnapshot(docs) {
         };
     }).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
-    $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
-    $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
-    $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
+    if ($('movie-total-count')) $('movie-total-count').innerText = formatNumber(allLoadedVideos.filter(isMovieVideo).length);
+    if ($('series-total-count')) $('series-total-count').innerText = formatNumber(allLoadedVideos.filter(isSeriesVideo).length);
+    if ($('adult-total-count')) $('adult-total-count').innerText = formatNumber(allLoadedVideos.filter(isAdultVideo).length);
 
     renderAllCategoryChips();
     filterVideosUI();
@@ -1337,11 +1370,6 @@ function shareVideoItem(event, videoId, encodedTitle) {
     openTelegramDirect(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(msg)}`);
 }
 
-function shareCurrentDetailVideo() {
-    if (!activeDetailVideo) return;
-    shareVideoItem(null, activeDetailVideo.id, encodeURIComponent(activeDetailVideo.title));
-}
-
 let activeSeriesForDrawer = null;
 function openSeriesEpisodesDrawer(seriesId) {
     triggerHaptic('light');
@@ -1389,7 +1417,9 @@ function selectEpisodeFromDrawer(epIndex) {
     openVideoDetailView(s.id, epIndex); 
 }
 
-/* ================= 100/100 সিনেমাটিক ভিডিও ডিটেইলস ভিউ ================= */
+/* =========================================================================
+   ইন-পেজ ভিডিও ডিটেইলস ভিউ (পোস্টার + নোটিশ + মাস্টার কার্ড)
+========================================================================= */
 function openVideoDetailView(videoId, epIndex = null) {
     triggerHaptic('light');
     lastSelectedVideoCardId = videoId;
@@ -1423,15 +1453,41 @@ function openVideoDetailView(videoId, epIndex = null) {
     updateUnlockProgressUI();
 
     document.querySelectorAll('.content-tab').forEach(t => t.style.display = 'none');
-    $('video-unlock-detail-view').style.display = 'block';
-    updateTelegramBackButtonState();
+    $('earn-hub-view').style.display = 'none';
+    $('dedicated-ad-view').style.display = 'none';
+    $('payout-view').style.display = 'none';
+    $('main-header').style.display = 'none';
+
+    const detailView = $('video-unlock-detail-view');
+    if (detailView) detailView.style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    updateTelegramBackButtonState();
+}
+
+function closeVideoDetailView() {
+    triggerHaptic('light');
+    if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
+    
+    $('video-unlock-detail-view').style.display = 'none';
+    $('main-header').style.display = 'block';
+    if ($('tab-' + currentActiveTab)) $('tab-' + currentActiveTab).style.display = 'block';
+    updateTelegramBackButtonState();
+
+    if (lastSelectedVideoCardId) {
+        setTimeout(() => {
+            const card = $(`video-card-${lastSelectedVideoCardId}`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 80);
+    }
 }
 
 function updateDetailLikeUI() {
     if (!activeDetailVideo) return;
     const isLiked = !!userLikedVideos[activeDetailVideo.id];
-    $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes || 0)} ${I18N[APP_LANG].likesWord}`;
+    if ($('detail-likes-txt')) $('detail-likes-txt').innerText = `${formatNumber(activeDetailVideo.likes || 0)} ${I18N[APP_LANG].likesWord}`;
     $('detail-like-btn-action')?.classList.toggle('active-liked', isLiked);
 }
 
@@ -1451,52 +1507,65 @@ function toggleDetailVideoLike() {
     if ($(`card-like-chip-${vId}`)) $(`card-like-chip-${vId}`).classList.toggle('active-liked', !isLiked);
 }
 
-// ব্যাক বাটনে ক্লিক করলে ঠিক আগের ভিডিওর পজিশনে ফিরিয়ে আনার লজিক
-function closeVideoDetailView() {
-    triggerHaptic('light');
-    if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
-    $('video-unlock-detail-view').style.display = 'none';
-    switchNavTab(currentActiveTab, null, false); // টপে না গিয়ে সরাসরি ট্যাবে যাবে
-    updateTelegramBackButtonState();
-
-    if (lastSelectedVideoCardId) {
-        setTimeout(() => {
-            const card = $(`video-card-${lastSelectedVideoCardId}`);
-            if (card) {
-                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }, 60);
-    }
-}
-
 function updateUnlockProgressUI() {
     if (!activeDetailVideo) return;
-    const vId = activeDetailVideo.id, total = APP_CONFIG.unlockAdCount || 3, isUnlocked = isVideoCurrentlyUnlocked(vId);
-    const t = I18N[APP_LANG], timerCard = $('unlock-status-timer-card'), adBtn = $('btn-unlock-ad-step'), pointBtn = $('btn-unlock-point-step');
+    const vId = activeDetailVideo.id;
+    const total = APP_CONFIG.unlockAdCount || 3;
+    const cost = APP_CONFIG.unlockPointsCost || 5;
+    const isUnlocked = isVideoCurrentlyUnlocked(vId);
+    const t = I18N[APP_LANG];
+    const timerCard = $('unlock-status-timer-card');
+    const pointBtn = $('btn-unlock-point-step');
 
-    if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
+    if (countdownTimerInterval) { 
+        clearInterval(countdownTimerInterval); 
+        countdownTimerInterval = null; 
+    }
+
+    const done = videoAdProgressMap[vId] || 0;
+    const remainingAds = Math.max(0, total - done);
+    const userPts = userData.balancePoints ?? 0;
+
+    if ($('detail-stat-cost-pts')) $('detail-stat-cost-pts').innerText = `${formatNumber(cost)} pt`;
+    if ($('ui-cost-points-badge')) $('ui-cost-points-badge').innerText = formatNumber(cost);
+    if ($('ui-cost-points-badge-btn')) $('ui-cost-points-badge-btn').innerText = formatNumber(cost);
+    if ($('detail-stat-user-bal')) $('detail-stat-user-bal').innerText = `${formatNumber(userPts)} pt`;
+    if ($('detail-stat-ad-req')) $('detail-stat-ad-req').innerText = isUnlocked ? (APP_LANG === 'bn' ? 'আনলকড' : 'Unlocked') : `${formatNumber(remainingAds)} টি`;
 
     if (isUnlocked) {
-        timerCard.style.display = 'flex';
+        if (timerCard) timerCard.style.display = 'flex';
         startExpiryCountdown(vId);
-        $('unlock-ratio-txt').innerText = `${formatNumber(total)} / ${formatNumber(total)} ${t.unlockCompletedTxt} (100%)`;
-        $('unlock-p-bar').style.width = "100%";
-        adBtn.innerHTML = `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}`;
-        pointBtn.disabled = true; pointBtn.style.opacity = "0.5";
+        if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(total)} / ${formatNumber(total)} ${t.unlockCompletedTxt}`;
+        if ($('unlock-p-pct')) $('unlock-p-pct').innerText = "100%";
+        if ($('unlock-p-bar')) $('unlock-p-bar').style.width = "100%";
+        if ($('btn-ad-remain-txt')) $('btn-ad-remain-txt').innerText = APP_LANG === 'bn' ? ' ভিডিও দেখুন' : 'Watch on ';
+        if ($('ui-ad-progress-desc')) $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? 'সরাসরি ভিডিও উপভোগ করুন' : 'Enjoy video streaming';
+        if (pointBtn) { pointBtn.disabled = true; pointBtn.style.opacity = "0.5"; }
     } else {
-        timerCard.style.display = 'none';
-        pointBtn.disabled = false; pointBtn.style.opacity = "1";
-        const done = videoAdProgressMap[vId] || 0, percent = Math.min(100, Math.round((done / total) * 100));
-        $('unlock-ratio-txt').innerText = `${formatNumber(done)} / ${formatNumber(total)} ${t.unlockCompletedTxt} (${formatNumber(percent)}%)`;
-        $('unlock-p-bar').style.width = percent + "%";
-        adBtn.innerHTML = done >= total ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram'}` :
-                         (done === (total - 1) ? `<i class="fa-brands fa-telegram"></i> ${APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad'}` :
-                         `<i class="fa-solid fa-desktop"></i> ${APP_LANG === 'bn' ? `বিজ্ঞাপন দেখুন (বাকি ${formatNumber(total - done)} টি)` : `Watch Ad (${total - done} remaining)`}`);
+        if (timerCard) timerCard.style.display = 'none';
+        if (pointBtn) { pointBtn.disabled = false; pointBtn.style.opacity = "1"; }
+        const percent = Math.min(100, Math.round((done / total) * 100));
+        if ($('unlock-ratio-txt')) $('unlock-ratio-txt').innerText = `${formatNumber(done)} / ${formatNumber(total)} ${t.unlockCompletedTxt}`;
+        if ($('unlock-p-pct')) $('unlock-p-pct').innerText = `${formatNumber(percent)}%`;
+        if ($('unlock-p-bar')) $('unlock-p-bar').style.width = percent + "%";
+
+        if ($('btn-ad-remain-txt')) {
+            $('btn-ad-remain-txt').innerText = done >= total 
+                ? (APP_LANG === 'bn' ? 'টেলিগ্রামে ভিডিও দেখুন' : 'Watch on Telegram')
+                : (done === (total - 1) 
+                    ? (APP_LANG === 'bn' ? 'চ্যানেলে জয়েন ও শেষ অ্যাড দেখুন' : 'Join Channel & Watch Final Ad')
+                    : (APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ফ্রি আনলক (বাকি ${formatNumber(remainingAds)} টি)` : `Watch Ad (${remainingAds} remaining)`));
+        }
+
+        if ($('ui-ad-progress-desc')) {
+            $('ui-ad-progress-desc').innerText = APP_LANG === 'bn' ? `বিজ্ঞাপন দেখে ${formatNumber(total)}টি পূরণ করুন` : `Watch ${formatNumber(total)} ads to complete`;
+        }
     }
 }
 
 function startExpiryCountdown(vId) {
     const timer = $('unlock-remaining-countdown');
+    if (!timer) return;
     if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
     const update = () => {
         const diff = (videoUnlockExpiryMap[vId] || 0) - Date.now();
@@ -1779,13 +1848,13 @@ function selectGateway(gw) {
     ['bKash', 'Nagad', 'Recharge'].forEach(g => $(`gw-card-${g}`)?.classList.toggle('active', g === gw));
     if ($('sim-operator-container')) $('sim-operator-container').style.display = (gw === 'Recharge') ? 'block' : 'none';
 
-    const minPts = getGatewayMinPoints(gw), minTk = Math.round(minPts * (APP_CONFIG.pointsToTakaRate || 0.3)), t = I18N[APP_LANG];
+    const minPts = getGatewayMinPoints(gw), minTk = Math.round(minPts * (APP_CONFIG.pointsToTakaRate || 0.25)), t = I18N[APP_LANG];
     $('payout-min-limit-alert').innerText = `${t.minWithdrawPrefix} ${formatNumber(minPts)} ${t.unitPoints} (${formatNumber(minTk)} ${t.currencySymbol})`;
 }
 
 function calculateWithdrawTakaPreview() {
     const val = parseInt($('pay-amount').value), tag = $('payout-live-calc-tag');
-    tag.innerText = (!isNaN(val) && val > 0) ? `= ${formatNumber((Math.round(val * (APP_CONFIG.pointsToTakaRate || 0.3) * 100) / 100).toFixed(2))} ${I18N[APP_LANG].currencySymbol}` : '';
+    tag.innerText = (!isNaN(val) && val > 0) ? `= ${formatNumber((Math.round(val * (APP_CONFIG.pointsToTakaRate || 0.25) * 100) / 100).toFixed(2))} ${I18N[APP_LANG].currencySymbol}` : '';
 }
 
 async function loadWithdrawalHistory() {
@@ -1960,4 +2029,9 @@ function filterVideosUI() {
     renderVideosForGrid('adult', filterSection('adult', isAdultVideo));
 }
 
-document.addEventListener('DOMContentLoaded', initApp);
+// সেফ ইনিশিয়ালাইজেশন
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
