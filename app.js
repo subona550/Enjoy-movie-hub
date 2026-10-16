@@ -147,7 +147,6 @@ let adminCreatedCategories = [];
 let activeSelectedCategory = { movies: 'all', series: 'all', adult: 'all' };
 
 let activeDedicatedNetwork = 'adsgram';
-let dedicatedAdReturnToProfile = false;
 let lastSelectedVideoCardId = null;
 
 const ITEMS_PER_PAGE = 10;
@@ -488,16 +487,6 @@ function closeEarnHubView() {
     updateTelegramBackButtonState();
 }
 
-async function openProfileNetworkAd(network) {
-    // Profile shortcuts reuse the existing membership check and reward-ad flow.
-    dedicatedAdReturnToProfile = true;
-    await openEarnHubView();
-    const activeGrid = $('earn-hub-active-grid');
-    if (activeGrid && activeGrid.style.display !== 'none') {
-        openDedicatedAdScreen(network);
-    }
-}
-
 function openDedicatedAdScreen(network) {
     triggerHaptic('light');
     activeDedicatedNetwork = network;
@@ -518,11 +507,6 @@ function openDedicatedAdScreen(network) {
 function closeDedicatedAdScreen() {
     triggerHaptic('light');
     $('dedicated-ad-view').style.display = 'none';
-    if (dedicatedAdReturnToProfile) {
-        dedicatedAdReturnToProfile = false;
-        closeEarnHubView();
-        return;
-    }
     openEarnHubView();
 }
 

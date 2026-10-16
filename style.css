@@ -2730,188 +2730,87 @@ header {
     margin-bottom: 18px; 
     box-shadow: 0 0 20px rgba(255, 8, 68, 0.4);
 }
-/* ================= PROFILE EARN CARD: PREMIUM + RESPONSIVE ================= */
-#tab-profile .ad-earn-box-wrapper {
-    position: relative;
-    margin: 0 10px 18px;
-    padding: 22px 18px 20px;
-    border: 1.5px solid rgba(0, 229, 255, 0.52);
-    border-radius: 24px;
-    background: radial-gradient(ellipse at 100% 0%, rgba(0, 229, 255, 0.15), transparent 48%), linear-gradient(145deg, #101d3a 0%, #0a1227 58%, #10172d 100%);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255,255,255,0.06);
-    contain: layout paint;
-}
-#tab-profile .ad-earn-top-row { align-items: flex-start; gap: 15px; margin-bottom: 18px; }
-#tab-profile .ad-earn-icon-square {
-    width: 58px; height: 58px; min-width: 58px; border-radius: 17px; font-size: 25px;
-    background: linear-gradient(145deg, rgba(0,229,255,0.23), rgba(41,121,255,0.16));
-    border: 1.5px solid rgba(0,229,255,0.8); box-shadow: 0 5px 16px rgba(0, 170, 255, 0.18);
-}
-#tab-profile .ad-earn-text-group { min-width: 0; flex: 1; }
-#tab-profile .ad-earn-text-group h3 { font-size: clamp(17px, 4.5vw, 20px); line-height: 1.4; letter-spacing: 0.05px; margin: 1px 0 5px; }
-#tab-profile .ad-earn-text-group p { font-size: 13.5px; line-height: 1.65; color: #b5c6e2; }
-#tab-profile .ad-earn-pills-row { gap: 9px; margin: 0 0 18px; }
-#tab-profile .earn-pill { min-height: 34px; padding: 7px 12px; border-radius: 12px; font-size: 12px; }
-#tab-profile #btn-profile-earn-more {
-    display: flex; width: 100%; min-height: 60px; padding: 17px 20px; border-radius: 17px;
-    border-bottom-width: 5px; font-size: 16.5px; font-weight: 900; letter-spacing: 0.15px;
-    box-shadow: 0 8px 20px rgba(0, 82, 212, 0.28); touch-action: manipulation;
-}
-#tab-profile #btn-profile-earn-more:active { transform: translateY(2px); }
-/* Reduce costly visual effects on small devices without changing app features. */
-@media (max-width: 600px) {
-    #tab-profile .ad-earn-box-wrapper { box-shadow: 0 7px 18px rgba(0, 0, 0, 0.3); }
-    #tab-profile .ad-earn-box-wrapper.shimmer-card-effect::before,
-    #tab-profile #btn-profile-earn-more::after { animation: none !important; display: none; }
-    header { -webkit-backdrop-filter: none; backdrop-filter: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-}
 
-/* ================= PROFILE BUTTONS: MODERN, BOLD & CENTERED ================= */
-#tab-profile .btn-chunky,
-#tab-profile button {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-weight: 900;
-    letter-spacing: 0.15px;
-    line-height: 1.35;
-    border-radius: 16px;
-    min-height: 54px;
-    padding: 13px 18px;
-    gap: 9px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-#tab-profile .btn-chunky {
-    border-width: 1.5px;
-    border-bottom-width: 5px;
-    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255,255,255,0.12);
-    transition: transform 0.12s ease, filter 0.12s ease;
-}
-#tab-profile .btn-chunky:active {
-    transform: translateY(2px);
-    filter: brightness(1.08);
-}
-#tab-profile #btn-profile-earn-more {
-    width: 100%;
-    min-height: 62px;
-    margin-inline: auto;
-    font-size: 16.5px;
+/* =================== PROFILE PAGE BUTTON ALIGNMENT UPDATE =================== */
+/* Make the withdraw area roomier and center the large withdraw button */
+#tab-profile .withdraw-banner-card {
+    padding: 20px 18px;
 }
 #tab-profile .wb-bottom-row {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 14px;
     text-align: center;
-}
-#tab-profile #btn-open-withdraw {
-    width: min(100%, 340px);
-    align-self: center;
+    gap: 14px;
 }
 #tab-profile .wb-min-info {
+    width: 100%;
     text-align: center;
-    width: 100%;
+    line-height: 1.6;
 }
-#tab-profile .refer-details-card > div[style*="display: flex"] {
-    justify-content: center;
-    align-items: stretch;
-}
-#tab-profile #btn-share-ref-link,
-#tab-profile #btn-copy-ref-link {
-    flex: 1 1 0 !important;
-    min-width: 0;
-    min-height: 56px;
-    padding-inline: 10px;
-}
-@media (max-width: 380px) {
-    #tab-profile .btn-chunky,
-    #tab-profile button {
-        min-height: 52px;
-        padding: 12px 10px;
-        font-size: 14px;
-        gap: 7px;
-    }
-    #tab-profile #btn-profile-earn-more { min-height: 58px; font-size: 15px; }
-}
-
-
-/* Profile shortcuts for Monetag and Adsgram reward ads */
-.profile-network-ad-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    max-width: 520px;
-    margin: 14px auto 2px;
-}
-.profile-network-btn {
-    min-width: 0;
-    min-height: 56px;
-    width: 100%;
+#tab-profile #btn-open-withdraw {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    padding: 13px 10px;
-    border-radius: 16px;
-    font-size: 14px;
-    line-height: 1.2;
-    font-weight: 900;
-    letter-spacing: .1px;
-    text-align: center;
-    white-space: normal;
-    box-shadow: 0 7px 18px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.14);
-    transition: transform .16s ease, filter .16s ease;
-}
-.profile-network-btn:active { transform: scale(.97); filter: brightness(1.08); }
-.profile-network-btn i { font-size: 17px; flex: 0 0 auto; }
-.profile-monetag-btn {
-    color: #fff;
-    border: 1px solid rgba(255, 80, 125, .5);
-    background: linear-gradient(135deg, #fa245e 0%, #9d174d 100%);
-}
-.profile-adsgram-btn {
-    color: #fff;
-    border: 1px solid rgba(34, 211, 238, .48);
-    background: linear-gradient(135deg, #0891b2 0%, #155e75 100%);
-}
-@media (max-width: 360px) {
-    .profile-network-ad-buttons { gap: 8px; }
-    .profile-network-btn { min-height: 52px; padding: 11px 6px; gap: 6px; font-size: 12px; border-radius: 13px; }
-    .profile-network-btn i { font-size: 15px; }
+    width: min(100%, 340px);
+    min-height: 58px;
+    margin: 0 auto;
+    padding: 17px 24px;
+    font-size: 17px;
+    border-radius: 18px;
 }
 
-/* Center the dedicated "Watch ads and earn points" button */
-#dedicated-ad-view #btn-watch-dedicated-ad {
-    display: flex;
-    align-items: center;
+/* Enlarge the "Earn More Points" card and center its CTA */
+#tab-profile .ad-earn-box-wrapper {
+    padding: 22px 18px;
+    min-height: 250px;
+}
+#tab-profile .ad-earn-top-row {
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+#tab-profile .ad-earn-text-group h3 {
+    font-size: 17px;
+    line-height: 1.45;
+}
+#tab-profile .ad-earn-text-group p {
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+#tab-profile .ad-earn-pills-row {
     justify-content: center;
-    text-align: center;
-    font-weight: 900;
+}
+#tab-profile #btn-profile-earn-more {
+    display: flex;
     width: min(100%, 360px);
     min-height: 60px;
-    margin: 14px auto 0 !important;
-    padding: 14px 18px;
-    gap: 10px;
-    box-sizing: border-box;
+    margin: 8px auto 0;
+    padding: 18px 22px;
+    font-size: 16.5px;
+    border-radius: 18px;
 }
-#dedicated-ad-view #btn-watch-dedicated-ad #btn-watch-ded-txt {
-    flex: 0 1 auto;
-    text-align: center;
+
+/* Center and enlarge the "Watch ad & get points" button */
+#btn-watch-dedicated-ad {
+    display: flex;
+    width: min(100%, 360px);
+    min-height: 60px;
+    margin: 18px auto 0 !important;
+    padding: 18px 22px;
+    font-size: 16.5px;
+    border-radius: 18px;
 }
+
 @media (max-width: 380px) {
-    #dedicated-ad-view #btn-watch-dedicated-ad {
+    #tab-profile .withdraw-banner-card {
+        padding: 18px 14px;
+    }
+    #tab-profile .ad-earn-box-wrapper {
+        padding: 20px 14px;
+    }
+    #tab-profile #btn-open-withdraw,
+    #tab-profile #btn-profile-earn-more,
+    #btn-watch-dedicated-ad {
         width: 100%;
-        min-height: 56px;
-        padding: 12px 10px;
+        font-size: 15.5px;
     }
 }
