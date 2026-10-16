@@ -2730,3 +2730,50 @@ header {
     margin-bottom: 18px; 
     box-shadow: 0 0 20px rgba(255, 8, 68, 0.4);
 }
+
+
+/* =================== PROFILE BUTTON ALIGNMENT + SMOOTHER PERFORMANCE =================== */
+/* Keep profile action buttons centered while preserving their existing colors and actions. */
+#tab-profile .wb-bottom-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+#tab-profile #btn-open-withdraw,
+#tab-profile #btn-profile-earn-more {
+    display: flex;
+    width: min(100%, 320px);
+    margin: 0 auto;
+    justify-content: center;
+    text-align: center;
+}
+#btn-watch-dedicated-ad {
+    display: flex;
+    width: min(100%, 320px);
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Avoid expensive visual effects on devices that request reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* On smaller/mobile devices, keep the interface responsive without removing its look. */
+@media (max-width: 600px) {
+    .preloader-glass-backdrop {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+    .shimmer-card-effect::before {
+        animation-duration: 9s !important;
+    }
+}
