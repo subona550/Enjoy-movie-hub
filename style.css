@@ -2889,3 +2889,29 @@ header {
     .profile-network-btn { min-height: 52px; padding: 11px 6px; gap: 6px; font-size: 12px; border-radius: 13px; }
     .profile-network-btn i { font-size: 15px; }
 }
+
+/* Center the dedicated "Watch ads and earn points" button */
+#dedicated-ad-view #btn-watch-dedicated-ad {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 900;
+    width: min(100%, 360px);
+    min-height: 60px;
+    margin: 14px auto 0 !important;
+    padding: 14px 18px;
+    gap: 10px;
+    box-sizing: border-box;
+}
+#dedicated-ad-view #btn-watch-dedicated-ad #btn-watch-ded-txt {
+    flex: 0 1 auto;
+    text-align: center;
+}
+@media (max-width: 380px) {
+    #dedicated-ad-view #btn-watch-dedicated-ad {
+        width: 100%;
+        min-height: 56px;
+        padding: 12px 10px;
+    }
+}
