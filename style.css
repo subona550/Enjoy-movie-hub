@@ -2730,3 +2730,41 @@ header {
     margin-bottom: 18px; 
     box-shadow: 0 0 20px rgba(255, 8, 68, 0.4);
 }
+/* ================= PROFILE EARN CARD: PREMIUM + RESPONSIVE ================= */
+#tab-profile .ad-earn-box-wrapper {
+    position: relative;
+    margin: 0 10px 18px;
+    padding: 22px 18px 20px;
+    border: 1.5px solid rgba(0, 229, 255, 0.52);
+    border-radius: 24px;
+    background: radial-gradient(ellipse at 100% 0%, rgba(0, 229, 255, 0.15), transparent 48%), linear-gradient(145deg, #101d3a 0%, #0a1227 58%, #10172d 100%);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255,255,255,0.06);
+    contain: layout paint;
+}
+#tab-profile .ad-earn-top-row { align-items: flex-start; gap: 15px; margin-bottom: 18px; }
+#tab-profile .ad-earn-icon-square {
+    width: 58px; height: 58px; min-width: 58px; border-radius: 17px; font-size: 25px;
+    background: linear-gradient(145deg, rgba(0,229,255,0.23), rgba(41,121,255,0.16));
+    border: 1.5px solid rgba(0,229,255,0.8); box-shadow: 0 5px 16px rgba(0, 170, 255, 0.18);
+}
+#tab-profile .ad-earn-text-group { min-width: 0; flex: 1; }
+#tab-profile .ad-earn-text-group h3 { font-size: clamp(17px, 4.5vw, 20px); line-height: 1.4; letter-spacing: 0.05px; margin: 1px 0 5px; }
+#tab-profile .ad-earn-text-group p { font-size: 13.5px; line-height: 1.65; color: #b5c6e2; }
+#tab-profile .ad-earn-pills-row { gap: 9px; margin: 0 0 18px; }
+#tab-profile .earn-pill { min-height: 34px; padding: 7px 12px; border-radius: 12px; font-size: 12px; }
+#tab-profile #btn-profile-earn-more {
+    display: flex; width: 100%; min-height: 60px; padding: 17px 20px; border-radius: 17px;
+    border-bottom-width: 5px; font-size: 16.5px; font-weight: 900; letter-spacing: 0.15px;
+    box-shadow: 0 8px 20px rgba(0, 82, 212, 0.28); touch-action: manipulation;
+}
+#tab-profile #btn-profile-earn-more:active { transform: translateY(2px); }
+/* Reduce costly visual effects on small devices without changing app features. */
+@media (max-width: 600px) {
+    #tab-profile .ad-earn-box-wrapper { box-shadow: 0 7px 18px rgba(0, 0, 0, 0.3); }
+    #tab-profile .ad-earn-box-wrapper.shimmer-card-effect::before,
+    #tab-profile #btn-profile-earn-more::after { animation: none !important; display: none; }
+    header { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
