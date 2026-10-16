@@ -1,5 +1,5 @@
 :root { 
-    --primary: #00e5ff;
+    --primary: #00e5ff; 
     --primary-glow: rgba(0, 229, 255, 0.65); 
     --bg-body: #050814;
     --card-bg: #0b1226; 
@@ -2839,4 +2839,53 @@ header {
         gap: 7px;
     }
     #tab-profile #btn-profile-earn-more { min-height: 58px; font-size: 15px; }
+}
+
+
+/* Profile shortcuts for Monetag and Adsgram reward ads */
+.profile-network-ad-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 520px;
+    margin: 14px auto 2px;
+}
+.profile-network-btn {
+    min-width: 0;
+    min-height: 56px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 13px 10px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 900;
+    letter-spacing: .1px;
+    text-align: center;
+    white-space: normal;
+    box-shadow: 0 7px 18px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.14);
+    transition: transform .16s ease, filter .16s ease;
+}
+.profile-network-btn:active { transform: scale(.97); filter: brightness(1.08); }
+.profile-network-btn i { font-size: 17px; flex: 0 0 auto; }
+.profile-monetag-btn {
+    color: #fff;
+    border: 1px solid rgba(255, 80, 125, .5);
+    background: linear-gradient(135deg, #fa245e 0%, #9d174d 100%);
+}
+.profile-adsgram-btn {
+    color: #fff;
+    border: 1px solid rgba(34, 211, 238, .48);
+    background: linear-gradient(135deg, #0891b2 0%, #155e75 100%);
+}
+@media (max-width: 360px) {
+    .profile-network-ad-buttons { gap: 8px; }
+    .profile-network-btn { min-height: 52px; padding: 11px 6px; gap: 6px; font-size: 12px; border-radius: 13px; }
+    .profile-network-btn i { font-size: 15px; }
 }
