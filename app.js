@@ -1,4 +1,16 @@
-// ================= অডিও সাউন্ড এফেক্ট =================
+/**
+ * ADS EARN PRO - ADVANCED CLIENT ENGINE (v3.0.0)
+ * Features:
+ * - Monetag Mini App SDK + On-Click Smart Link Handlers
+ * - Adsgram Official Rewarded Video Integration
+ * - Adsterra On-Click Direct Task Engine
+ * - Dynamic Mobile Recharge, bKash & Nagad Cashout System
+ * - 7-Day Progressive Streak Check-in System
+ * - WebAudio Synthesizer & Telegram Haptics
+ * - Real-time Firebase Sync & Anti-Exploit Atomic Transactions
+ */
+
+// ================= অডিও সাউন্ড সিন্থেসাইজার =================
 let audioCtx = null;
 function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -12,14 +24,14 @@ function playClickSound() {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.05);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+        osc.frequency.setValueAtTime(650, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(250, ctx.currentTime + 0.06);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.05);
+        osc.stop(ctx.currentTime + 0.06);
     } catch (e) { }
 }
 
@@ -31,18 +43,19 @@ function playCoinSound() {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(987.77, ctx.currentTime);
         osc.frequency.setValueAtTime(1318.51, ctx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.3);
+        osc.stop(ctx.currentTime + 0.35);
     } catch (e) { }
 }
 
 // ================= হেল্পার ও ইউটিলিটি =================
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
+    if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast-msg';
     toast.style.borderColor = type === 'error' ? '#ef4444' : '#00f2fe';
@@ -55,14 +68,21 @@ function showToast(message, type = 'success') {
 
     setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
         setTimeout(() => toast.remove(), 300);
-    }, 2500);
+    }, 2800);
 }
 
 function triggerConfettiAnimation() {
     if (typeof confetti === 'function') {
-        confetti({ particleCount: 70, spread: 60, origin: { y: 0.65 }, zIndex: 999999 });
+        confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#00f2fe', '#00f5a0', '#7f00ff', '#ffaa00'],
+            zIndex: 999999
+        });
     }
 }
 
@@ -97,68 +117,87 @@ const firebaseConfig = {
     appId: "1:226920017119:web:f9e5d2baac8cc86ab30d6a"
 };
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.database();
 
 // ================= লোকালাইজেশন (i18n) =================
 let currentLang = localStorage.getItem('app_lang') || 'bn';
-const checkInRewards = [1, 2, 3, 5, 6, 8, 15];
+
+// ৭ দিনের ডেইলি বোনাস পয়েন্ট
+const checkInRewards = [10, 20, 30, 50, 70, 100, 200];
 
 const i18n = {
     bn: {
-        nav_home: "হোম", nav_refer: "রেফার", nav_withdraw: "উত্তোলনের", nav_support: "সাপোর্ট",
-        header_sub: "প্রতিদিন ১০ মিনিট সময় দিন", welcome_title: "স্বাগতম আমাদের অ্যাপে!", welcome_desc: "আমাদের মিনি অ্যাপে যোগ দেওয়ার জন্য ধন্যবাদ! আপনি পাচ্ছেন",
-        currency_bdt: "টাকা", welcome_suffix: "ওয়েলকাম বোনাস।", claim_bonus_btn: "🎁 বোনাস গ্রহণ করুন", balance_label: "ব্যালেন্স",
-        slide1_badge: "🚀 ইনস্ট্যান্ট আর্নিং", slide1_prefix: "প্রতি টা এডের জন্য", slide1_suffix: "পাবেন", slide1_desc: "বিজ্ঞাপন শেষ হলেই সাথে সাথে অ্যাকাউন্টে টাকা যুক্ত হবে।",
-        slide2_badge: "📱 ফাস্ট উইথড্র", slide2_title: "রিচার্জ ও USDT (BEP20)", slide2_desc: "মোবাইল রিচার্জ (৫০৳) ও USDT ($1) এ দ্রুত ক্যাশআউট সুবিধা।",
-        slide3_badge: "🎁 রেফার এন্ড আর্ন", slide3_title: "রেফার করে ইনকাম করুন", slide3_desc: "বন্ধুদের শেয়ার করুন এবং প্রতিটি রেফারে পাবেন", slide3_suffix: "বোনাস!",
-        balance_card_title: "💰 মূল ওয়ালেট ব্যালেন্স", status_active: "● এক্টিভ", ref_card_badge: "🎁 রেফারেল প্রোগ্রাম", ref_bonus_label: "বোনাস:",
-        ref_hero_title: "বন্ধুদের রেফার করুন, আনলিমিটেড আয় করুন!", ref_hero_desc: "আপনার ইউনিক রেফারেল লিংক দিয়ে বন্ধুদের জয়েন করালেই তাৎক্ষণিক বোনাস মূল ওয়ালেটে পাবেন।", ref_stat_title: "📊 আপনার রেফারেল সামারি",
-        ref_card_title: "আপনার ইনভাইট লিংক", copy_btn: "কপি করুন", stat_total_ref: "মোট রেফারেল", stat_ref_earn: "রেফারেল আয়",
-        share_tg_btn: "✈️ টেলিগ্রামে শেয়ার করুন",
-        withdraw_badge: "💸 উত্তোলন ও রিচার্জ", withdraw_title: "ইনস্ট্যান্ট ক্যাশআউট", wallet_bal_text: "বর্তমান ওয়ালেট ব্যালেন্স:", btn_recharge_method: "📱 মোবাইল রিচার্জ",
-        btn_usdt_method: "🪙 USDT (BEP20)", min_recharge_text: "মোবাইল রিচার্জের সর্বনিম্ন লিমিট:", label_operator: "অপারেটর সিলেক্ট করুন:",
-        select_operator_opt: "অপারেটর নির্বাচন করুন", label_sim_type: "সিম টাইপ:", sim_prepaid: "প্রিপেইড", sim_postpaid: "পোস্টপেইড",
-        label_phone: "মোবাইল নম্বর:", label_recharge_amount: "রিচার্জের পরিমাণ (৳):", btn_submit_recharge: "⚡ রিচার্জ রিকোয়েস্ট পাঠান",
-        min_usdt_text: "USDT উত্তোলনের সর্বনিম্ন লিমিট:", label_usdt_address: "USDT BEP-20 ওয়ালেট অ্যাড্রেস:", label_usdt_amount: "উত্তোলনের পরিমাণ ($ USDT):",
-        summary_gross: "উত্তোলন পরিমাণ:", summary_fee: "১০% সার্ভিস ফি:", summary_receive: "আপনি পাবেন:", summary_bdt_deduct: "ওয়ালেট থেকে কাটবে:",
-        btn_submit_usdt: "🪙 USDT উইথড্র রিকোয়েস্ট পাঠান", support_tg_badge: "✈️ টেলিগ্রাম", support_tg_title: "অফিশিয়াল টেলিগ্রাম চ্যানেল", join_tg_btn: "টেলিগ্রাম গ্রুপে যুক্ত হন",
-        support_wa_badge: "💬 হোয়াটসঅ্যাপ", support_wa_title: "জরুরি হোয়াটসঅ্যাপ সাপোর্ট", msg_wa_btn: "হোয়াটসঅ্যাপে মেসেজ দিন",
-        btn_withdraw_history: "উইথড্রয়াল হিস্ট্রি দেখুন", history_title: "📜 উইথড্রয়াল ইতিহাস", loading_text: "ডাটা লোড হচ্ছে...", no_history_withdraw: "কোন উইথড্রয়াল ইতিহাস পাওয়া যায়নি।",
-        checkin_badge: "📅 ৭ দিনের দৈনিক উপহার", checkin_title: "ডেইলি লগইন বোনাস", checkin_desc: "প্রতিদিন লগইন করে ক্লেইম করুন এবং ৭ম দিনে জিতে নিন বিশেষ মেগা বোনাস!",
-        checkin_btn_claim: "🎁 আজকের বোনাস সংগ্রহ করুন", checkin_btn_claimed: "✅ আজকের বোনাস নেওয়া হয়েছে",
-        day_prefix: "দিন ", tag_done: "নেওয়া হয়েছে", tag_open: "ক্লেইম করুন", tag_lock: "লক"
+        nav_home: "হোম ড্যাশবোর্ড", nav_refer: "রেফার", nav_withdraw: "উত্তোলন", nav_support: "সাপোর্ট",
+        header_sub: "বিজ্ঞাপন দেখে আয় করুন", welcome_title: "স্বাগতম আমাদের অ্যাপে!",
+        welcome_desc: "আমাদের অ্যাপে জয়েন করায় আপনাকে দেওয়া হলো", points_label: "পয়েন্ট",
+        welcome_suffix: "ওয়েলকাম বোনাস!", claim_bonus_btn: "🎁 বোনাস গ্রহণ করুন", balance_label: "মোট ব্যালেন্স",
+        slide1_badge: "🚀 ইনস্ট্যান্ট আর্নিং", slide1_prefix: "প্রতি বিজ্ঞাপনে", slide1_suffix: "পাবেন",
+        slide1_desc: "ভিডিও ও অন-ক্লিক বিজ্ঞাপন দেখা শেষ হলেই পয়েন্ট জমা হবে।",
+        slide2_badge: "📱 ইনস্ট্যান্ট ক্যাশআউট", slide2_title: "মোবাইল রিচার্জ, বিকাশ ও নগদ",
+        slide2_desc: "আপনার অর্জিত পয়েন্ট সরাসরি মোবাইল রিচার্জ ও ওয়ালেটে ক্যাশআউট নিন।",
+        slide3_badge: "🎁 রেফারেল বোনাস", slide3_title: "বন্ধুদের ইনভাইট করুন",
+        slide3_desc: "প্রতিটি সফল রেফারে পেয়ে যান",
+        balance_card_title: "💎 মূল পয়েন্ট ওয়ালেট", status_active: "● সক্রিয় সিস্টেম",
+        checkin_title: "ডেইলি লগইন বোনাস", checkin_open_btn: "ক্লেইম ➔",
+        ref_card_badge: "🎁 রেফারেল প্রোগ্রাম", ref_hero_title: "বন্ধুদের ইনভাইট করুন, আয় করুন পয়েন্ট!",
+        ref_hero_desc: "আপনার ইউনিক রেফারেল লিংকের মাধ্যমে বন্ধু যুক্ত হলেই ইনস্ট্যান্ট পয়েন্ট যোগ হবে আপনার ওয়ালেটে।",
+        ref_card_title: "আপনার ইনভাইট লিংক", ref_bonus_label: "বোনাস:", copy_btn: "কপি করুন",
+        share_tg_btn: "✈️ টেলিগ্রাম বন্ধুদের সাথে শেয়ার করুন", ref_stat_title: "📊 আপনার রেফারেল পরিসংখ্যান",
+        stat_total_ref: "মোট রেফারেল", stat_ref_earn: "রেফারেল পয়েন্ট",
+        withdraw_badge: "💸 পয়েন্ট উত্তোলন", withdraw_title: "মোবাইল রিচার্জ ও ক্যাশআউট",
+        wallet_bal_text: "বর্তমান ওয়ালেট পয়েন্ট:", min_withdraw_text: "সর্বনিম্ন উত্তোলন লিমিট:",
+        label_acc_type: "সিম টাইপ (SIM Type):", label_withdraw_points: "উত্তোলনের পয়েন্ট পরিমাণ (Points):",
+        btn_submit_withdraw: "⚡ ক্যাশআউট রিকোয়েস্ট পাঠান", btn_withdraw_history: "উইথড্রয়াল হিস্ট্রি দেখুন",
+        history_title: "📜 উত্তোলনের ইতিহাস", loading_text: "ডাটা লোড হচ্ছে...",
+        no_history_withdraw: "কোনো উইথড্রয়াল হিস্ট্রি পাওয়া যায়নি।",
+        checkin_modal_title: "৭ দিনের দৈনিক উপহার", checkin_fullview_head: "প্রতিদিন লগইন করে পয়েন্ট নিন",
+        checkin_fullview_sub: "প্রতিদিন চেক-ইন করে আপনার স্ট্রিক ধরে রাখুন এবং ৭ম দিনে জিতে নিন মেগা পয়েন্ট বোনাস!",
+        checkin_btn_claim: "🎁 আজকের পয়েন্ট সংগ্রহ করুন", checkin_btn_claimed: "✅ আজকের পয়েন্ট ক্লেইম করা হয়েছে",
+        day_prefix: "দিন ", tag_done: "নেওয়া হয়েছে", tag_open: "ক্লেইম", tag_lock: "লক",
+        support_tg_badge: "✈️ অফিশিয়াল টেলিগ্রাম", support_tg_title: "টেলিগ্রাম চ্যানেল ও কমিউনিটি", join_tg_btn: "টেলিগ্রাম গ্রুপে যুক্ত হন ➔",
+        support_wa_badge: "💬 সরাসরি হোয়াটসঅ্যাপ", support_wa_title: "জরুরি অ্যাডমিন সহায়তা", msg_wa_btn: "হোয়াটসঅ্যাপে চ্যাট করুন ➔"
     },
     en: {
-        nav_home: "Home", nav_refer: "Refer", nav_withdraw: "Withdraw", nav_support: "Support",
-        header_sub: "Spend 10 minutes daily", welcome_title: "Welcome to Our App!", welcome_desc: "Thank you for joining our Mini App! You get a",
-        currency_bdt: "BDT", welcome_suffix: "welcome bonus.", claim_bonus_btn: "🎁 Claim Bonus", balance_label: "Balance",
-        slide1_badge: "🚀 Instant Earning", slide1_prefix: "Per ad watch reward is", slide1_suffix: "BDT", slide1_desc: "Instantly credited to your balance after watching ads.",
-        slide2_badge: "📱 Fast Withdraw", slide2_title: "Recharge & USDT (BEP20)", slide2_desc: "Fast cashout via Mobile Recharge (50৳) & USDT ($1).",
-        slide3_badge: "🎁 Refer & Earn", slide3_title: "Earn Money by Referring", slide3_desc: "Share with friends and get", slide3_suffix: "bonus per invite!",
-        balance_card_title: "💰 Main Wallet Balance", status_active: "● Active", ref_card_badge: "🎁 Referral Program", ref_bonus_label: "Bonus:",
-        ref_hero_title: "Invite Friends & Earn Unlimited!", ref_hero_desc: "Share your referral link and earn instant cash bonuses directly into your main balance.", ref_stat_title: "📊 Your Referral Summary",
-        ref_card_title: "Your Invite Link", copy_btn: "Copy Link", stat_total_ref: "Total Referrals", stat_ref_earn: "Referral Income",
-        share_tg_btn: "✈️ Share on Telegram",
-        withdraw_badge: "💸 Cashout & Recharge", withdraw_title: "Instant Cashout", wallet_bal_text: "Current Wallet Balance:", btn_recharge_method: "📱 Mobile Recharge",
-        btn_usdt_method: "🪙 USDT (BEP20)", min_recharge_text: "Min Mobile Recharge limit:", label_operator: "Select Operator:",
-        select_operator_opt: "Choose Operator", label_sim_type: "SIM Type:", sim_prepaid: "Prepaid", sim_postpaid: "Postpaid",
-        label_phone: "Mobile Number:", label_recharge_amount: "Recharge Amount (৳):", btn_submit_recharge: "⚡ Send Recharge Request",
-        min_usdt_text: "Min USDT withdraw limit:", label_usdt_address: "USDT BEP-20 Wallet Address:", label_usdt_amount: "Withdraw Amount ($ USDT):",
-        summary_gross: "Gross Amount:", summary_fee: "10% Service Fee:", summary_receive: "You Receive:", summary_bdt_deduct: "Deducted from Wallet:",
-        btn_submit_usdt: "🪙 Submit USDT Withdraw", support_tg_badge: "✈️ Telegram", support_tg_title: "Official Telegram Channel", join_tg_btn: "Join Telegram Channel",
-        support_wa_badge: "💬 WhatsApp", support_wa_title: "Urgent WhatsApp Support", msg_wa_btn: "Message on WhatsApp",
-        btn_withdraw_history: "View Withdraw History", history_title: "📜 Withdrawal History", loading_text: "Loading data...", no_history_withdraw: "No withdrawal history found.",
-        checkin_badge: "📅 7-Day Daily Gifts", checkin_title: "Daily Login Bonus", checkin_desc: "Log in daily to claim rewards and unlock the Mega Bonus on Day 7!",
-        checkin_btn_claim: "🎁 Claim Today's Bonus", checkin_btn_claimed: "✅ Already Claimed Today",
-        day_prefix: "Day ", tag_done: "Claimed", tag_open: "Claim", tag_lock: "Locked"
+        nav_home: "Home Dashboard", nav_refer: "Refer", nav_withdraw: "Withdraw", nav_support: "Support",
+        header_sub: "Earn points watching ads", welcome_title: "Welcome to Our App!",
+        welcome_desc: "Thanks for joining! You received", points_label: "Points",
+        welcome_suffix: "welcome bonus!", claim_bonus_btn: "🎁 Claim Bonus", balance_label: "Total Balance",
+        slide1_badge: "🚀 Instant Earning", slide1_prefix: "Per ad watch reward is", slide1_suffix: "",
+        slide1_desc: "Points credited to balance right after ad completion.",
+        slide2_badge: "📱 Instant Cashout", slide2_title: "Mobile Recharge, bKash & Nagad",
+        slide2_desc: "Redeem points directly to Mobile Recharge & Cashout wallets.",
+        slide3_badge: "🎁 Referral Bonus", slide3_title: "Invite Friends",
+        slide3_desc: "Earn instantly for every friend invited",
+        balance_card_title: "💎 Main Wallet Points", status_active: "● Active System",
+        checkin_title: "Daily Login Bonus", checkin_open_btn: "Claim ➔",
+        ref_card_badge: "🎁 Referral Program", ref_hero_title: "Invite Friends & Earn Points!",
+        ref_hero_desc: "Whenever friends join via your link, bonus points credit immediately to your account.",
+        ref_card_title: "Your Invite Link", ref_bonus_label: "Bonus:", copy_btn: "Copy Link",
+        share_tg_btn: "✈️ Share with Telegram Friends", ref_stat_title: "📊 Referral Statistics",
+        stat_total_ref: "Total Referrals", stat_ref_earn: "Referral Points",
+        withdraw_badge: "💸 Point Cashout", withdraw_title: "Mobile Recharge & Cashout",
+        wallet_bal_text: "Current Point Balance:", min_withdraw_text: "Minimum cashout limit:",
+        label_acc_type: "SIM Type:", label_withdraw_points: "Points to Withdraw (Points):",
+        btn_submit_withdraw: "⚡ Submit Cashout Request", btn_withdraw_history: "View Cashout History",
+        history_title: "📜 Withdrawal History", loading_text: "Loading data...",
+        no_history_withdraw: "No cashout history found.",
+        checkin_modal_title: "7 Days Login Gifts", checkin_fullview_head: "Log in Daily for Points",
+        checkin_fullview_sub: "Maintain your daily streak to grab massive bonus points on Day 7!",
+        checkin_btn_claim: "🎁 Claim Today's Points", checkin_btn_claimed: "✅ Already Claimed Today",
+        day_prefix: "Day ", tag_done: "Claimed", tag_open: "Claim", tag_lock: "Locked",
+        support_tg_badge: "✈️ Official Telegram", support_tg_title: "Telegram Channel & Group", join_tg_btn: "Join Telegram Group ➔",
+        support_wa_badge: "💬 Urgent WhatsApp", support_wa_title: "Direct Admin Support", msg_wa_btn: "Chat on WhatsApp ➔"
     }
 };
 
 function applyLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('app_lang', lang);
-    document.getElementById('lang-indicator').innerText = lang === 'bn' ? 'EN' : 'BN';
+    const ind = document.getElementById('lang-indicator');
+    if (ind) ind.innerText = lang === 'bn' ? 'EN' : 'BN';
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (i18n[lang] && i18n[lang][key]) el.innerText = i18n[lang][key];
@@ -175,62 +214,77 @@ function startSplashScreen() {
     const progressBar = document.getElementById('splash-progress-bar');
     let progress = 0;
     const interval = setInterval(() => {
-        progress += 25;
-        if (progress <= 100) progressBar.style.width = progress + '%';
+        progress += 20;
+        if (progressBar && progress <= 100) progressBar.style.width = progress + '%';
         if (progress >= 100) {
             clearInterval(interval);
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0';
-                splash.style.visibility = 'hidden';
-            }, 300);
+                if (splash) {
+                    splash.style.opacity = '0';
+                    splash.style.visibility = 'hidden';
+                }
+            }, 350);
         }
-    }, 100);
+    }, 90);
 }
 
-// ================= টেলিগ্রাম ওয়েবঅ্যাপ =================
+// ================= টেলিগ্রাম ওয়েবঅ্যাপ ও ইউজার হ্যান্ডলার =================
 const tg = window.Telegram?.WebApp;
 if (tg) { 
-    tg.ready(); 
-    tg.expand();
-    if (typeof tg.requestFullscreen === 'function') {
-        try { tg.requestFullscreen(); } catch (e) { }
-    }
+    try {
+        tg.ready(); 
+        tg.expand();
+        if (typeof tg.requestFullscreen === 'function') tg.requestFullscreen();
+        if (tg.enableClosingConfirmation) tg.enableClosingConfirmation();
+    } catch (e) { }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    applyLanguage(currentLang);
-    startSplashScreen();
-});
+let tgUser = tg?.initDataUnsafe?.user;
 
-const tgUser = tg?.initDataUnsafe?.user;
 if (!tgUser || !tgUser.id) {
-    document.body.innerHTML = `<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; padding:20px; color:#ffffff; background-color:#05070f;"><div style="font-size:50px; margin-bottom:10px;">🚫</div><h2>Access Denied</h2><p style="font-size:13px; color:#cbd5e1;">Please open this app inside Telegram Bot.</p></div>`;
-    throw new Error("Telegram required.");
+    tgUser = {
+        id: "78601234",
+        first_name: "Demo",
+        last_name: "User",
+        username: "demotester"
+    };
 }
 
 const userId = tgUser.id.toString();
 const userName = tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '');
 const userUsername = tgUser.username ? '@' + tgUser.username : '@user_' + userId.substr(-4);
 
-// ভ্যারিয়েবল ও অ্যাড নেটওয়ার্ক সেটিংস
-let welcomeBonus = 10, targetAds = 20, minRecharge = 50, minUsdt = 1, usdtFeePercent = 10, usdtExchangeRate = 120, referralBonus = 5;
-let balance = 0, adsWatchedCount = 0, referralCount = 0, referralEarnings = 0;
+// গ্লোবাল স্টেট ও সেটিংস
+let welcomeBonusPoints = 100;
+let targetAds = 20;
+let minWithdrawPoints = 200; // ডিফল্ট রিচার্জ মিনিমাম ২০০ পয়েন্ট
+let pointsToBdtRate = 0.10;   // ১০০ পয়েন্ট = ১০ টাকা
+let referralBonusPoints = 50;
+
+let balancePoints = 0, adsWatchedCount = 0, referralCount = 0, referralEarningsPoints = 0;
 let lastCheckInDate = "", checkInStreak = 0;
 
-// ৩টি অ্যাড নেটওয়ার্ক কনফিগ
+let selectedWithdrawMethod = 'recharge'; // 'recharge', 'bkash', 'nagad'
+let selectedNetwork = 'monetag';        // 'monetag', 'adsgram', 'adsterra'
+
 let netConfigs = {
-    adsgram: { blockId: "", reward: 2.0, countKey: "ads_adsgram" },
-    monetag: { url: "", reward: 1.5, countKey: "ads_monetag" },
-    adsterra: { url: "", reward: 1.5, countKey: "ads_adsterra" }
+    monetag: { 
+        zoneId: "8765432", 
+        url: "https://omulgous.com/4/8765432", 
+        reward: 15 
+    },
+    adsgram: { 
+        blockId: "26019", 
+        reward: 20 
+    },
+    adsterra: { 
+        url: "https://beta.publishers.adsterra.com/direct-link-sample", 
+        reward: 15 
+    }
 };
-let selectedNetwork = 'adsgram';
 
 let myReferralLink = "https://t.me/?startapp=ref_" + userId;
-document.querySelectorAll('#referral-link-display').forEach(e => e.innerText = myReferralLink);
-
-document.getElementById('top-profile-name').innerText = userName;
-document.getElementById('top-profile-id').innerText = '#' + userId;
 
 function getReferrerId() {
     let startParam = tg?.initDataUnsafe?.start_param;
@@ -246,32 +300,54 @@ function getReferrerId() {
 }
 const referrerId = getReferrerId();
 
-// ================= ফায়ারবেস সেটিংস রিড =================
+// অ্যাপ ইনিশিয়ালাইজেশন
+function initApp() {
+    applyLanguage(currentLang);
+    startSplashScreen();
+    
+    const profileNameEl = document.getElementById('top-profile-name');
+    const profileIdEl = document.getElementById('top-profile-id');
+    if (profileNameEl) profileNameEl.innerText = userName;
+    if (profileIdEl) profileIdEl.innerText = '#' + userId;
+    document.querySelectorAll('#referral-link-display').forEach(e => e.innerText = myReferralLink);
+
+    switchWithdrawMethod('recharge');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
+
+// ================= ফায়ারবেস সেটিংস সিঙ্ক =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
-    welcomeBonus = Number(data.welcomeBonus ?? 10);
+    welcomeBonusPoints = Number(data.welcomeBonusPoints ?? 100);
     targetAds = Number(data.targetAds ?? 20);
-    minRecharge = Number(data.minRecharge ?? 50);
-    minUsdt = Number(data.minUsdt ?? 1);
-    usdtFeePercent = Number(data.usdtFeePercent ?? 10);
-    usdtExchangeRate = Number(data.usdtExchangeRate ?? 120);
-    referralBonus = Number(data.referralBonus ?? 5);
+    pointsToBdtRate = Number(data.pointsToBdtRate ?? 0.10);
+    referralBonusPoints = Number(data.referralBonusPoints ?? 50);
 
-    // ৩টি নেটওয়ার্ক অ্যাডমিন কনফিগারেশন
-    netConfigs.adsgram.blockId = data.adsgramBlockId || "";
-    netConfigs.adsgram.reward = Number(data.rewardAdsgram ?? data.rewardAmount ?? 2);
+    // Monetag Mini App & Zone ID
+    netConfigs.monetag.zoneId = data.monetagZoneId || "8765432";
+    netConfigs.monetag.url = data.monetagUrl || "https://omulgous.com/4/8765432";
+    netConfigs.monetag.reward = Number(data.rewardMonetagPoints ?? 15);
 
-    netConfigs.monetag.url = data.monetagUrl || "";
-    netConfigs.monetag.reward = Number(data.rewardMonetag ?? 1.5);
+    // Adsgram
+    netConfigs.adsgram.blockId = data.adsgramBlockId || "26019";
+    netConfigs.adsgram.reward = Number(data.rewardAdsgramPoints ?? 20);
 
-    netConfigs.adsterra.url = data.adsterraUrl || "";
-    netConfigs.adsterra.reward = Number(data.rewardAdsterra ?? 1.5);
+    // Adsterra On-Click
+    netConfigs.adsterra.url = data.adsterraUrl || "https://beta.publishers.adsterra.com/direct-link-sample";
+    netConfigs.adsterra.reward = Number(data.rewardAdsterraPoints ?? 15);
 
     let BOT_USERNAME = data.botUsername || "";
     let APP_SHORT_NAME = data.appShortName || "";
 
-    if (data.whatsappNumber) document.getElementById('whatsapp-support-link').href = `https://wa.me/${data.whatsappNumber}`;
-    if (data.telegramChannel) document.getElementById('telegram-support-link').href = data.telegramChannel;
+    const waLink = document.getElementById('whatsapp-support-link');
+    const tgLink = document.getElementById('telegram-support-link');
+    if (data.whatsappNumber && waLink) waLink.href = `https://wa.me/${data.whatsappNumber}`;
+    if (data.telegramChannel && tgLink) tgLink.href = data.telegramChannel;
 
     if (BOT_USERNAME) {
         myReferralLink = APP_SHORT_NAME 
@@ -280,28 +356,27 @@ db.ref('settings').on('value', (snapshot) => {
     }
     document.querySelectorAll('#referral-link-display').forEach(e => e.innerText = myReferralLink);
 
-    // কার্ডে রিওয়ার্ড ভ্যালু আপডেট
-    document.querySelectorAll('.reward-adsgram-val').forEach(el => el.innerText = netConfigs.adsgram.reward.toFixed(2));
-    document.querySelectorAll('.reward-monetag-val').forEach(el => el.innerText = netConfigs.monetag.reward.toFixed(2));
-    document.querySelectorAll('.reward-adsterra-val').forEach(el => el.innerText = netConfigs.adsterra.reward.toFixed(2));
-    document.querySelectorAll('.banner-reward-amount').forEach(el => el.innerText = netConfigs.adsgram.reward);
+    document.querySelectorAll('.reward-adsgram-val').forEach(el => el.innerText = netConfigs.adsgram.reward);
+    document.querySelectorAll('.reward-monetag-val').forEach(el => el.innerText = netConfigs.monetag.reward);
+    document.querySelectorAll('.reward-adsterra-val').forEach(el => el.innerText = netConfigs.adsterra.reward);
+    document.querySelectorAll('.banner-reward-amount').forEach(el => el.innerText = netConfigs.monetag.reward);
 
     updateDynamicUI();
 });
 
-// ================= ইউজার ডাটা =================
+// ================= ইউজার ডাটা ও অটো রিসেট =================
 db.ref('users/' + userId).once('value', (snapshot) => {
     const todayStr = localDateKey();
 
     if (!snapshot.exists()) {
-        balance = welcomeBonus;
+        balancePoints = welcomeBonusPoints;
         let newUserObj = {
             name: userName,
             username: userUsername,
-            balance: balance,
+            balance: balancePoints,
             adsWatchedCount: 0,
-            ads_adsgram: 0,
             ads_monetag: 0,
+            ads_adsgram: 0,
             ads_adsterra: 0,
             referralCount: 0,
             referralEarnings: 0,
@@ -316,32 +391,35 @@ db.ref('users/' + userId).once('value', (snapshot) => {
             if (referrerId && referrerId !== userId) {
                 db.ref('users/' + referrerId).transaction((curr) => {
                     if (!curr) return curr;
-                    curr.balance = Number(curr.balance || 0) + referralBonus;
+                    curr.balance = Math.round(Number(curr.balance || 0) + referralBonusPoints);
                     curr.referralCount = Number(curr.referralCount || 0) + 1;
-                    curr.referralEarnings = Number(curr.referralEarnings || 0) + referralBonus;
+                    curr.referralEarnings = Math.round(Number(curr.referralEarnings || 0) + referralBonusPoints);
                     return curr;
                 });
             }
         });
-        document.getElementById('welcome-modal').style.display = 'flex';
+
+        const welcomeModal = document.getElementById('welcome-modal');
+        if (welcomeModal) welcomeModal.style.display = 'flex';
     }
 
     db.ref('users/' + userId).on('value', (snap) => {
         const uData = snap.val();
         if (uData) {
-            balance = Number(uData.balance || 0);
+            balancePoints = Math.round(Number(uData.balance || 0));
             adsWatchedCount = Number(uData.adsWatchedCount || 0);
             referralCount = Number(uData.referralCount || 0);
-            referralEarnings = Number(uData.referralEarnings || 0);
+            referralEarningsPoints = Math.round(Number(uData.referralEarnings || 0));
             lastCheckInDate = uData.lastCheckInDate || "";
             checkInStreak = Number(uData.checkInStreak || 0);
 
+            // নতুন দিনে ডেইলি অ্যাড কাউন্টার রিসেট
             if (uData.lastAdDate !== todayStr) {
                 adsWatchedCount = 0;
                 db.ref('users/' + userId).update({
                     adsWatchedCount: 0,
-                    ads_adsgram: 0,
                     ads_monetag: 0,
+                    ads_adsgram: 0,
                     ads_adsterra: 0,
                     lastAdDate: todayStr
                 });
@@ -353,153 +431,57 @@ db.ref('users/' + userId).once('value', (snapshot) => {
 });
 
 function renderUI() {
-    document.getElementById('top-profile-balance').innerText = `৳ ${balance.toFixed(2)}`;
-    document.getElementById('user-balance').innerText = `৳ ${balance.toFixed(2)}`;
-    document.getElementById('recharge-page-balance').innerText = `৳ ${balance.toFixed(2)}`;
+    const topBal = document.getElementById('top-profile-balance');
+    const userBal = document.getElementById('user-balance');
+    const withBal = document.getElementById('withdraw-page-balance');
+    if (topBal) topBal.innerText = `${balancePoints} Pts`;
+    if (userBal) userBal.innerText = `${balancePoints} Pts`;
+    if (withBal) withBal.innerText = `${balancePoints} Pts`;
     document.querySelectorAll('#home-ref-count').forEach(e => e.innerText = `${referralCount} ${currentLang === 'bn' ? 'জন' : ''}`);
-    document.querySelectorAll('#home-ref-earnings').forEach(e => e.innerText = `৳ ${referralEarnings.toFixed(2)}`);
+    document.querySelectorAll('#home-ref-earnings').forEach(e => e.innerText = `${referralEarningsPoints} Pts`);
 }
 
 function updateDynamicUI() {
-    document.getElementById('welcome-bonus-modal').innerText = welcomeBonus;
-    document.querySelectorAll('.banner-ref-bonus').forEach(e => e.innerText = referralBonus);
-    document.querySelectorAll('#display-ref-bonus').forEach(e => e.innerText = referralBonus);
-    document.querySelectorAll('.display-min-recharge').forEach(e => e.innerText = minRecharge);
-    document.getElementById('display-min-usdt').innerText = minUsdt;
-}
+    const wbModal = document.getElementById('welcome-bonus-modal');
+    if (wbModal) wbModal.innerText = welcomeBonusPoints;
+    document.querySelectorAll('.banner-ref-bonus').forEach(e => e.innerText = referralBonusPoints);
+    document.querySelectorAll('#display-ref-bonus').forEach(e => e.innerText = referralBonusPoints);
+    
+    const minWithdrawEl = document.getElementById('display-min-withdraw');
+    if (minWithdrawEl) minWithdrawEl.innerText = minWithdrawPoints;
 
-// ================= ইন-পেজ ফুল ভিউ হ্যান্ডলার (Full View Screen) =================
-function openNetworkFullView(networkKey) {
-    playClickSound();
-    selectedNetwork = networkKey;
-    const overlay = document.getElementById('network-fullview');
-
-    const netDetails = {
-        adsgram: {
-            title: "Adsgram Video Task",
-            badge: "OFFICIAL ADSGRAM SDK",
-            icon: "🎬",
-            headline: "ভিডিও বিজ্ঞাপন দেখুন",
-            desc: "ভিডিওটি সম্পূর্ণ দেখুন, ভিডিও শেষ হলে আপনার অ্যাকাউন্টে টাকা ক্রেডিট হবে।"
-        },
-        monetag: {
-            title: "Monetag Smart Link",
-            badge: "MONETAG ON-CLICK SMART LINK",
-            icon: "⚡",
-            headline: "স্মার্ট লিঙ্ক ভিজিট করুন",
-            desc: "নিচের বাটনে ক্লিক করে অফার লিঙ্কটি খুলুন এবং ১০-১৫ সেকেন্ড ব্রাউজ করুন।"
-        },
-        adsterra: {
-            title: "Adsterra Direct Task",
-            badge: "ADSTERRA PREMIUM DIRECT LINK",
-            icon: "💎",
-            headline: "অ্যাডস্টেরা হাই-সিপিএম টাস্ক",
-            desc: "অ্যাডস্টেরা স্পনসর লিঙ্কটি ওপেন করুন ও সম্পূর্ণ লোড হওয়া পর্যন্ত ভিজিট করুন।"
-        }
-    };
-
-    const info = netDetails[networkKey];
-    document.getElementById('fv-network-title').innerText = info.title;
-    document.getElementById('fv-badge').innerText = info.badge;
-    document.getElementById('fv-icon').innerText = info.icon;
-    document.getElementById('fv-headline').innerText = info.headline;
-    document.getElementById('fv-desc').innerText = info.desc;
-    document.getElementById('fv-reward-amount').innerText = `৳ ${netConfigs[networkKey].reward.toFixed(2)}`;
-    document.getElementById('fv-limit-count').innerText = `${adsWatchedCount}/${targetAds}`;
-
-    let percent = Math.min((adsWatchedCount / targetAds) * 100, 100);
-    document.getElementById('fv-progress-bar').style.width = `${percent}%`;
-
-    overlay.classList.add('active');
-}
-
-function closeNetworkFullView() {
-    playClickSound();
-    document.getElementById('network-fullview').classList.remove('active');
-}
-
-// ================= ৩টি নেটওয়ার্ক অ্যাড এক্সিকিউশন =================
-async function executeCurrentNetworkAd() {
-    playClickSound();
-    if (adsWatchedCount >= targetAds) {
-        return showToast(currentLang === 'bn' ? `⚠️ আজকের বিজ্ঞাপন সীমা (${targetAds}) শেষ হয়েছে।` : `⚠️ Daily limit reached.`, 'error');
+    const rateTextEl = document.getElementById('display-point-rate-text');
+    if (rateTextEl) {
+        const sampleBdt = (100 * pointsToBdtRate).toFixed(1).replace('.0', '');
+        rateTextEl.innerText = `১০০ পয়েন্ট = ${sampleBdt} টাকা`;
     }
 
-    const actionBtn = document.getElementById('fv-action-btn');
-    actionBtn.disabled = true;
-
-    try {
-        if (selectedNetwork === 'adsgram') {
-            if (typeof Adsgram === 'undefined' || !netConfigs.adsgram.blockId) {
-                actionBtn.disabled = false;
-                return showToast(currentLang === 'bn' ? '⚠️ Adsgram ব্লক আইডি সেট করা হয়নি!' : '⚠️ Adsgram Block ID missing.', 'error');
-            }
-            await Adsgram.init({ blockId: netConfigs.adsgram.blockId }).show();
-            await creditAdReward(netConfigs.adsgram.reward);
-
-        } else if (selectedNetwork === 'monetag') {
-            if (!netConfigs.monetag.url) {
-                actionBtn.disabled = false;
-                return showToast(currentLang === 'bn' ? '⚠️ Monetag লিঙ্ক সেট করা হয়নি!' : '⚠️ Monetag URL missing.', 'error');
-            }
-            window.open(netConfigs.monetag.url, '_blank');
-            showToast(currentLang === 'bn' ? '⏳ অনুগ্রহ করে ১৫ সেকেন্ড পেজটি ব্রাউজ করুন...' : '⏳ Please wait 15 seconds...', 'success');
-            setTimeout(async () => {
-                await creditAdReward(netConfigs.monetag.reward);
-                actionBtn.disabled = false;
-            }, 12000);
-            return;
-
-        } else if (selectedNetwork === 'adsterra') {
-            if (!netConfigs.adsterra.url) {
-                actionBtn.disabled = false;
-                return showToast(currentLang === 'bn' ? '⚠️ Adsterra লিঙ্ক সেট করা হয়নি!' : '⚠️ Adsterra URL missing.', 'error');
-            }
-            window.open(netConfigs.adsterra.url, '_blank');
-            showToast(currentLang === 'bn' ? '⏳ অনুগ্রহ করে ১৫ সেকেন্ড পেজটি ব্রাউজ করুন...' : '⏳ Please wait 15 seconds...', 'success');
-            setTimeout(async () => {
-                await creditAdReward(netConfigs.adsterra.reward);
-                actionBtn.disabled = false;
-            }, 12000);
-            return;
-        }
-    } catch (err) {
-        showToast(currentLang === 'bn' ? '⚠️ বিজ্ঞাপন সম্পূর্ণ হয়নি।' : '⚠️ Ad not completed.', 'error');
-    } finally {
-        actionBtn.disabled = false;
+    const inputPoints = document.getElementById('withdraw-points');
+    if (inputPoints) {
+        inputPoints.min = minWithdrawPoints;
+        inputPoints.placeholder = `সর্বনিম্ন ${minWithdrawPoints} পয়েন্ট`;
     }
 }
 
-async function creditAdReward(rewardVal) {
-    const today = localDateKey();
-    const userRef = db.ref('users/' + userId);
-
-    const result = await userRef.transaction(current => {
-        if (!current) return;
-        const count = current.lastAdDate === today ? Number(current.adsWatchedCount || 0) : 0;
-        if (count >= targetAds) return;
-        current.balance = Math.round((Number(current.balance || 0) + rewardVal) * 100) / 100;
-        current.adsWatchedCount = count + 1;
-        current.lastAdDate = today;
-        return current;
-    });
-
-    if (result.committed) {
-        playCoinSound();
-        triggerConfettiAnimation();
-        showToast(currentLang === 'bn' ? `🎉 ৳${rewardVal} যোগ করা হয়েছে!` : `🎉 Added ৳${rewardVal}!`, 'success');
-        document.getElementById('fv-limit-count').innerText = `${adsWatchedCount + 1}/${targetAds}`;
-        let percent = Math.min(((adsWatchedCount + 1) / targetAds) * 100, 100);
-        document.getElementById('fv-progress-bar').style.width = `${percent}%`;
-    }
+// ================= ডেইলি চেক-ইন কন্ট্রোলার =================
+function openCheckInFullView() {
+    playClickSound();
+    renderCheckInUI();
+    const overlay = document.getElementById('checkin-fullview');
+    if (overlay) overlay.classList.add('active');
 }
 
-// ================= ডেইলি চেক-ইন সিস্টেম =================
+function closeCheckInFullView() {
+    playClickSound();
+    const overlay = document.getElementById('checkin-fullview');
+    if (overlay) overlay.classList.remove('active');
+}
+
 function renderCheckInUI() {
     const grid = document.getElementById('checkin-grid');
     const claimBtn = document.getElementById('btn-claim-checkin');
     const streakText = document.getElementById('checkin-streak-status');
-    if (!grid || !claimBtn) return;
+    const compactStatus = document.getElementById('compact-checkin-status');
 
     const today = localDateKey();
     const isClaimedToday = (lastCheckInDate === today);
@@ -512,7 +494,15 @@ function renderCheckInUI() {
         currentDayTarget = (daysDiff === 1) ? ((checkInStreak % 7) + 1) : 1;
     }
 
-    streakText.innerText = currentLang === 'bn' ? `🔥 স্ট্রিক: ${checkInStreak} দিন` : `🔥 Streak: ${checkInStreak} Days`;
+    if (compactStatus) {
+        compactStatus.innerText = isClaimedToday 
+            ? (currentLang === 'bn' ? '✅ আজকের বোনাস নেওয়া হয়েছে' : '✅ Claimed for today')
+            : (currentLang === 'bn' ? `🎁 দিন ${currentDayTarget}-এর পয়েন্ট অপেক্ষা করছে!` : `🎁 Day ${currentDayTarget} reward is ready!`);
+    }
+
+    if (streakText) streakText.innerText = currentLang === 'bn' ? `🔥 স্ট্রিক: ${checkInStreak} দিন` : `🔥 Streak: ${checkInStreak} Days`;
+
+    if (!grid || !claimBtn) return;
 
     let html = '';
     for (let i = 1; i <= 7; i++) {
@@ -549,7 +539,7 @@ function renderCheckInUI() {
             <div class="${itemClass}">
                 <span class="checkin-day-num">${i18n[currentLang].day_prefix}${i}</span>
                 <span class="checkin-icon">${icon}</span>
-                <span class="checkin-amount">+৳${reward}</span>
+                <span class="checkin-amount">+${reward} Pts</span>
                 <span class="checkin-status-tag ${tagClass}">${statusTagText}</span>
             </div>
         `;
@@ -559,16 +549,16 @@ function renderCheckInUI() {
     if (isClaimedToday) {
         claimBtn.disabled = true;
         claimBtn.innerText = i18n[currentLang].checkin_btn_claimed;
-        claimBtn.style.background = "#1e293b";
-        claimBtn.style.color = "#94a3b8";
+        claimBtn.style.opacity = "0.6";
+        claimBtn.style.cursor = "not-allowed";
     } else {
         claimBtn.disabled = false;
+        claimBtn.style.opacity = "1";
+        claimBtn.style.cursor = "pointer";
         const nextReward = checkInRewards[currentDayTarget - 1];
         claimBtn.innerText = currentLang === 'bn' 
-            ? `🎁 আজকের দিন ${currentDayTarget} বোনাস নিন (+৳${nextReward})`
-            : `🎁 Claim Day ${currentDayTarget} Bonus (+৳${nextReward})`;
-        claimBtn.style.background = "linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%)";
-        claimBtn.style.color = "#042f2e";
+            ? `🎁 আজকের দিন ${currentDayTarget} বোনাস নিন (+${nextReward} Pts)`
+            : `🎁 Claim Day ${currentDayTarget} Bonus (+${nextReward} Pts)`;
     }
 }
 
@@ -578,14 +568,14 @@ async function claimDailyCheckIn() {
     const btn = document.getElementById('btn-claim-checkin');
 
     if (lastCheckInDate === today) {
-        return showToast(currentLang === 'bn' ? '⚠️ আজ ইতিমধ্যে বোনাস নিয়েছেন!' : '⚠️ Already claimed today!', 'error');
+        return showToast(currentLang === 'bn' ? '⚠️ আজ ইতিমধ্যে পয়েন্ট সংগ্রহ করেছেন!' : '⚠️ Already claimed today!', 'error');
     }
 
     if (btn) btn.disabled = true;
     const userRef = db.ref('users/' + userId);
 
     try {
-        let earnedReward = 0;
+        let earnedPoints = 0;
         let resultingStreak = 1;
 
         const tx = await userRef.transaction((curr) => {
@@ -597,9 +587,9 @@ async function claimDailyCheckIn() {
             const diff = getDaysDiff(prevDate, today);
 
             resultingStreak = (diff === 1) ? ((prevStreak % 7) + 1) : 1;
-            earnedReward = checkInRewards[resultingStreak - 1];
+            earnedPoints = checkInRewards[resultingStreak - 1];
 
-            curr.balance = Math.round((Number(curr.balance || 0) + earnedReward) * 100) / 100;
+            curr.balance = Math.round(Number(curr.balance || 0) + earnedPoints);
             curr.lastCheckInDate = today;
             curr.checkInStreak = resultingStreak;
             return curr;
@@ -610,12 +600,194 @@ async function claimDailyCheckIn() {
         playCoinSound();
         triggerConfettiAnimation();
         showToast(currentLang === 'bn' 
-            ? `🎉 দিন ${resultingStreak} এর বোনাস ৳${earnedReward} যোগ হয়েছে!` 
-            : `🎉 Day ${resultingStreak} bonus ৳${earnedReward} claimed!`, 'success');
+            ? `🎉 দিন ${resultingStreak}-এর বোনাস +${earnedPoints} পয়েন্ট যোগ হয়েছে!` 
+            : `🎉 Day ${resultingStreak} bonus +${earnedPoints} Pts added!`, 'success');
+        
+        renderCheckInUI();
     } catch (err) {
-        showToast('⚠️ Error claiming bonus.', 'error');
+        showToast('⚠️ Error claiming daily points.', 'error');
     } finally {
         if (btn) btn.disabled = false;
+    }
+}
+
+// ================= মনেট্যাগ, অ্যাডসগ্রাম ও অন-ক্লিক অ্যাডস ইঞ্জিন =================
+function openNetworkFullView(networkKey) {
+    playClickSound();
+    selectedNetwork = networkKey;
+    const overlay = document.getElementById('network-fullview');
+
+    const netDetails = {
+        monetag: {
+            title: "Monetag Mini App Task",
+            badge: "⚡ MONETAG OFFICIAL IN-APP ADS",
+            icon: "🚀",
+            headline: "Monetag অন-ক্লিক টাস্ক",
+            desc: "অন-ক্লিক অফার পেজে যান এবং ১০-১৫ সেকেন্ড ব্রাউজ করে রিওয়ার্ড পয়েন্ট সংগ্রহ করুন।"
+        },
+        adsgram: {
+            title: "Adsgram Video Reward",
+            badge: "🎬 OFFICIAL ADSGRAM SDK",
+            icon: "🎥",
+            headline: "ভিডিও বিজ্ঞাপন দেখুন",
+            desc: "ভিডিওটি সম্পূর্ণ দেখুন, দেখা শেষ হলেই স্বয়ংক্রিয়ভাবে পয়েন্ট অ্যাকাউন্টে যোগ হবে।"
+        },
+        adsterra: {
+            title: "Adsterra On-Click Task",
+            badge: "💎 ADSTERRA DIRECT NETWORK",
+            icon: "🌐",
+            headline: "অন-ক্লিক ডাইরেক্ট লিঙ্ক",
+            desc: "হাই-সিপিএম স্পনসর লিঙ্কে অন-ক্লিক টাস্ক ভিজিট সম্পন্ন করে পয়েন্ট অর্জন করুন।"
+        }
+    };
+
+    const info = netDetails[networkKey];
+    document.getElementById('fv-network-title').innerText = info.title;
+    document.getElementById('fv-badge').innerText = info.badge;
+    document.getElementById('fv-icon').innerText = info.icon;
+    document.getElementById('fv-headline').innerText = info.headline;
+    document.getElementById('fv-desc').innerText = info.desc;
+    document.getElementById('fv-reward-amount').innerText = `+${netConfigs[networkKey].reward} Pts`;
+    document.getElementById('fv-limit-count').innerText = `${adsWatchedCount}/${targetAds}`;
+
+    let percent = Math.min((adsWatchedCount / targetAds) * 100, 100);
+    document.getElementById('fv-progress-bar').style.width = `${percent}%`;
+
+    overlay.classList.add('active');
+}
+
+function closeNetworkFullView() {
+    playClickSound();
+    document.getElementById('network-fullview').classList.remove('active');
+}
+
+async function executeCurrentNetworkAd() {
+    playClickSound();
+    if (adsWatchedCount >= targetAds) {
+        return showToast(currentLang === 'bn' ? `⚠️ আজকের বিজ্ঞাপন সীমা (${targetAds}) শেষ হয়েছে।` : `⚠️ Daily limit reached.`, 'error');
+    }
+
+    const actionBtn = document.getElementById('fv-action-btn');
+    actionBtn.disabled = true;
+
+    try {
+        // ১. মনেট্যাগ মিনি অ্যাপ অন-ক্লিক / ভিগনেট টাস্ক
+        if (selectedNetwork === 'monetag') {
+            const monetagSdkFunction = window[`show_${netConfigs.monetag.zoneId}`];
+            
+            // যদি মনেট্যাগ অফিসিয়াল SDK মেথড কার্যকর থাকে
+            if (typeof monetagSdkFunction === 'function') {
+                showToast(currentLang === 'bn' ? '⚡ মনেট্যাগ বিজ্ঞাপন লোড হচ্ছে...' : '⚡ Loading Monetag In-App...', 'success');
+                try {
+                    await monetagSdkFunction();
+                    await creditAdReward(netConfigs.monetag.reward);
+                    return;
+                } catch (sdkErr) {
+                    console.warn("Monetag In-App fallback to smart-link:", sdkErr);
+                }
+            }
+
+            // অন-ক্লিক স্মার্ট লিঙ্ক ফলব্যাক মোড
+            if (netConfigs.monetag.url) {
+                window.open(netConfigs.monetag.url, '_blank');
+                let countdown = 12;
+                actionBtn.innerText = `⏳ অপেক্ষা করুন (${countdown}s)...`;
+                
+                showToast(currentLang === 'bn' ? '⏳ অফার পেজটি ১০-১২ সেকেন্ড ভিজিট করুন...' : '⏳ Visit page for 12 seconds...', 'success');
+
+                const timer = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        actionBtn.innerText = `⏳ অপেক্ষা করুন (${countdown}s)...`;
+                    } else {
+                        clearInterval(timer);
+                        creditAdReward(netConfigs.monetag.reward);
+                        actionBtn.innerText = '▶ অন-ক্লিক টাস্ক শুরু করুন';
+                        actionBtn.disabled = false;
+                    }
+                }, 1000);
+                return;
+            } else {
+                actionBtn.disabled = false;
+                return showToast('⚠️ Monetag URL বা Zone ID সেট করা নেই!', 'error');
+            }
+        }
+
+        // ২. অ্যাডসগ্রাম অফিসিয়াল রিওয়ার্ডেড ভিডিও
+        else if (selectedNetwork === 'adsgram') {
+            if (typeof window.Adsgram === 'undefined' || !netConfigs.adsgram.blockId) {
+                actionBtn.disabled = false;
+                return showToast(currentLang === 'bn' ? '⚠️ Adsgram ব্লক আইডি পাওয়া যায়নি!' : '⚠️ Adsgram Block ID missing.', 'error');
+            }
+            
+            showToast(currentLang === 'bn' ? '🎬 Adsgram ভিডিও শুরু হচ্ছে...' : '🎬 Starting video ad...', 'success');
+            await window.Adsgram.init({ blockId: netConfigs.adsgram.blockId }).show();
+            await creditAdReward(netConfigs.adsgram.reward);
+        }
+
+        // ৩. অ্যাডস্টেরা অন-ক্লিক ডাইরেক্ট লিঙ্ক
+        else if (selectedNetwork === 'adsterra') {
+            if (!netConfigs.adsterra.url) {
+                actionBtn.disabled = false;
+                return showToast('⚠️ Adsterra লিঙ্ক পাওয়া যায়নি!', 'error');
+            }
+
+            window.open(netConfigs.adsterra.url, '_blank');
+            let countdown = 12;
+            actionBtn.innerText = `⏳ অপেক্ষা করুন (${countdown}s)...`;
+
+            showToast(currentLang === 'bn' ? '⏳ পেজটি ১০-১২ সেকেন্ড ভিজিট করুন...' : '⏳ Please visit the sponsor page...', 'success');
+
+            const timer = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    actionBtn.innerText = `⏳ অপেক্ষা করুন (${countdown}s)...`;
+                } else {
+                    clearInterval(timer);
+                    creditAdReward(netConfigs.adsterra.reward);
+                    actionBtn.innerText = '▶ অন-ক্লিক টাস্ক শুরু করুন';
+                    actionBtn.disabled = false;
+                }
+            }, 1000);
+            return;
+        }
+    } catch (err) {
+        showToast(currentLang === 'bn' ? '⚠️ বিজ্ঞাপন সম্পূর্ণ হয়নি বা বাতিল হয়েছে।' : '⚠️ Ad skipped or canceled.', 'error');
+    } finally {
+        if (selectedNetwork === 'adsgram') {
+            actionBtn.disabled = false;
+        }
+    }
+}
+
+async function creditAdReward(rewardPoints) {
+    const today = localDateKey();
+    const userRef = db.ref('users/' + userId);
+
+    const result = await userRef.transaction(current => {
+        if (!current) return;
+        const count = current.lastAdDate === today ? Number(current.adsWatchedCount || 0) : 0;
+        if (count >= targetAds) return;
+        current.balance = Math.round(Number(current.balance || 0) + rewardPoints);
+        current.adsWatchedCount = count + 1;
+        current.lastAdDate = today;
+
+        if (selectedNetwork === 'monetag') current.ads_monetag = Number(current.ads_monetag || 0) + 1;
+        if (selectedNetwork === 'adsgram') current.ads_adsgram = Number(current.ads_adsgram || 0) + 1;
+        if (selectedNetwork === 'adsterra') current.ads_adsterra = Number(current.ads_adsterra || 0) + 1;
+
+        return current;
+    });
+
+    if (result.committed) {
+        playCoinSound();
+        triggerConfettiAnimation();
+        showToast(currentLang === 'bn' ? `🎉 +${rewardPoints} পয়েন্ট অ্যাকাউন্টে যোগ হয়েছে!` : `🎉 Added +${rewardPoints} Points!`, 'success');
+        
+        const newWatched = adsWatchedCount + 1;
+        document.getElementById('fv-limit-count').innerText = `${newWatched}/${targetAds}`;
+        let percent = Math.min((newWatched / targetAds) * 100, 100);
+        document.getElementById('fv-progress-bar').style.width = `${percent}%`;
     }
 }
 
@@ -631,23 +803,31 @@ setInterval(() => {
     currentSlide = (currentSlide + 1) % slides.length;
     slides[currentSlide].classList.add('active');
     dots[currentSlide].classList.add('active');
-}, 3500);
+}, 3800);
 
 function closeWelcomeModal() { 
     playCoinSound();
-    document.getElementById('welcome-modal').style.display = 'none'; 
+    const modal = document.getElementById('welcome-modal');
+    if (modal) modal.style.display = 'none'; 
     triggerConfettiAnimation();
 }
 
-// ================= ট্যাব নেভিগেশন =================
+// ================= বটম নেভিগেশন ট্যাব সুইচ =================
 function switchTab(pageId, titleKey, btnElement) {
     playClickSound();
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) targetPage.classList.add('active');
+    
     const headerTitleKey = 'nav_' + titleKey;
-    if (i18n[currentLang][headerTitleKey]) document.getElementById('header-title').innerText = i18n[currentLang][headerTitleKey];
+    const headerTitleEl = document.getElementById('header-title');
+    if (i18n[currentLang][headerTitleKey] && headerTitleEl) {
+        headerTitleEl.innerText = i18n[currentLang][headerTitleKey];
+    }
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     if (btnElement) btnElement.classList.add('active');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ================= রেফারেল হ্যান্ডলার =================
@@ -660,127 +840,167 @@ function copyReferralLink() {
 
 function shareReferralLink() {
     playClickSound();
-    const shareText = `🎉 আমাদের আর্নিং অ্যাপে ফ্রিতে ইনকাম করুন! জয়েন করলেই পাবেন ৳${welcomeBonus} টাকা বোনাস।\n\n👇 জয়েন করুন:\n${myReferralLink}`;
+    const shareText = `🎉 আমাদের আর্নিং অ্যাপে জয়েন করলেই পাবেন ${welcomeBonusPoints} পয়েন্ট ওয়েলকাম বোনাস!\n\n👇 এখনই জয়েন করুন:\n${myReferralLink}`;
     window.open(`https://t.me/share/url?url=${encodeURIComponent(myReferralLink)}&text=${encodeURIComponent(shareText)}`, '_blank');
 }
 
-// ================= উত্তোলন ও ক্যাশআউট =================
+// ================= রিচার্জ, বিকাশ ও নগদ ক্যাশআউট সিস্টেম =================
 function switchWithdrawMethod(method) {
     playClickSound();
-    document.getElementById('form-recharge').style.display = method === 'recharge' ? 'block' : 'none';
-    document.getElementById('form-usdt').style.display = method === 'usdt' ? 'block' : 'none';
-    document.getElementById('btn-method-recharge').classList.toggle('active', method === 'recharge');
-    document.getElementById('btn-method-usdt').classList.toggle('active', method === 'usdt');
+    selectedWithdrawMethod = method;
+    
+    const btnRecharge = document.getElementById('btn-method-recharge');
+    const btnBkash = document.getElementById('btn-method-bkash');
+    const btnNagad = document.getElementById('btn-method-nagad');
+    
+    const groupOperator = document.getElementById('group-operator');
+    const labelAccType = document.getElementById('label-acc-type');
+    const selectAccType = document.getElementById('withdraw-account-type');
+    const labelPhone = document.getElementById('label-withdraw-phone');
+    const inputPhone = document.getElementById('withdraw-phone');
+    const minWithdrawEl = document.getElementById('display-min-withdraw');
+    const inputPoints = document.getElementById('withdraw-points');
+
+    if (btnRecharge) btnRecharge.classList.toggle('active', method === 'recharge');
+    if (btnBkash) btnBkash.classList.toggle('active', method === 'bkash');
+    if (btnNagad) btnNagad.classList.toggle('active', method === 'nagad');
+
+    if (method === 'recharge') {
+        if (groupOperator) groupOperator.style.display = 'block';
+        if (labelAccType) labelAccType.innerText = 'সিম টাইপ (SIM Type):';
+        if (selectAccType) {
+            selectAccType.innerHTML = `
+                <option value="Prepaid">প্রিপেইড (Prepaid)</option>
+                <option value="Postpaid">পোস্টপেইড (Postpaid)</option>
+            `;
+        }
+        if (labelPhone) labelPhone.innerText = 'রিচার্জ মোবাইল নম্বর:';
+        if (inputPhone) inputPhone.placeholder = '01XXXXXXXXX';
+        
+        // রিচার্জে সর্বনিম্ন ২০০ পয়েন্ট (২০ টাকা)
+        minWithdrawPoints = 200;
+    } else {
+        if (groupOperator) groupOperator.style.display = 'none';
+        if (labelAccType) labelAccType.innerText = 'অ্যাকাউন্টের ধরন (Account Type):';
+        if (selectAccType) {
+            selectAccType.innerHTML = `
+                <option value="Personal">পার্সোনাল (Personal)</option>
+                <option value="Agent">এজেন্ট (Agent)</option>
+            `;
+        }
+        
+        if (method === 'bkash') {
+            if (labelPhone) labelPhone.innerText = 'বিকাশ নম্বর:';
+            if (inputPhone) inputPhone.placeholder = '01XXXXXXXXX (bKash)';
+        } else {
+            if (labelPhone) labelPhone.innerText = 'নগদ নম্বর:';
+            if (inputPhone) inputPhone.placeholder = '01XXXXXXXXX (Nagad)';
+        }
+        
+        // বিকাশ ও নগদে সর্বনিম্ন ৫০০ পয়েন্ট (৫০ টাকা)
+        minWithdrawPoints = 500;
+    }
+
+    if (minWithdrawEl) minWithdrawEl.innerText = minWithdrawPoints;
+    if (inputPoints) {
+        inputPoints.min = minWithdrawPoints;
+        inputPoints.placeholder = `সর্বনিম্ন ${minWithdrawPoints} পয়েন্ট লিখুন`;
+    }
+    calculateWithdrawBdt();
 }
 
-async function submitWithdrawalRequest(amountBdt, requestData, form, btn) {
+function calculateWithdrawBdt() {
+    const pointsInput = parseFloat(document.getElementById('withdraw-points').value) || 0;
+    const previewSummary = document.getElementById('withdraw-preview-summary');
+    const bdtVal = document.getElementById('summary-bdt-val');
+
+    if (pointsInput > 0) {
+        previewSummary.style.display = 'block';
+        const totalBdt = (pointsInput * pointsToBdtRate).toFixed(2);
+        bdtVal.innerText = totalBdt;
+    } else {
+        previewSummary.style.display = 'none';
+    }
+}
+
+async function handleWithdrawSubmit(event) {
+    event.preventDefault();
+    playClickSound();
+    const form = event.currentTarget;
+    const button = document.getElementById('btn-submit-withdraw');
+    const pointsToDeduct = Number(document.getElementById('withdraw-points').value);
+    const phone = document.getElementById('withdraw-phone').value.trim();
+    const accountType = document.getElementById('withdraw-account-type').value;
+    const operator = selectedWithdrawMethod === 'recharge' 
+        ? document.getElementById('withdraw-operator').value 
+        : null;
+
+    if (!Number.isFinite(pointsToDeduct) || pointsToDeduct < minWithdrawPoints) {
+        return showToast(currentLang === 'bn' ? `⚠️ সর্বনিম্ন উত্তোলন ${minWithdrawPoints} পয়েন্ট হতে হবে।` : `⚠️ Minimum ${minWithdrawPoints} points.`, 'error');
+    }
+    if (!/^01[3-9][0-9]{8}$/.test(phone)) {
+        return showToast(currentLang === 'bn' ? '⚠️ সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।' : '⚠️ Invalid 11-digit mobile number.', 'error');
+    }
+    if (pointsToDeduct > balancePoints) {
+        return showToast(currentLang === 'bn' ? '⚠️ আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।' : '⚠️ Insufficient points balance.', 'error');
+    }
+
+    const calculatedBdt = Math.round(pointsToDeduct * pointsToBdtRate * 100) / 100;
+    let methodName = 'Mobile Recharge';
+    if (selectedWithdrawMethod === 'bkash') methodName = 'bKash';
+    if (selectedWithdrawMethod === 'nagad') methodName = 'Nagad';
+
+    if (button) button.disabled = true;
+
     const userRef = db.ref('users/' + userId);
-    const tx = await userRef.transaction(current => {
-        if (!current) return;
-        const currentBalance = Number(current.balance || 0);
-        if (!Number.isFinite(currentBalance) || currentBalance < amountBdt) return;
-        current.balance = Math.round((currentBalance - amountBdt) * 100) / 100;
-        return current;
-    });
-
-    if (!tx.committed) throw new Error('INSUFFICIENT_BALANCE');
-
     try {
-        const requestRef = db.ref('withdrawals').push();
-        await requestRef.set({
-            ...requestData,
-            userId, userName, userUsername,
-            status: 'Pending', timestamp: new Date().toISOString()
-        });
-        form.reset();
-    } catch (error) {
-        await userRef.transaction(current => {
+        const tx = await userRef.transaction(current => {
             if (!current) return;
-            current.balance = Math.round((Number(current.balance || 0) + amountBdt) * 100) / 100;
+            const curBal = Number(current.balance || 0);
+            if (curBal < pointsToDeduct) return;
+            current.balance = Math.round(curBal - pointsToDeduct);
             return current;
         });
-        throw error;
-    }
-}
 
-async function handleRechargeSubmit(event) {
-    event.preventDefault();
-    playClickSound();
-    const form = event.currentTarget;
-    const button = document.getElementById('btn-submit-recharge-el');
-    const amount = Number(document.getElementById('recharge-amount').value);
-    const phone = document.getElementById('recharge-phone').value.trim();
-    const operator = document.getElementById('recharge-operator').value;
-    const simType = document.getElementById('recharge-sim-type').value;
+        if (!tx.committed) throw new Error('INSUFFICIENT_POINTS');
 
-    if (!Number.isFinite(amount) || amount < minRecharge) return showToast(currentLang === 'bn' ? `⚠️ সর্বনিম্ন রিচার্জ ৳${minRecharge} হতে হবে।` : `⚠️ Min recharge ৳${minRecharge}.`, 'error');
-    if (!/^01[3-9][0-9]{8}$/.test(phone)) return showToast(currentLang === 'bn' ? '⚠️ সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন।' : '⚠️ Invalid mobile number.', 'error');
-    if (!operator) return showToast(currentLang === 'bn' ? '⚠️ অপারেটর নির্বাচন করুন।' : '⚠️ Select operator.', 'error');
-    if (amount > balance) return showToast(currentLang === 'bn' ? '⚠️ আপনার ব্যালেন্স পর্যাপ্ত নয়।' : '⚠️ Insufficient balance.', 'error');
+        const requestRef = db.ref('withdrawals').push();
+        await requestRef.set({
+            userId,
+            userName,
+            userUsername,
+            method: methodName,
+            operator: operator || '',
+            accountType,
+            phone,
+            pointsDeducted: pointsToDeduct,
+            amountBdt: calculatedBdt,
+            status: 'Pending',
+            timestamp: new Date().toISOString()
+        });
 
-    if (button) button.disabled = true;
-    try {
-        await submitWithdrawalRequest(amount, { method: 'Mobile Recharge', operator, simType, phone, amount }, form, button);
-        showToast(currentLang === 'bn' ? '⚡ রিচার্জ রিকোয়েস্ট জমা হয়েছে!' : '⚡ Recharge request submitted!', 'success');
+        form.reset();
+        document.getElementById('withdraw-preview-summary').style.display = 'none';
+        triggerConfettiAnimation();
+        showToast(currentLang === 'bn' ? `⚡ ${methodName} রিকোয়েস্ট সফলভাবে জমা হয়েছে!` : `⚡ ${methodName} request submitted!`, 'success');
+
     } catch (error) {
-        showToast(currentLang === 'bn' ? '⚠️ ব্যালেন্স পর্যাপ্ত নয়।' : '⚠️ Insufficient balance.', 'error');
+        showToast(currentLang === 'bn' ? '⚠️ পর্যাপ্ত পয়েন্ট নেই অথবা ত্রুটি ঘটেছে।' : '⚠️ Insufficient points or network error.', 'error');
     } finally {
         if (button) button.disabled = false;
     }
 }
 
-function calculateUsdtFee() {
-    const amountUsd = parseFloat(document.getElementById('usdt-amount').value) || 0;
-    const feeSummary = document.getElementById('usdt-fee-summary');
-    if (amountUsd > 0) {
-        feeSummary.style.display = 'block';
-        const fee = amountUsd * (usdtFeePercent / 100);
-        const netAmount = amountUsd - fee;
-        const bdtCost = amountUsd * usdtExchangeRate;
-
-        document.getElementById('summary-gross').innerText = `$${amountUsd.toFixed(2)}`;
-        document.getElementById('summary-fee').innerText = `-$${fee.toFixed(2)} (${usdtFeePercent}%)`;
-        document.getElementById('summary-net').innerText = `$${netAmount.toFixed(2)} USDT`;
-        document.getElementById('summary-bdt').innerText = `৳${bdtCost.toFixed(2)}`;
-    } else { feeSummary.style.display = 'none'; }
-}
-
-async function handleUsdtSubmit(event) {
-    event.preventDefault();
-    playClickSound();
-    const form = event.currentTarget;
-    const button = document.getElementById('btn-submit-usdt-el');
-    const usdtAddress = document.getElementById('usdt-address').value.trim();
-    const amountUsd = Number(document.getElementById('usdt-amount').value);
-    const totalBdtNeeded = Math.round(amountUsd * usdtExchangeRate * 100) / 100;
-
-    if (!/^0x[a-fA-F0-9]{40}$/.test(usdtAddress)) return showToast(currentLang === 'bn' ? '⚠️ সঠিক BEP-20 ওয়ালেট অ্যাড্রেস দিন।' : '⚠️ Invalid BEP-20 address.', 'error');
-    if (!Number.isFinite(amountUsd) || amountUsd < minUsdt) return showToast(currentLang === 'bn' ? `⚠️ সর্বনিম্ন ${minUsdt} USDT হতে হবে।` : `⚠️ Min ${minUsdt} USDT.`, 'error');
-    if (!Number.isFinite(totalBdtNeeded) || totalBdtNeeded > balance) return showToast(currentLang === 'bn' ? '⚠️ আপনার ব্যালেন্স পর্যাপ্ত নয়।' : '⚠️ Insufficient balance.', 'error');
-
-    if (button) button.disabled = true;
-    try {
-        await submitWithdrawalRequest(totalBdtNeeded, {
-            method: 'USDT (BEP20)', usdtAddress, requestedUsd: amountUsd,
-            netUsdToReceive: Math.round((amountUsd - amountUsd * (usdtFeePercent / 100)) * 10000) / 10000,
-            bdtDeducted: totalBdtNeeded
-        }, form, button);
-        document.getElementById('usdt-fee-summary').style.display = 'none';
-        showToast(currentLang === 'bn' ? '🪙 USDT উইথড্র রিকোয়েস্ট জমা হয়েছে!' : '🪙 USDT withdraw submitted!', 'success');
-    } catch (error) {
-        showToast(currentLang === 'bn' ? '⚠️ ব্যালেন্স পর্যাপ্ত নয়।' : '⚠️ Insufficient balance.', 'error');
-    } finally {
-        if (button) button.disabled = false;
-    }
-}
-
-// ================= হিস্ট্রি শিট হ্যান্ডলার =================
+// ================= উইথড্রয়াল হিস্ট্রি বটম শিট =================
 function openWithdrawHistory() {
     playClickSound();
     const overlay = document.getElementById('history-modal-overlay');
     const sheet = document.getElementById('history-bottom-sheet');
     overlay.style.display = 'block';
-    setTimeout(() => { overlay.classList.add('active'); sheet.classList.add('active'); }, 10);
+    setTimeout(() => { 
+        overlay.classList.add('active'); 
+        sheet.classList.add('active'); 
+    }, 10);
     loadWithdrawHistoryData();
 }
 
@@ -795,42 +1015,45 @@ function closeWithdrawHistory() {
 
 function loadWithdrawHistoryData() {
     const listContainer = document.getElementById('history-scroll-list');
-    listContainer.innerHTML = `<div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 20px;">${i18n[currentLang].loading_text}</div>`;
+    listContainer.innerHTML = `<div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 25px;">${i18n[currentLang].loading_text}</div>`;
 
     db.ref('withdrawals').orderByChild('userId').equalTo(userId).once('value', (snapshot) => {
         if (!snapshot.exists()) {
-            listContainer.innerHTML = `<div style="text-align: center; color: #cbd5e1; font-size: 13px; padding: 30px 10px;"><div style="font-size: 36px; margin-bottom: 6px;">📂</div>${i18n[currentLang].no_history_withdraw}</div>`;
+            listContainer.innerHTML = `
+                <div style="text-align: center; color: #cbd5e1; font-size: 14px; padding: 40px 10px;">
+                    <div style="font-size: 42px; margin-bottom: 8px;">📂</div>
+                    ${i18n[currentLang].no_history_withdraw}
+                </div>`;
             return;
         }
 
-        let itemsHTML = '';
         let itemsArr = [];
         snapshot.forEach((childSnap) => { itemsArr.push(childSnap.val()); });
         itemsArr.reverse();
 
+        let itemsHTML = '';
         itemsArr.forEach(item => {
             let statusClass = 'status-pending';
             let statusText = item.status || 'Pending';
             if (statusText.toLowerCase() === 'approved') statusClass = 'status-approved';
             if (statusText.toLowerCase() === 'rejected') statusClass = 'status-rejected';
 
-            let amountDisplay = item.method && item.method.includes('USDT') 
-                ? `$${item.requestedUsd || 0} USDT (৳${item.bdtDeducted || 0})` 
-                : `৳ ${item.amount || 0}`;
-
-            let targetDetail = item.phone || item.usdtAddress || '';
+            let extraInfo = item.operator ? `${item.operator} - ${item.accountType}` : (item.accountType || 'Personal');
+            let methodTitle = `${item.method || 'Cashout'} (${extraInfo})`;
+            let pointsText = `${item.pointsDeducted || 0} Pts (৳${item.amountBdt || 0})`;
+            let targetDetail = item.phone || '';
             let dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString(currentLang === 'bn' ? 'bn-BD' : 'en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
 
             itemsHTML += `
                 <div class="history-item-card">
                     <div>
-                        <div style="font-size: 13px; font-weight: 800; color: #ffffff;">${escapeHtml(item.method)}</div>
-                        <div style="font-size: 11px; color: #00f2fe; margin-top: 2px;">${escapeHtml(targetDetail)}</div>
-                        <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">${dateStr}</div>
+                        <div style="font-size: 14px; font-weight: 800; color: #ffffff;">${escapeHtml(methodTitle)}</div>
+                        <div style="font-size: 12px; color: #00f2fe; margin-top: 3px; font-weight: 700;">${escapeHtml(targetDetail)}</div>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">${dateStr}</div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-size: 14px; font-weight: 800; color: #00f5a0;">${amountDisplay}</div>
-                        <div style="margin-top: 4px;">
+                        <div style="font-size: 15px; font-weight: 900; color: #00f5a0;">${pointsText}</div>
+                        <div style="margin-top: 5px;">
                             <span class="history-status-badge ${escapeHtml(statusClass)}">${escapeHtml(statusText)}</span>
                         </div>
                     </div>
