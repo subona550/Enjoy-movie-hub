@@ -616,3 +616,51 @@ body {
 /* টোস্ট */
 #toast-container { position: fixed; top: calc(20px + var(--safe-top)); left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; width: 90%; max-width: 320px; }
 .toast-msg { background: rgba(10, 17, 36, 0.95); border: 1px solid var(--accent-cyan); color: #fff; padding: 10px 16px; border-radius: 14px; font-size: 12px; font-weight: 700; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
+/* ================= ফিক্স: টেক্সট ইনপুট ও পেস্ট সমস্যা ================= */
+input, select, textarea {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+}
+
+/* ================= ফিক্স: ড্রপডাউন অপশন দেখা না যাওয়া ================= */
+.banner-input-group select option {
+    background-color: #0b1124;
+    color: #ffffff;
+    padding: 10px;
+}
+
+/* ================= ফিক্স: iOS ইনপুট অটো-জুম প্রতিরোধ ================= */
+.banner-input-group input, 
+.banner-input-group select {
+    font-size: 15px !important; /* জুম সমস্যা এড়াতে */
+}
+
+/* ================= ফিক্স: মিসিং টেক্সট ক্লাসসমূহ ================= */
+.text-gradient {
+    background: linear-gradient(135deg, #00f2fe 0%, #00f5a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gold {
+    color: var(--accent-gold);
+    font-weight: 800;
+}
+
+/* ================= ফিক্স: ফুল-ভিউ ট্রানজিশন সেফটি ================= */
+.fullview-container {
+    visibility: hidden;
+}
+
+.fullview-container.active {
+    visibility: visible;
+}
+
+/* ================= কাস্টম স্ক্রলবার (হিস্ট্রির জন্য দেখতে সুন্দর লাগবে) ================= */
+.history-scroll-list::-webkit-scrollbar {
+    width: 4px;
+}
+.history-scroll-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.2);
+    border-radius: 4px;
+}
