@@ -1,12 +1,13 @@
 /* ==========================================================
-   EARNHUB PRO - FULL-WIDTH MODERN FINTECH THEME (v5.1.0)
-   - Edge-to-Edge Responsive Width (No tight 520px restriction)
-   - Large Spacious Cards
-   - Enhanced Readable Font Sizes
-   - High-End "Light Sweep / Shine Effect" Glass Animation
+   EARNHUB PRO - FULL-WIDTH MODERN FINTECH THEME (v5.3.0)
+   - Dynamic Theme Engine: Pure Dark & Crisp Day/Light Mode
+   - Animated SVG Checkmark & Premium Receipt Card
+   - Anti-Spam Button Protection Styling
+   - Status Bar Safe Inset & Edge-to-Edge Responsiveness
 ========================================================== */
 
 :root {
+    /* DEFAULT DARK THEME */
     --bg-base: #0B0E14;
     --card-surface: #141923;
     --card-border: rgba(255, 255, 255, 0.08);
@@ -20,9 +21,36 @@
     --text-primary: #FFFFFF;
     --text-secondary: #A0ABC0;
     --text-muted: #64748B;
+    
+    --input-bg: #0E121B;
+    --top-nav-bg: rgba(11, 14, 20, 0.96);
+    --bottom-nav-bg: rgba(14, 18, 27, 0.96);
+    --chip-bg: #1E2638;
 
-    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-top: 0px;
     --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* DAY / LIGHT THEME */
+body.light-theme {
+    --bg-base: #F3F4F8;
+    --card-surface: #FFFFFF;
+    --card-border: rgba(0, 0, 0, 0.08);
+    --card-hover: #F8FAFC;
+
+    --accent-mint: #00BA7C;
+    --accent-mint-soft: rgba(0, 186, 124, 0.12);
+    --accent-blue: #0284C7;
+    --accent-purple: #7E22CE;
+
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+    
+    --input-bg: #F8FAFC;
+    --top-nav-bg: rgba(255, 255, 255, 0.96);
+    --bottom-nav-bg: rgba(255, 255, 255, 0.96);
+    --chip-bg: #E2E8F0;
 }
 
 * {
@@ -31,6 +59,7 @@
     padding: 0;
     font-family: 'Inter', 'Hind Siliguri', -apple-system, sans-serif;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.25s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 body {
@@ -110,6 +139,96 @@ input, select, textarea {
     100% { left: 150%; }
 }
 
+/* ================= অ্যানিমেটেড গ্রিন টিক চিহ্ন (SVG ANIMATION) ================= */
+.success-checkmark-wrap {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 16px auto;
+    position: relative;
+}
+
+.checkmark-svg {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 3.5;
+    stroke: var(--accent-mint);
+    stroke-miterlimit: 10;
+    box-shadow: 0 0 24px rgba(0, 229, 153, 0.25);
+    animation: checkmarkScale 0.35s ease-in-out 0.8s both;
+}
+
+.checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 3.5;
+    stroke-miterlimit: 10;
+    stroke: var(--accent-mint);
+    animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    stroke: var(--accent-mint);
+    stroke-width: 4;
+    animation: strokeCheck 0.35s cubic-bezier(0.65, 0, 0.45, 1) 0.55s forwards;
+}
+
+@keyframes strokeCircle {
+    100% { stroke-dashoffset: 0; }
+}
+
+@keyframes strokeCheck {
+    100% { stroke-dashoffset: 0; }
+}
+
+@keyframes checkmarkScale {
+    0%, 100% { transform: none; }
+    50% { transform: scale3d(1.08, 1.08, 1); }
+}
+
+/* রিসিট কার্ড ও মেমো বক্স */
+.receipt-card {
+    max-width: 380px !important;
+    padding: 26px 20px !important;
+}
+
+.receipt-box {
+    background: var(--input-bg);
+    border: 1px dashed rgba(0, 229, 153, 0.45);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin: 18px 0 22px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.rc-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.rc-val {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.font-bold {
+    font-weight: 800;
+}
+
 /* ================= স্প্ল্যাশ স্ক্রিন ================= */
 #splash-screen {
     position: fixed;
@@ -126,7 +245,7 @@ input, select, textarea {
 .splash-loader {
     width: 44px;
     height: 44px;
-    border: 3.5px solid rgba(255, 255, 255, 0.1);
+    border: 3.5px solid rgba(125, 125, 125, 0.2);
     border-top-color: var(--accent-mint);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
@@ -144,7 +263,7 @@ input, select, textarea {
 .splash-bar {
     width: 160px;
     height: 4px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(125, 125, 125, 0.15);
     border-radius: 6px;
     margin-top: 16px;
     overflow: hidden;
@@ -157,17 +276,20 @@ input, select, textarea {
     transition: width 0.2s ease;
 }
 
-/* ================= হেডার (প্রসারিত) ================= */
+/* ================= হেডার (স্ট্যাটাস বার ওভারল্যাপ ফিক্স) ================= */
 .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: calc(14px + var(--safe-top)) 16px 14px 16px;
+    padding-top: calc(18px + var(--safe-top));
+    padding-bottom: 14px;
+    padding-left: 16px;
+    padding-right: 16px;
     position: sticky;
     top: 0;
     width: 100%;
-    background: rgba(11, 14, 20, 0.95);
-    backdrop-filter: blur(12px);
+    background: var(--top-nav-bg);
+    backdrop-filter: blur(14px);
     z-index: 100;
     border-bottom: 1px solid var(--card-border);
 }
@@ -183,7 +305,7 @@ input, select, textarea {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: #1E293B;
+    background: var(--input-bg);
     border: 2px solid var(--accent-mint);
     display: flex;
     align-items: center;
@@ -196,33 +318,45 @@ input, select, textarea {
 .user-name {
     font-size: 15px;
     font-weight: 700;
+    color: var(--text-primary);
 }
 
 .user-status-text {
     font-size: 12px;
     color: var(--accent-mint);
     font-weight: 600;
+    display: block;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .icon-btn-pill {
-    background: #141923;
+    background: var(--card-surface);
     border: 1px solid var(--card-border);
     color: var(--text-primary);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 22px;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 20px;
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
 }
 
-/* ================= সম্পূর্ণ স্ক্রিন প্রসারিত বডি ================= */
+.icon-btn-pill:active {
+    transform: scale(0.96);
+}
+
+/* ================= সম্পূর্ণ বডি ================= */
 .app-body {
     padding: 14px 12px;
     width: 100%;
-    max-width: 100%; /* দুই পাশে অসার/বড় এবং ডিভাইস ফ্রেন্ডলি */
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -233,7 +367,7 @@ input, select, textarea {
     padding: 22px 18px;
     margin-bottom: 14px;
     width: 100%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 /* হিরো ব্যালেন্স কার্ড */
@@ -280,7 +414,7 @@ input, select, textarea {
     font-size: 46px;
     font-weight: 800;
     letter-spacing: -0.5px;
-    color: #FFF;
+    color: var(--text-primary);
 }
 
 .b-curr {
@@ -314,7 +448,8 @@ input, select, textarea {
 .track-bar {
     width: 100%;
     height: 8px;
-    background: #1E2636;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     overflow: hidden;
 }
@@ -345,7 +480,7 @@ input, select, textarea {
     color: var(--text-muted);
 }
 
-/* ================= বড় ও প্রশস্ত অ্যাড কার্ড ================= */
+/* ================= অ্যাড কার্ড ================= */
 .ad-card-container {
     display: flex;
     flex-direction: column;
@@ -362,14 +497,14 @@ input, select, textarea {
     position: relative;
     cursor: pointer;
     width: 100%;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 .ad-card:active {
     transform: scale(0.985);
     background: var(--card-hover);
-    border-color: rgba(0, 229, 153, 0.4);
+    border-color: var(--accent-mint);
 }
 
 .ad-card-badge {
@@ -384,9 +519,9 @@ input, select, textarea {
     text-transform: uppercase;
 }
 
-.blue-badge { background: rgba(0, 152, 234, 0.16); color: #0098EA; }
-.mint-badge { background: rgba(0, 229, 153, 0.16); color: #00E599; }
-.purple-badge { background: rgba(147, 51, 234, 0.16); color: #A855F7; }
+.blue-badge { background: rgba(0, 152, 234, 0.16); color: var(--accent-blue); }
+.mint-badge { background: rgba(0, 229, 153, 0.16); color: var(--accent-mint); }
+.purple-badge { background: rgba(147, 51, 234, 0.16); color: var(--accent-purple); }
 
 .ad-card-main {
     display: flex;
@@ -407,7 +542,7 @@ input, select, textarea {
 
 .task-blue { background: rgba(0, 152, 234, 0.14); color: var(--accent-blue); }
 .task-mint { background: rgba(0, 229, 153, 0.14); color: var(--accent-mint); }
-.task-purple { background: rgba(147, 51, 234, 0.14); color: #C084FC; }
+.task-purple { background: rgba(147, 51, 234, 0.14); color: var(--accent-purple); }
 
 .ad-meta {
     flex: 1;
@@ -417,7 +552,7 @@ input, select, textarea {
 .ad-title {
     font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--text-primary);
 }
 
 .ad-desc {
@@ -431,13 +566,13 @@ input, select, textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--card-border);
     padding-top: 14px;
 }
 
 .ad-reward-pill {
     background: var(--accent-mint-soft);
-    color: #00E599;
+    color: var(--accent-mint);
     font-size: 14px;
     font-weight: 800;
     padding: 6px 14px;
@@ -450,10 +585,10 @@ input, select, textarea {
     gap: 6px;
     font-size: 14px;
     font-weight: 700;
-    color: #E2E8F0;
+    color: var(--text-primary);
 }
 
-/* ================= ইন-পেজ ফুল ভিউ স্ক্রিন ================= */
+/* ================= ইন-পেজ ফুল ভিউ ================= */
 .inpage-screen {
     position: fixed;
     inset: 0;
@@ -476,17 +611,20 @@ input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: calc(14px + var(--safe-top)) 18px 14px 18px;
-    background: #0E121B;
+    padding-top: calc(18px + var(--safe-top));
+    padding-bottom: 14px;
+    padding-left: 18px;
+    padding-right: 18px;
+    background: var(--top-nav-bg);
     border-bottom: 1px solid var(--card-border);
 }
 
 .fv-back-btn {
     width: 38px;
     height: 38px;
-    background: #19202D;
+    background: var(--card-surface);
     border: 1px solid var(--card-border);
-    color: #FFF;
+    color: var(--text-primary);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -497,7 +635,7 @@ input, select, textarea {
 .fv-header-title {
     font-size: 17px;
     font-weight: 700;
-    color: #FFF;
+    color: var(--text-primary);
 }
 
 .fv-scroll-content {
@@ -515,7 +653,7 @@ input, select, textarea {
     width: 76px;
     height: 76px;
     border-radius: 24px;
-    background: rgba(0, 229, 153, 0.12);
+    background: var(--accent-mint-soft);
     color: var(--accent-mint);
     border: 1.5px solid rgba(0, 229, 153, 0.3);
     display: flex;
@@ -530,8 +668,8 @@ input, select, textarea {
     letter-spacing: 1px;
     padding: 4px 12px;
     border-radius: 14px;
-    background: #1E2638;
-    color: #CBD5E1;
+    background: var(--chip-bg);
+    color: var(--text-secondary);
     display: inline-block;
     margin-bottom: 10px;
 }
@@ -539,7 +677,7 @@ input, select, textarea {
 .fv-title {
     font-size: 22px;
     font-weight: 800;
-    color: #FFF;
+    color: var(--text-primary);
     margin-bottom: 8px;
 }
 
@@ -555,7 +693,7 @@ input, select, textarea {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    background: #141923;
+    background: var(--card-surface);
     border: 1px solid var(--card-border);
     border-radius: 18px;
     padding: 18px 12px;
@@ -565,7 +703,7 @@ input, select, textarea {
 
 .fv-m-label {
     font-size: 11px;
-    color: #64748B;
+    color: var(--text-muted);
     display: block;
     margin-bottom: 6px;
 }
@@ -573,13 +711,13 @@ input, select, textarea {
 .fv-m-val {
     font-size: 15px;
     font-weight: 800;
-    color: #FFF;
+    color: var(--text-primary);
 }
 
-.text-online { color: #00E599; }
+.text-online { color: var(--accent-mint); }
 
 .fv-rules-card {
-    background: #141923;
+    background: var(--card-surface);
     border: 1px solid var(--card-border);
     border-radius: 18px;
     padding: 20px;
@@ -588,7 +726,7 @@ input, select, textarea {
 .fv-rules-title {
     font-size: 15px;
     font-weight: 700;
-    color: #FFF;
+    color: var(--text-primary);
     margin-bottom: 16px;
 }
 
@@ -604,8 +742,8 @@ input, select, textarea {
 .fv-step-num {
     width: 26px;
     height: 26px;
-    background: #1E2638;
-    color: #00E599;
+    background: var(--chip-bg);
+    color: var(--accent-mint);
     font-size: 13px;
     font-weight: 800;
     border-radius: 50%;
@@ -626,8 +764,8 @@ input, select, textarea {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(14, 18, 27, 0.96);
-    backdrop-filter: blur(12px);
+    background: var(--bottom-nav-bg);
+    backdrop-filter: blur(14px);
     border-top: 1px solid var(--card-border);
     padding: 14px 18px calc(16px + var(--safe-bottom)) 18px;
     z-index: 10006;
@@ -638,7 +776,7 @@ input, select, textarea {
     font-size: 16px;
 }
 
-/* ================= প্রাইমারি বাটন ================= */
+/* ================= বাটন ও সিঙ্গেল ক্লিক স্টেট ================= */
 .btn-primary {
     width: 100%;
     background: var(--accent-mint);
@@ -657,7 +795,14 @@ input, select, textarea {
 }
 
 .btn-primary:active { opacity: 0.88; transform: scale(0.99); }
-.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* বাটন ডিজেবল স্টেট */
+.btn-primary:disabled { 
+    opacity: 0.55; 
+    cursor: not-allowed; 
+    transform: none !important;
+    filter: grayscale(0.2);
+}
 
 .btn-outline-text {
     width: 100%;
@@ -671,7 +816,7 @@ input, select, textarea {
     margin-top: 8px;
 }
 
-/* ================= রেফারেল পেজ ================= */
+/* ================= রেফারেল ও রেফারেল হিস্ট্রি ================= */
 .compact-hero {
     text-align: center;
     padding: 22px 18px;
@@ -688,6 +833,7 @@ input, select, textarea {
     font-size: 19px;
     font-weight: 800;
     margin: 8px 0;
+    color: var(--text-primary);
 }
 
 .hero-sub {
@@ -698,7 +844,7 @@ input, select, textarea {
 .ref-input-box {
     display: flex;
     align-items: center;
-    background: #0E121B;
+    background: var(--input-bg);
     border: 1px solid var(--card-border);
     border-radius: 12px;
     padding: 8px 10px 8px 14px;
@@ -715,9 +861,9 @@ input, select, textarea {
 }
 
 .btn-copy-chip {
-    background: #1E2636;
+    background: var(--chip-bg);
     border: none;
-    color: #FFF;
+    color: var(--text-primary);
     padding: 8px 16px;
     border-radius: 10px;
     font-size: 13px;
@@ -746,6 +892,72 @@ input, select, textarea {
     font-weight: 800;
     display: block;
     margin-top: 6px;
+    color: var(--text-primary);
+}
+
+/* রেফার করা ইউজারদের তালিকা */
+.referral-list-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.ref-item {
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ref-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ref-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card-surface);
+    border: 1.5px solid var(--accent-mint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--accent-mint);
+}
+
+.ref-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.ref-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.ref-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.ref-badge {
+    background: var(--accent-mint-soft);
+    color: var(--accent-mint);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 8px;
 }
 
 /* ================= ক্যাশআউট পেজ ================= */
@@ -762,7 +974,7 @@ input, select, textarea {
 .sum-balance {
     font-size: 38px;
     font-weight: 800;
-    color: #FFF;
+    color: var(--text-primary);
     margin-top: 6px;
 }
 
@@ -773,7 +985,7 @@ input, select, textarea {
 
 .method-segmented-tabs {
     display: flex;
-    background: #141923;
+    background: var(--card-surface);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     padding: 5px;
@@ -795,9 +1007,9 @@ input, select, textarea {
 }
 
 .tab-btn.active {
-    background: #1E2638;
-    color: #FFF;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: var(--chip-bg);
+    color: var(--text-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .field-group {
@@ -824,9 +1036,9 @@ input, select, textarea {
 
 .field-input {
     width: 100%;
-    background: #0E121B;
+    background: var(--input-bg);
     border: 1px solid var(--card-border);
-    color: #FFF;
+    color: var(--text-primary);
     padding: 14px 16px;
     border-radius: 12px;
     font-size: 15px;
@@ -839,8 +1051,8 @@ input, select, textarea {
 }
 
 .preview-box {
-    background: #0E121B;
-    border: 1px dashed rgba(0, 229, 153, 0.35);
+    background: var(--input-bg);
+    border: 1px dashed rgba(0, 229, 153, 0.45);
     border-radius: 12px;
     padding: 12px 16px;
     display: none;
@@ -867,7 +1079,7 @@ input, select, textarea {
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: #1E293B;
+    background: var(--input-bg);
     border: 2.5px solid var(--accent-mint);
     margin: 0 auto 12px auto;
     display: flex;
@@ -878,11 +1090,11 @@ input, select, textarea {
     color: var(--accent-mint);
 }
 
-.profile-name { font-size: 19px; font-weight: 800; }
+.profile-name { font-size: 19px; font-weight: 800; color: var(--text-primary); }
 .profile-handle { font-size: 13px; color: var(--text-muted); display: block; margin-top: 4px; }
 .profile-id {
     display: inline-block;
-    background: #1F2937;
+    background: var(--chip-bg);
     color: var(--text-secondary);
     font-size: 11px;
     padding: 4px 10px;
@@ -900,13 +1112,13 @@ input, select, textarea {
 
 .stat-pill {
     flex: 1;
-    background: #0E121B;
+    background: var(--input-bg);
     border-radius: 12px;
     padding: 10px;
 }
 
 .sp-label { font-size: 11px; color: var(--text-muted); display: block; }
-.sp-val { font-size: 16px; font-weight: 800; margin-top: 4px; display: block; }
+.sp-val { font-size: 16px; font-weight: 800; margin-top: 4px; display: block; color: var(--text-primary); }
 
 .menu-list {
     padding: 6px 14px;
@@ -920,7 +1132,7 @@ input, select, textarea {
     border-bottom: 1px solid var(--card-border);
     cursor: pointer;
     text-decoration: none;
-    color: #FFF;
+    color: var(--text-primary);
     font-size: 15px;
     font-weight: 600;
 }
@@ -936,7 +1148,7 @@ input, select, textarea {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(14, 18, 27, 0.96);
+    background: var(--bottom-nav-bg);
     backdrop-filter: blur(14px);
     border-top: 1px solid var(--card-border);
     display: flex;
@@ -967,7 +1179,7 @@ input, select, textarea {
 .sheet-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.7);
     display: none;
     align-items: flex-end;
     z-index: 10001;
@@ -976,7 +1188,7 @@ input, select, textarea {
 .sheet-modal.active { display: flex; }
 
 .sheet-box {
-    background: #141923;
+    background: var(--card-surface);
     border-top: 1px solid var(--card-border);
     border-radius: 24px 24px 0 0;
     width: 100%;
@@ -998,12 +1210,12 @@ input, select, textarea {
     margin-bottom: 16px;
 }
 
-.sheet-header h3 { font-size: 18px; font-weight: 700; }
+.sheet-header h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); }
 
 .close-btn {
-    background: #1E2638;
+    background: var(--chip-bg);
     border: none;
-    color: #FFF;
+    color: var(--text-primary);
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -1026,7 +1238,7 @@ input, select, textarea {
 }
 
 .ci-day {
-    background: #0E121B;
+    background: var(--input-bg);
     border: 1px solid var(--card-border);
     border-radius: 12px;
     padding: 10px 4px;
@@ -1036,17 +1248,17 @@ input, select, textarea {
 
 .ci-day.active {
     border-color: var(--accent-mint);
-    background: rgba(0, 229, 153, 0.1);
+    background: var(--accent-mint-soft);
 }
 
 .ci-day.claimed { opacity: 0.45; }
 .ci-num { font-weight: 700; color: var(--text-muted); display: block; font-size: 12px; }
-.ci-pts { font-weight: 800; color: #FFF; margin-top: 4px; display: block; font-size: 13px; }
+.ci-pts { font-weight: 800; color: var(--text-primary); margin-top: 4px; display: block; font-size: 13px; }
 
 /* হিস্ট্রি লিস্ট */
 .history-list { max-height: 52vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.h-item { background: #0E121B; border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
-.h-title { font-size: 14px; font-weight: 700; }
+.h-item { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .h-date { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 .h-pts { font-size: 14px; font-weight: 800; color: var(--accent-mint); text-align: right; }
 .h-badge { font-size: 10px; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; font-weight: 700; display: inline-block; margin-top: 3px; }
@@ -1058,7 +1270,7 @@ input, select, textarea {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(0, 0, 0, 0.85);
     display: none;
     align-items: center;
     justify-content: center;
@@ -1078,13 +1290,13 @@ input, select, textarea {
 
 .modal-badge { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--accent-mint); margin-bottom: 14px; }
 .modal-icon-wrap { color: var(--accent-mint); margin-bottom: 12px; }
-.modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
 .modal-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; line-height: 1.5; }
 
 /* টোস্ট */
 #toast-container {
     position: fixed;
-    top: calc(18px + var(--safe-top));
+    top: calc(22px + var(--safe-top));
     left: 50%;
     transform: translateX(-50%);
     z-index: 99999;
@@ -1094,15 +1306,15 @@ input, select, textarea {
 }
 
 .toast-msg {
-    background: #161D2B;
+    background: var(--card-surface);
     border: 1px solid var(--accent-mint);
-    color: #FFF;
+    color: var(--text-primary);
     padding: 12px 16px;
     border-radius: 12px;
     font-size: 13px;
     font-weight: 600;
     text-align: center;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
     margin-bottom: 8px;
 }
 

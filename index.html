@@ -25,7 +25,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=5.1.0">
+    <link rel="stylesheet" href="style.css?v=5.3.0">
 </head>
 <body>
 
@@ -56,6 +56,52 @@
         </div>
     </div>
 
+    <!-- ================= অ্যানিমেটেড টিক চিহ্ন সহ প্রিমিয়াম সাকসেস মোডাল ================= -->
+    <div id="cashout-success-modal" class="modal-overlay">
+        <div class="modal-card shine-card receipt-card">
+            
+            <!-- অ্যানিমেটেড গ্রিন টিক সার্কেল -->
+            <div class="success-checkmark-wrap">
+                <svg class="checkmark-svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="24" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+
+            <div class="modal-badge mint-badge" data-i18n="receipt_badge">REQUEST SUBMITTED</div>
+            <h3 class="modal-title" data-i18n="receipt_title">Cashout Successful!</h3>
+            <p class="modal-desc" data-i18n="receipt_desc">Your cashout request has been securely placed and is currently under review.</p>
+
+            <!-- ট্রানজেকশন রিসিট মেমো -->
+            <div class="receipt-box">
+                <div class="receipt-row">
+                    <span class="rc-label" data-i18n="rc_method">Method:</span>
+                    <span class="rc-val font-bold" id="receipt-method">bKash</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="rc-label" data-i18n="rc_account">Account:</span>
+                    <span class="rc-val" id="receipt-account">01XXXXXXXXX</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="rc-label" data-i18n="rc_points">Points Deducted:</span>
+                    <span class="rc-val text-mint" id="receipt-points">-0 PTS</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="rc-label" data-i18n="rc_amount">Amount:</span>
+                    <span class="rc-val font-bold text-mint" id="receipt-amount">৳ 0.00</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="rc-label" data-i18n="rc_status">Status:</span>
+                    <span class="h-badge st-pending" id="receipt-status" data-i18n="status_pending">Pending</span>
+                </div>
+            </div>
+
+            <button class="btn-primary shine-sweep" onclick="closeCashoutSuccessModal()" data-i18n="btn_done">
+                Done & Close
+            </button>
+        </div>
+    </div>
+
     <!-- Top Navigation Header -->
     <header class="top-nav">
         <div class="user-chip" onclick="switchTab('profile')">
@@ -67,14 +113,20 @@
         </div>
 
         <div class="header-actions">
+            <!-- ডার্ক / ডে-নাইট মোড সুইচ বাটন -->
+            <button class="icon-btn-pill" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                <span id="theme-icon">🌙</span>
+            </button>
+
+            <!-- ভাষা পরিবর্তন বাটন -->
             <button class="icon-btn-pill" onclick="toggleLanguage()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                 <span id="lang-indicator">BN</span>
             </button>
         </div>
     </header>
 
-    <!-- App Main Container (Full-Width Spacious) -->
+    <!-- App Main Container -->
     <main class="app-body">
 
         <!-- ================= 1. HOME TAB ================= -->
@@ -205,7 +257,7 @@
                     <button class="btn-copy-chip" onclick="copyReferralLink()" data-i18n="btn_copy">Copy</button>
                 </div>
 
-                <button class="btn-primary shine-sweep" onclick="shareReferralLink()">
+                <button class="btn-primary shine-sweep" id="btn-share-referral" onclick="shareReferralLink()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                     <span data-i18n="btn_share_telegram">Share via Telegram</span>
                 </button>
@@ -219,6 +271,18 @@
                 <div class="f-card stat-box shine-card">
                     <span class="stat-label" data-i18n="stat_ref_earnings">Bonus Earned</span>
                     <span class="stat-number text-mint" id="home-ref-earnings">0</span>
+                </div>
+            </div>
+
+            <!-- রেফার করা ইউজারদের তালিকা -->
+            <div class="section-head" style="margin-top: 20px;">
+                <span class="section-title" data-i18n="refer_list_title">Invited Friends</span>
+                <span class="section-sub" data-i18n="refer_list_sub">List of users who joined with your link</span>
+            </div>
+
+            <div class="f-card shine-card" style="padding: 12px;">
+                <div id="referrals-container" class="referral-list-box">
+                    <div class="loading-state" data-i18n="loading_text">Loading records...</div>
                 </div>
             </div>
         </section>
@@ -289,8 +353,9 @@
                         <div class="preview-val">৳ <span id="summary-bdt-val">0.00</span></div>
                     </div>
 
-                    <button type="submit" id="btn-submit-withdraw" class="btn-primary shine-sweep" data-i18n="btn_submit_cashout">
-                        Submit Cashout Request
+                    <!-- সাবমিট বাটন (এক ক্লিকেই ডিজেবল ও প্রটেক্টেড) -->
+                    <button type="submit" id="btn-submit-withdraw" class="btn-primary shine-sweep">
+                        <span id="btn-submit-text" data-i18n="btn_submit_cashout">Submit Cashout Request</span>
                     </button>
                 </form>
 
@@ -362,7 +427,7 @@
                 </a>
             </div>
 
-            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.1.0 • Verified Telegram WebApp</div>
+            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.3.0 • Verified Telegram WebApp</div>
         </section>
 
     </main>
@@ -480,6 +545,6 @@
     </nav>
 
     <!-- Client Engine Script -->
-    <script src="app.js?v=5.1.0"></script>
+    <script src="app.js?v=5.3.0"></script>
 </body>
 </html>

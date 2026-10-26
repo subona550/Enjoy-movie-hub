@@ -1,7 +1,10 @@
 /**
- * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.1.0)
- * Dual Language Engine: 100% Pure English <--> 100% Pure Bengali
- * Includes Support Handler, Full Bengali Numeral Conversion and Shine-Sync
+ * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.3.0)
+ * Dual Language Engine: Pure English <--> Pure Bengali
+ * Dark & Day/Night Mode Switcher with Persistent LocalStorage
+ * Anti-Spam Single Click Button Disabler
+ * Animated Checkmark Receipt Modal for Cashouts
+ * Full Referral User History Tracker
  */
 
 // ================= ১. ওয়েব অডিও সিন্থেসাইজার =================
@@ -46,14 +49,27 @@ function playRewardSound() {
     } catch (e) { }
 }
 
-// ================= ২. টেলিগ্রাম SDK ও হ্যাপটিক =================
+// ================= ২. টেলিগ্রাম SDK ও স্ট্যাটাস বার সমাধান =================
 const tg = window.Telegram?.WebApp;
 if (tg) {
     try {
         tg.ready();
         tg.expand();
-        if (typeof tg.requestFullscreen === 'function') tg.requestFullscreen();
+        
+        // requestFullscreen ছাড়া নিরাপদ মোড চালু
         if (typeof tg.enableClosingConfirmation === 'function') tg.enableClosingConfirmation();
+
+        // ডায়নামিক Safe-Area সেটআপ যাতে স্ট্যাটাস বারে না মেশে
+        const applyTelegramSafeArea = () => {
+            const safeTop = tg.safeAreaInset?.top || tg.contentSafeAreaInset?.top || 0;
+            if (safeTop > 0) {
+                document.documentElement.style.setProperty('--safe-top', `${safeTop}px`);
+            }
+        };
+        applyTelegramSafeArea();
+        if (typeof tg.onEvent === 'function') {
+            tg.onEvent('safeAreaChanged', applyTelegramSafeArea);
+        }
     } catch (e) { }
 }
 
@@ -86,15 +102,40 @@ function showToast(message, type = 'success') {
 function triggerConfetti() {
     if (typeof confetti === 'function') {
         confetti({
-            particleCount: 50,
-            spread: 60,
-            origin: { y: 0.7 },
-            colors: ['#00e599', '#0098ea', '#ffffff']
+            particleCount: 60,
+            spread: 70,
+            origin: { y: 0.65 },
+            colors: ['#00e599', '#0098ea', '#ffffff', '#ffd700']
         });
     }
 }
 
-// ================= ৩. ফায়ারবেস কনফিগারেশন =================
+// ================= ৩. ডার্ক ও ডে/লাইট মোড কন্ট্রোলার =================
+let currentTheme = localStorage.getItem('app_theme') || 'dark';
+
+function applyTheme() {
+    const iconEl = document.getElementById('theme-icon');
+    if (currentTheme === 'light') {
+        document.body.classList.add('light-theme');
+        if (iconEl) iconEl.innerText = '☀️';
+        if (tg) tg.setHeaderColor && tg.setHeaderColor('#FFFFFF');
+    } else {
+        document.body.classList.remove('light-theme');
+        if (iconEl) iconEl.innerText = '🌙';
+        if (tg) tg.setHeaderColor && tg.setHeaderColor('#0B0E14');
+    }
+}
+
+function toggleTheme() {
+    playClickSound();
+    triggerHaptic('light');
+    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('app_theme', currentTheme);
+    applyTheme();
+    showToast(currentTheme === 'light' ? (currentLang === 'bn' ? 'লাইট মোড সক্রিয়' : 'Light Mode Enabled') : (currentLang === 'bn' ? 'ডার্ক মোড সক্রিয়' : 'Dark Mode Enabled'));
+}
+
+// ================= ৪. ফায়ারবেস কনফিগারেশন =================
 const firebaseConfig = {
   apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
   authDomain: "enjoy-movies-app.firebaseapp.com",
@@ -110,9 +151,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-// ================= ৪. ভাষা ডিকশনারি ও অনুবাদক =================
+// ================= ৫. ভাষা ডিকশনারি ও অনুবাদক =================
 let currentLang = localStorage.getItem('app_lang') || 'en';
-
 const bnDigits = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
 
 function formatNum(val) {
@@ -151,6 +191,9 @@ const translations = {
         btn_share_telegram: "Share via Telegram",
         stat_total_ref: "Total Referrals",
         stat_ref_earnings: "Bonus Earned",
+        refer_list_title: "Invited Friends",
+        refer_list_sub: "List of users who joined with your link",
+        empty_referrals: "No referrals yet. Share your link to start earning!",
         withdraw_bal_label: "Current Withdrawable Balance",
         method_recharge: "Recharge",
         method_bkash: "bKash",
@@ -162,6 +205,7 @@ const translations = {
         label_min: "Min:",
         label_you_will_get: "You will receive:",
         btn_submit_cashout: "Submit Cashout Request",
+        btn_submitting: "Processing...",
         btn_view_history: "View Withdrawal History",
         profile_stat_bal: "Balance",
         profile_stat_ref: "Referrals",
@@ -169,7 +213,7 @@ const translations = {
         menu_daily_bonus: "7-Day Streak Rewards",
         menu_support: "24/7 Help & Support",
         menu_tg_support: "Telegram Official Channel",
-        footer_caption: "EarnHub Pro v5.1.0 • Verified Telegram WebApp",
+        footer_caption: "EarnHub Pro v5.3.0 • Verified Telegram WebApp",
         fv_task_details: "Task Overview",
         fv_m_reward: "Task Reward",
         fv_m_limit: "Daily Progress",
@@ -197,7 +241,6 @@ const translations = {
         toast_min_limit: "⚠️ Minimum withdrawal is {pts} points.",
         toast_valid_phone: "⚠️ Please enter a valid 11-digit mobile number.",
         toast_insufficient_bal: "⚠️ Insufficient balance in your account.",
-        toast_cashout_success: "⚡ {method} request submitted successfully!",
         toast_cashout_error: "⚠️ Insufficient points or database error.",
         toast_already_claimed: "⚠️ You have already claimed today's gift!",
         toast_claim_success: "🎉 Day {day} reward +{pts} points added!",
@@ -208,7 +251,17 @@ const translations = {
         checkin_claim_btn: "🎁 Claim Today's Gift (+{pts} PTS)",
         home_streak_claimed: "Streak: {day} Days (Claimed)",
         home_streak_ready: "Day {day} Reward",
-        empty_history: "No withdrawal history found."
+        empty_history: "No withdrawal history found.",
+        receipt_badge: "REQUEST SUBMITTED",
+        receipt_title: "Cashout Successful!",
+        receipt_desc: "Your cashout request has been securely placed and is currently under review.",
+        rc_method: "Method:",
+        rc_account: "Account:",
+        rc_points: "Points Deducted:",
+        rc_amount: "Amount:",
+        rc_status: "Status:",
+        status_pending: "Pending",
+        btn_done: "Done & Close"
     },
     bn: {
         welcome_badge: "স্বাগতম উপহার",
@@ -239,6 +292,9 @@ const translations = {
         btn_share_telegram: "টেলিগ্রামে পাঠান",
         stat_total_ref: "মোট রেফারেল",
         stat_ref_earnings: "অর্জিত পয়েন্ট",
+        refer_list_title: "আমন্ত্রিত বন্ধুদের তালিকা",
+        refer_list_sub: "আপনার রেফারেল লিংক ব্যবহার করে যারা যুক্ত হয়েছেন",
+        empty_referrals: "এখনও কোনো রেফারেল নেই। বন্ধুদের লিংক শেয়ার করুন!",
         withdraw_bal_label: "উত্তোলনযোগ্য মূল ব্যালেন্স",
         method_recharge: "রিচার্জ",
         method_bkash: "বিকাশ",
@@ -250,6 +306,7 @@ const translations = {
         label_min: "সর্বনিম্ন:",
         label_you_will_get: "আপনি পাবেন:",
         btn_submit_cashout: "ক্যাশআউট রিকোয়েস্ট পাঠান",
+        btn_submitting: "প্রক্রিয়াধীন...",
         btn_view_history: "উত্তোলনের হিস্ট্রি দেখুন",
         profile_stat_bal: "ব্যালেন্স",
         profile_stat_ref: "রেফারেল",
@@ -257,7 +314,7 @@ const translations = {
         menu_daily_bonus: "৭ দিনের ধারাবাহিক উপহার",
         menu_support: "২৪/৭ হেল্প ও সাপোর্ট",
         menu_tg_support: "টেলিগ্রাম অফিসিয়াল চ্যানেল",
-        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.১.০ • টেলিগ্রাম মিনি অ্যাপ",
+        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৩.০ • টেলিগ্রাম মিনি অ্যাপ",
         fv_task_details: "টাস্ক বিবরণ",
         fv_m_reward: "টাস্ক রিওয়ার্ড",
         fv_m_limit: "দৈনিক লিমিট",
@@ -285,7 +342,6 @@ const translations = {
         toast_min_limit: "⚠️ সর্বনিম্ন উত্তোলন {pts} পয়েন্ট হতে হবে।",
         toast_valid_phone: "⚠️ সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।",
         toast_insufficient_bal: "⚠️ অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।",
-        toast_cashout_success: "⚡ {method} রিকোয়েস্ট সফলভাবে জমা হয়েছে!",
         toast_cashout_error: "⚠️ পর্যাপ্ত পয়েন্ট নেই অথবা ডাটাবেজ ত্রুটি।",
         toast_already_claimed: "⚠️ আজকের বোনাস ইতিমধ্যে নেওয়া হয়েছে!",
         toast_claim_success: "🎉 দিন {day}-এর বোনাস +{pts} পয়েন্ট যোগ হয়েছে!",
@@ -296,7 +352,17 @@ const translations = {
         checkin_claim_btn: "🎁 আজকের উপহার সংগ্রহ করুন (+{pts} পয়েন্ট)",
         home_streak_claimed: "স্ট্রিক: {day} দিন (নেওয়া হয়েছে)",
         home_streak_ready: "দিন {day} উপহার",
-        empty_history: "কোনো উত্তোলনের রেকর্ড পাওয়া যায়নি।"
+        empty_history: "কোনো উত্তোলনের রেকর্ড পাওয়া যায়নি।",
+        receipt_badge: "রিকোয়েস্ট জমা হয়েছে",
+        receipt_title: "ক্যাশআউট সফল হয়েছে!",
+        receipt_desc: "আপনার ক্যাশআউট রিকোয়েস্ট সফলভাবে জমা হয়েছে এবং পর্যালোচনায় রয়েছে।",
+        rc_method: "উত্তোলন মাধ্যম:",
+        rc_account: "অ্যাকাউন্ট নম্বর:",
+        rc_points: "কর্তনকৃত পয়েন্ট:",
+        rc_amount: "টাকার পরিমাণ:",
+        rc_status: "স্ট্যাটাস:",
+        status_pending: "অপেক্ষারত",
+        btn_done: "ঠিক আছে"
     }
 };
 
@@ -355,7 +421,7 @@ function updateDropdownOptions() {
     }
 }
 
-// ================= ৫. স্টেট ম্যানেজমেন্ট ও ইউজার অবজেক্ট =================
+// ================= ৬. স্টেট ম্যানেজমেন্ট ও ইউজার অবজেক্ট =================
 let tgUser = tg?.initDataUnsafe?.user;
 if (!tgUser || !tgUser.id) {
     tgUser = {
@@ -422,7 +488,7 @@ function getReferrerId() {
 }
 const referrerId = getReferrerId();
 
-// ================= ৬. ফায়ারবেস অ্যাডমিন কনফিগ সিঙ্ক =================
+// ================= ৭. ফায়ারবেস অ্যাডমিন কনফিগ সিঙ্ক =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
     targetAds = Number(data.targetAds ?? 20);
@@ -458,7 +524,6 @@ db.ref('settings').on('value', (snapshot) => {
         if (refDisplay) refDisplay.innerText = myReferralLink;
     }
 
-    // সাপোর্ট লিঙ্ক সিঙ্ক (যদি ডাটাবেজে থাকে তবে সেট হবে অথবা ডিফল্ট সাপোর্ট)
     const supportLinkEl = document.getElementById('telegram-support-link');
     const channelLinkEl = document.getElementById('telegram-channel-link');
 
@@ -482,7 +547,7 @@ db.ref('settings').on('value', (snapshot) => {
     updateUI();
 });
 
-// ================= ৭. ইউজার ইনিশিয়ালাইজেশন =================
+// ================= ৮. ইউজার ইনিশিয়ালাইজেশন ও রেফারেল সেভ =================
 function initUser() {
     const today = localDateKey();
     const userRef = db.ref('users/' + userId);
@@ -513,6 +578,14 @@ function initUser() {
                         curr.referralEarnings = Math.round(Number(curr.referralEarnings || 0) + referralBonusPoints);
                         return curr;
                     });
+
+                    db.ref(`referrals/${referrerId}/${userId}`).set({
+                        id: userId,
+                        name: userName,
+                        username: userUsername,
+                        bonus: referralBonusPoints,
+                        timestamp: new Date().toISOString()
+                    });
                 }
             });
 
@@ -542,6 +615,42 @@ function initUser() {
             updateUI();
             renderCheckInGrid();
         });
+    });
+
+    listenToUserReferrals();
+}
+
+function listenToUserReferrals() {
+    const refContainer = document.getElementById('referrals-container');
+    if (!refContainer) return;
+
+    db.ref(`referrals/${userId}`).on('value', snapshot => {
+        if (!snapshot.exists()) {
+            refContainer.innerHTML = `<div style="text-align:center; padding:18px; font-size:13px; color:var(--text-muted);">${t('empty_referrals')}</div>`;
+            return;
+        }
+
+        let html = '';
+        snapshot.forEach(child => {
+            const item = child.val();
+            const initial = (item.name?.charAt(0) || 'U').toUpperCase();
+            const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : '';
+
+            html = `
+                <div class="ref-item shine-card">
+                    <div class="ref-item-left">
+                        <div class="ref-avatar">${escapeHtml(initial)}</div>
+                        <div class="ref-info">
+                            <span class="ref-name">${escapeHtml(item.name || 'User')}</span>
+                            <span class="ref-date">${escapeHtml(item.username || '')} • ${dateStr}</span>
+                        </div>
+                    </div>
+                    <span class="ref-badge">+${formatNum(item.bonus || 50)} ${t('pts_currency')}</span>
+                </div>
+            ` + html;
+        });
+
+        refContainer.innerHTML = html;
     });
 }
 
@@ -584,7 +693,7 @@ function updateUI() {
     if (pId) pId.innerText = `ID: #${formatNum(userId)}`;
 }
 
-// ================= ৮. ফুলভিউ অ্যাড স্ক্রিন কন্ট্রোলার =================
+// ================= ৯. ফুলভিউ অ্যাড স্ক্রিন কন্ট্রোলার =================
 function openNetworkFullView(networkKey) {
     playClickSound();
     triggerHaptic('light');
@@ -648,6 +757,7 @@ function closeNetworkFullView() {
     }
 }
 
+// অ্যাড শুরু - এক ক্লিকে বাটন ডিজেবল
 async function executeCurrentNetworkAd() {
     playClickSound();
     triggerHaptic('medium');
@@ -757,7 +867,7 @@ async function creditPoints(reward) {
     }
 }
 
-// ================= ৯. ক্যাশআউট / উত্তোলন কন্ট্রোলার =================
+// ================= ১০. ক্যাশআউট / উত্তোলন কন্ট্রোলার =================
 function switchWithdrawMethod(method) {
     playClickSound();
     triggerHaptic('light');
@@ -805,6 +915,7 @@ function calculateWithdrawBdt() {
     }
 }
 
+// সাবমিট বাটন ক্লিক: এক ক্লিকে ডিজেবল ও প্রটেকশন
 async function handleWithdrawSubmit(event) {
     event.preventDefault();
     playClickSound();
@@ -812,6 +923,7 @@ async function handleWithdrawSubmit(event) {
 
     const form = event.currentTarget;
     const submitBtn = document.getElementById('btn-submit-withdraw');
+    const submitText = document.getElementById('btn-submit-text');
     const pointsToDeduct = Number(document.getElementById('withdraw-points').value);
     const phone = document.getElementById('withdraw-phone').value.trim();
     const accountType = document.getElementById('withdraw-account-type').value;
@@ -834,7 +946,11 @@ async function handleWithdrawSubmit(event) {
     if (selectedWithdrawMethod === 'bkash') methodName = 'bKash';
     if (selectedWithdrawMethod === 'nagad') methodName = 'Nagad';
 
-    if (submitBtn) submitBtn.disabled = true;
+    // বাটন তাৎক্ষণিক ডিজেবল
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        if (submitText) submitText.innerText = t('btn_submitting');
+    }
 
     try {
         const userRef = db.ref('users/' + userId);
@@ -848,6 +964,7 @@ async function handleWithdrawSubmit(event) {
 
         if (!tx.committed) throw new Error('INSUFFICIENT_FUNDS');
 
+        // ডাটাবেজে রিকোয়েস্ট সংরক্ষণ
         await db.ref('withdrawals').push({
             userId,
             userName,
@@ -864,17 +981,55 @@ async function handleWithdrawSubmit(event) {
 
         form.reset();
         calculateWithdrawBdt();
-        triggerConfetti();
-        triggerHaptic('notification_success');
-        showToast(t('toast_cashout_success', { method: methodName }));
+
+        // অ্যানিমেটেড টিক চিহ্ন সহ প্রিমিয়াম রিসিট মোডাল ওপেন
+        openCashoutSuccessModal({
+            method: methodName + (operator ? ` (${operator})` : ''),
+            account: `${phone} (${accountType})`,
+            points: pointsToDeduct,
+            bdt: calculatedBdt
+        });
+
     } catch (err) {
         showToast(t('toast_cashout_error'), 'error');
-    } finally {
-        if (submitBtn) submitBtn.disabled = false;
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            if (submitText) submitText.innerText = t('btn_submit_cashout');
+        }
     }
 }
 
-// ================= ১০. উইথড্রয়াল হিস্ট্রি বটম শিট =================
+// ================= ১১. প্রিমিয়াম রিসিট ও টিক মোডাল হ্যান্ডলার =================
+function openCashoutSuccessModal(data) {
+    const modal = document.getElementById('cashout-success-modal');
+    if (!modal) return;
+
+    document.getElementById('receipt-method').innerText = data.method;
+    document.getElementById('receipt-account').innerText = data.account;
+    document.getElementById('receipt-points').innerText = `-${formatNum(data.points)} ${t('pts_currency')}`;
+    document.getElementById('receipt-amount').innerText = `৳ ${formatNum(data.bdt)}`;
+    document.getElementById('receipt-status').innerText = t('status_pending');
+
+    modal.style.display = 'flex';
+    playRewardSound();
+    triggerConfetti();
+    triggerHaptic('notification_success');
+}
+
+function closeCashoutSuccessModal() {
+    playClickSound();
+    triggerHaptic('light');
+    const modal = document.getElementById('cashout-success-modal');
+    if (modal) modal.style.display = 'none';
+
+    // সাবমিট বাটন পুনরায় এনেবল করা
+    const submitBtn = document.getElementById('btn-submit-withdraw');
+    const submitText = document.getElementById('btn-submit-text');
+    if (submitBtn) submitBtn.disabled = false;
+    if (submitText) submitText.innerText = t('btn_submit_cashout');
+}
+
+// ================= ১২. উইথড্রয়াল হিস্ট্রি বটম শিট =================
 function openWithdrawHistory() {
     playClickSound();
     triggerHaptic('light');
@@ -903,7 +1058,7 @@ function loadHistoryData() {
 
     db.ref('withdrawals').orderByChild('userId').equalTo(userId).once('value', snapshot => {
         if (!snapshot.exists()) {
-            listContainer.innerHTML = `<div style="text-align:center; padding:24px; font-size:13px; color:#64748B;">${t('empty_history')}</div>`;
+            listContainer.innerHTML = `<div style="text-align:center; padding:24px; font-size:13px; color:var(--text-muted);">${t('empty_history')}</div>`;
             return;
         }
 
@@ -939,7 +1094,7 @@ function loadHistoryData() {
     });
 }
 
-// ================= ১১. ডেইলি ৭-দিনের চেক-ইন সিস্টেম =================
+// ================= ১৩. ডেইলি ৭-দিনের চেক-ইন সিস্টেম =================
 function openCheckInFullView() {
     playClickSound();
     triggerHaptic('light');
@@ -1021,6 +1176,7 @@ async function claimDailyCheckIn() {
         return showToast(t('toast_already_claimed'), 'error');
     }
 
+    // বাটন এক ক্লিকে ডিজেবল
     if (claimBtn) claimBtn.disabled = true;
     const userRef = db.ref('users/' + userId);
 
@@ -1046,12 +1202,11 @@ async function claimDailyCheckIn() {
         renderCheckInGrid();
     } catch (err) {
         showToast(t('toast_cashout_error'), 'error');
-    } finally {
         if (claimBtn) claimBtn.disabled = false;
     }
 }
 
-// ================= ১২. লিংক শেয়ার ও ট্যাব সুইচ =================
+// ================= ১৪. লিংক শেয়ার ও ট্যাব সুইচ =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');
@@ -1063,6 +1218,13 @@ function copyReferralLink() {
 function shareReferralLink() {
     playClickSound();
     triggerHaptic('light');
+
+    const shareBtn = document.getElementById('btn-share-referral');
+    if (shareBtn) {
+        shareBtn.disabled = true;
+        setTimeout(() => { shareBtn.disabled = false; }, 1200);
+    }
+
     const shareText = currentLang === 'bn' 
         ? `🎉 আমাদের আর্নহাব প্রো প্ল্যাটফর্মে যোগ দিন এবং সহজ বিজ্ঞাপন দেখে জিতে নিন পয়েন্ট!\n\n👇 জয়েন লিংক:\n${myReferralLink}`
         : `🎉 Join EarnHub Pro and earn verified points by completing simple sponsored tasks!\n\n👇 Join Link:\n${myReferralLink}`;
@@ -1093,7 +1255,7 @@ function closeWelcomeModal() {
     triggerConfetti();
 }
 
-// ================= ১৩. অ্যাপ ইনিট =================
+// ================= ১৫. অ্যাপ ইনিট =================
 document.addEventListener('DOMContentLoaded', () => {
     const initialLetter = (userName.charAt(0) || 'U').toUpperCase();
     const hAvatar = document.getElementById('header-avatar');
@@ -1108,6 +1270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pName) pName.innerText = userName;
     if (pUname) pUname.innerText = userUsername;
 
+    applyTheme();
     applyLanguage();
     initUser();
     switchWithdrawMethod('recharge');
