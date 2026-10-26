@@ -1,13 +1,12 @@
 /**
- * ADS EARN PRO - ADVANCED CLIENT ENGINE (v3.0.0)
+ * ADS EARN PRO - ADVANCED CLIENT ENGINE (v3.1.0)
  * Features:
- * - Monetag Mini App SDK + On-Click Smart Link Handlers
- * - Adsgram Official Rewarded Video Integration
- * - Adsterra On-Click Direct Task Engine
- * - Dynamic Mobile Recharge, bKash & Nagad Cashout System
+ * - 3-Dot Sliding Dashboard Drawer Engine
+ * - Fullscreen Modern Cashout & Conversion Engine
+ * - Complete Profile Page with Live Stats
+ * - Monetag, Adsgram & Adsterra Integrated Systems
  * - 7-Day Progressive Streak Check-in System
- * - WebAudio Synthesizer & Telegram Haptics
- * - Real-time Firebase Sync & Anti-Exploit Atomic Transactions
+ * - Real-time Firebase Sync & WebAudio Synthesizer
  */
 
 // ================= অডিও সাউন্ড সিন্থেসাইজার =================
@@ -130,7 +129,7 @@ const checkInRewards = [10, 20, 30, 50, 70, 100, 200];
 
 const i18n = {
     bn: {
-        nav_home: "হোম ড্যাশবোর্ড", nav_refer: "রেফার", nav_withdraw: "উত্তোলন", nav_support: "সাপোর্ট",
+        nav_home: "হোম ড্যাশবোর্ড", nav_refer: "রেফারেল", nav_withdraw: "উত্তোলন", nav_profile: "আমার প্রোফাইল",
         header_sub: "বিজ্ঞাপন দেখে আয় করুন", welcome_title: "স্বাগতম আমাদের অ্যাপে!",
         welcome_desc: "আমাদের অ্যাপে জয়েন করায় আপনাকে দেওয়া হলো", points_label: "পয়েন্ট",
         welcome_suffix: "ওয়েলকাম বোনাস!", claim_bonus_btn: "🎁 বোনাস গ্রহণ করুন", balance_label: "মোট ব্যালেন্স",
@@ -148,7 +147,7 @@ const i18n = {
         share_tg_btn: "✈️ টেলিগ্রাম বন্ধুদের সাথে শেয়ার করুন", ref_stat_title: "📊 আপনার রেফারেল পরিসংখ্যান",
         stat_total_ref: "মোট রেফারেল", stat_ref_earn: "রেফারেল পয়েন্ট",
         withdraw_badge: "💸 পয়েন্ট উত্তোলন", withdraw_title: "মোবাইল রিচার্জ ও ক্যাশআউট",
-        wallet_bal_text: "বর্তমান ওয়ালেট পয়েন্ট:", min_withdraw_text: "সর্বনিম্ন উত্তোলন লিমিট:",
+        wallet_bal_text: "বর্তমান উত্তোলনযোগ্য পয়েন্ট:", min_withdraw_text: "সর্বনিম্ন উত্তোলন লিমিট:",
         label_acc_type: "সিম টাইপ (SIM Type):", label_withdraw_points: "উত্তোলনের পয়েন্ট পরিমাণ (Points):",
         btn_submit_withdraw: "⚡ ক্যাশআউট রিকোয়েস্ট পাঠান", btn_withdraw_history: "উইথড্রয়াল হিস্ট্রি দেখুন",
         history_title: "📜 উত্তোলনের ইতিহাস", loading_text: "ডাটা লোড হচ্ছে...",
@@ -156,12 +155,10 @@ const i18n = {
         checkin_modal_title: "৭ দিনের দৈনিক উপহার", checkin_fullview_head: "প্রতিদিন লগইন করে পয়েন্ট নিন",
         checkin_fullview_sub: "প্রতিদিন চেক-ইন করে আপনার স্ট্রিক ধরে রাখুন এবং ৭ম দিনে জিতে নিন মেগা পয়েন্ট বোনাস!",
         checkin_btn_claim: "🎁 আজকের পয়েন্ট সংগ্রহ করুন", checkin_btn_claimed: "✅ আজকের পয়েন্ট ক্লেইম করা হয়েছে",
-        day_prefix: "দিন ", tag_done: "নেওয়া হয়েছে", tag_open: "ক্লেইম", tag_lock: "লক",
-        support_tg_badge: "✈️ অফিশিয়াল টেলিগ্রাম", support_tg_title: "টেলিগ্রাম চ্যানেল ও কমিউনিটি", join_tg_btn: "টেলিগ্রাম গ্রুপে যুক্ত হন ➔",
-        support_wa_badge: "💬 সরাসরি হোয়াটসঅ্যাপ", support_wa_title: "জরুরি অ্যাডমিন সহায়তা", msg_wa_btn: "হোয়াটসঅ্যাপে চ্যাট করুন ➔"
+        day_prefix: "দিন ", tag_done: "নেওয়া হয়েছে", tag_open: "ক্লেইম", tag_lock: "লক"
     },
     en: {
-        nav_home: "Home Dashboard", nav_refer: "Refer", nav_withdraw: "Withdraw", nav_support: "Support",
+        nav_home: "Home Dashboard", nav_refer: "Refer", nav_withdraw: "Withdraw", nav_profile: "My Profile",
         header_sub: "Earn points watching ads", welcome_title: "Welcome to Our App!",
         welcome_desc: "Thanks for joining! You received", points_label: "Points",
         welcome_suffix: "welcome bonus!", claim_bonus_btn: "🎁 Claim Bonus", balance_label: "Total Balance",
@@ -187,9 +184,7 @@ const i18n = {
         checkin_modal_title: "7 Days Login Gifts", checkin_fullview_head: "Log in Daily for Points",
         checkin_fullview_sub: "Maintain your daily streak to grab massive bonus points on Day 7!",
         checkin_btn_claim: "🎁 Claim Today's Points", checkin_btn_claimed: "✅ Already Claimed Today",
-        day_prefix: "Day ", tag_done: "Claimed", tag_open: "Claim", tag_lock: "Locked",
-        support_tg_badge: "✈️ Official Telegram", support_tg_title: "Telegram Channel & Group", join_tg_btn: "Join Telegram Group ➔",
-        support_wa_badge: "💬 Urgent WhatsApp", support_wa_title: "Direct Admin Support", msg_wa_btn: "Chat on WhatsApp ➔"
+        day_prefix: "Day ", tag_done: "Claimed", tag_open: "Claim", tag_lock: "Locked"
     }
 };
 
@@ -305,10 +300,18 @@ function initApp() {
     applyLanguage(currentLang);
     startSplashScreen();
     
-    const profileNameEl = document.getElementById('top-profile-name');
-    const profileIdEl = document.getElementById('top-profile-id');
-    if (profileNameEl) profileNameEl.innerText = userName;
-    if (profileIdEl) profileIdEl.innerText = '#' + userId;
+    // ড্যাশবোর্ড ড্রয়ার ও প্রোফাইল পেজে ইউজারের তথ্য সেট করা
+    const setElemText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
+    };
+
+    setElemText('drawer-user-name', userName);
+    setElemText('drawer-user-id', '#' + userId);
+    setElemText('profile-page-name', userName);
+    setElemText('profile-page-username', userUsername);
+    setElemText('profile-page-id', 'ID: #' + userId);
+
     document.querySelectorAll('#referral-link-display').forEach(e => e.innerText = myReferralLink);
 
     switchWithdrawMethod('recharge');
@@ -344,10 +347,21 @@ db.ref('settings').on('value', (snapshot) => {
     let BOT_USERNAME = data.botUsername || "";
     let APP_SHORT_NAME = data.appShortName || "";
 
+    // প্রোফাইল ও ড্রয়ার লিঙ্ক সিঙ্ক
     const waLink = document.getElementById('whatsapp-support-link');
     const tgLink = document.getElementById('telegram-support-link');
-    if (data.whatsappNumber && waLink) waLink.href = `https://wa.me/${data.whatsappNumber}`;
-    if (data.telegramChannel && tgLink) tgLink.href = data.telegramChannel;
+    const drawerWa = document.getElementById('drawer-wa-link');
+    const drawerTg = document.getElementById('drawer-tg-link');
+
+    if (data.whatsappNumber) {
+        const waUrl = `https://wa.me/${data.whatsappNumber}`;
+        if (waLink) waLink.href = waUrl;
+        if (drawerWa) drawerWa.href = waUrl;
+    }
+    if (data.telegramChannel) {
+        if (tgLink) tgLink.href = data.telegramChannel;
+        if (drawerTg) drawerTg.href = data.telegramChannel;
+    }
 
     if (BOT_USERNAME) {
         myReferralLink = APP_SHORT_NAME 
@@ -413,7 +427,7 @@ db.ref('users/' + userId).once('value', (snapshot) => {
             lastCheckInDate = uData.lastCheckInDate || "";
             checkInStreak = Number(uData.checkInStreak || 0);
 
-            // নতুন দিনে ডেইলি অ্যাড কাউন্টার রিসেট
+            // নতুন দিনে ডেইলি কাউন্টার রিসেট
             if (uData.lastAdDate !== todayStr) {
                 adsWatchedCount = 0;
                 db.ref('users/' + userId).update({
@@ -431,12 +445,18 @@ db.ref('users/' + userId).once('value', (snapshot) => {
 });
 
 function renderUI() {
-    const topBal = document.getElementById('top-profile-balance');
     const userBal = document.getElementById('user-balance');
     const withBal = document.getElementById('withdraw-page-balance');
-    if (topBal) topBal.innerText = `${balancePoints} Pts`;
+    const drawerBal = document.getElementById('drawer-profile-balance');
+    const profBal = document.getElementById('profile-stat-balance');
+    const profRef = document.getElementById('profile-stat-ref');
+
     if (userBal) userBal.innerText = `${balancePoints} Pts`;
     if (withBal) withBal.innerText = `${balancePoints} Pts`;
+    if (drawerBal) drawerBal.innerText = `${balancePoints} Pts`;
+    if (profBal) profBal.innerText = `${balancePoints} Pts`;
+    if (profRef) profRef.innerText = `${referralCount} ${currentLang === 'bn' ? 'জন' : ''}`;
+
     document.querySelectorAll('#home-ref-count').forEach(e => e.innerText = `${referralCount} ${currentLang === 'bn' ? 'জন' : ''}`);
     document.querySelectorAll('#home-ref-earnings').forEach(e => e.innerText = `${referralEarningsPoints} Pts`);
 }
@@ -459,7 +479,7 @@ function updateDynamicUI() {
     const inputPoints = document.getElementById('withdraw-points');
     if (inputPoints) {
         inputPoints.min = minWithdrawPoints;
-        inputPoints.placeholder = `সর্বনিম্ন ${minWithdrawPoints} পয়েন্ট`;
+        inputPoints.placeholder = `পয়েন্ট পরিমাণ লিখুন (মিনিমাম ${minWithdrawPoints})`;
     }
 }
 
@@ -482,6 +502,7 @@ function renderCheckInUI() {
     const claimBtn = document.getElementById('btn-claim-checkin');
     const streakText = document.getElementById('checkin-streak-status');
     const compactStatus = document.getElementById('compact-checkin-status');
+    const profStreakDesc = document.getElementById('profile-streak-desc');
 
     const today = localDateKey();
     const isClaimedToday = (lastCheckInDate === today);
@@ -501,6 +522,13 @@ function renderCheckInUI() {
     }
 
     if (streakText) streakText.innerText = currentLang === 'bn' ? `🔥 স্ট্রিক: ${checkInStreak} দিন` : `🔥 Streak: ${checkInStreak} Days`;
+    
+    // প্রোফাইল পেজেও স্ট্রিক দেখানো
+    if (profStreakDesc) {
+        profStreakDesc.innerText = currentLang === 'bn' 
+            ? `বর্তমান স্ট্রিক: ${checkInStreak} দিন (${isClaimedToday ? 'আজকে নেওয়া হয়েছে' : 'আজকের বাকি আছে'})` 
+            : `Current streak: ${checkInStreak} Days`;
+    }
 
     if (!grid || !claimBtn) return;
 
@@ -671,11 +699,10 @@ async function executeCurrentNetworkAd() {
     actionBtn.disabled = true;
 
     try {
-        // ১. মনেট্যাগ মিনি অ্যাপ অন-ক্লিক / ভিগনেট টাস্ক
+        // ১. মনেট্যাগ অন-ক্লিক / SDK
         if (selectedNetwork === 'monetag') {
             const monetagSdkFunction = window[`show_${netConfigs.monetag.zoneId}`];
             
-            // যদি মনেট্যাগ অফিসিয়াল SDK মেথড কার্যকর থাকে
             if (typeof monetagSdkFunction === 'function') {
                 showToast(currentLang === 'bn' ? '⚡ মনেট্যাগ বিজ্ঞাপন লোড হচ্ছে...' : '⚡ Loading Monetag In-App...', 'success');
                 try {
@@ -687,7 +714,6 @@ async function executeCurrentNetworkAd() {
                 }
             }
 
-            // অন-ক্লিক স্মার্ট লিঙ্ক ফলব্যাক মোড
             if (netConfigs.monetag.url) {
                 window.open(netConfigs.monetag.url, '_blank');
                 let countdown = 12;
@@ -713,7 +739,7 @@ async function executeCurrentNetworkAd() {
             }
         }
 
-        // ২. অ্যাডসগ্রাম অফিসিয়াল রিওয়ার্ডেড ভিডিও
+        // ২. অ্যাডসগ্রাম রিওয়ার্ডেড ভিডিও
         else if (selectedNetwork === 'adsgram') {
             if (typeof window.Adsgram === 'undefined' || !netConfigs.adsgram.blockId) {
                 actionBtn.disabled = false;
@@ -725,7 +751,7 @@ async function executeCurrentNetworkAd() {
             await creditAdReward(netConfigs.adsgram.reward);
         }
 
-        // ৩. অ্যাডস্টেরা অন-ক্লিক ডাইরেক্ট লিঙ্ক
+        // ৩. অ্যাডস্টেরা অন-ক্লিক লিঙ্ক
         else if (selectedNetwork === 'adsterra') {
             if (!netConfigs.adsterra.url) {
                 actionBtn.disabled = false;
@@ -812,7 +838,7 @@ function closeWelcomeModal() {
     triggerConfettiAnimation();
 }
 
-// ================= বটম নেভিগেশন ট্যাব সুইচ =================
+// ================= বটম নেভিগেশন ও ট্যাব সুইচ =================
 function switchTab(pageId, titleKey, btnElement) {
     playClickSound();
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -877,8 +903,7 @@ function switchWithdrawMethod(method) {
         if (labelPhone) labelPhone.innerText = 'রিচার্জ মোবাইল নম্বর:';
         if (inputPhone) inputPhone.placeholder = '01XXXXXXXXX';
         
-        // রিচার্জে সর্বনিম্ন ২০০ পয়েন্ট (২০ টাকা)
-        minWithdrawPoints = 200;
+        minWithdrawPoints = 200; // রিচার্জে সর্বনিম্ন ২০০ পয়েন্ট
     } else {
         if (groupOperator) groupOperator.style.display = 'none';
         if (labelAccType) labelAccType.innerText = 'অ্যাকাউন্টের ধরন (Account Type):';
@@ -897,14 +922,13 @@ function switchWithdrawMethod(method) {
             if (inputPhone) inputPhone.placeholder = '01XXXXXXXXX (Nagad)';
         }
         
-        // বিকাশ ও নগদে সর্বনিম্ন ৫০০ পয়েন্ট (৫০ টাকা)
-        minWithdrawPoints = 500;
+        minWithdrawPoints = 500; // বিকাশ ও নগদে সর্বনিম্ন ৫০০ পয়েন্ট
     }
 
     if (minWithdrawEl) minWithdrawEl.innerText = minWithdrawPoints;
     if (inputPoints) {
         inputPoints.min = minWithdrawPoints;
-        inputPoints.placeholder = `সর্বনিম্ন ${minWithdrawPoints} পয়েন্ট লিখুন`;
+        inputPoints.placeholder = `পয়েন্ট পরিমাণ লিখুন (মিনিমাম ${minWithdrawPoints})`;
     }
     calculateWithdrawBdt();
 }
