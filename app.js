@@ -1,13 +1,18 @@
 /**
- * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.3.0)
- * Dual Language Engine: Pure English <--> Pure Bengali
- * Dark & Day/Night Mode Switcher with Persistent LocalStorage
- * Anti-Spam Single Click Button Disabler
- * Animated Checkmark Receipt Modal for Cashouts
- * Full Referral User History Tracker
+ * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.4.2)
+ * Full Security & 5-Second Adsterra Anti-Cheat Engine
+ * - Mandatory 5-Second Active Visit for Adsterra Direct Link
+ * - Anti-Cheat Tab/Browser Visibility Tracker
+ * - Cloudflare Worker Serverless Verification
+ * - Adsgram ad completion verification (done: true)
+ * - Dynamic Monetag SDK injection
+ * - Server-synced Date & Anti-Clock manipulation
  */
 
-// ================= ১. ওয়েব অডিও সিন্থেসাইজার =================
+// ================= ১. ঐচ্ছিক সুরক্ষিত ব্যাকএন্ড কনফিগারেশন =================
+const BACKEND_API_URL = "https://earnpro84cc.rakibkdbb.workers.dev"; 
+
+// ================= ২. ওয়েব অডিও সিন্থেসাইজার =================
 let audioCtx = null;
 function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -49,17 +54,14 @@ function playRewardSound() {
     } catch (e) { }
 }
 
-// ================= ২. টেলিগ্রাম SDK ও স্ট্যাটাস বার সমাধান =================
+// ================= ৩. টেলিগ্রাম SDK ও স্ট্যাটাস বার =================
 const tg = window.Telegram?.WebApp;
 if (tg) {
     try {
         tg.ready();
         tg.expand();
-        
-        // requestFullscreen ছাড়া নিরাপদ মোড চালু
         if (typeof tg.enableClosingConfirmation === 'function') tg.enableClosingConfirmation();
 
-        // ডায়নামিক Safe-Area সেটআপ যাতে স্ট্যাটাস বারে না মেশে
         const applyTelegramSafeArea = () => {
             const safeTop = tg.safeAreaInset?.top || tg.contentSafeAreaInset?.top || 0;
             if (safeTop > 0) {
@@ -110,7 +112,7 @@ function triggerConfetti() {
     }
 }
 
-// ================= ৩. ডার্ক ও ডে/লাইট মোড কন্ট্রোলার =================
+// ================= ৪. থিম কন্ট্রোলার =================
 let currentTheme = localStorage.getItem('app_theme') || 'dark';
 
 function applyTheme() {
@@ -118,11 +120,11 @@ function applyTheme() {
     if (currentTheme === 'light') {
         document.body.classList.add('light-theme');
         if (iconEl) iconEl.innerText = '☀️';
-        if (tg) tg.setHeaderColor && tg.setHeaderColor('#FFFFFF');
+        if (tg?.setHeaderColor) tg.setHeaderColor('#FFFFFF');
     } else {
         document.body.classList.remove('light-theme');
         if (iconEl) iconEl.innerText = '🌙';
-        if (tg) tg.setHeaderColor && tg.setHeaderColor('#0B0E14');
+        if (tg?.setHeaderColor) tg.setHeaderColor('#0B0E14');
     }
 }
 
@@ -135,7 +137,7 @@ function toggleTheme() {
     showToast(currentTheme === 'light' ? (currentLang === 'bn' ? 'লাইট মোড সক্রিয়' : 'Light Mode Enabled') : (currentLang === 'bn' ? 'ডার্ক মোড সক্রিয়' : 'Dark Mode Enabled'));
 }
 
-// ================= ৪. ফায়ারবেস কনফিগারেশন =================
+// ================= ৫. ফায়ারবেস কনফিগারেশন =================
 const firebaseConfig = {
   apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
   authDomain: "enjoy-movies-app.firebaseapp.com",
@@ -151,7 +153,17 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-// ================= ৫. ভাষা ডিকশনারি ও অনুবাদক =================
+let serverTimeOffset = 0;
+db.ref('.info/serverTimeOffset').on('value', (snap) => {
+    serverTimeOffset = snap.val() || 0;
+});
+
+function getSafeDateKey() {
+    const serverNow = new Date(Date.now() + serverTimeOffset);
+    return `${serverNow.getUTCFullYear()}-${String(serverNow.getUTCMonth() + 1).padStart(2, '0')}-${String(serverNow.getUTCDate()).padStart(2, '0')}`;
+}
+
+// ================= ৬. দ্বিভাষিক ইঞ্জিন =================
 let currentLang = localStorage.getItem('app_lang') || 'en';
 const bnDigits = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
 
@@ -181,7 +193,7 @@ const translations = {
         adsgram_title: "Adsgram Ad Stream",
         adsgram_desc: "High-CPM interstitial and video ad experience",
         adsterra_title: "Direct Sponsor Link",
-        adsterra_desc: "Explore sponsored partner link for 10-12 seconds",
+        adsterra_desc: "Explore sponsored partner link for at least 5 seconds",
         btn_start_task: "Start Task",
         refer_badge: "REFER & EARN",
         refer_heading: "Invite Friends & Earn Together",
@@ -213,7 +225,7 @@ const translations = {
         menu_daily_bonus: "7-Day Streak Rewards",
         menu_support: "24/7 Help & Support",
         menu_tg_support: "Telegram Official Channel",
-        footer_caption: "EarnHub Pro v5.3.0 • Verified Telegram WebApp",
+        footer_caption: "EarnHub Pro v5.4.2 • Verified Telegram WebApp",
         fv_task_details: "Task Overview",
         fv_m_reward: "Task Reward",
         fv_m_limit: "Daily Progress",
@@ -234,14 +246,14 @@ const translations = {
         toast_limit_reached: "⚠️ Today's ad task limit is reached!",
         toast_preparing_ad: "⚡ Loading advertisement...",
         toast_starting_ad: "🎬 Starting advertisement...",
-        toast_ad_failed: "⚠️ Advertisement cancelled or failed to load.",
+        toast_ad_failed: "⚠️ Advertisement cancelled or not completed.",
         toast_sdk_error: "⚠️ Ad SDK failed to initialize!",
         toast_wait: "⏳ Please wait",
         toast_pts_credited: "🎉 +{pts} points credited successfully!",
         toast_min_limit: "⚠️ Minimum withdrawal is {pts} points.",
         toast_valid_phone: "⚠️ Please enter a valid 11-digit mobile number.",
         toast_insufficient_bal: "⚠️ Insufficient balance in your account.",
-        toast_cashout_error: "⚠️ Insufficient points or database error.",
+        toast_cashout_error: "⚠️ Insufficient points or server error.",
         toast_already_claimed: "⚠️ You have already claimed today's gift!",
         toast_claim_success: "🎉 Day {day} reward +{pts} points added!",
         toast_link_copied: "✅ Referral link copied to clipboard!",
@@ -282,7 +294,7 @@ const translations = {
         adsgram_title: "অ্যাডসগ্রাম অ্যাড স্ট্রিম",
         adsgram_desc: "উচ্চ সি-পি-এম ভিডিও এবং ইন্টারস্টিশিয়াল বিজ্ঞাপন",
         adsterra_title: "সরাসরি স্পনসর লিংক",
-        adsterra_desc: "স্পনসর পেজটিতে ১০-১২ সেকেন্ড সক্রিয়ভাবে ভিজিট করুন",
+        adsterra_desc: "স্পনসর পেজটিতে অন্তত ৫ সেকেন্ড সক্রিয়ভাবে ভিজিট করুন",
         btn_start_task: "টাস্ক শুরু",
         refer_badge: "রেফার ও আয়",
         refer_heading: "বন্ধুদের আমন্ত্রণ জানিয়ে আয় করুন",
@@ -314,7 +326,7 @@ const translations = {
         menu_daily_bonus: "৭ দিনের ধারাবাহিক উপহার",
         menu_support: "২৪/৭ হেল্প ও সাপোর্ট",
         menu_tg_support: "টেলিগ্রাম অফিসিয়াল চ্যানেল",
-        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৩.০ • টেলিগ্রাম মিনি অ্যাপ",
+        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৪.২ • টেলিগ্রাম মিনি অ্যাপ",
         fv_task_details: "টাস্ক বিবরণ",
         fv_m_reward: "টাস্ক রিওয়ার্ড",
         fv_m_limit: "দৈনিক লিমিট",
@@ -335,14 +347,14 @@ const translations = {
         toast_limit_reached: "⚠️ আজকের বিজ্ঞাপন দেখার সীমা শেষ হয়েছে!",
         toast_preparing_ad: "⚡ বিজ্ঞাপন প্রস্তুত হচ্ছে...",
         toast_starting_ad: "🎬 বিজ্ঞাপন শুরু হচ্ছে...",
-        toast_ad_failed: "⚠️ বিজ্ঞাপন বাতিল করা হয়েছে বা লোড হয়নি।",
+        toast_ad_failed: "⚠️ বিজ্ঞাপন বাতিল হয়েছে বা সম্পূর্ণ দেখা হয়নি।",
         toast_sdk_error: "⚠️ অ্যাড এসডিকে লোড হতে পারেনি!",
         toast_wait: "⏳ অপেক্ষা করুন",
         toast_pts_credited: "🎉 +{pts} পয়েন্ট অ্যাকাউন্টে যোগ হয়েছে!",
         toast_min_limit: "⚠️ সর্বনিম্ন উত্তোলন {pts} পয়েন্ট হতে হবে।",
         toast_valid_phone: "⚠️ সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।",
         toast_insufficient_bal: "⚠️ অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।",
-        toast_cashout_error: "⚠️ পর্যাপ্ত পয়েন্ট নেই অথবা ডাটাবেজ ত্রুটি।",
+        toast_cashout_error: "⚠️ পর্যাপ্ত পয়েন্ট নেই অথবা সার্ভার ত্রুটি।",
         toast_already_claimed: "⚠️ আজকের বোনাস ইতিমধ্যে নেওয়া হয়েছে!",
         toast_claim_success: "🎉 দিন {day}-এর বোনাস +{pts} পয়েন্ট যোগ হয়েছে!",
         toast_link_copied: "✅ রেফারেল লিংক কপি করা হয়েছে!",
@@ -421,7 +433,7 @@ function updateDropdownOptions() {
     }
 }
 
-// ================= ৬. স্টেট ম্যানেজমেন্ট ও ইউজার অবজেক্ট =================
+// ================= ৭. ইউজার স্টেট ম্যানেজমেন্ট =================
 let tgUser = tg?.initDataUnsafe?.user;
 if (!tgUser || !tgUser.id) {
     tgUser = {
@@ -463,10 +475,8 @@ let netConfigs = {
 
 let adsgramNextFormat = 'rewarded';
 
-function localDateKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
+// Adsterra ৫-সেকেন্ড ট্র্যাকিং সেশন ভেরিয়েবল
+let adsterraSession = null;
 
 function escapeHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, c => ({
@@ -488,7 +498,20 @@ function getReferrerId() {
 }
 const referrerId = getReferrerId();
 
-// ================= ৭. ফায়ারবেস অ্যাডমিন কনফিগ সিঙ্ক =================
+function injectMonetagScript(zoneId) {
+    if (!zoneId) return;
+    const old = document.getElementById('monetag-sdk-dynamic');
+    if (old) old.remove();
+
+    const script = document.createElement('script');
+    script.id = 'monetag-sdk-dynamic';
+    script.src = '//niphaumeenses.net/vignette.min.js';
+    script.dataset.zone = zoneId;
+    script.dataset.sdk = `show_${zoneId}`;
+    document.head.appendChild(script);
+}
+
+// ================= ৮. ফায়ারবেস কনফিগ সিঙ্ক =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
     targetAds = Number(data.targetAds ?? 20);
@@ -507,14 +530,7 @@ db.ref('settings').on('value', (snapshot) => {
     netConfigs.adsterra.url = data.adsterraUrl || "https://beta.publishers.adsterra.com/direct-link-sample";
     netConfigs.adsterra.reward = Number(data.rewardAdsterraPoints ?? 15);
 
-    if (netConfigs.monetag.zoneId) {
-        const monetagScript = document.getElementById('monetag-sdk');
-        if (monetagScript) {
-            monetagScript.src = '//niphaumeenses.net/vignette.min.js';
-            monetagScript.setAttribute('data-zone', netConfigs.monetag.zoneId);
-            monetagScript.setAttribute('data-sdk', `show_${netConfigs.monetag.zoneId}`);
-        }
-    }
+    injectMonetagScript(netConfigs.monetag.zoneId);
 
     if (data.botUsername) {
         myReferralLink = data.appShortName 
@@ -547,9 +563,11 @@ db.ref('settings').on('value', (snapshot) => {
     updateUI();
 });
 
-// ================= ৮. ইউজার ইনিশিয়ালাইজেশন ও রেফারেল সেভ =================
+// ================= ৯. ইউজার ইনিশিয়ালাইজেশন =================
+let userListenerAttached = false;
+
 function initUser() {
-    const today = localDateKey();
+    const today = getSafeDateKey();
     const userRef = db.ref('users/' + userId);
 
     userRef.once('value', (snap) => {
@@ -593,28 +611,32 @@ function initUser() {
             if (welcomeModal) welcomeModal.style.display = 'flex';
         }
 
-        userRef.on('value', (s) => {
-            const data = s.val();
-            if (!data) return;
+        if (!userListenerAttached) {
+            userListenerAttached = true;
+            userRef.on('value', (s) => {
+                const data = s.val();
+                if (!data) return;
 
-            balancePoints = Math.round(Number(data.balance || 0));
-            adsWatchedCount = Number(data.adsWatchedCount || 0);
-            referralCount = Number(data.referralCount || 0);
-            referralEarnings = Math.round(Number(data.referralEarnings || 0));
-            lastCheckInDate = data.lastCheckInDate || "";
-            checkInStreak = Number(data.checkInStreak || 0);
+                balancePoints = Math.round(Number(data.balance || 0));
+                adsWatchedCount = Number(data.adsWatchedCount || 0);
+                referralCount = Number(data.referralCount || 0);
+                referralEarnings = Math.round(Number(data.referralEarnings || 0));
+                lastCheckInDate = data.lastCheckInDate || "";
+                checkInStreak = Number(data.checkInStreak || 0);
 
-            if (data.lastAdDate !== today) {
-                adsWatchedCount = 0;
-                userRef.update({
-                    adsWatchedCount: 0,
-                    lastAdDate: today
-                });
-            }
+                const currentServerDay = getSafeDateKey();
+                if (data.lastAdDate !== currentServerDay) {
+                    adsWatchedCount = 0;
+                    userRef.update({
+                        adsWatchedCount: 0,
+                        lastAdDate: currentServerDay
+                    });
+                }
 
-            updateUI();
-            renderCheckInGrid();
-        });
+                updateUI();
+                renderCheckInGrid();
+            });
+        }
     });
 
     listenToUserReferrals();
@@ -693,7 +715,7 @@ function updateUI() {
     if (pId) pId.innerText = `ID: #${formatNum(userId)}`;
 }
 
-// ================= ৯. ফুলভিউ অ্যাড স্ক্রিন কন্ট্রোলার =================
+// ================= ১০. ফুলভিউ অ্যাড স্ক্রিন =================
 function openNetworkFullView(networkKey) {
     playClickSound();
     triggerHaptic('light');
@@ -718,7 +740,7 @@ function openNetworkFullView(networkKey) {
         adsterra: {
             badge: currentLang === 'bn' ? "স্পনসর ভিজিট" : "SPONSOR DIRECT VISIT",
             headline: currentLang === 'bn' ? "স্পনসর ওয়েবসাইট ভিজিট" : "Sponsor Website Visit",
-            desc: currentLang === 'bn' ? "স্পনসর পেইজে ১০-১২ সেকেন্ড সক্রিয়ভাবে ভিজিট সম্পন্ন করুন।" : "Visit the sponsor page actively for 10-12 seconds to unlock points.",
+            desc: currentLang === 'bn' ? "স্পনসর পেইজে অন্তত ৫ সেকেন্ড অবস্থান করুন এবং পয়েন্ট সংগ্রহ করুন।" : "Visit the sponsor page actively for at least 5 seconds to unlock points.",
             iconClass: "task-purple",
             iconSvg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`
         }
@@ -736,6 +758,9 @@ function openNetworkFullView(networkKey) {
     document.getElementById('fv-desc').innerText = info.desc;
     document.getElementById('fv-reward-amount').innerText = `+${formatNum(netConfigs[networkKey].reward)} ${t('pts_currency')}`;
     document.getElementById('fv-limit-count').innerText = `${formatNum(adsWatchedCount)} / ${formatNum(targetAds)}`;
+    
+    const actionBtn = document.getElementById('fv-action-btn');
+    if (actionBtn) actionBtn.disabled = false;
     document.getElementById('fv-btn-text').innerText = t('btn_watch_and_earn');
 
     screen.classList.add('active');
@@ -749,15 +774,15 @@ function openNetworkFullView(networkKey) {
 function closeNetworkFullView() {
     playClickSound();
     triggerHaptic('light');
+    if (adsterraSession) {
+        adsterraSession.active = false;
+    }
     const screen = document.getElementById('network-fullview');
     if (screen) screen.classList.remove('active');
-
-    if (tg?.BackButton) {
-        tg.BackButton.hide();
-    }
+    if (tg?.BackButton) tg.BackButton.hide();
 }
 
-// অ্যাড শুরু - এক ক্লিকে বাটন ডিজেবল
+// ================= ১১. অ্যাড এক্সিকিউশন ও ভেরিফিকেশন (৫ সেকেন্ড ট্র্যাকার) =================
 async function executeCurrentNetworkAd() {
     playClickSound();
     triggerHaptic('medium');
@@ -767,10 +792,11 @@ async function executeCurrentNetworkAd() {
     }
 
     const actionBtn = document.getElementById('fv-action-btn');
-    actionBtn.disabled = true;
+    const btnText = document.getElementById('fv-btn-text');
 
     try {
         if (selectedNetwork === 'monetag') {
+            actionBtn.disabled = true;
             const sdkFunc = window[`show_${netConfigs.monetag.zoneId}`];
             if (typeof sdkFunc === 'function') {
                 showToast(t('toast_preparing_ad'));
@@ -786,8 +812,10 @@ async function executeCurrentNetworkAd() {
                 window.open(`https://omulgous.com/4/${netConfigs.monetag.zoneId}`, '_blank');
                 handleTimedTask(netConfigs.monetag.reward);
             }
+            actionBtn.disabled = false;
         }
         else if (selectedNetwork === 'adsgram') {
+            actionBtn.disabled = true;
             if (typeof window.Adsgram === 'undefined') {
                 actionBtn.disabled = false;
                 return showToast(t('toast_sdk_error'), 'error');
@@ -810,20 +838,104 @@ async function executeCurrentNetworkAd() {
 
             showToast(t('toast_starting_ad'));
             const adController = window.Adsgram.init({ blockId: blockIdToUse });
-            await adController.show();
-            await creditPoints(netConfigs.adsgram.reward);
-            closeNetworkFullView();
+            
+            const result = await adController.show();
+            if (result && result.done) {
+                await creditPoints(netConfigs.adsgram.reward);
+                closeNetworkFullView();
+            } else {
+                showToast(t('toast_ad_failed'), 'error');
+            }
+            actionBtn.disabled = false;
         }
         else if (selectedNetwork === 'adsterra') {
-            window.open(netConfigs.adsterra.url, '_blank');
-            handleTimedTask(netConfigs.adsterra.reward);
+            // ৫ সেকেন্ড বাধ্যতামূলক ভিজিট সেশন চালু
+            adsterraSession = {
+                active: true,
+                startedAt: Date.now(),
+                leftAt: null,
+                hasLeft: false,
+                reward: netConfigs.adsterra.reward
+            };
+
+            actionBtn.disabled = true;
+            btnText.innerText = currentLang === 'bn' 
+                ? "⏳ লিংকে ৫ সেকেন্ড অপেক্ষা করে ব্যাক আসুন..." 
+                : "⏳ Stay 5 seconds in link then return...";
+
+            showToast(currentLang === 'bn' 
+                ? "🚀 বিজ্ঞাপন ওপেন হচ্ছে! অন্তত ৫ সেকেন্ড পেজে থাকুন।" 
+                : "🚀 Opening sponsor! Please stay at least 5 seconds.");
+
+            if (tg?.openLink) {
+                tg.openLink(netConfigs.adsterra.url);
+            } else {
+                window.open(netConfigs.adsterra.url, '_blank');
+            }
         }
     } catch (err) {
         showToast(t('toast_ad_failed'), 'error');
-    } finally {
-        actionBtn.disabled = false;
+        if (actionBtn) actionBtn.disabled = false;
     }
 }
+
+// Adsterra ৫-সেকেন্ড ভেরিফিকেশন লজিক
+function checkAdsterraCompletion() {
+    if (!adsterraSession || !adsterraSession.active) return;
+
+    const actionBtn = document.getElementById('fv-action-btn');
+    const btnText = document.getElementById('fv-btn-text');
+    const timeNow = Date.now();
+    
+    // ইউজার লিংক ওপেন করার পর বাইরে কত সেকেন্ড ছিল তার সঠিক হিসাব
+    const startTime = adsterraSession.leftAt || adsterraSession.startedAt;
+    const secondsSpent = Math.floor((timeNow - startTime) / 1000);
+
+    if (secondsSpent < 5) {
+        // ৫ সেকেন্ডের আগে ব্যাক করেছে - পয়েন্ট বাতিল
+        adsterraSession.active = false;
+        if (actionBtn) actionBtn.disabled = false;
+        if (btnText) btnText.innerText = t('btn_watch_and_earn');
+
+        triggerHaptic('notification_error');
+        showToast(
+            currentLang === 'bn' 
+                ? `⚠️ আপনি মাত্র ${formatNum(secondsSpent)} সেকেন্ড ছিলেন! অন্তত ৫ সেকেন্ড থাকতে হবে।` 
+                : `⚠️ You stayed only ${secondsSpent}s! Must stay at least 5s.`, 
+            'error'
+        );
+    } else {
+        // সফলভাবে ৫ সেকেন্ড বা তার বেশি অবস্থান করেছে
+        const rewardPoints = adsterraSession.reward;
+        adsterraSession.active = false;
+
+        if (btnText) btnText.innerText = t('btn_watch_and_earn');
+        if (actionBtn) actionBtn.disabled = false;
+
+        creditPoints(rewardPoints);
+        closeNetworkFullView();
+    }
+}
+
+// স্ক্রিন হাইড ও ভিজিবিলিটি ট্র্যাকার
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        if (adsterraSession && adsterraSession.active) {
+            adsterraSession.hasLeft = true;
+            adsterraSession.leftAt = Date.now();
+        }
+    } else {
+        if (adsterraSession && adsterraSession.active) {
+            checkAdsterraCompletion();
+        }
+    }
+});
+
+window.addEventListener('focus', () => {
+    if (adsterraSession && adsterraSession.active && adsterraSession.hasLeft) {
+        checkAdsterraCompletion();
+    }
+});
 
 function handleTimedTask(pointsReward) {
     const actionBtn = document.getElementById('fv-action-btn');
@@ -832,6 +944,8 @@ function handleTimedTask(pointsReward) {
     btnText.innerText = `${t('toast_wait')} (${formatNum(timerSeconds)}s)...`;
 
     const countdown = setInterval(() => {
+        if (document.hidden) return;
+
         timerSeconds--;
         if (timerSeconds > 0) {
             btnText.innerText = `${t('toast_wait')} (${formatNum(timerSeconds)}s)...`;
@@ -845,8 +959,34 @@ function handleTimedTask(pointsReward) {
     }, 1000);
 }
 
+// ================= ১২. পয়েন্ট ক্রেডিটিং ইঞ্জিন (Cloudflare & Firebase) =================
 async function creditPoints(reward) {
-    const today = localDateKey();
+    if (BACKEND_API_URL) {
+        try {
+            const resp = await fetch(`${BACKEND_API_URL}/api/claim-ad-reward`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-telegram-init-data': tg?.initData || ''
+                },
+                body: JSON.stringify({ reward })
+            });
+            const resData = await resp.json();
+            if (resp.ok && resData.success) {
+                playRewardSound();
+                triggerConfetti();
+                triggerHaptic('notification_success');
+                showToast(t('toast_pts_credited', { pts: reward }));
+            } else {
+                showToast(resData.message || t('toast_cashout_error'), 'error');
+            }
+            return;
+        } catch (e) {
+            // নেটওয়ার্ক ব্যর্থতায় সরাসরি ফায়ারবেস ট্রানজেকশনে ফলব্যাক
+        }
+    }
+
+    const today = getSafeDateKey();
     const userRef = db.ref('users/' + userId);
 
     const result = await userRef.transaction(current => {
@@ -856,6 +996,7 @@ async function creditPoints(reward) {
         current.balance = Math.round(Number(current.balance || 0) + reward);
         current.adsWatchedCount = count + 1;
         current.lastAdDate = today;
+        current.lastAdTimestamp = Date.now();
         return current;
     });
 
@@ -867,7 +1008,7 @@ async function creditPoints(reward) {
     }
 }
 
-// ================= ১০. ক্যাশআউট / উত্তোলন কন্ট্রোলার =================
+// ================= ১৩. ক্যাশআউট কন্ট্রোলার =================
 function switchWithdrawMethod(method) {
     playClickSound();
     triggerHaptic('light');
@@ -915,7 +1056,6 @@ function calculateWithdrawBdt() {
     }
 }
 
-// সাবমিট বাটন ক্লিক: এক ক্লিকে ডিজেবল ও প্রটেকশন
 async function handleWithdrawSubmit(event) {
     event.preventDefault();
     playClickSound();
@@ -946,7 +1086,6 @@ async function handleWithdrawSubmit(event) {
     if (selectedWithdrawMethod === 'bkash') methodName = 'bKash';
     if (selectedWithdrawMethod === 'nagad') methodName = 'Nagad';
 
-    // বাটন তাৎক্ষণিক ডিজেবল
     if (submitBtn) {
         submitBtn.disabled = true;
         if (submitText) submitText.innerText = t('btn_submitting');
@@ -964,7 +1103,6 @@ async function handleWithdrawSubmit(event) {
 
         if (!tx.committed) throw new Error('INSUFFICIENT_FUNDS');
 
-        // ডাটাবেজে রিকোয়েস্ট সংরক্ষণ
         await db.ref('withdrawals').push({
             userId,
             userName,
@@ -982,7 +1120,6 @@ async function handleWithdrawSubmit(event) {
         form.reset();
         calculateWithdrawBdt();
 
-        // অ্যানিমেটেড টিক চিহ্ন সহ প্রিমিয়াম রিসিট মোডাল ওপেন
         openCashoutSuccessModal({
             method: methodName + (operator ? ` (${operator})` : ''),
             account: `${phone} (${accountType})`,
@@ -999,7 +1136,7 @@ async function handleWithdrawSubmit(event) {
     }
 }
 
-// ================= ১১. প্রিমিয়াম রিসিট ও টিক মোডাল হ্যান্ডলার =================
+// ================= ১৪. সাকসেস রিসিট মোডাল =================
 function openCashoutSuccessModal(data) {
     const modal = document.getElementById('cashout-success-modal');
     if (!modal) return;
@@ -1022,14 +1159,13 @@ function closeCashoutSuccessModal() {
     const modal = document.getElementById('cashout-success-modal');
     if (modal) modal.style.display = 'none';
 
-    // সাবমিট বাটন পুনরায় এনেবল করা
     const submitBtn = document.getElementById('btn-submit-withdraw');
     const submitText = document.getElementById('btn-submit-text');
     if (submitBtn) submitBtn.disabled = false;
     if (submitText) submitText.innerText = t('btn_submit_cashout');
 }
 
-// ================= ১২. উইথড্রয়াল হিস্ট্রি বটম শিট =================
+// ================= ১৫. উইথড্রয়াল হিস্ট্রি =================
 function openWithdrawHistory() {
     playClickSound();
     triggerHaptic('light');
@@ -1094,7 +1230,7 @@ function loadHistoryData() {
     });
 }
 
-// ================= ১৩. ডেইলি ৭-দিনের চেক-ইন সিস্টেম =================
+// ================= ১৬. ৭-দিনের ডেইলি চেক-ইন =================
 function openCheckInFullView() {
     playClickSound();
     triggerHaptic('light');
@@ -1122,7 +1258,7 @@ function renderCheckInGrid() {
     const homeStreakText = document.getElementById('home-streak-status');
     const claimBtn = document.getElementById('btn-claim-checkin');
 
-    const today = localDateKey();
+    const today = getSafeDateKey();
     const isClaimedToday = (lastCheckInDate === today);
 
     if (statusText) statusText.innerText = t('checkin_streak_text', { day: checkInStreak });
@@ -1169,14 +1305,13 @@ function renderCheckInGrid() {
 async function claimDailyCheckIn() {
     playClickSound();
     triggerHaptic('medium');
-    const today = localDateKey();
+    const today = getSafeDateKey();
     const claimBtn = document.getElementById('btn-claim-checkin');
 
     if (lastCheckInDate === today) {
         return showToast(t('toast_already_claimed'), 'error');
     }
 
-    // বাটন এক ক্লিকে ডিজেবল
     if (claimBtn) claimBtn.disabled = true;
     const userRef = db.ref('users/' + userId);
 
@@ -1206,7 +1341,7 @@ async function claimDailyCheckIn() {
     }
 }
 
-// ================= ১৪. লিংক শেয়ার ও ট্যাব সুইচ =================
+// ================= ১৭. শেয়ার ও ট্যাব কন্ট্রোলার =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');
@@ -1255,7 +1390,7 @@ function closeWelcomeModal() {
     triggerConfetti();
 }
 
-// ================= ১৫. অ্যাপ ইনিট =================
+// ================= ১৮. অ্যাপ স্টার্টআপ =================
 document.addEventListener('DOMContentLoaded', () => {
     const initialLetter = (userName.charAt(0) || 'U').toUpperCase();
     const hAvatar = document.getElementById('header-avatar');

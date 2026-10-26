@@ -16,16 +16,13 @@
     <!-- Adsgram Official SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
-    <!-- Monetag In-App Script Container -->
-    <script id="monetag-sdk"></script>
-
     <!-- Canvas Confetti & Firebase SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=5.3.0">
+    <link rel="stylesheet" href="style.css?v=5.4.2">
 </head>
 <body>
 
@@ -56,11 +53,9 @@
         </div>
     </div>
 
-    <!-- ================= অ্যানিমেটেড টিক চিহ্ন সহ প্রিমিয়াম সাকসেস মোডাল ================= -->
+    <!-- ক্যাশআউট সাকসেস রিসিট মোডাল -->
     <div id="cashout-success-modal" class="modal-overlay">
         <div class="modal-card shine-card receipt-card">
-            
-            <!-- অ্যানিমেটেড গ্রিন টিক সার্কেল -->
             <div class="success-checkmark-wrap">
                 <svg class="checkmark-svg" viewBox="0 0 52 52">
                     <circle class="checkmark-circle" cx="26" cy="26" r="24" fill="none"/>
@@ -72,7 +67,6 @@
             <h3 class="modal-title" data-i18n="receipt_title">Cashout Successful!</h3>
             <p class="modal-desc" data-i18n="receipt_desc">Your cashout request has been securely placed and is currently under review.</p>
 
-            <!-- ট্রানজেকশন রিসিট মেমো -->
             <div class="receipt-box">
                 <div class="receipt-row">
                     <span class="rc-label" data-i18n="rc_method">Method:</span>
@@ -113,12 +107,10 @@
         </div>
 
         <div class="header-actions">
-            <!-- ডার্ক / ডে-নাইট মোড সুইচ বাটন -->
             <button class="icon-btn-pill" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
                 <span id="theme-icon">🌙</span>
             </button>
 
-            <!-- ভাষা পরিবর্তন বাটন -->
             <button class="icon-btn-pill" onclick="toggleLanguage()">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                 <span id="lang-indicator">BN</span>
@@ -132,7 +124,6 @@
         <!-- ================= 1. HOME TAB ================= -->
         <section id="home" class="page active">
             
-            <!-- Hero Balance Card -->
             <div class="f-card balance-hero shine-card">
                 <div class="b-row-top">
                     <span class="b-label" data-i18n="wallet_balance_label">Main Wallet Balance</span>
@@ -152,7 +143,6 @@
                 </div>
             </div>
 
-            <!-- Daily Ad Tasks Counter -->
             <div class="f-card progress-card shine-card">
                 <div class="progress-info">
                     <span class="p-title" data-i18n="today_task_title">Daily Tasks Progress</span>
@@ -163,16 +153,14 @@
                 </div>
             </div>
 
-            <!-- Ad Section Header -->
             <div class="section-head">
                 <span class="section-title" data-i18n="section_tasks_title">Official Sponsored Tasks</span>
                 <span class="section-sub" data-i18n="section_tasks_sub">Tap any card to preview & execute</span>
             </div>
 
-            <!-- Ad Cards Grid -->
             <div class="ad-card-container">
                 
-                <!-- Card 1: Monetag -->
+                <!-- Monetag -->
                 <div class="ad-card shine-card" onclick="openNetworkFullView('monetag')">
                     <div class="ad-card-badge blue-badge" data-i18n="badge_rewarded">REWARDED INTERSTITIAL</div>
                     <div class="ad-card-main">
@@ -193,7 +181,7 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Adsgram -->
+                <!-- Adsgram -->
                 <div class="ad-card shine-card" onclick="openNetworkFullView('adsgram')">
                     <div class="ad-card-badge mint-badge" id="adsgram-mode-tag">ADSGRAM STREAM</div>
                     <div class="ad-card-main">
@@ -214,7 +202,7 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Adsterra -->
+                <!-- Adsterra -->
                 <div class="ad-card shine-card" onclick="openNetworkFullView('adsterra')">
                     <div class="ad-card-badge purple-badge" data-i18n="badge_direct">SPONSOR VISIT</div>
                     <div class="ad-card-main">
@@ -223,7 +211,8 @@
                         </div>
                         <div class="ad-meta">
                             <h4 class="ad-title" data-i18n="adsterra_title">Direct Sponsor Link</h4>
-                            <p class="ad-desc" data-i18n="adsterra_desc">Explore sponsored partner link for 10-12 seconds</p>
+                            <!-- আপডেট: ৫ সেকেন্ডের জন্য ডেসক্রিপশন -->
+                            <p class="ad-desc" data-i18n="adsterra_desc">Explore sponsored partner link for at least 5 seconds</p>
                         </div>
                     </div>
                     <div class="ad-card-footer">
@@ -236,7 +225,6 @@
                 </div>
 
             </div>
-
         </section>
 
         <!-- ================= 2. REFERRAL TAB ================= -->
@@ -274,7 +262,6 @@
                 </div>
             </div>
 
-            <!-- রেফার করা ইউজারদের তালিকা -->
             <div class="section-head" style="margin-top: 20px;">
                 <span class="section-title" data-i18n="refer_list_title">Invited Friends</span>
                 <span class="section-sub" data-i18n="refer_list_sub">List of users who joined with your link</span>
@@ -294,7 +281,6 @@
                 <div class="sum-balance"><span id="withdraw-page-balance">0</span> <small data-i18n="pts_currency">PTS</small></div>
             </div>
 
-            <!-- Segmented Method Tabs -->
             <div class="method-segmented-tabs">
                 <button type="button" class="tab-btn active" id="btn-method-recharge" onclick="switchWithdrawMethod('recharge')" data-i18n="method_recharge">
                     Recharge
@@ -307,11 +293,9 @@
                 </button>
             </div>
 
-            <!-- Form Card -->
             <div class="f-card form-card shine-card">
                 <form id="form-withdraw" onsubmit="handleWithdrawSubmit(event)">
 
-                    <!-- Operator Select -->
                     <div class="field-group" id="group-operator">
                         <label class="field-label" data-i18n="label_operator">Select Mobile Operator:</label>
                         <select id="withdraw-operator" class="field-input">
@@ -323,7 +307,6 @@
                         </select>
                     </div>
 
-                    <!-- SIM or Wallet Type -->
                     <div class="field-group" id="group-acc-type">
                         <label id="label-acc-type" class="field-label" data-i18n="label_sim_type">SIM Connection Type:</label>
                         <select id="withdraw-account-type" class="field-input">
@@ -332,13 +315,11 @@
                         </select>
                     </div>
 
-                    <!-- Account Phone Number -->
                     <div class="field-group">
                         <label id="label-withdraw-phone" class="field-label" data-i18n="label_phone">Account Number:</label>
                         <input type="tel" id="withdraw-phone" class="field-input" placeholder="01XXXXXXXXX" pattern="[0-9]{11}" maxlength="11" required>
                     </div>
 
-                    <!-- Points Quantity -->
                     <div class="field-group">
                         <div class="label-row">
                             <label class="field-label" data-i18n="label_points">Points Amount:</label>
@@ -347,13 +328,11 @@
                         <input type="number" id="withdraw-points" class="field-input" placeholder="Enter points" min="200" oninput="calculateWithdrawBdt()" required>
                     </div>
 
-                    <!-- Calculated Amount Preview -->
                     <div id="withdraw-preview-summary" class="preview-box">
                         <span data-i18n="label_you_will_get">You will receive:</span>
                         <div class="preview-val">৳ <span id="summary-bdt-val">0.00</span></div>
                     </div>
 
-                    <!-- সাবমিট বাটন (এক ক্লিকেই ডিজেবল ও প্রটেক্টেড) -->
                     <button type="submit" id="btn-submit-withdraw" class="btn-primary shine-sweep">
                         <span id="btn-submit-text" data-i18n="btn_submit_cashout">Submit Cashout Request</span>
                     </button>
@@ -387,7 +366,6 @@
                 </div>
             </div>
 
-            <!-- Profile Menu -->
             <div class="f-card menu-list shine-card">
                 <div class="menu-item" onclick="openWithdrawHistory()">
                     <div class="mi-left">
@@ -405,19 +383,14 @@
                     <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
 
-                <!-- 24/7 Live Support -->
                 <a id="telegram-support-link" href="#" target="_blank" class="menu-item">
                     <div class="mi-left">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-                            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
-                        </svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
                         <span data-i18n="menu_support">24/7 Help & Support</span>
                     </div>
                     <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </a>
 
-                <!-- Telegram Official Channel -->
                 <a id="telegram-channel-link" href="#" target="_blank" class="menu-item">
                     <div class="mi-left">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
@@ -427,7 +400,7 @@
                 </a>
             </div>
 
-            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.3.0 • Verified Telegram WebApp</div>
+            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.4.2 • Verified Telegram WebApp</div>
         </section>
 
     </main>
@@ -545,6 +518,6 @@
     </nav>
 
     <!-- Client Engine Script -->
-    <script src="app.js?v=5.3.0"></script>
+    <script src="app.js?v=5.4.2"></script>
 </body>
 </html>
