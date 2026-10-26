@@ -1,15 +1,13 @@
 /**
- * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.4.2)
- * Full Security & 5-Second Adsterra Anti-Cheat Engine
- * - Mandatory 5-Second Active Visit for Adsterra Direct Link
- * - Anti-Cheat Tab/Browser Visibility Tracker
- * - Cloudflare Worker Serverless Verification
- * - Adsgram ad completion verification (done: true)
- * - Dynamic Monetag SDK injection
- * - Server-synced Date & Anti-Clock manipulation
+ * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.4.3)
+ * - Separate Daily Limits for Monetag, Adsgram, and Adsterra
+ * - Dynamic LibTL Monetag SDK Integration
+ * - Admin-Controlled Minimum Cashout Limits (Recharge, bKash, Nagad)
+ * - 5-Second Adsterra Anti-Cheat Active Tab Verification
+ * - Serverless Daily Reset & Bilingual Engine
  */
 
-// ================= ১. ঐচ্ছিক সুরক্ষিত ব্যাকএন্ড কনফিগারেশন =================
+// ================= ১. ব্যাকএন্ড কনফিগারেশন =================
 const BACKEND_API_URL = "https://earnpro84cc.rakibkdbb.workers.dev"; 
 
 // ================= ২. ওয়েব অডিও সিন্থেসাইজার =================
@@ -104,8 +102,8 @@ function showToast(message, type = 'success') {
 function triggerConfetti() {
     if (typeof confetti === 'function') {
         confetti({
-            particleCount: 60,
-            spread: 70,
+            particleCount: 65,
+            spread: 75,
             origin: { y: 0.65 },
             colors: ['#00e599', '#0098ea', '#ffffff', '#ffd700']
         });
@@ -184,10 +182,10 @@ const translations = {
         user_status: "● Active Member",
         wallet_balance_label: "Main Wallet Balance",
         pts_currency: "PTS",
-        today_task_title: "Daily Tasks Progress",
+        today_task_title: "Total Tasks Completed Today",
         section_tasks_title: "Official Sponsored Tasks",
         section_tasks_sub: "Tap any card to preview & execute",
-        badge_rewarded: "REWARDED INTERSTITIAL",
+        badge_rewarded: "REWARDED",
         badge_direct: "SPONSOR VISIT",
         monetag_title: "Monetag Rewarded",
         monetag_desc: "Watch full sponsored video to credit instant points",
@@ -226,10 +224,10 @@ const translations = {
         menu_daily_bonus: "7-Day Streak Rewards",
         menu_support: "24/7 Help & Support",
         menu_tg_support: "Telegram Official Channel",
-        footer_caption: "EarnHub Pro v5.4.2 • Verified Telegram WebApp",
+        footer_caption: "EarnHub Pro v5.4.3 • Verified Telegram WebApp",
         fv_task_details: "Task Overview",
         fv_m_reward: "Task Reward",
-        fv_m_limit: "Daily Progress",
+        fv_m_limit: "Daily Limit",
         fv_m_status: "Status",
         fv_active: "● Active",
         fv_rules_title: "How to Complete This Task?",
@@ -244,7 +242,7 @@ const translations = {
         nav_refer: "Refer",
         nav_withdraw: "Cashout",
         nav_profile: "Profile",
-        toast_limit_reached: "⚠️ Today's ad task limit is reached!",
+        toast_limit_reached: "⚠️ Today's limit for this ad network is reached!",
         toast_preparing_ad: "⚡ Loading advertisement...",
         toast_starting_ad: "🎬 Starting advertisement...",
         toast_ad_failed: "⚠️ Advertisement cancelled or not completed.",
@@ -285,10 +283,10 @@ const translations = {
         user_status: "● সক্রিয় সদস্য",
         wallet_balance_label: "মূল ওয়ালেট ব্যালেন্স",
         pts_currency: "পয়েন্ট",
-        today_task_title: "দৈনিক টাস্ক প্রোগ্রেস",
+        today_task_title: "আজকে সম্পন্ন মোট টাস্ক",
         section_tasks_title: "অফিসিয়াল স্পনসর টাস্ক",
         section_tasks_sub: "বিস্তারিত দেখতে যেকোনো কার্ডে চাপুন",
-        badge_rewarded: "রিওয়ার্ডেড বিজ্ঞাপন",
+        badge_rewarded: "রিওয়ার্ডেড",
         badge_direct: "স্পনসর ভিজিট",
         monetag_title: "মানেট্যাগ রিওয়ার্ডেড",
         monetag_desc: "সম্পূর্ণ ভিডিও বিজ্ঞাপন দেখে সরাসরি পয়েন্ট যোগ করুন",
@@ -327,7 +325,7 @@ const translations = {
         menu_daily_bonus: "৭ দিনের ধারাবাহিক উপহার",
         menu_support: "২৪/৭ হেল্প ও সাপোর্ট",
         menu_tg_support: "টেলিগ্রাম অফিসিয়াল চ্যানেল",
-        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৪.২ • টেলিগ্রাম মিনি অ্যাপ",
+        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৪.৩ • টেলিগ্রাম মিনি অ্যাপ",
         fv_task_details: "টাস্ক বিবরণ",
         fv_m_reward: "টাস্ক রিওয়ার্ড",
         fv_m_limit: "দৈনিক লিমিট",
@@ -345,7 +343,7 @@ const translations = {
         nav_refer: "রেফার",
         nav_withdraw: "উত্তোলন",
         nav_profile: "প্রোফাইল",
-        toast_limit_reached: "⚠️ আজকের বিজ্ঞাপন দেখার সীমা শেষ হয়েছে!",
+        toast_limit_reached: "⚠️ এই নেটওয়ার্কের আজকের বিজ্ঞাপন দেখার সীমা শেষ হয়েছে!",
         toast_preparing_ad: "⚡ বিজ্ঞাপন প্রস্তুত হচ্ছে...",
         toast_starting_ad: "🎬 বিজ্ঞাপন শুরু হচ্ছে...",
         toast_ad_failed: "⚠️ বিজ্ঞাপন বাতিল হয়েছে বা সম্পূর্ণ দেখা হয়নি।",
@@ -451,6 +449,10 @@ const userUsername = tgUser.username ? '@' + tgUser.username : '@user_' + userId
 
 let balancePoints = 0;
 let adsWatchedCount = 0;
+let monetagWatchedCount = 0;
+let adsgramWatchedCount = 0;
+let adsterraWatchedCount = 0;
+
 let referralCount = 0;
 let referralEarnings = 0;
 let lastCheckInDate = "";
@@ -458,25 +460,29 @@ let checkInStreak = 0;
 
 const checkInRewards = [10, 20, 30, 45, 60, 80, 150];
 
-let targetAds = 20;
+// ডায়নামিক অ্যাডমিন কনফিগ ভেরিয়েবল
 let pointsToBdtRate = 0.10;
-let minWithdrawPoints = 200;
 let referralBonusPoints = 50;
 let welcomeBonusPoints = 100;
 let myReferralLink = `https://t.me/?startapp=ref_${userId}`;
 
+// অ্যাডমিন প্যানেল দিয়ে নির্ধারিত উইথড্র লিমিট
+let adminMinRecharge = 200;
+let adminMinBkash = 500;
+let adminMinNagad = 500;
+let minWithdrawPoints = 200;
+
 let selectedWithdrawMethod = 'recharge';
 let selectedNetwork = 'monetag';
 
+// আলাদা আলাদা অ্যাড লিমিট এবং রিওয়ার্ড কনফিগারেশন
 let netConfigs = {
-    monetag: { zoneId: "8765432", reward: 15 },
-    adsgram: { rewardedBlockId: "26019", interstitialBlockId: "26020", mode: "swap", reward: 20 },
-    adsterra: { url: "https://beta.publishers.adsterra.com/direct-link-sample", reward: 15 }
+    monetag: { zoneId: "8765432", reward: 15, limit: 15 },
+    adsgram: { rewardedBlockId: "26019", interstitialBlockId: "26020", mode: "swap", reward: 20, limit: 20 },
+    adsterra: { url: "https://beta.publishers.adsterra.com/direct-link-sample", reward: 15, limit: 25 }
 };
 
 let adsgramNextFormat = 'rewarded';
-
-// Adsterra ৫-সেকেন্ড ট্র্যাকিং সেশন ভেরিয়েবল
 let adsterraSession = null;
 
 function escapeHtml(str) {
@@ -499,6 +505,7 @@ function getReferrerId() {
 }
 const referrerId = getReferrerId();
 
+// আপডেট: ব্যবহারকারীর দেওয়া '//libtl.com/sdk.js' স্ক্রিপ্ট লোডার
 function injectMonetagScript(zoneId) {
     if (!zoneId) return;
     const old = document.getElementById('monetag-sdk-dynamic');
@@ -506,30 +513,49 @@ function injectMonetagScript(zoneId) {
 
     const script = document.createElement('script');
     script.id = 'monetag-sdk-dynamic';
-    script.src = '//niphaumeenses.net/vignette.min.js';
+    script.src = '//libtl.com/sdk.js';
     script.dataset.zone = zoneId;
     script.dataset.sdk = `show_${zoneId}`;
     document.head.appendChild(script);
 }
 
-// ================= ৮. ফায়ারবেস কনফিগ সিঙ্ক =================
+// ================= ৮. ফায়ারবেস সেটিংস সিঙ্ক (অ্যাডমিন প্যানেল কন্ট্রোল) =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
-    targetAds = Number(data.targetAds ?? 20);
+
+    // পয়েন্ট টু টাকা রেট ও ওয়েলকাম বোনাস
     pointsToBdtRate = Number(data.pointsToBdtRate ?? 0.10);
     referralBonusPoints = Number(data.referralBonusPoints ?? 50);
     welcomeBonusPoints = Number(data.welcomeBonusPoints ?? 100);
 
+    // অ্যাডমিন প্যানেল দিয়ে সেট করা মিনিমাম উইথড্রয়াল পয়েন্ট
+    adminMinRecharge = Number(data.minWithdrawRecharge ?? data.minWithdrawPoints ?? 200);
+    adminMinBkash = Number(data.minWithdrawBkash ?? data.minWithdrawWallet ?? 500);
+    adminMinNagad = Number(data.minWithdrawNagad ?? adminMinBkash ?? 500);
+
+    // বর্তমানে সিলেক্টেড মেথড অনুযায়ী লিমিট সেট করা
+    if (selectedWithdrawMethod === 'recharge') {
+        minWithdrawPoints = adminMinRecharge;
+    } else if (selectedWithdrawMethod === 'bkash') {
+        minWithdrawPoints = adminMinBkash;
+    } else if (selectedWithdrawMethod === 'nagad') {
+        minWithdrawPoints = adminMinNagad;
+    }
+
+    // আলাদা আলাদা নেটওয়ার্ক লিমিট ও রিওয়ার্ড সিঙ্ক
     netConfigs.monetag.zoneId = data.monetagZoneId || "8765432";
     netConfigs.monetag.reward = Number(data.rewardMonetagPoints ?? 15);
+    netConfigs.monetag.limit = Number(data.monetagLimit ?? data.limitMonetag ?? 15);
 
     netConfigs.adsgram.rewardedBlockId = data.adsgramRewardedBlockId || data.adsgramBlockId || "26019";
     netConfigs.adsgram.interstitialBlockId = data.adsgramInterstitialBlockId || "26020";
     netConfigs.adsgram.mode = (data.adsgramMode || "swap").toLowerCase();
     netConfigs.adsgram.reward = Number(data.rewardAdsgramPoints ?? 20);
+    netConfigs.adsgram.limit = Number(data.adsgramLimit ?? data.limitAdsgram ?? 20);
 
     netConfigs.adsterra.url = data.adsterraUrl || "https://beta.publishers.adsterra.com/direct-link-sample";
     netConfigs.adsterra.reward = Number(data.rewardAdsterraPoints ?? 15);
+    netConfigs.adsterra.limit = Number(data.adsterraLimit ?? data.limitAdsterra ?? 25);
 
     injectMonetagScript(netConfigs.monetag.zoneId);
 
@@ -579,6 +605,9 @@ function initUser() {
                 username: userUsername,
                 balance: balancePoints,
                 adsWatchedCount: 0,
+                monetagWatchedCount: 0,
+                adsgramWatchedCount: 0,
+                adsterraWatchedCount: 0,
                 referralCount: 0,
                 referralEarnings: 0,
                 referredBy: (referrerId && referrerId !== userId) ? referrerId : null,
@@ -620,16 +649,28 @@ function initUser() {
 
                 balancePoints = Math.round(Number(data.balance || 0));
                 adsWatchedCount = Number(data.adsWatchedCount || 0);
+                monetagWatchedCount = Number(data.monetagWatchedCount || 0);
+                adsgramWatchedCount = Number(data.adsgramWatchedCount || 0);
+                adsterraWatchedCount = Number(data.adsterraWatchedCount || 0);
+
                 referralCount = Number(data.referralCount || 0);
                 referralEarnings = Math.round(Number(data.referralEarnings || 0));
                 lastCheckInDate = data.lastCheckInDate || "";
                 checkInStreak = Number(data.checkInStreak || 0);
 
+                // নতুন দিনের সূচনায় সব নেটওয়ার্কের অ্যাড কাউন্টার অটো রিসেট
                 const currentServerDay = getSafeDateKey();
                 if (data.lastAdDate !== currentServerDay) {
                     adsWatchedCount = 0;
+                    monetagWatchedCount = 0;
+                    adsgramWatchedCount = 0;
+                    adsterraWatchedCount = 0;
+
                     userRef.update({
                         adsWatchedCount: 0,
+                        monetagWatchedCount: 0,
+                        adsgramWatchedCount: 0,
+                        adsterraWatchedCount: 0,
                         lastAdDate: currentServerDay
                     });
                 }
@@ -649,7 +690,7 @@ function listenToUserReferrals() {
 
     db.ref(`referrals/${userId}`).on('value', snapshot => {
         if (!snapshot.exists()) {
-            refContainer.innerHTML = `<div style="text-align:center; padding:18px; font-size:13px; color:var(--text-muted);">${t('empty_referrals')}</div>`;
+            refContainer.innerHTML = `<div style="text-align:center; padding:18px; font-size:14px; color:var(--text-muted);">${t('empty_referrals')}</div>`;
             return;
         }
 
@@ -690,13 +731,24 @@ function updateUI() {
     setElem('home-ref-count', formatNum(referralCount));
     setElem('home-ref-earnings', formatNum(referralEarnings));
 
-    setElem('home-ad-counter', `${formatNum(adsWatchedCount)} / ${formatNum(targetAds)}`);
-    const pct = Math.min((adsWatchedCount / targetAds) * 100, 100);
+    // আলাদা নেটওয়ার্ক লিমিট ব্যাজ আপডেট
+    setElem('monetag-counter-badge', `${formatNum(monetagWatchedCount)} / ${formatNum(netConfigs.monetag.limit)}`);
+    setElem('adsgram-counter-badge', `${formatNum(adsgramWatchedCount)} / ${formatNum(netConfigs.adsgram.limit)}`);
+    setElem('adsterra-counter-badge', `${formatNum(adsterraWatchedCount)} / ${formatNum(netConfigs.adsterra.limit)}`);
+
+    // মোট কাজ ও প্রোগ্রেস বার
+    const totalPossibleAds = (netConfigs.monetag.limit + netConfigs.adsgram.limit + netConfigs.adsterra.limit) || 60;
+    setElem('home-ad-counter', `${formatNum(adsWatchedCount)} / ${formatNum(totalPossibleAds)}`);
+    const pct = Math.min((adsWatchedCount / totalPossibleAds) * 100, 100);
     const fill = document.getElementById('home-progress-fill');
     if (fill) fill.style.width = `${pct}%`;
 
+    // ফুল-ভিউ স্ক্রিন ওপেন থাকলে তার লিমিট আপডেট
     const fvLimit = document.getElementById('fv-limit-count');
-    if (fvLimit) fvLimit.innerText = `${formatNum(adsWatchedCount)} / ${formatNum(targetAds)}`;
+    if (fvLimit && selectedNetwork) {
+        let curWatched = selectedNetwork === 'monetag' ? monetagWatchedCount : (selectedNetwork === 'adsgram' ? adsgramWatchedCount : adsterraWatchedCount);
+        fvLimit.innerText = `${formatNum(curWatched)} / ${formatNum(netConfigs[selectedNetwork].limit)}`;
+    }
 
     const rateTextEl = document.getElementById('display-point-rate-text');
     if (rateTextEl) {
@@ -704,6 +756,7 @@ function updateUI() {
         rateTextEl.innerText = `${formatNum(100)} ${t('pts_currency')} = ${formatNum(bdtCalc)} ৳`;
     }
 
+    // অ্যাডমিন দ্বারা নির্ধারিত উইথড্রয়াল পয়েন্ট আপডেট
     const minWithdrawEl = document.getElementById('display-min-withdraw');
     if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
 
@@ -725,25 +778,31 @@ function openNetworkFullView(networkKey) {
 
     const details = {
         monetag: {
-            badge: currentLang === 'bn' ? "মানেট্যাগ পার্টনার" : "MONETAG OFFICIAL",
+            badge: currentLang === 'bn' ? "মানেট্যাগ অফিসিয়াল" : "MONETAG OFFICIAL",
             headline: currentLang === 'bn' ? "মানেট্যাগ রিওয়ার্ডেড টাস্ক" : "Monetag Rewarded Task",
             desc: currentLang === 'bn' ? "ভিডিওটি সম্পূর্ণ দেখলে সরাসরি পয়েন্ট অ্যাকাউন্টে যোগ হবে।" : "Watch the complete sponsored video to credit points to your account balance.",
             iconClass: "task-blue",
-            iconSvg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-2 10h8L7 22l2-10H1z"/></svg>`
+            iconSvg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-2 10h8L7 22l2-10H1z"/></svg>`,
+            watched: monetagWatchedCount,
+            limit: netConfigs.monetag.limit
         },
         adsgram: {
             badge: currentLang === 'bn' ? `অ্যাডসগ্রাম স্ট্রিম` : `ADSGRAM STREAM`,
             headline: currentLang === 'bn' ? "অ্যাডসগ্রাম স্পনসর টাস্ক" : "Adsgram Sponsored Task",
             desc: currentLang === 'bn' ? "বিজ্ঞাপন সম্পন্ন হওয়া মাত্রই রিওয়ার্ড পয়েন্ট নিশ্চিত করা হবে।" : "Complete the video or interstitial stream to claim instant reward.",
             iconClass: "task-mint",
-            iconSvg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="15" x="2" y="5" rx="2"/><polyline points="10 9 15 12.5 10 16"/></svg>`
+            iconSvg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="15" x="2" y="5" rx="2"/><polyline points="10 9 15 12.5 10 16"/></svg>`,
+            watched: adsgramWatchedCount,
+            limit: netConfigs.adsgram.limit
         },
         adsterra: {
             badge: currentLang === 'bn' ? "স্পনসর ভিজিট" : "SPONSOR DIRECT VISIT",
             headline: currentLang === 'bn' ? "স্পনসর ওয়েবসাইট ভিজিট" : "Sponsor Website Visit",
             desc: currentLang === 'bn' ? "স্পনসর পেইজে অন্তত ৫ সেকেন্ড অবস্থান করুন এবং পয়েন্ট সংগ্রহ করুন।" : "Visit the sponsor page actively for at least 5 seconds to unlock points.",
             iconClass: "task-purple",
-            iconSvg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`
+            iconSvg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`,
+            watched: adsterraWatchedCount,
+            limit: netConfigs.adsterra.limit
         }
     };
 
@@ -758,7 +817,7 @@ function openNetworkFullView(networkKey) {
     document.getElementById('fv-headline').innerText = info.headline;
     document.getElementById('fv-desc').innerText = info.desc;
     document.getElementById('fv-reward-amount').innerText = `+${formatNum(netConfigs[networkKey].reward)} ${t('pts_currency')}`;
-    document.getElementById('fv-limit-count').innerText = `${formatNum(adsWatchedCount)} / ${formatNum(targetAds)}`;
+    document.getElementById('fv-limit-count').innerText = `${formatNum(info.watched)} / ${formatNum(info.limit)}`;
     
     const actionBtn = document.getElementById('fv-action-btn');
     if (actionBtn) actionBtn.disabled = false;
@@ -783,35 +842,51 @@ function closeNetworkFullView() {
     if (tg?.BackButton) tg.BackButton.hide();
 }
 
-// ================= ১১. অ্যাড এক্সিকিউশন ও ভেরিফিকেশন (৫ সেকেন্ড ট্র্যাকার) =================
+// ================= ১১. অ্যাড এক্সিকিউশন ও ভেরিফিকেশন (আলাদা লিমিট চেক) =================
 async function executeCurrentNetworkAd() {
     playClickSound();
     triggerHaptic('medium');
 
-    if (adsWatchedCount >= targetAds) {
-        return showToast(t('toast_limit_reached'), 'error');
-    }
-
     const actionBtn = document.getElementById('fv-action-btn');
     const btnText = document.getElementById('fv-btn-text');
+
+    // নির্দিষ্ট নেটওয়ার্কের লিমিট চেক করা
+    let curCount = 0;
+    let curLimit = 0;
+
+    if (selectedNetwork === 'monetag') {
+        curCount = monetagWatchedCount;
+        curLimit = netConfigs.monetag.limit;
+    } else if (selectedNetwork === 'adsgram') {
+        curCount = adsgramWatchedCount;
+        curLimit = netConfigs.adsgram.limit;
+    } else if (selectedNetwork === 'adsterra') {
+        curCount = adsterraWatchedCount;
+        curLimit = netConfigs.adsterra.limit;
+    }
+
+    if (curCount >= curLimit) {
+        return showToast(t('toast_limit_reached'), 'error');
+    }
 
     try {
         if (selectedNetwork === 'monetag') {
             actionBtn.disabled = true;
+            // LibTL SDK কল
             const sdkFunc = window[`show_${netConfigs.monetag.zoneId}`];
             if (typeof sdkFunc === 'function') {
                 showToast(t('toast_preparing_ad'));
                 try {
                     await sdkFunc({ type: 'rewarded' });
-                    await creditPoints(netConfigs.monetag.reward);
+                    await creditPoints('monetag', netConfigs.monetag.reward);
                     closeNetworkFullView();
                 } catch (sdkErr) {
                     window.open(`https://omulgous.com/4/${netConfigs.monetag.zoneId}`, '_blank');
-                    handleTimedTask(netConfigs.monetag.reward);
+                    handleTimedTask('monetag', netConfigs.monetag.reward);
                 }
             } else {
                 window.open(`https://omulgous.com/4/${netConfigs.monetag.zoneId}`, '_blank');
-                handleTimedTask(netConfigs.monetag.reward);
+                handleTimedTask('monetag', netConfigs.monetag.reward);
             }
             actionBtn.disabled = false;
         }
@@ -842,7 +917,7 @@ async function executeCurrentNetworkAd() {
             
             const result = await adController.show();
             if (result && result.done) {
-                await creditPoints(netConfigs.adsgram.reward);
+                await creditPoints('adsgram', netConfigs.adsgram.reward);
                 closeNetworkFullView();
             } else {
                 showToast(t('toast_ad_failed'), 'error');
@@ -850,7 +925,7 @@ async function executeCurrentNetworkAd() {
             actionBtn.disabled = false;
         }
         else if (selectedNetwork === 'adsterra') {
-            // ৫ সেকেন্ড বাধ্যতামূলক ভিজিট সেশন চালু
+            // ৫ সেকেন্ড বাধ্যতামূলক সক্রিয় ভিজিট সেশন
             adsterraSession = {
                 active: true,
                 startedAt: Date.now(),
@@ -880,7 +955,7 @@ async function executeCurrentNetworkAd() {
     }
 }
 
-// Adsterra ৫-সেকেন্ড ভেরিফিকেশন লজিক
+// Adsterra ৫-সেকেন্ড ভেরিফিকেশন ইঞ্জিন
 function checkAdsterraCompletion() {
     if (!adsterraSession || !adsterraSession.active) return;
 
@@ -888,12 +963,10 @@ function checkAdsterraCompletion() {
     const btnText = document.getElementById('fv-btn-text');
     const timeNow = Date.now();
     
-    // ইউজার লিংক ওপেন করার পর বাইরে কত সেকেন্ড ছিল তার সঠিক হিসাব
     const startTime = adsterraSession.leftAt || adsterraSession.startedAt;
     const secondsSpent = Math.floor((timeNow - startTime) / 1000);
 
     if (secondsSpent < 5) {
-        // ৫ সেকেন্ডের আগে ব্যাক করেছে - পয়েন্ট বাতিল
         adsterraSession.active = false;
         if (actionBtn) actionBtn.disabled = false;
         if (btnText) btnText.innerText = t('btn_watch_and_earn');
@@ -906,19 +979,17 @@ function checkAdsterraCompletion() {
             'error'
         );
     } else {
-        // সফলভাবে ৫ সেকেন্ড বা তার বেশি অবস্থান করেছে
         const rewardPoints = adsterraSession.reward;
         adsterraSession.active = false;
 
         if (btnText) btnText.innerText = t('btn_watch_and_earn');
         if (actionBtn) actionBtn.disabled = false;
 
-        creditPoints(rewardPoints);
+        creditPoints('adsterra', rewardPoints);
         closeNetworkFullView();
     }
 }
 
-// স্ক্রিন হাইড ও ভিজিবিলিটি ট্র্যাকার
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         if (adsterraSession && adsterraSession.active) {
@@ -938,7 +1009,7 @@ window.addEventListener('focus', () => {
     }
 });
 
-function handleTimedTask(pointsReward) {
+function handleTimedTask(networkKey, pointsReward) {
     const actionBtn = document.getElementById('fv-action-btn');
     const btnText = document.getElementById('fv-btn-text');
     let timerSeconds = 12;
@@ -952,7 +1023,7 @@ function handleTimedTask(pointsReward) {
             btnText.innerText = `${t('toast_wait')} (${formatNum(timerSeconds)}s)...`;
         } else {
             clearInterval(countdown);
-            creditPoints(pointsReward);
+            creditPoints(networkKey, pointsReward);
             btnText.innerText = t('btn_watch_and_earn');
             actionBtn.disabled = false;
             closeNetworkFullView();
@@ -960,8 +1031,8 @@ function handleTimedTask(pointsReward) {
     }, 1000);
 }
 
-// ================= ১২. পয়েন্ট ক্রেডিটিং ইঞ্জিন (Cloudflare & Firebase) =================
-async function creditPoints(reward) {
+// ================= ১২. পয়েন্ট ক্রেডিটিং ইঞ্জিন (নেটওয়ার্ক-স্পেসিফিক লিমিট ট্র্যাকিং) =================
+async function creditPoints(networkKey, reward) {
     if (BACKEND_API_URL) {
         try {
             const resp = await fetch(`${BACKEND_API_URL}/api/claim-ad-reward`, {
@@ -970,7 +1041,7 @@ async function creditPoints(reward) {
                     'Content-Type': 'application/json',
                     'x-telegram-init-data': tg?.initData || ''
                 },
-                body: JSON.stringify({ reward })
+                body: JSON.stringify({ network: networkKey, reward })
             });
             const resData = await resp.json();
             if (resp.ok && resData.success) {
@@ -978,12 +1049,10 @@ async function creditPoints(reward) {
                 triggerConfetti();
                 triggerHaptic('notification_success');
                 showToast(t('toast_pts_credited', { pts: reward }));
-            } else {
-                showToast(resData.message || t('toast_cashout_error'), 'error');
+                return;
             }
-            return;
         } catch (e) {
-            // নেটওয়ার্ক ব্যর্থতায় সরাসরি ফায়ারবেস ট্রানজেকশনে ফলব্যাক
+            // ক্লাউডফ্লেয়ার ফলব্যাক
         }
     }
 
@@ -992,12 +1061,30 @@ async function creditPoints(reward) {
 
     const result = await userRef.transaction(current => {
         if (!current) return;
-        const count = current.lastAdDate === today ? Number(current.adsWatchedCount || 0) : 0;
-        if (count >= targetAds) return;
+        
+        // তারিখ পরিবর্তন চেক
+        if (current.lastAdDate !== today) {
+            current.adsWatchedCount = 0;
+            current.monetagWatchedCount = 0;
+            current.adsgramWatchedCount = 0;
+            current.adsterraWatchedCount = 0;
+            current.lastAdDate = today;
+        }
+
+        const netCountKey = `${networkKey}WatchedCount`;
+        const currentNetworkCount = Number(current[netCountKey] || 0);
+        const limitForNetwork = netConfigs[networkKey].limit;
+
+        if (currentNetworkCount >= limitForNetwork) {
+            return; // লিমিট শেষ
+        }
+
         current.balance = Math.round(Number(current.balance || 0) + reward);
-        current.adsWatchedCount = count + 1;
+        current.adsWatchedCount = Number(current.adsWatchedCount || 0) + 1;
+        current[netCountKey] = currentNetworkCount + 1;
         current.lastAdDate = today;
         current.lastAdTimestamp = Date.now();
+
         return current;
     });
 
@@ -1006,10 +1093,12 @@ async function creditPoints(reward) {
         triggerConfetti();
         triggerHaptic('notification_success');
         showToast(t('toast_pts_credited', { pts: reward }));
+    } else {
+        showToast(t('toast_limit_reached'), 'error');
     }
 }
 
-// ================= ১৩. ক্যাশআউট কন্ট্রোলার =================
+// ================= ১৩. ক্যাশআউট কন্ট্রোলার (অ্যাডমিন লিমিট সাপোর্ট) =================
 function switchWithdrawMethod(method) {
     playClickSound();
     triggerHaptic('light');
@@ -1027,19 +1116,28 @@ function switchWithdrawMethod(method) {
         if (grpOperator) grpOperator.style.display = 'block';
         if (labelAcc) labelAcc.innerText = currentLang === 'bn' ? 'সিম সংযোগ ধরন:' : 'SIM Connection Type:';
         if (phoneInput) phoneInput.placeholder = '01XXXXXXXXX';
-        minWithdrawPoints = 200;
+        minWithdrawPoints = adminMinRecharge;
+    } else if (method === 'bkash') {
+        if (grpOperator) grpOperator.style.display = 'none';
+        if (labelAcc) labelAcc.innerText = currentLang === 'bn' ? 'অ্যাকাউন্টের ধরন:' : 'Account Type:';
+        if (phoneInput) phoneInput.placeholder = '01XXXXXXXXX (bKash)';
+        minWithdrawPoints = adminMinBkash;
     } else {
         if (grpOperator) grpOperator.style.display = 'none';
         if (labelAcc) labelAcc.innerText = currentLang === 'bn' ? 'অ্যাকাউন্টের ধরন:' : 'Account Type:';
-        if (phoneInput) phoneInput.placeholder = method === 'bkash' ? '01XXXXXXXXX (bKash)' : '01XXXXXXXXX (Nagad)';
-        minWithdrawPoints = 500;
+        if (phoneInput) phoneInput.placeholder = '01XXXXXXXXX (Nagad)';
+        minWithdrawPoints = adminMinNagad;
     }
 
     updateDropdownOptions();
+    
+    // অ্যাডমিন দ্বারা নির্ধারিত পরিবর্তনশীল মিনিমাম উইথড্রয়াল পয়েন্ট শো করা
     const minWithdrawEl = document.getElementById('display-min-withdraw');
     if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
+
     const ptsInput = document.getElementById('withdraw-points');
     if (ptsInput) ptsInput.min = minWithdrawPoints;
+    
     calculateWithdrawBdt();
 }
 
@@ -1195,7 +1293,7 @@ function loadHistoryData() {
 
     db.ref('withdrawals').orderByChild('userId').equalTo(userId).once('value', snapshot => {
         if (!snapshot.exists()) {
-            listContainer.innerHTML = `<div style="text-align:center; padding:24px; font-size:13px; color:var(--text-muted);">${t('empty_history')}</div>`;
+            listContainer.innerHTML = `<div style="text-align:center; padding:24px; font-size:14px; color:var(--text-muted);">${t('empty_history')}</div>`;
             return;
         }
 
@@ -1342,7 +1440,7 @@ async function claimDailyCheckIn() {
     }
 }
 
-// ================= ১৭. শেয়ার ও ট্যাব কন্ট্রোলার =================
+// ================= ১৭. রেফারেল ও নেভিগেশন =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');

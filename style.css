@@ -1,26 +1,27 @@
 /* ==========================================================
-   EARNHUB PRO - FULL-WIDTH MODERN FINTECH THEME (v5.3.0)
-   - Dynamic Theme Engine: Pure Dark & Crisp Day/Light Mode
+   EARNHUB PRO - MODERN FINTECH THEME (v5.4.3)
+   - Dynamic Theme Engine: Dark & Crisp Day/Light Mode
+   - Enhanced Typography & Larger Font Sizes for High Readability
+   - Network Specific Daily Limit Pill & Badge Alignment
    - Animated SVG Checkmark & Premium Receipt Card
-   - Anti-Spam Button Protection Styling
-   - Status Bar Safe Inset & Edge-to-Edge Responsiveness
+   - Anti-Spam Button Protection & Smooth Transitions
 ========================================================== */
 
 :root {
     /* DEFAULT DARK THEME */
     --bg-base: #0B0E14;
     --card-surface: #141923;
-    --card-border: rgba(255, 255, 255, 0.08);
+    --card-border: rgba(255, 255, 255, 0.09);
     --card-hover: #1A212E;
 
     --accent-mint: #00E599;
-    --accent-mint-soft: rgba(0, 229, 153, 0.14);
+    --accent-mint-soft: rgba(0, 229, 153, 0.15);
     --accent-blue: #0098EA;
     --accent-purple: #9333EA;
 
     --text-primary: #FFFFFF;
-    --text-secondary: #A0ABC0;
-    --text-muted: #64748B;
+    --text-secondary: #A6B4C9;
+    --text-muted: #6C7D93;
     
     --input-bg: #0E121B;
     --top-nav-bg: rgba(11, 14, 20, 0.96);
@@ -33,19 +34,19 @@
 
 /* DAY / LIGHT THEME */
 body.light-theme {
-    --bg-base: #F3F4F8;
+    --bg-base: #F4F6F9;
     --card-surface: #FFFFFF;
     --card-border: rgba(0, 0, 0, 0.08);
     --card-hover: #F8FAFC;
 
     --accent-mint: #00BA7C;
-    --accent-mint-soft: rgba(0, 186, 124, 0.12);
+    --accent-mint-soft: rgba(0, 186, 124, 0.13);
     --accent-blue: #0284C7;
     --accent-purple: #7E22CE;
 
     --text-primary: #0F172A;
     --text-secondary: #475569;
-    --text-muted: #94A3B8;
+    --text-muted: #8E9BAE;
     
     --input-bg: #F8FAFC;
     --top-nav-bg: rgba(255, 255, 255, 0.96);
@@ -66,9 +67,9 @@ body {
     background-color: var(--bg-base);
     color: var(--text-primary);
     min-height: 100vh;
-    padding-bottom: calc(85px + var(--safe-bottom));
-    font-size: 15px;
-    line-height: 1.5;
+    padding-bottom: calc(90px + var(--safe-bottom));
+    font-size: 16px; /* হালকা বড় বেস ফন্ট */
+    line-height: 1.55;
     overflow-x: hidden;
     user-select: none;
     width: 100%;
@@ -78,7 +79,19 @@ input, select, textarea {
     user-select: text !important;
 }
 
-/* ================= SHINE EFFECT / LIGHT SWEEP ANIMATION ================= */
+.font-bold {
+    font-weight: 800 !important;
+}
+
+.text-mint {
+    color: var(--accent-mint) !important;
+}
+
+.text-online {
+    color: var(--accent-mint) !important;
+}
+
+/* ================= শাইন লাইট সুইপ অ্যানিমেশন ================= */
 .shine-card {
     position: relative;
     overflow: hidden;
@@ -139,23 +152,23 @@ input, select, textarea {
     100% { left: 150%; }
 }
 
-/* ================= অ্যানিমেটেড গ্রিন টিক চিহ্ন (SVG ANIMATION) ================= */
+/* ================= অ্যানিমেটেড টিক চিহ্ন ================= */
 .success-checkmark-wrap {
-    width: 76px;
-    height: 76px;
-    margin: 0 auto 16px auto;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 18px auto;
     position: relative;
 }
 
 .checkmark-svg {
-    width: 76px;
-    height: 76px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     display: block;
     stroke-width: 3.5;
     stroke: var(--accent-mint);
     stroke-miterlimit: 10;
-    box-shadow: 0 0 24px rgba(0, 229, 153, 0.25);
+    box-shadow: 0 0 26px rgba(0, 229, 153, 0.3);
     animation: checkmarkScale 0.35s ease-in-out 0.8s both;
 }
 
@@ -177,34 +190,28 @@ input, select, textarea {
     animation: strokeCheck 0.35s cubic-bezier(0.65, 0, 0.45, 1) 0.55s forwards;
 }
 
-@keyframes strokeCircle {
-    100% { stroke-dashoffset: 0; }
-}
-
-@keyframes strokeCheck {
-    100% { stroke-dashoffset: 0; }
-}
-
+@keyframes strokeCircle { 100% { stroke-dashoffset: 0; } }
+@keyframes strokeCheck { 100% { stroke-dashoffset: 0; } }
 @keyframes checkmarkScale {
     0%, 100% { transform: none; }
     50% { transform: scale3d(1.08, 1.08, 1); }
 }
 
-/* রিসিট কার্ড ও মেমো বক্স */
+/* রিসিট কার্ড */
 .receipt-card {
-    max-width: 380px !important;
-    padding: 26px 20px !important;
+    max-width: 390px !important;
+    padding: 28px 22px !important;
 }
 
 .receipt-box {
     background: var(--input-bg);
-    border: 1px dashed rgba(0, 229, 153, 0.45);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin: 18px 0 22px 0;
+    border: 1px dashed rgba(0, 229, 153, 0.5);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin: 20px 0 24px 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     text-align: left;
 }
 
@@ -212,7 +219,7 @@ input, select, textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .rc-label {
@@ -222,11 +229,7 @@ input, select, textarea {
 
 .rc-val {
     color: var(--text-primary);
-    font-weight: 600;
-}
-
-.font-bold {
-    font-weight: 800;
+    font-weight: 700;
 }
 
 /* ================= স্প্ল্যাশ স্ক্রিন ================= */
@@ -243,29 +246,29 @@ input, select, textarea {
 }
 
 .splash-loader {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border: 3.5px solid rgba(125, 125, 125, 0.2);
     border-top-color: var(--accent-mint);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
 .splash-title {
-    font-size: 19px;
-    font-weight: 800;
+    font-size: 21px;
+    font-weight: 900;
     letter-spacing: 2px;
 }
 
 .splash-bar {
-    width: 160px;
-    height: 4px;
+    width: 170px;
+    height: 5px;
     background: rgba(125, 125, 125, 0.15);
     border-radius: 6px;
-    margin-top: 16px;
+    margin-top: 18px;
     overflow: hidden;
 }
 
@@ -276,15 +279,15 @@ input, select, textarea {
     transition: width 0.2s ease;
 }
 
-/* ================= হেডার (স্ট্যাটাস বার ওভারল্যাপ ফিক্স) ================= */
+/* ================= হেডার ================= */
 .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: calc(18px + var(--safe-top));
-    padding-bottom: 14px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-bottom: 15px;
+    padding-left: 18px;
+    padding-right: 18px;
     position: sticky;
     top: 0;
     width: 100%;
@@ -302,8 +305,8 @@ input, select, textarea {
 }
 
 .user-avatar {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: var(--input-bg);
     border: 2px solid var(--accent-mint);
@@ -311,20 +314,20 @@ input, select, textarea {
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 16px;
+    font-size: 17px;
     color: var(--accent-mint);
 }
 
 .user-name {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 800;
     color: var(--text-primary);
 }
 
 .user-status-text {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--accent-mint);
-    font-weight: 600;
+    font-weight: 700;
     display: block;
 }
 
@@ -341,20 +344,18 @@ input, select, textarea {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 7px 12px;
+    padding: 8px 13px;
     border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     cursor: pointer;
 }
 
-.icon-btn-pill:active {
-    transform: scale(0.96);
-}
+.icon-btn-pill:active { transform: scale(0.95); }
 
-/* ================= সম্পূর্ণ বডি ================= */
+/* ================= বডি ও কার্ডস ================= */
 .app-body {
-    padding: 14px 12px;
+    padding: 16px 14px;
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
@@ -363,9 +364,9 @@ input, select, textarea {
 .f-card {
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 20px;
+    border-radius: 22px;
     padding: 22px 18px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     width: 100%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
@@ -374,7 +375,7 @@ input, select, textarea {
 .balance-hero {
     display: flex;
     flex-direction: column;
-    padding: 24px 20px;
+    padding: 26px 20px;
 }
 
 .b-row-top {
@@ -384,19 +385,19 @@ input, select, textarea {
 }
 
 .b-label {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-secondary);
     font-weight: 600;
 }
 
 .streak-badge-btn {
     background: var(--accent-mint-soft);
-    border: 1px solid rgba(0, 229, 153, 0.35);
+    border: 1px solid rgba(0, 229, 153, 0.4);
     color: var(--accent-mint);
     padding: 6px 14px;
     border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 800;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -406,30 +407,30 @@ input, select, textarea {
 .b-amount-wrap {
     display: flex;
     align-items: baseline;
-    gap: 8px;
-    margin: 10px 0;
+    gap: 10px;
+    margin: 12px 0 8px 0;
 }
 
 .b-value {
-    font-size: 46px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    font-size: 50px;
+    font-weight: 900;
+    letter-spacing: -1px;
     color: var(--text-primary);
 }
 
 .b-curr {
-    font-size: 17px;
+    font-size: 19px;
     color: var(--accent-mint);
     font-weight: 800;
 }
 
 .b-rate-pill {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 700;
 }
 
-/* টাস্ক প্রোগ্রেস বার */
+/* প্রোগ্রেস কার্ড */
 .progress-card {
     padding: 18px 20px;
 }
@@ -437,17 +438,17 @@ input, select, textarea {
 .progress-info {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     margin-bottom: 10px;
 }
 
 .p-title { color: var(--text-secondary); }
-.p-count { color: var(--accent-mint); font-size: 15px; }
+.p-count { color: var(--accent-mint); font-size: 16px; font-weight: 800; }
 
 .track-bar {
     width: 100%;
-    height: 8px;
+    height: 9px;
     background: var(--input-bg);
     border: 1px solid var(--card-border);
     border-radius: 8px;
@@ -466,34 +467,34 @@ input, select, textarea {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin: 18px 4px 12px 4px;
+    margin: 20px 4px 14px 4px;
 }
 
 .section-title {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 800;
     color: var(--text-primary);
 }
 
 .section-sub {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
 }
 
-/* ================= অ্যাড কার্ড ================= */
+/* ================= অ্যাড কার্ডস ও ব্যাজ গ্রুপিং ================= */
 .ad-card-container {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 22px;
     width: 100%;
 }
 
 .ad-card {
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 20px;
-    padding: 20px 18px;
+    border-radius: 22px;
+    padding: 22px 18px 18px 18px;
     position: relative;
     cursor: pointer;
     width: 100%;
@@ -507,11 +508,31 @@ input, select, textarea {
     border-color: var(--accent-mint);
 }
 
-.ad-card-badge {
+/* কার্ডের উপরে ডানপাশের ব্যাজ গ্রুপ */
+.card-badge-group {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    font-size: 10px;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+}
+
+/* নির্দিষ্ট নেটওয়ার্কের দৈনিক লিমিট পিল */
+.ad-limit-pill {
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: var(--accent-mint);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 8px;
+    letter-spacing: 0.3px;
+}
+
+.ad-card-badge {
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.6px;
     padding: 4px 10px;
@@ -528,12 +549,13 @@ input, select, textarea {
     align-items: center;
     gap: 16px;
     margin-bottom: 16px;
+    margin-top: 6px;
 }
 
 .ad-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -546,20 +568,20 @@ input, select, textarea {
 
 .ad-meta {
     flex: 1;
-    padding-right: 70px;
+    padding-right: 20px;
 }
 
 .ad-title {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 17px;
+    font-weight: 800;
     color: var(--text-primary);
 }
 
 .ad-desc {
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--text-secondary);
-    margin-top: 4px;
-    line-height: 1.4;
+    margin-top: 5px;
+    line-height: 1.45;
 }
 
 .ad-card-footer {
@@ -573,7 +595,7 @@ input, select, textarea {
 .ad-reward-pill {
     background: var(--accent-mint-soft);
     color: var(--accent-mint);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
     padding: 6px 14px;
     border-radius: 10px;
@@ -583,7 +605,7 @@ input, select, textarea {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-primary);
 }
@@ -612,7 +634,7 @@ input, select, textarea {
     align-items: center;
     justify-content: space-between;
     padding-top: calc(18px + var(--safe-top));
-    padding-bottom: 14px;
+    padding-bottom: 16px;
     padding-left: 18px;
     padding-right: 18px;
     background: var(--top-nav-bg);
@@ -620,8 +642,8 @@ input, select, textarea {
 }
 
 .fv-back-btn {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     background: var(--card-surface);
     border: 1px solid var(--card-border);
     color: var(--text-primary);
@@ -633,118 +655,116 @@ input, select, textarea {
 }
 
 .fv-header-title {
-    font-size: 17px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 800;
     color: var(--text-primary);
 }
 
 .fv-scroll-content {
     flex: 1;
     overflow-y: auto;
-    padding: 24px 18px 110px 18px;
+    padding: 24px 18px 120px 18px;
 }
 
 .fv-hero {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 26px;
 }
 
 .fv-icon-box {
-    width: 76px;
-    height: 76px;
-    border-radius: 24px;
+    width: 82px;
+    height: 82px;
+    border-radius: 26px;
     background: var(--accent-mint-soft);
     color: var(--accent-mint);
     border: 1.5px solid rgba(0, 229, 153, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 14px auto;
+    margin: 0 auto 16px auto;
 }
 
 .fv-badge {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
-    padding: 4px 12px;
-    border-radius: 14px;
+    padding: 5px 14px;
+    border-radius: 16px;
     background: var(--chip-bg);
     color: var(--text-secondary);
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .fv-title {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .fv-subtitle {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-secondary);
-    line-height: 1.5;
-    max-width: 440px;
+    line-height: 1.55;
+    max-width: 460px;
     margin: 0 auto;
 }
 
 .fv-metrics-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 12px;
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 18px;
-    padding: 18px 12px;
-    margin-bottom: 22px;
+    border-radius: 20px;
+    padding: 20px 14px;
+    margin-bottom: 24px;
     text-align: center;
 }
 
 .fv-m-label {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-muted);
     display: block;
     margin-bottom: 6px;
 }
 
 .fv-m-val {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 800;
     color: var(--text-primary);
 }
 
-.text-online { color: var(--accent-mint); }
-
 .fv-rules-card {
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 18px;
-    padding: 20px;
+    border-radius: 20px;
+    padding: 22px;
 }
 
 .fv-rules-title {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .fv-step-item {
     display: flex;
     align-items: flex-start;
     gap: 14px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 
 .fv-step-item:last-child { margin-bottom: 0; }
 
 .fv-step-num {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     background: var(--chip-bg);
     color: var(--accent-mint);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
     border-radius: 50%;
     display: flex;
@@ -754,9 +774,9 @@ input, select, textarea {
 }
 
 .fv-step-text {
-    font-size: 14px;
+    font-size: 14.5px;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 .fv-bottom-action {
@@ -767,25 +787,25 @@ input, select, textarea {
     background: var(--bottom-nav-bg);
     backdrop-filter: blur(14px);
     border-top: 1px solid var(--card-border);
-    padding: 14px 18px calc(16px + var(--safe-bottom)) 18px;
+    padding: 16px 18px calc(18px + var(--safe-bottom)) 18px;
     z-index: 10006;
 }
 
 .fv-cta-btn {
-    height: 52px;
-    font-size: 16px;
+    height: 54px;
+    font-size: 16.5px;
 }
 
-/* ================= বাটন ও সিঙ্গেল ক্লিক স্টেট ================= */
+/* ================= বাটনস ================= */
 .btn-primary {
     width: 100%;
     background: var(--accent-mint);
     color: #05261B;
     border: none;
-    padding: 15px 18px;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 700;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 800;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -796,12 +816,10 @@ input, select, textarea {
 
 .btn-primary:active { opacity: 0.88; transform: scale(0.99); }
 
-/* বাটন ডিজেবল স্টেট */
 .btn-primary:disabled { 
     opacity: 0.55; 
     cursor: not-allowed; 
     transform: none !important;
-    filter: grayscale(0.2);
 }
 
 .btn-outline-text {
@@ -809,35 +827,35 @@ input, select, textarea {
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    padding: 12px;
-    font-size: 14px;
-    font-weight: 600;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
-/* ================= রেফারেল ও রেফারেল হিস্ট্রি ================= */
+/* ================= রেফারেল ================= */
 .compact-hero {
     text-align: center;
-    padding: 22px 18px;
+    padding: 24px 18px;
 }
 
 .hero-badge {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
     color: var(--accent-mint);
 }
 
 .hero-heading {
-    font-size: 19px;
-    font-weight: 800;
+    font-size: 21px;
+    font-weight: 900;
     margin: 8px 0;
     color: var(--text-primary);
 }
 
 .hero-sub {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-secondary);
 }
 
@@ -846,15 +864,16 @@ input, select, textarea {
     align-items: center;
     background: var(--input-bg);
     border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 8px 10px 8px 14px;
-    margin-bottom: 14px;
+    border-radius: 14px;
+    padding: 8px 10px 8px 16px;
+    margin-bottom: 16px;
 }
 
 .ref-link {
     flex: 1;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--accent-mint);
+    font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -864,50 +883,50 @@ input, select, textarea {
     background: var(--chip-bg);
     border: none;
     color: var(--text-primary);
-    padding: 8px 16px;
+    padding: 9px 18px;
     border-radius: 10px;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     cursor: pointer;
 }
 
 .stat-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 14px;
 }
 
 .stat-box {
     text-align: center;
-    padding: 18px 14px;
+    padding: 20px 16px;
 }
 
 .stat-label {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
+    font-weight: 600;
 }
 
 .stat-number {
-    font-size: 24px;
-    font-weight: 800;
+    font-size: 26px;
+    font-weight: 900;
     display: block;
     margin-top: 6px;
     color: var(--text-primary);
 }
 
-/* রেফার করা ইউজারদের তালিকা */
 .referral-list-box {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 280px;
+    max-height: 290px;
     overflow-y: auto;
 }
 
 .ref-item {
     background: var(--input-bg);
     border: 1px solid var(--card-border);
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 12px 14px;
     display: flex;
     justify-content: space-between;
@@ -921,8 +940,8 @@ input, select, textarea {
 }
 
 .ref-avatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: var(--card-surface);
     border: 1.5px solid var(--accent-mint);
@@ -930,67 +949,55 @@ input, select, textarea {
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--accent-mint);
 }
 
-.ref-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.ref-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.ref-date {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 2px;
-}
+.ref-info { display: flex; flex-direction: column; }
+.ref-name { font-size: 14.5px; font-weight: 700; color: var(--text-primary); }
+.ref-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
 .ref-badge {
     background: var(--accent-mint-soft);
     color: var(--accent-mint);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 800;
-    padding: 4px 10px;
+    padding: 5px 11px;
     border-radius: 8px;
 }
 
 /* ================= ক্যাশআউট পেজ ================= */
 .balance-summary-card {
     text-align: center;
-    padding: 20px;
+    padding: 22px;
 }
 
 .sum-label {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-secondary);
 }
 
 .sum-balance {
-    font-size: 38px;
-    font-weight: 800;
+    font-size: 42px;
+    font-weight: 900;
     color: var(--text-primary);
     margin-top: 6px;
 }
 
 .sum-balance small {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--accent-mint);
+    font-weight: 800;
 }
 
 .method-segmented-tabs {
     display: flex;
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 5px;
-    gap: 6px;
-    margin-bottom: 16px;
+    border-radius: 16px;
+    padding: 6px;
+    gap: 8px;
+    margin-bottom: 18px;
 }
 
 .tab-btn {
@@ -998,10 +1005,10 @@ input, select, textarea {
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    padding: 12px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
+    padding: 13px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 800;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -1013,13 +1020,13 @@ input, select, textarea {
 }
 
 .field-group {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .field-label {
     display: block;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     color: var(--text-secondary);
     margin-bottom: 8px;
 }
@@ -1027,11 +1034,13 @@ input, select, textarea {
 .label-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .sub-alert {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--accent-mint);
+    font-weight: 700;
 }
 
 .field-input {
@@ -1039,9 +1048,9 @@ input, select, textarea {
     background: var(--input-bg);
     border: 1px solid var(--card-border);
     color: var(--text-primary);
-    padding: 14px 16px;
-    border-radius: 12px;
-    font-size: 15px;
+    padding: 15px 18px;
+    border-radius: 14px;
+    font-size: 16px; /* iOS জুমিং রোধ করবে */
     outline: none;
     transition: border 0.2s;
 }
@@ -1052,95 +1061,96 @@ input, select, textarea {
 
 .preview-box {
     background: var(--input-bg);
-    border: 1px dashed rgba(0, 229, 153, 0.45);
-    border-radius: 12px;
-    padding: 12px 16px;
+    border: 1px dashed rgba(0, 229, 153, 0.5);
+    border-radius: 14px;
+    padding: 14px 18px;
     display: none;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-secondary);
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .preview-val {
-    font-size: 18px;
-    font-weight: 800;
+    font-size: 20px;
+    font-weight: 900;
     color: var(--accent-mint);
 }
 
 /* ================= প্রোফাইল ================= */
 .profile-card {
     text-align: center;
-    padding: 26px 18px;
+    padding: 28px 20px;
 }
 
 .avatar-lg {
-    width: 72px;
-    height: 72px;
+    width: 78px;
+    height: 78px;
     border-radius: 50%;
     background: var(--input-bg);
     border: 2.5px solid var(--accent-mint);
-    margin: 0 auto 12px auto;
+    margin: 0 auto 14px auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 800;
     color: var(--accent-mint);
 }
 
-.profile-name { font-size: 19px; font-weight: 800; color: var(--text-primary); }
-.profile-handle { font-size: 13px; color: var(--text-muted); display: block; margin-top: 4px; }
+.profile-name { font-size: 21px; font-weight: 900; color: var(--text-primary); }
+.profile-handle { font-size: 14px; color: var(--text-muted); display: block; margin-top: 4px; font-weight: 600; }
 .profile-id {
     display: inline-block;
     background: var(--chip-bg);
     color: var(--text-secondary);
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 12px;
-    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 14px;
+    margin-top: 10px;
 }
 
 .profile-stats-row {
     display: flex;
-    gap: 12px;
-    margin-top: 18px;
+    gap: 14px;
+    margin-top: 20px;
     border-top: 1px solid var(--card-border);
-    padding-top: 16px;
+    padding-top: 18px;
 }
 
 .stat-pill {
     flex: 1;
     background: var(--input-bg);
-    border-radius: 12px;
-    padding: 10px;
+    border-radius: 14px;
+    padding: 12px;
 }
 
-.sp-label { font-size: 11px; color: var(--text-muted); display: block; }
-.sp-val { font-size: 16px; font-weight: 800; margin-top: 4px; display: block; color: var(--text-primary); }
+.sp-label { font-size: 12px; color: var(--text-muted); display: block; font-weight: 600; }
+.sp-val { font-size: 17px; font-weight: 800; margin-top: 4px; display: block; color: var(--text-primary); }
 
 .menu-list {
-    padding: 6px 14px;
+    padding: 6px 16px;
 }
 
 .menu-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 6px;
+    padding: 18px 6px;
     border-bottom: 1px solid var(--card-border);
     cursor: pointer;
     text-decoration: none;
     color: var(--text-primary);
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .menu-item:last-child { border-bottom: none; }
 .mi-left { display: flex; align-items: center; gap: 14px; }
 .chevron { color: var(--text-muted); }
-.footer-caption { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 16px; }
+.footer-caption { text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 20px; font-weight: 600; }
 
 /* ================= বটম নেভিগেশন ================= */
 .bottom-nav {
@@ -1166,8 +1176,8 @@ input, select, textarea {
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -1175,11 +1185,11 @@ input, select, textarea {
     color: var(--accent-mint);
 }
 
-/* ================= মোডাল ও বটম শিট ================= */
+/* ================= শিট ও মোডাল ================= */
 .sheet-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.72);
     display: none;
     align-items: flex-end;
     z-index: 10001;
@@ -1190,10 +1200,10 @@ input, select, textarea {
 .sheet-box {
     background: var(--card-surface);
     border-top: 1px solid var(--card-border);
-    border-radius: 24px 24px 0 0;
+    border-radius: 26px 26px 0 0;
     width: 100%;
     max-height: 85vh;
-    padding: 22px 18px calc(24px + var(--safe-bottom)) 18px;
+    padding: 24px 20px calc(24px + var(--safe-bottom)) 20px;
     animation: slideUp 0.25s ease;
     overflow-y: auto;
 }
@@ -1207,43 +1217,43 @@ input, select, textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
-.sheet-header h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+.sheet-header h3 { font-size: 19px; font-weight: 800; color: var(--text-primary); }
 
 .close-btn {
     background: var(--chip-bg);
     border: none;
     color: var(--text-primary);
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 800;
 }
 
 .streak-head {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--accent-mint);
-    font-weight: 700;
-    margin-bottom: 16px;
+    font-weight: 800;
+    margin-bottom: 18px;
 }
 
 .checkin-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 22px;
 }
 
 .ci-day {
     background: var(--input-bg);
     border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 10px 4px;
+    border-radius: 14px;
+    padding: 12px 6px;
     text-align: center;
-    font-size: 12px;
 }
 
 .ci-day.active {
@@ -1252,16 +1262,16 @@ input, select, textarea {
 }
 
 .ci-day.claimed { opacity: 0.45; }
-.ci-num { font-weight: 700; color: var(--text-muted); display: block; font-size: 12px; }
-.ci-pts { font-weight: 800; color: var(--text-primary); margin-top: 4px; display: block; font-size: 13px; }
+.ci-num { font-weight: 700; color: var(--text-muted); display: block; font-size: 12.5px; }
+.ci-pts { font-weight: 800; color: var(--text-primary); margin-top: 4px; display: block; font-size: 14px; }
 
 /* হিস্ট্রি লিস্ট */
-.history-list { max-height: 52vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.h-item { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
-.h-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-.h-date { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
-.h-pts { font-size: 14px; font-weight: 800; color: var(--accent-mint); text-align: right; }
-.h-badge { font-size: 10px; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; font-weight: 700; display: inline-block; margin-top: 3px; }
+.history-list { max-height: 52vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.h-item { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.h-date { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.h-pts { font-size: 15px; font-weight: 800; color: var(--accent-mint); text-align: right; }
+.h-badge { font-size: 11px; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; font-weight: 800; display: inline-block; margin-top: 4px; }
 .st-pending { background: rgba(245, 158, 11, 0.16); color: #F59E0B; }
 .st-approved { background: rgba(0, 229, 153, 0.16); color: var(--accent-mint); }
 .st-rejected { background: rgba(239, 68, 68, 0.16); color: #EF4444; }
@@ -1281,17 +1291,17 @@ input, select, textarea {
 .modal-card {
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 24px;
-    padding: 28px 24px;
+    border-radius: 26px;
+    padding: 30px 24px;
     width: 100%;
-    max-width: 360px;
+    max-width: 370px;
     text-align: center;
 }
 
-.modal-badge { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--accent-mint); margin-bottom: 14px; }
-.modal-icon-wrap { color: var(--accent-mint); margin-bottom: 12px; }
-.modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
-.modal-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; line-height: 1.5; }
+.modal-badge { font-size: 12px; font-weight: 800; letter-spacing: 1px; color: var(--accent-mint); margin-bottom: 14px; }
+.modal-icon-wrap { color: var(--accent-mint); margin-bottom: 14px; }
+.modal-title { font-size: 22px; font-weight: 900; margin-bottom: 10px; color: var(--text-primary); }
+.modal-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.55; }
 
 /* টোস্ট */
 #toast-container {
@@ -1301,23 +1311,22 @@ input, select, textarea {
     transform: translateX(-50%);
     z-index: 99999;
     width: 90%;
-    max-width: 380px;
+    max-width: 400px;
     pointer-events: none;
 }
 
 .toast-msg {
     background: var(--card-surface);
-    border: 1px solid var(--accent-mint);
+    border: 1.5px solid var(--accent-mint);
     color: var(--text-primary);
-    padding: 12px 16px;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 600;
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-size: 14.5px;
+    font-weight: 700;
     text-align: center;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    margin-bottom: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
 }
 
 .page { display: none; width: 100%; }
 .page.active { display: block; }
-.text-mint { color: var(--accent-mint); }
