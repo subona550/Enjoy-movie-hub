@@ -141,6 +141,7 @@ function toggleTheme() {
 const firebaseConfig = {
   apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
   authDomain: "enjoy-movies-app.firebaseapp.com",
+  databaseURL: "https://enjoy-movies-app-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "enjoy-movies-app",
   storageBucket: "enjoy-movies-app.firebasestorage.app",
   messagingSenderId: "839389874270",
