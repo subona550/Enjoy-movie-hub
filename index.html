@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AdsEarn Pro - Cyberpunk Reward Hub</title>
+    <title>EarnHub Pro - Telegram Mini App</title>
 
-    <!-- প্রফেশনাল স্টাইলিশ গুগল ফন্টস -->
+    <!-- Google Fonts: Inter & Hind Siliguri -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Orbitron:wght@700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -16,685 +16,461 @@
     <!-- Adsgram Official SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
-    <!-- Monetag SDK / In-App Ad Wrapper -->
-    <script src='//niphaumeenses.net/vignette.min.js' data-zone='8765432' data-sdk='show_8765432'></script>
+    <!-- Monetag In-App Script Container (Dynamic injection supported via Firebase) -->
+    <script id="monetag-sdk"></script>
 
-    <!-- Canvas Confetti ও Firebase SDKs -->
+    <!-- Canvas Confetti & Firebase SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <!-- External Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=3.1.0">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=4.1.0">
 </head>
 <body>
 
-    <!-- ব্যাকগ্রাউন্ড লাইটিং অ্যানিমেশন -->
-    <div class="ambient-glow glow-cyan"></div>
-    <div class="ambient-glow glow-purple"></div>
-    <div class="ambient-glow glow-blue"></div>
-    <div class="cyber-grid-overlay"></div>
-
-    <!-- টোস্ট নোটিফিকেশন কন্টেইনার -->
+    <!-- টোস্ট নোটিফিকেশন -->
     <div id="toast-container"></div>
 
     <!-- আধুনিক স্প্ল্যাশ স্ক্রিন -->
     <div id="splash-screen">
-        <div class="splash-core">
-            <div class="splash-ring-outer"></div>
-            <div class="splash-ring-inner"></div>
-            <div class="splash-icon">⚡</div>
-        </div>
-        <div class="splash-app-title">ADS EARN PRO</div>
-        <div class="splash-status-text" id="splash-status">INITIALIZING REWARD SYSTEM...</div>
-        <div class="splash-progress-track">
-            <div class="splash-progress-fill" id="splash-progress-bar"></div>
-        </div>
+        <div class="splash-loader"></div>
+        <div class="splash-title">EARNHUB PRO</div>
+        <div class="splash-bar"><div class="splash-fill" id="splash-progress"></div></div>
     </div>
-
-    <!-- ড্যাশবোর্ড সাইড ড্রয়ার ওভারলে (Overlay) -->
-    <div id="drawer-overlay" class="drawer-overlay" onclick="closeDashboardDrawer()"></div>
-
-    <!-- ================= বাম দিকের স্লাইডিং ড্যাশবোর্ড ড্রয়ার ================= -->
-    <aside id="dashboard-drawer" class="dashboard-drawer">
-        <div class="drawer-header">
-            <div class="drawer-brand">
-                <span class="drawer-logo-icon">⚡</span>
-                <span class="drawer-brand-name">ADS EARN PRO</span>
-            </div>
-            <button class="drawer-close-btn" onclick="closeDashboardDrawer()">✕</button>
-        </div>
-
-        <div class="drawer-user-card">
-            <div class="drawer-avatar">👤</div>
-            <div class="drawer-user-meta">
-                <h4 id="drawer-user-name" class="drawer-name">ইউজার লোড হচ্ছে...</h4>
-                <span id="drawer-user-id" class="drawer-uid">#000000</span>
-            </div>
-            <div class="drawer-user-bal-pill">
-                <span class="drawer-bal-label">ব্যালেন্স</span>
-                <span id="drawer-profile-balance" class="drawer-bal-val">0 Pts</span>
-            </div>
-        </div>
-
-        <div class="drawer-nav-menu">
-            <div class="drawer-section-label">প্রধান মেনু</div>
-
-            <button class="drawer-nav-item active" onclick="navigateFromDrawer('home', 'home')">
-                <span class="d-icon">🏠</span>
-                <span class="d-text">হোম ড্যাশবোর্ড</span>
-                <span class="d-arrow">➔</span>
-            </button>
-
-            <button class="drawer-nav-item" onclick="navigateFromDrawer('refer', 'refer')">
-                <span class="d-icon">🎁</span>
-                <span class="d-text">রেফারেল প্রোগ্রাম</span>
-                <span class="d-arrow">➔</span>
-            </button>
-
-            <button class="drawer-nav-item" onclick="navigateFromDrawer('withdraw', 'withdraw')">
-                <span class="d-icon">💸</span>
-                <span class="d-text">টাকা উত্তোলন (Cashout)</span>
-                <span class="d-arrow">➔</span>
-            </button>
-
-            <button class="drawer-nav-item" onclick="navigateFromDrawer('profile', 'profile')">
-                <span class="d-icon">👤</span>
-                <span class="d-text">আমার প্রোফাইল</span>
-                <span class="d-arrow">➔</span>
-            </button>
-
-            <div class="drawer-section-label">শর্টকাট ফিচার</div>
-
-            <button class="drawer-nav-item" onclick="openCheckInFromDrawer()">
-                <span class="d-icon">📅</span>
-                <span class="d-text">ডেইলি রিওয়ার্ড স্ট্রিক</span>
-                <span class="d-tag">বোনাস</span>
-            </button>
-
-            <button class="drawer-nav-item" onclick="openHistoryFromDrawer()">
-                <span class="d-icon">📜</span>
-                <span class="d-text">উইথড্রয়াল হিস্ট্রি</span>
-            </button>
-
-            <div class="drawer-section-label">অফিশিয়াল হেল্প ও কমিউনিটি</div>
-
-            <a id="drawer-tg-link" href="#" target="_blank" class="drawer-nav-item drawer-link-item">
-                <span class="d-icon">✈️</span>
-                <span class="d-text">টেলিগ্রাম চ্যানেল</span>
-            </a>
-
-            <a id="drawer-wa-link" href="#" target="_blank" class="drawer-nav-item drawer-link-item">
-                <span class="d-icon">💬</span>
-                <span class="d-text">হোয়াটসঅ্যাপ সাপোর্ট</span>
-            </a>
-        </div>
-
-        <div class="drawer-footer">
-            <span>Ads Earn Pro v3.1.0 • Verified Telegram Hub</span>
-        </div>
-    </aside>
 
     <!-- ওয়েলকাম বোনাস মোডাল -->
     <div id="welcome-modal" class="modal-overlay">
         <div class="modal-card">
-            <div class="modal-badge-top">WELCOME GIFT</div>
-            <div style="font-size: 58px; margin: 10px 0;">🎉</div>
-            <h2 class="text-gradient modal-headline" data-i18n="welcome_title">স্বাগতম আমাদের অ্যাপে!</h2>
+            <div class="modal-badge">WELCOME REWARD</div>
+            <div class="modal-icon-wrap">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+            </div>
+            <h3 class="modal-title">স্বাগতম আমাদের প্ল্যাটফর্মে!</h3>
             <p class="modal-desc">
-                <span data-i18n="welcome_desc">আমাদের অ্যাপে জয়েন করায় আপনাকে দেওয়া হলো</span> 
-                <strong id="welcome-bonus-modal" class="text-gold">১০০</strong> 
-                <span data-i18n="points_label">পয়েন্ট</span> 
-                <span data-i18n="welcome_suffix">ওয়েলকাম বোনাস!</span>
+                অ্যাপে যোগ দেওয়ায় আপনাকে দেওয়া হলো 
+                <strong id="welcome-bonus-modal" class="text-mint">100</strong> 
+                পয়েন্ট ওয়েলকাম বোনাস!
             </p>
-            <button class="btn-primary-large btn-shimmer" onclick="closeWelcomeModal()" data-i18n="claim_bonus_btn">
-                🎁 বোনাস গ্রহণ করুন
-            </button>
+            <button class="btn-primary" onclick="closeWelcomeModal()">বোনাস সংগ্রহ করুন</button>
         </div>
     </div>
 
-    <!-- ================= আধুনিক হেডার বার (বাম দিকে ৩-ডট ড্যাশবোর্ড বাটন) ================= -->
-    <header class="header">
-        <div class="header-left">
-            <!-- ৩ ডট মেনু ট্রিগার বাটন -->
-            <button class="three-dots-btn" onclick="openDashboardDrawer()" title="ড্যাশবোর্ড মেনু খুলুন">
-                <span class="dot-icon"></span>
-                <span class="dot-icon"></span>
-                <span class="dot-icon"></span>
-            </button>
-        </div>
-
-        <div class="header-content">
-            <h2 id="header-title" data-i18n="nav_home">হোম ড্যাশবোর্ড</h2>
-            <div class="db-status">
-                <span class="live-dot"></span> 
-                <span data-i18n="header_sub">বিজ্ঞাপন দেখে আয় করুন</span>
+    <!-- ================= মিনিমালিস্ট হেডার ================= -->
+    <header class="top-nav">
+        <div class="user-chip" onclick="switchTab('profile')">
+            <div class="user-avatar" id="header-avatar">U</div>
+            <div class="user-meta">
+                <span class="user-name" id="header-name">Loading...</span>
+                <span class="user-status-text">● Active Member</span>
             </div>
         </div>
 
-        <div class="header-right">
-            <button class="lang-switch-btn" onclick="toggleLanguage()">
-                🌐 <span id="lang-indicator">EN</span>
+        <div class="header-actions">
+            <button class="icon-btn-pill" onclick="toggleLanguage()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                <span id="lang-indicator">EN</span>
             </button>
         </div>
     </header>
 
-    <!-- মেইন কন্টেইনার -->
-    <main class="container">
+    <!-- মেইন স্ক্রিন কন্টেইনার -->
+    <main class="app-body">
 
-        <!-- ================= ১. 🏠 হোম পেজ ================= -->
+        <!-- ================= ১. হোম পেজ ================= -->
         <section id="home" class="page active">
             
-            <!-- স্লাইডার ব্যানার -->
-            <div class="banner-container">
-                <div class="banner-slide slide-1 active">
-                    <span class="banner-badge" data-i18n="slide1_badge">🚀 ইনস্ট্যান্ট আর্নিং</span>
-                    <div class="banner-title">
-                        <span data-i18n="slide1_prefix">প্রতি বিজ্ঞাপনে</span> 
-                        <span class="banner-reward-amount">২০</span> 
-                        <span data-i18n="points_label">পয়েন্ট</span> 
-                        <span data-i18n="slide1_suffix">পাবেন</span>
-                    </div>
-                    <div class="banner-desc" data-i18n="slide1_desc">ভিডিও ও অন-ক্লিক বিজ্ঞাপন দেখা শেষ হলেই পয়েন্ট জমা হবে।</div>
+            <!-- মূল ব্যালেন্স ও দৈনিক স্ট্রিম কার্ড -->
+            <div class="f-card balance-hero">
+                <div class="b-row-top">
+                    <span class="b-label">মূল ওয়ালেট ব্যালেন্স</span>
+                    <button class="streak-badge-btn" onclick="openCheckInFullView()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                        <span id="home-streak-status">৭ দিনের বোনাস</span>
+                    </button>
                 </div>
                 
-                <div class="banner-slide slide-2">
-                    <span class="banner-badge" data-i18n="slide2_badge">📱 ইনস্ট্যান্ট ক্যাশআউট</span>
-                    <div class="banner-title" data-i18n="slide2_title">মোবাইল রিচার্জ, বিকাশ ও নগদ</div>
-                    <div class="banner-desc" data-i18n="slide2_desc">আপনার অর্জিত পয়েন্ট সরাসরি মোবাইল রিচার্জ ও ওয়ালেটে ক্যাশআউট নিন।</div>
+                <div class="b-amount-wrap">
+                    <span id="user-balance" class="b-value">0</span>
+                    <span class="b-curr">PTS</span>
                 </div>
+
+                <div class="b-rate-pill">
+                    <span id="display-point-rate-text">১০০ পয়েন্ট = ১০.০০ ৳</span>
+                </div>
+            </div>
+
+            <!-- কম্প্যাক্ট ডেইলি টাস্ক কাউন্টার -->
+            <div class="f-card progress-card">
+                <div class="progress-info">
+                    <span class="p-title">আজকের বিজ্ঞাপন টাস্ক</span>
+                    <span class="p-count" id="home-ad-counter">0 / 20</span>
+                </div>
+                <div class="track-bar">
+                    <div class="track-fill" id="home-progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- বিজ্ঞাপন সেকশন টাইটেল -->
+            <div class="section-head">
+                <span class="section-title">বিজ্ঞাপন টাস্ক ও নেটওয়ার্ক</span>
+                <span class="section-sub">যেকোনো কার্ডে ট্যাপ করে বিস্তারিত দেখুন</span>
+            </div>
+
+            <!-- ================= প্রিমিয়াম অ্যাড কার্ডস গ্রিড ================= -->
+            <div class="ad-card-container">
                 
-                <div class="banner-slide slide-3">
-                    <span class="banner-badge" data-i18n="slide3_badge">🎁 রেফারেল বোনাস</span>
-                    <div class="banner-title" data-i18n="slide3_title">বন্ধুদের ইনভাইট করুন</div>
-                    <div class="banner-desc">
-                        <span data-i18n="slide3_desc">প্রতিটি সফল রেফারে পেয়ে যান</span> 
-                        <span class="banner-ref-bonus">৫০</span> 
-                        <span data-i18n="points_label">পয়েন্ট</span> লাইফটাইম!
+                <!-- কার্ড ১: Monetag Rewarded Interstitial -->
+                <div class="ad-card" onclick="openNetworkFullView('monetag')">
+                    <div class="ad-card-badge blue-badge">REWARDED INTERSTITIAL</div>
+                    <div class="ad-card-main">
+                        <div class="ad-icon task-blue">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-2 10h8L7 22l2-10H1z"/></svg>
+                        </div>
+                        <div class="ad-meta">
+                            <h4 class="ad-title">Monetag Rewarded</h4>
+                            <p class="ad-desc">সম্পূর্ণ বিজ্ঞাপন দেখে ইনস্ট্যান্ট পয়েন্ট সংগ্রহ করুন</p>
+                        </div>
+                    </div>
+                    <div class="ad-card-footer">
+                        <span class="ad-reward-pill">+<span class="reward-monetag-val">15</span> PTS</span>
+                        <div class="ad-cta">
+                            <span>টাস্ক শুরু</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
                     </div>
                 </div>
 
-                <div class="banner-dots">
-                    <span class="dot active"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </div>
-            </div>
-
-            <!-- মূল ওয়ালেট ব্যালেন্স কার্ড -->
-            <div class="glass-card balance-card">
-                <div class="balance-card-header">
-                    <span class="wallet-badge" data-i18n="balance_card_title">💎 মূল পয়েন্ট ওয়ালেট</span>
-                    <span class="wallet-status" data-i18n="status_active">● সক্রিয় সিস্টেম</span>
-                </div>
-                <div id="user-balance" class="balance-amount">0 Pts</div>
-                <div class="balance-sub-hint">পয়েন্ট রিডিম করে টাকা বা রিচার্জ তুলে নিন</div>
-            </div>
-
-            <!-- ডেইলি চেক-ইন প্রিমিয়াম কার্ড -->
-            <div class="glass-card checkin-compact-card" onclick="openCheckInFullView()">
-                <div class="checkin-compact-left">
-                    <div class="checkin-compact-icon">🎁</div>
-                    <div class="checkin-compact-info">
-                        <div class="checkin-compact-title" data-i18n="checkin_title">ডেইলি লগইন বোনাস</div>
-                        <div class="checkin-compact-sub" id="compact-checkin-status">আজকের উপহার প্রস্তুত! সংগ্রহ করতে ট্যাপ করুন</div>
+                <!-- কার্ড ২: Adsgram Video & Interstitial Swap -->
+                <div class="ad-card" onclick="openNetworkFullView('adsgram')">
+                    <div class="ad-card-badge mint-badge" id="adsgram-mode-tag">ADSGRAM SWAP</div>
+                    <div class="ad-card-main">
+                        <div class="ad-icon task-mint">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="15" x="2" y="5" rx="2"/><polyline points="10 9 15 12.5 10 16"/></svg>
+                        </div>
+                        <div class="ad-meta">
+                            <h4 class="ad-title">Adsgram Ad Stream</h4>
+                            <p class="ad-desc">হাই-সিপিএম ভিডিও এবং ইন্টারস্টিশিয়াল লাইভ স্ট্রিম</p>
+                        </div>
+                    </div>
+                    <div class="ad-card-footer">
+                        <span class="ad-reward-pill">+<span class="reward-adsgram-val">20</span> PTS</span>
+                        <div class="ad-cta">
+                            <span>টাস্ক শুরু</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
                     </div>
                 </div>
-                <div class="checkin-compact-action">
-                    <button class="btn-claim-pill" data-i18n="checkin_open_btn">ক্লেইম ➔</button>
-                </div>
-            </div>
 
-            <!-- ইনকাম টাস্ক টাইটেল বার -->
-            <div class="section-title-bar">
-                <h3 class="section-title">📺 ইনকাম টাস্ক ও অন-ক্লিক অ্যাডস</h3>
-                <span class="section-subtitle">টাস্ক সম্পন্ন করুন ও পয়েন্ট নিন</span>
-            </div>
-
-            <!-- ১. Monetag Smart Link & On-Click Ad Card -->
-            <div class="glass-card network-card monetag-glow-card" onclick="openNetworkFullView('monetag')">
-                <div class="network-card-header">
-                    <div class="network-badge-tag tag-monetag">⚡ MONETAG MINI APP & ON-CLICK</div>
-                    <div class="network-reward-badge">+<span class="reward-monetag-val">১৫</span> Pts</div>
-                </div>
-                <div class="network-card-body">
-                    <div class="network-icon monetag-icon-anim">🚀</div>
-                    <div class="network-info">
-                        <h4>Monetag On-Click Smart Task</h4>
-                        <p>অন-ক্লিক অফার পেজে যান এবং ১০-১৫ সেকেন্ড ভিজিট করে পয়েন্ট ক্লেইম করুন</p>
+                <!-- কার্ড ৩: Direct Smart Link -->
+                <div class="ad-card" onclick="openNetworkFullView('adsterra')">
+                    <div class="ad-card-badge purple-badge">DIRECT TASK</div>
+                    <div class="ad-card-main">
+                        <div class="ad-icon task-purple">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                        </div>
+                        <div class="ad-meta">
+                            <h4 class="ad-title">Sponsor Direct Visit</h4>
+                            <p class="ad-desc">স্পনসর পেইজে ১০-১২ সেকেন্ড ব্রাউজ করে রিওয়ার্ড নিন</p>
+                        </div>
                     </div>
-                    <div class="network-arrow">➔</div>
-                </div>
-            </div>
-
-            <!-- ২. Adsgram Rewarded Video Card -->
-            <div class="glass-card network-card" onclick="openNetworkFullView('adsgram')">
-                <div class="network-card-header">
-                    <div class="network-badge-tag tag-adsgram">🎬 ADSGRAM OFFICIAL</div>
-                    <div class="network-reward-badge">+<span class="reward-adsgram-val">২০</span> Pts</div>
-                </div>
-                <div class="network-card-body">
-                    <div class="network-icon">🎥</div>
-                    <div class="network-info">
-                        <h4>Adsgram Video Ads</h4>
-                        <p>সম্পূর্ণ ভিডিও বিজ্ঞাপন দেখুন ও ইনস্ট্যান্ট পয়েন্ট ব্যালেন্সে যুক্ত করুন</p>
+                    <div class="ad-card-footer">
+                        <span class="ad-reward-pill">+<span class="reward-adsterra-val">15</span> PTS</span>
+                        <div class="ad-cta">
+                            <span>টাস্ক শুরু</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
                     </div>
-                    <div class="network-arrow">➔</div>
                 </div>
-            </div>
 
-            <!-- ৩. On-Click Direct Ad Card (Adsterra) -->
-            <div class="glass-card network-card" onclick="openNetworkFullView('adsterra')">
-                <div class="network-card-header">
-                    <div class="network-badge-tag tag-adsterra">💎 ON-CLICK DIRECT ADS</div>
-                    <div class="network-reward-badge">+<span class="reward-adsterra-val">১৫</span> Pts</div>
-                </div>
-                <div class="network-card-body">
-                    <div class="network-icon">🌐</div>
-                    <div class="network-info">
-                        <h4>On-Click Fast Direct Link</h4>
-                        <p>হাই-সিপিএম স্পনসর লিঙ্কে অন-ক্লিক টাস্ক ভিজিট সম্পন্ন করুন</p>
-                    </div>
-                    <div class="network-arrow">➔</div>
-                </div>
             </div>
 
         </section>
 
-        <!-- ================= ২. 🎁 রেফারেল পেজ ================= -->
+        <!-- ================= ২. রেফারেল পেজ ================= -->
         <section id="refer" class="page">
-            <div class="glass-card refer-hero-banner">
-                <span class="banner-badge-green" data-i18n="ref_card_badge">🎁 রেফারেল প্রোগ্রাম</span>
-                <h2 class="page-big-title" data-i18n="ref_hero_title">বন্ধুদের ইনভাইট করুন, আয় করুন পয়েন্ট!</h2>
-                <p class="page-big-desc" data-i18n="ref_hero_desc">
-                    আপনার ইউনিক রেফারেল লিংকের মাধ্যমে বন্ধু যুক্ত হলেই ইনস্ট্যান্ট পয়েন্ট যোগ হবে আপনার ওয়ালেটে।
-                </p>
+            <div class="f-card compact-hero">
+                <span class="hero-badge">REFER & EARN</span>
+                <h3 class="hero-heading">বন্ধুদের ইনভাইট করে পয়েন্ট জিতুন</h3>
+                <p class="hero-sub">প্রতি রেফারে সরাসরি অ্যাকাউন্টে যোগ হবে +<strong id="display-ref-bonus" class="text-mint">50</strong> Pts</p>
             </div>
 
-            <div class="glass-card referral-banner-card">
-                <div class="referral-card-header">
-                    <h3 class="card-inner-title" data-i18n="ref_card_title">আপনার ইনভাইট লিংক</h3>
-                    <span class="bonus-tag">
-                        <span data-i18n="ref_bonus_label">বোনাস:</span> +<span id="display-ref-bonus">৫০</span> Pts
-                    </span>
+            <!-- লিংক বক্স -->
+            <div class="f-card">
+                <div class="ref-input-box">
+                    <span id="referral-link-display" class="ref-link">Generating link...</span>
+                    <button class="btn-copy-chip" onclick="copyReferralLink()">কপি</button>
                 </div>
 
-                <div class="ref-link-box">
-                    <span id="referral-link-display" class="ref-link-text">লিংক লোড হচ্ছে...</span>
-                    <button class="btn-copy-action" onclick="copyReferralLink()" data-i18n="copy_btn">কপি করুন</button>
-                </div>
-
-                <button onclick="shareReferralLink()" class="btn-primary-large btn-shimmer btn-telegram-share" data-i18n="share_tg_btn">
-                    ✈️ টেলিগ্রাম বন্ধুদের সাথে শেয়ার করুন
+                <button class="btn-primary" onclick="shareReferralLink()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    টেলিগ্রামে শেয়ার করুন
                 </button>
             </div>
 
             <!-- রেফারেল পরিসংখ্যান -->
-            <div class="glass-card">
-                <h4 class="card-inner-title text-cyan" data-i18n="ref_stat_title">📊 আপনার রেফারেল পরিসংখ্যান</h4>
-                <div class="ref-stats-grid">
-                    <div class="stat-banner-box">
-                        <div class="stat-title-text" data-i18n="stat_total_ref">মোট রেফারেল</div>
-                        <div id="home-ref-count" class="stat-number-green">০ জন</div>
-                    </div>
-                    <div class="stat-banner-box">
-                        <div class="stat-title-text" data-i18n="stat_ref_earn">রেফারেল পয়েন্ট</div>
-                        <div id="home-ref-earnings" class="stat-number-gold">0 Pts</div>
-                    </div>
+            <div class="stat-grid">
+                <div class="f-card stat-box">
+                    <span class="stat-label">মোট রেফারেল</span>
+                    <span class="stat-number" id="home-ref-count">0</span>
+                </div>
+                <div class="f-card stat-box">
+                    <span class="stat-label">অর্জিত পয়েন্ট</span>
+                    <span class="stat-number text-mint" id="home-ref-earnings">0</span>
                 </div>
             </div>
         </section>
 
-        <!-- ================= ৩. 💸 উত্তোলন পেজ (ফুল স্ক্রিন ও প্রিমিয়াম মডেল ডিজাইন) ================= -->
+        <!-- ================= ৩. উত্তোলন (Cashout) পেজ ================= -->
         <section id="withdraw" class="page">
-            <div class="withdraw-fullscreen-wrapper">
-                
-                <!-- টপ ব্যালেন্স ডিসপ্লে হেড -->
-                <div class="withdraw-hero-card">
-                    <div class="w-hero-badge">REDEEM POINTS</div>
-                    <span class="w-hero-subtitle" data-i18n="wallet_bal_text">বর্তমান উত্তোলনযোগ্য পয়েন্ট:</span>
-                    <div id="withdraw-page-balance" class="w-hero-balance">0 Pts</div>
-                    <div class="w-rate-pill">
-                        💡 <span id="display-point-rate-text">১০০ পয়েন্ট = ১০ টাকা</span>
-                    </div>
-                </div>
+            <div class="f-card balance-summary-card">
+                <span class="sum-label">বর্তমান উত্তোলনযোগ্য ব্যালেন্স</span>
+                <div class="sum-balance"><span id="withdraw-page-balance">0</span> <small>PTS</small></div>
+            </div>
 
-                <!-- পেমেন্ট মেথড বাছাই সেকশন (বড় কার্ড গ্রিড) -->
-                <div class="method-section-title">পেমেন্ট মেথড সিলেক্ট করুন</div>
-                <div class="withdraw-methods-grid">
-                    
-                    <div class="modern-method-card active" id="btn-method-recharge" onclick="switchWithdrawMethod('recharge')">
-                        <div class="mmc-check">✓</div>
-                        <div class="mmc-icon">📱</div>
-                        <div class="mmc-details">
-                            <span class="mmc-title">মোবাইল রিচার্জ</span>
-                            <span class="mmc-limit">মিনিমাম ২০০ Pts (৳২০)</span>
-                        </div>
-                    </div>
+            <!-- সেগমেন্টেড মেথড ট্যাব সুইচ -->
+            <div class="method-segmented-tabs">
+                <button type="button" class="tab-btn active" id="btn-method-recharge" onclick="switchWithdrawMethod('recharge')">
+                    রিচার্জ
+                </button>
+                <button type="button" class="tab-btn" id="btn-method-bkash" onclick="switchWithdrawMethod('bkash')">
+                    বিকাশ
+                </button>
+                <button type="button" class="tab-btn" id="btn-method-nagad" onclick="switchWithdrawMethod('nagad')">
+                    নগদ
+                </button>
+            </div>
 
-                    <div class="modern-method-card" id="btn-method-bkash" onclick="switchWithdrawMethod('bkash')">
-                        <div class="mmc-check">✓</div>
-                        <div class="mmc-icon mmc-bkash">🌸</div>
-                        <div class="mmc-details">
-                            <span class="mmc-title">বিকাশ (bKash)</span>
-                            <span class="mmc-limit">মিনিমাম ৫০০ Pts (৳৫০)</span>
-                        </div>
-                    </div>
+            <!-- ক্যাশআউট ফরম -->
+            <div class="f-card form-card">
+                <form id="form-withdraw" onsubmit="handleWithdrawSubmit(event)">
 
-                    <div class="modern-method-card" id="btn-method-nagad" onclick="switchWithdrawMethod('nagad')">
-                        <div class="mmc-check">✓</div>
-                        <div class="mmc-icon mmc-nagad">🟠</div>
-                        <div class="mmc-details">
-                            <span class="mmc-title">নগদ (Nagad)</span>
-                            <span class="mmc-limit">মিনিমাম ৫০০ Pts (৳৫০)</span>
-                        </div>
+                    <!-- সিম অপারেটর (শুধুমাত্র রিচার্জ) -->
+                    <div class="field-group" id="group-operator">
+                        <label class="field-label">অপারেটর সিলেক্ট করুন:</label>
+                        <select id="withdraw-operator" class="field-input">
+                            <option value="Grameenphone">গ্রামীণফোন (GP)</option>
+                            <option value="Banglalink">বাংলালিংক (BL)</option>
+                            <option value="Robi">রবি (Robi)</option>
+                            <option value="Airtel">এয়ারটেল (Airtel)</option>
+                            <option value="Teletalk">টেলিটক (Teletalk)</option>
+                        </select>
                     </div>
 
-                </div>
+                    <!-- সিম/অ্যাকাউন্ট টাইপ -->
+                    <div class="field-group" id="group-acc-type">
+                        <label id="label-acc-type" class="field-label">সিম টাইপ (SIM Type):</label>
+                        <select id="withdraw-account-type" class="field-input">
+                            <option value="Prepaid">প্রিপেইড (Prepaid)</option>
+                            <option value="Postpaid">পোস্টপেইড (Postpaid)</option>
+                        </select>
+                    </div>
 
-                <!-- ক্যাশআউট ফরম কার্ড -->
-                <div class="glass-card withdraw-form-card">
-                    <form id="form-withdraw" onsubmit="handleWithdrawSubmit(event)">
+                    <!-- ফোন নম্বর -->
+                    <div class="field-group">
+                        <label id="label-withdraw-phone" class="field-label">নম্বর:</label>
+                        <input type="tel" id="withdraw-phone" class="field-input" placeholder="01XXXXXXXXX" pattern="[0-9]{11}" maxlength="11" required>
+                    </div>
 
-                        <!-- সিম অপারেটর (শুধুমাত্র রিচার্জের জন্য) -->
-                        <div class="form-row-group" id="group-operator">
-                            <label class="form-modern-label">সিম অপারেটর সিলেক্ট করুন:</label>
-                            <div class="select-wrapper">
-                                <select id="withdraw-operator" class="form-modern-input">
-                                    <option value="Grameenphone">গ্রামীণফোন (GP)</option>
-                                    <option value="Banglalink">বাংলালিংক (BL)</option>
-                                    <option value="Robi">রবি (Robi)</option>
-                                    <option value="Airtel">এয়ারটেল (Airtel)</option>
-                                    <option value="Teletalk">টেলিটক (Teletalk)</option>
-                                </select>
-                            </div>
+                    <!-- পয়েন্ট পরিমাণ -->
+                    <div class="field-group">
+                        <div class="label-row">
+                            <label class="field-label">পয়েন্ট পরিমাণ:</label>
+                            <span class="sub-alert">মিনিমাম: <strong id="display-min-withdraw">200</strong> Pts</span>
                         </div>
+                        <input type="number" id="withdraw-points" class="field-input" placeholder="পয়েন্ট পরিমাণ দিন" min="200" oninput="calculateWithdrawBdt()" required>
+                    </div>
 
-                        <!-- অ্যাকাউন্ট / সিম টাইপ -->
-                        <div class="form-row-group" id="group-acc-type">
-                            <label id="label-acc-type" class="form-modern-label">সিম টাইপ (SIM Type):</label>
-                            <div class="select-wrapper">
-                                <select id="withdraw-account-type" class="form-modern-input" required>
-                                    <option value="Prepaid">প্রিপেইড (Prepaid)</option>
-                                    <option value="Postpaid">পোস্টপেইড (Postpaid)</option>
-                                </select>
-                            </div>
-                        </div>
+                    <!-- কনভার্সন প্রিভিউ সামারি -->
+                    <div id="withdraw-preview-summary" class="preview-box">
+                        <span>আপনি পাবেন:</span>
+                        <div class="preview-val">৳ <span id="summary-bdt-val">0.00</span></div>
+                    </div>
 
-                        <!-- মোবাইল নম্বর ইনপুট -->
-                        <div class="form-row-group">
-                            <label id="label-withdraw-phone" class="form-modern-label">মোবাইল নম্বর:</label>
-                            <div class="input-with-icon">
-                                <span class="input-icon">📞</span>
-                                <input type="tel" id="withdraw-phone" class="form-modern-input" placeholder="01XXXXXXXXX" pattern="[0-9]{11}" maxlength="11" required>
-                            </div>
-                        </div>
-
-                        <!-- উত্তোলনের পয়েন্ট ইনপুট -->
-                        <div class="form-row-group">
-                            <div class="label-flex">
-                                <label data-i18n="label_withdraw_points" class="form-modern-label">উত্তোলনের পয়েন্ট পরিমাণ (Points):</label>
-                                <span class="min-indicator">মিনিমাম: <strong id="display-min-withdraw">২০০</strong> Pts</span>
-                            </div>
-                            <div class="input-with-icon">
-                                <span class="input-icon">💎</span>
-                                <input type="number" id="withdraw-points" class="form-modern-input" placeholder="পয়েন্ট পরিমাণ লিখুন" min="200" oninput="calculateWithdrawBdt()" required>
-                            </div>
-                        </div>
-
-                        <!-- কনভার্সন প্রিভিউ সামারি কার্ড -->
-                        <div id="withdraw-preview-summary" class="withdraw-preview-summary">
-                            <div class="summary-flex">
-                                <div class="summary-left">
-                                    <span class="summary-label">আপনি পাবেন:</span>
-                                    <span class="summary-hint">সরাসরি ওয়ালেট বা রিচার্জে</span>
-                                </div>
-                                <div class="summary-val-box">
-                                    <span class="val-currency">৳</span>
-                                    <span id="summary-bdt-val" class="val-num">০.০০</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- সাবমিট বাটন -->
-                        <button type="submit" id="btn-submit-withdraw" class="btn-primary-large btn-shimmer btn-withdraw-submit" data-i18n="btn_submit_withdraw">
-                            ⚡ ক্যাশআউট রিকোয়েস্ট পাঠান
-                        </button>
-                    </form>
-
-                    <!-- হিস্ট্রি বাটন -->
-                    <button type="button" class="btn-history-trigger-modern" onclick="openWithdrawHistory()">
-                        📜 <span data-i18n="btn_withdraw_history">উইথড্রয়াল হিস্ট্রি দেখুন</span>
+                    <button type="submit" id="btn-submit-withdraw" class="btn-primary">
+                        ক্যাশআউট রিকোয়েস্ট পাঠান
                     </button>
-                </div>
+                </form>
 
+                <button type="button" class="btn-outline-text" onclick="openWithdrawHistory()">
+                    উইথড্রয়াল ইতিহাস দেখুন
+                </button>
             </div>
         </section>
 
-        <!-- ================= ৪. 👤 প্রোফাইল পেজ (সাপোর্টের পরিবর্তে পূর্ণাঙ্গ প্রোফাইল) ================= -->
+        <!-- ================= ৪. প্রোফাইল পেজ ================= -->
         <section id="profile" class="page">
-            
-            <!-- প্রোফাইল কার্ড -->
-            <div class="glass-card profile-main-card">
-                <div class="profile-avatar-wrapper">
-                    <div class="profile-avatar-large">👤</div>
-                    <span class="profile-status-badge">ACTIVE</span>
+            <div class="f-card profile-card">
+                <div class="p-avatar-wrap">
+                    <div class="avatar-lg" id="profile-avatar">U</div>
                 </div>
-                <h3 id="profile-page-name" class="profile-name">ইউজার নাম</h3>
-                <span id="profile-page-username" class="profile-uname">@username</span>
-                <span id="profile-page-id" class="profile-id-badge">ID: #00000000</span>
+                <h3 class="profile-name" id="profile-page-name">User Name</h3>
+                <span class="profile-handle" id="profile-page-username">@username</span>
+                <span class="profile-id" id="profile-page-id">ID: #000000</span>
 
-                <div class="profile-quick-stats">
-                    <div class="p-stat-box">
-                        <span class="p-stat-title">বর্তমান ব্যালেন্স</span>
-                        <span id="profile-stat-balance" class="p-stat-val text-cyan">0 Pts</span>
+                <div class="profile-stats-row">
+                    <div class="stat-pill">
+                        <span class="sp-label">ব্যালেন্স</span>
+                        <span class="sp-val" id="profile-stat-balance">0 Pts</span>
                     </div>
-                    <div class="p-stat-box">
-                        <span class="p-stat-title">টোটাল রেফার</span>
-                        <span id="profile-stat-ref" class="p-stat-val text-green">০ জন</span>
+                    <div class="stat-pill">
+                        <span class="sp-label">রেফারেল</span>
+                        <span class="sp-val text-mint" id="profile-stat-ref">0 জন</span>
                     </div>
                 </div>
             </div>
 
-            <!-- ইউজার অ্যাকাউন্ট ফিচার ও সেটিংস লিস্ট -->
-            <div class="glass-card profile-menu-list">
-                <div class="profile-section-title">অ্যাকাউন্ট ও হিস্ট্রি</div>
-
-                <div class="profile-menu-item" onclick="openWithdrawHistory()">
-                    <div class="p-menu-left">
-                        <span class="p-menu-icon icon-history">📜</span>
-                        <div class="p-menu-text">
-                            <h4>উত্তোলনের হিস্ট্রি</h4>
-                            <p>আপনার সমস্ত ক্যাশআউট ও রিচার্জ রিকোয়েস্টের অবস্থা</p>
-                        </div>
+            <!-- মেনু লিস্ট -->
+            <div class="f-card menu-list">
+                <div class="menu-item" onclick="openWithdrawHistory()">
+                    <div class="mi-left">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+                        <span>পেমেন্ট হিস্ট্রি</span>
                     </div>
-                    <span class="p-menu-arrow">➔</span>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
 
-                <div class="profile-menu-item" onclick="openCheckInFullView()">
-                    <div class="p-menu-left">
-                        <span class="p-menu-icon icon-streak">🔥</span>
-                        <div class="p-menu-text">
-                            <h4>৭ দিনের ডেইলি স্ট্রিক</h4>
-                            <p id="profile-streak-desc">প্রতিদিন লগইন করে বিশেষ বোনাস সংগ্রহ করুন</p>
-                        </div>
+                <div class="menu-item" onclick="openCheckInFullView()">
+                    <div class="mi-left">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        <span>৭ দিনের ডেইলি বোনাস</span>
                     </div>
-                    <span class="p-menu-arrow">➔</span>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
 
-                <div class="profile-section-title">সাপোর্ট ও যোগাযোগ</div>
-
-                <a id="telegram-support-link" href="#" target="_blank" class="profile-menu-item">
-                    <div class="p-menu-left">
-                        <span class="p-menu-icon icon-tg">✈️</span>
-                        <div class="p-menu-text">
-                            <h4>অফিশিয়াল টেলিগ্রাম চ্যানেল</h4>
-                            <p>পেমেন্ট প্রুফ ও নতুন অফার আপডেট পান</p>
-                        </div>
+                <a id="telegram-support-link" href="#" target="_blank" class="menu-item">
+                    <div class="mi-left">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                        <span>টেলিগ্রাম চ্যানেল / সাপোর্ট</span>
                     </div>
-                    <span class="p-menu-arrow">➔</span>
-                </a>
-
-                <a id="whatsapp-support-link" href="#" target="_blank" class="profile-menu-item">
-                    <div class="p-menu-left">
-                        <span class="p-menu-icon icon-wa">💬</span>
-                        <div class="p-menu-text">
-                            <h4>হোয়াটসঅ্যাপ অ্যাডমিন সাপোর্ট</h4>
-                            <p>পেমেন্ট সংক্রান্ত কোনো সমস্যায় যোগাযোগ করুন</p>
-                        </div>
-                    </div>
-                    <span class="p-menu-arrow">➔</span>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </a>
             </div>
 
-            <!-- অ্যাপ ইনফো ব্যাজ -->
-            <div class="app-version-box">
-                ADS EARN PRO • v3.1.0 • Cyberpunk Telegram Edition
-            </div>
+            <div class="footer-caption">EarnHub Pro v4.1.0 • Verified Telegram WebApp</div>
         </section>
 
     </main>
 
-    <!-- ================= ডেইলি চেক-ইন ইন-পেজ ফুল ভিউ (Back বাটন সহ) ================= -->
-    <div id="checkin-fullview" class="fullview-container">
-        <div class="fullview-header">
-            <button class="fullview-back-btn" onclick="closeCheckInFullView()">
-                ← ফিরে যান
+    <!-- ================= ইন-পেজ ফুল ভিউ স্ক্রিন (In-Page Screen) ================= -->
+    <div id="network-fullview" class="inpage-screen">
+        <!-- ফুলভিউ হেডার -->
+        <div class="fv-topbar">
+            <button class="fv-back-btn" onclick="closeNetworkFullView()" aria-label="Back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
-            <div class="fullview-title" data-i18n="checkin_modal_title">৭ দিনের দৈনিক উপহার</div>
-            <div style="width: 50px;"></div>
+            <span class="fv-header-title">টাস্ক বিবরণ</span>
+            <div style="width: 34px;"></div>
         </div>
 
-        <div class="fullview-content checkin-flow">
-            <div class="fv-hero-badge">DAILY REWARD STREAK</div>
-            <div class="fv-icon-anim">🎁</div>
-            <h2 class="fv-headline" data-i18n="checkin_fullview_head">প্রতিদিন লগইন করে পয়েন্ট নিন</h2>
-            <p class="fv-description" data-i18n="checkin_fullview_sub">প্রতিদিন চেক-ইন করে আপনার স্ট্রিক ধরে রাখুন এবং ৭ম দিনে জিতে নিন মেগা পয়েন্ট বোনাস!</p>
-
-            <div class="streak-status-row">
-                <span id="checkin-streak-status" class="streak-text">🔥 স্ট্রিক: ০ দিন</span>
-                <span class="streak-cycle">টোটাল সাইকেল: ৭ দিন</span>
+        <!-- ফুলভিউ স্ক্রোল কনটেন্ট -->
+        <div class="fv-scroll-content">
+            <!-- হিরো কার্ড -->
+            <div class="fv-hero">
+                <div class="fv-icon-box" id="fv-icon-box">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <span class="fv-badge" id="fv-badge">OFFICIAL AD NETWORK</span>
+                <h2 id="fv-headline" class="fv-title">বিজ্ঞাপন টাস্ক</h2>
+                <p id="fv-desc" class="fv-subtitle">বিজ্ঞাপনটি সম্পূর্ণ সম্পন্ন করলে স্বয়ংক্রিয়ভাবে পয়েন্ট অ্যাকাউন্টে যোগ হবে।</p>
             </div>
 
-            <!-- ৭ দিনের গ্রিড -->
-            <div class="checkin-grid" id="checkin-grid"></div>
+            <!-- মেট্রিক্স গ্রিড -->
+            <div class="fv-metrics-grid">
+                <div class="fv-metric-item">
+                    <span class="fv-m-label">রিওয়ার্ড পয়েন্ট</span>
+                    <span class="fv-m-val text-mint" id="fv-reward-amount">+20 PTS</span>
+                </div>
+                <div class="fv-metric-item">
+                    <span class="fv-m-label">দৈনিক লিমিট</span>
+                    <span class="fv-m-val" id="fv-limit-count">0 / 20</span>
+                </div>
+                <div class="fv-metric-item">
+                    <span class="fv-m-label">নেটওয়ার্ক স্ট্যাটাস</span>
+                    <span class="fv-m-val text-online">● Active</span>
+                </div>
+            </div>
 
-            <button id="btn-claim-checkin" onclick="claimDailyCheckIn()" class="btn-primary-large btn-shimmer btn-claim-today" data-i18n="checkin_btn_claim">
-                🎁 আজকের পয়েন্ট সংগ্রহ করুন
+            <!-- টাস্ক নিয়মাবলী বক্স -->
+            <div class="fv-rules-card">
+                <h4 class="fv-rules-title">কীভাবে টাস্কটি সম্পন্ন করবেন?</h4>
+                <div class="fv-step-item">
+                    <span class="fv-step-num">১</span>
+                    <span class="fv-step-text">নিচের <strong>"বিজ্ঞাপন দেখুন ও পয়েন্ট নিন"</strong> বাটনে ট্যাপ করুন।</span>
+                </div>
+                <div class="fv-step-item">
+                    <span class="fv-step-num">২</span>
+                    <span class="fv-step-text">বিজ্ঞাপনটি সম্পূর্ণ চলা পর্যন্ত ব্যাক করবেন না বা স্ক্রিন ক্লোজ করবেন না।</span>
+                </div>
+                <div class="fv-step-item">
+                    <span class="fv-step-num">৩</span>
+                    <span class="fv-step-text">বিজ্ঞাপন সম্পন্ন হলেই রিওয়ার্ড ক্রেডিট হবে এবং ব্যালেন্স স্বয়ংক্রিয়ভাবে আপডেট হবে।</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- স্টিকি বটম অ্যাকশন এরিয়া -->
+        <div class="fv-bottom-action">
+            <button id="fv-action-btn" class="btn-primary fv-cta-btn" onclick="executeCurrentNetworkAd()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                বিজ্ঞাপন দেখুন ও পয়েন্ট নিন
             </button>
         </div>
     </div>
 
-    <!-- ================= অন-ক্লিক ও বিজ্ঞাপন ইন-পেজ ফুল ভিউ (Back বাটন সহ) ================= -->
-    <div id="network-fullview" class="fullview-container">
-        <div class="fullview-header">
-            <button class="fullview-back-btn" onclick="closeNetworkFullView()">
-                ← ফিরে যান
-            </button>
-            <div class="fullview-title" id="fv-network-title">Ad Task Window</div>
-            <div style="width: 50px;"></div>
-        </div>
-
-        <div class="fullview-content">
-            <div class="fv-hero-badge" id="fv-badge">OFFICIAL NETWORK</div>
-            <div class="fv-icon-anim" id="fv-icon">🎬</div>
-            <h2 class="fv-headline" id="fv-headline">বিজ্ঞাপন দেখে পয়েন্ট নিন</h2>
-            <p class="fv-description" id="fv-desc">টাস্ক সম্পন্ন করলেই সরাসরি আপনার ওয়ালেটে পয়েন্ট জমা হবে।</p>
-
-            <div class="glass-card fv-stats-card">
-                <div class="fv-stat-item">
-                    <span class="fv-stat-label">প্রতি বিজ্ঞাপনে পয়েন্ট</span>
-                    <span class="fv-stat-val" id="fv-reward-amount">+২০ Pts</span>
-                </div>
-                <div class="fv-stat-item">
-                    <span class="fv-stat-label">দৈনিক লিমিট</span>
-                    <span class="fv-stat-val" id="fv-limit-count">০/২০</span>
-                </div>
+    <!-- ================= ডেইলি চেক-ইন বটম শিট ================= -->
+    <div id="checkin-fullview" class="sheet-modal">
+        <div class="sheet-box">
+            <div class="sheet-header">
+                <h3>৭ দিনের দৈনিক উপহার</h3>
+                <button class="close-btn" onclick="closeCheckInFullView()">✕</button>
             </div>
-
-            <!-- প্রোগ্রেস বার -->
-            <div class="highlevel-progress-bg">
-                <div id="fv-progress-bar" class="highlevel-progress-bar"></div>
+            <div class="streak-head">
+                <span id="checkin-streak-status">বর্তমান স্ট্রিক: ০ দিন</span>
             </div>
+            
+            <div class="checkin-grid" id="checkin-grid"></div>
 
-            <div class="fv-info-box">
-                💡 <b>বিজ্ঞাপনের নিয়মাবলী:</b> অন-ক্লিক বা স্মার্ট লিঙ্কে ক্লিক করার পর পেজটিতে ১০-১৫ সেকেন্ড ব্রাউজ করুন। পয়েন্ট যুক্ত হওয়া পর্যন্ত অপেক্ষা করুন। কাজ শেষে সহজেই <b>"← ফিরে যান"</b> চেপে ড্যাশবোর্ডে আসতে পারবেন।
-            </div>
-
-            <button id="fv-action-btn" class="btn-primary-large btn-shimmer" onclick="executeCurrentNetworkAd()">
-                ▶ অন-ক্লিক টাস্ক শুরু করুন
+            <button id="btn-claim-checkin" onclick="claimDailyCheckIn()" class="btn-primary">
+                আজকের রিওয়ার্ড সংগ্রহ করুন
             </button>
         </div>
     </div>
 
     <!-- ================= উইথড্রয়াল হিস্ট্রি বটম শিট ================= -->
-    <div id="history-modal-overlay" class="history-overlay" onclick="closeWithdrawHistory()"></div>
-    <div id="history-bottom-sheet" class="history-bottom-sheet">
-        <div class="sheet-handle"></div>
-        <div class="sheet-header">
-            <h3 data-i18n="history_title">📜 উত্তোলনের ইতিহাস</h3>
-            <button class="sheet-close-btn" onclick="closeWithdrawHistory()">✕</button>
-        </div>
-        <div id="history-scroll-list" class="history-scroll-list">
-            <div class="loading-state-text" data-i18n="loading_text">ডাটা লোড হচ্ছে...</div>
+    <div id="history-modal-overlay" class="sheet-modal" onclick="closeWithdrawHistory()">
+        <div class="sheet-box" onclick="event.stopPropagation()">
+            <div class="sheet-header">
+                <h3>ক্যাশআউট ইতিহাস</h3>
+                <button class="close-btn" onclick="closeWithdrawHistory()">✕</button>
+            </div>
+            <div id="history-scroll-list" class="history-list">
+                <div class="loading-state">ডাটা লোড হচ্ছে...</div>
+            </div>
         </div>
     </div>
 
-    <!-- ================= বড় ও প্রিমিয়াম বটম নেভিগেশন বার ================= -->
-    <nav class="navbar">
-        <button class="nav-item active" onclick="switchTab('home', 'home', this)">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label" data-i18n="nav_home">হোম</span>
+    <!-- ================= বটম নেভিগেশন বার ================= -->
+    <nav class="bottom-nav">
+        <button class="nav-tab active" onclick="switchTab('home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>হোম</span>
         </button>
-        <button class="nav-item" onclick="switchTab('refer', 'refer', this)">
-            <span class="nav-icon">🎁</span>
-            <span class="nav-label" data-i18n="nav_refer">রেফার</span>
+        <button class="nav-tab" onclick="switchTab('refer')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>রেফার</span>
         </button>
-        <button class="nav-item" onclick="switchTab('withdraw', 'withdraw', this)">
-            <span class="nav-icon">💸</span>
-            <span class="nav-label" data-i18n="nav_withdraw">উত্তোলন</span>
+        <button class="nav-tab" onclick="switchTab('withdraw')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            <span>উত্তোলন</span>
         </button>
-        <!-- সাপোর্ট পরিবর্তন করে প্রোফাইল করা হয়েছে -->
-        <button class="nav-item" onclick="switchTab('profile', 'profile', this)">
-            <span class="nav-icon">👤</span>
-            <span class="nav-label" data-i18n="nav_profile">প্রোফাইল</span>
+        <button class="nav-tab" onclick="switchTab('profile')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+            <span>প্রোফাইল</span>
         </button>
     </nav>
 
-    <!-- ড্রয়ার টগল করার ইনলাইন হেল্পার স্ক্রিপ্ট -->
-    <script>
-        function openDashboardDrawer() {
-            if (typeof playClickSound === 'function') playClickSound();
-            document.getElementById('dashboard-drawer').classList.add('active');
-            document.getElementById('drawer-overlay').classList.add('active');
-        }
-
-        function closeDashboardDrawer() {
-            if (typeof playClickSound === 'function') playClickSound();
-            document.getElementById('dashboard-drawer').classList.remove('active');
-            document.getElementById('drawer-overlay').classList.remove('active');
-        }
-
-        function navigateFromDrawer(pageId, titleKey) {
-            closeDashboardDrawer();
-            const navBtn = document.querySelector(`.navbar .nav-item[onclick*="${pageId}"]`);
-            if (typeof switchTab === 'function') {
-                switchTab(pageId, titleKey, navBtn);
-            }
-        }
-
-        function openCheckInFromDrawer() {
-            closeDashboardDrawer();
-            if (typeof openCheckInFullView === 'function') openCheckInFullView();
-        }
-
-        function openHistoryFromDrawer() {
-            closeDashboardDrawer();
-            if (typeof openWithdrawHistory === 'function') openWithdrawHistory();
-        }
-    </script>
-
-    <!-- External App Script -->
-    <script src="app.js?v=3.1.0"></script>
+    <!-- External Script -->
+    <script src="app.js?v=4.1.0"></script>
 </body>
 </html>
