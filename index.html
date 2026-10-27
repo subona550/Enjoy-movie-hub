@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -22,7 +22,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=5.5.0">
+    <link rel="stylesheet" href="style.css?v=5.6.3">
 </head>
 <body>
 
@@ -37,8 +37,8 @@
     </div>
 
     <!-- Welcome Reward Modal Card -->
-    <div id="welcome-modal" class="modal-overlay">
-        <div class="modal-card shine-card">
+    <div id="welcome-modal" class="modal-overlay" onclick="closeWelcomeModal()">
+        <div class="modal-card shine-card" onclick="event.stopPropagation()">
             <div class="modal-badge" data-i18n="welcome_badge">WELCOME REWARD</div>
             <div class="modal-icon-wrap">
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -60,8 +60,8 @@
     </div>
 
     <!-- Telegram Channel Verification Modal (Lock System) -->
-    <div id="channel-verify-modal" class="modal-overlay">
-        <div class="modal-card shine-card">
+    <div id="channel-verify-modal" class="modal-overlay" onclick="closeChannelVerifyModal()">
+        <div class="modal-card shine-card" onclick="event.stopPropagation()">
             <div class="modal-badge" style="color: #F59E0B;" data-i18n="verify_badge">VERIFICATION REQUIRED</div>
             <div class="modal-icon-wrap" style="color: #0088cc;">
                 <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -91,8 +91,8 @@
     </div>
 
     <!-- Cashout Success Receipt Modal -->
-    <div id="cashout-success-modal" class="modal-overlay">
-        <div class="modal-card shine-card receipt-card">
+    <div id="cashout-success-modal" class="modal-overlay" onclick="closeCashoutSuccessModal()">
+        <div class="modal-card shine-card receipt-card" onclick="event.stopPropagation()">
             <div class="success-checkmark-wrap">
                 <svg class="checkmark-svg" viewBox="0 0 52 52">
                     <circle class="checkmark-circle" cx="26" cy="26" r="24" fill="none"/>
@@ -187,7 +187,7 @@
                 </div>
             </div>
 
-            <!-- কাজের নিয়ম / ইউটিউব ভিডিও টিউটোরিয়াল বাটন কার্ড (রিপ্লেসড সেকশন) -->
+            <!-- কাজের নিয়ম / ইউটিউব ভিডিও টিউটোরিয়াল বাটন কার্ড -->
             <div class="f-card shine-card" id="card-video-tutorial" onclick="openTutorialVideo()" style="cursor: pointer; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #FF0000; background: linear-gradient(90deg, rgba(255,0,0,0.06) 0%, var(--card-surface) 100%);">
                 <div style="display: flex; align-items: center; gap: 14px;">
                     <div style="width: 48px; height: 48px; border-radius: 16px; background: rgba(255, 0, 0, 0.15); color: #FF0000; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 15px rgba(255,0,0,0.2);">
@@ -261,7 +261,7 @@
                     </div>
                 </div>
 
-                <!-- 3. Adsterra Direct Link Task Card -->
+                <!-- 3. Adsterra Direct Link Task Card (Updated Text) -->
                 <div class="ad-card shine-card" onclick="openNetworkFullView('adsterra')">
                     <div class="card-badge-group">
                         <span class="ad-card-badge purple-badge" data-i18n="badge_direct">SPONSOR VISIT</span>
@@ -272,7 +272,7 @@
                         </div>
                         <div class="ad-meta">
                             <h4 class="ad-title" data-i18n="adsterra_title">Direct Sponsor Link</h4>
-                            <p class="ad-desc" data-i18n="adsterra_desc">Explore sponsored partner link for at least 5 seconds</p>
+                            <p class="ad-desc" data-i18n="adsterra_desc">Explore sponsored partner link and stay for verified seconds</p>
                         </div>
                     </div>
                     <div class="ad-card-footer">
@@ -385,7 +385,7 @@
                             <label class="field-label" data-i18n="label_points">Points Amount:</label>
                             <span class="sub-alert"><span data-i18n="label_min">Min:</span> <strong id="display-min-withdraw">200</strong> <span data-i18n="pts_currency">PTS</span></span>
                         </div>
-                        <input type="number" id="withdraw-points" class="field-input font-bold" placeholder="Enter points" min="100" oninput="calculateWithdrawBdt()" required>
+                        <input type="number" id="withdraw-points" class="field-input font-bold" placeholder="Enter points" min="200" oninput="calculateWithdrawBdt()" required>
                     </div>
 
                     <div id="withdraw-preview-summary" class="preview-box">
@@ -479,7 +479,7 @@
                 </a>
             </div>
 
-            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.5.0 • Verified Telegram WebApp</div>
+            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.6.3 • Verified Telegram WebApp</div>
         </section>
 
     </main>
@@ -548,8 +548,8 @@
     </div>
 
     <!-- ================= DAILY CHECK-IN BOTTOM SHEET ================= -->
-    <div id="checkin-fullview" class="sheet-modal">
-        <div class="sheet-box">
+    <div id="checkin-fullview" class="sheet-modal" onclick="closeCheckInFullView()">
+        <div class="sheet-box" onclick="event.stopPropagation()">
             <div class="sheet-header">
                 <h3 data-i18n="checkin_modal_title">7-Day Daily Gifts</h3>
                 <button class="close-btn" onclick="closeCheckInFullView()">✕</button>
@@ -600,6 +600,6 @@
     </nav>
 
     <!-- Client Engine Script -->
-    <script src="app.js?v=5.5.0"></script>
+    <script src="app.js?v=5.6.3"></script>
 </body>
 </html>
