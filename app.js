@@ -1,7 +1,8 @@
 /**
- * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.4.3)
+ * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.4.4)
+ * - Monetag Official Rewarded Interstitial Engine (show_().then(...))
  * - Separate Daily Limits for Monetag, Adsgram, and Adsterra
- * - Dynamic LibTL Monetag SDK Integration
+ * - Dynamic LibTL Monetag SDK Integration & Preloading
  * - Admin-Controlled Minimum Cashout Limits (Recharge, bKash, Nagad)
  * - 5-Second Adsterra Anti-Cheat Active Tab Verification
  * - Serverless Daily Reset & Bilingual Engine
@@ -224,7 +225,7 @@ const translations = {
         menu_daily_bonus: "7-Day Streak Rewards",
         menu_support: "24/7 Help & Support",
         menu_tg_support: "Telegram Official Channel",
-        footer_caption: "EarnHub Pro v5.4.3 • Verified Telegram WebApp",
+        footer_caption: "EarnHub Pro v5.4.4 • Verified Telegram WebApp",
         fv_task_details: "Task Overview",
         fv_m_reward: "Task Reward",
         fv_m_limit: "Daily Limit",
@@ -325,7 +326,7 @@ const translations = {
         menu_daily_bonus: "৭ দিনের ধারাবাহিক উপহার",
         menu_support: "২৪/৭ হেল্প ও সাপোর্ট",
         menu_tg_support: "টেলিগ্রাম অফিসিয়াল চ্যানেল",
-        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৪.৩ • টেলিগ্রাম মিনি অ্যাপ",
+        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৪.৪ • টেলিগ্রাম মিনি অ্যাপ",
         fv_task_details: "টাস্ক বিবরণ",
         fv_m_reward: "টাস্ক রিওয়ার্ড",
         fv_m_limit: "দৈনিক লিমিট",
@@ -505,7 +506,7 @@ function getReferrerId() {
 }
 const referrerId = getReferrerId();
 
-// আপডেট: ব্যবহারকারীর দেওয়া '//libtl.com/sdk.js' স্ক্রিপ্ট লোডার
+// ================= ৮. MONETAG SDK LOADER & HELPER =================
 function injectMonetagScript(zoneId) {
     if (!zoneId) return;
     const old = document.getElementById('monetag-sdk-dynamic');
@@ -513,27 +514,43 @@ function injectMonetagScript(zoneId) {
 
     const script = document.createElement('script');
     script.id = 'monetag-sdk-dynamic';
-    script.src = '//libtl.com/sdk.js';
+    script.src = 'https://libtl.com/sdk.js';
     script.dataset.zone = zoneId;
     script.dataset.sdk = `show_${zoneId}`;
+    script.async = true;
+
+    script.onload = () => {
+        // show_() এবং show_<zoneId>() দুটিকেই সক্রিয় রাখা
+        if (typeof window[`show_${zoneId}`] === 'function') {
+            window.show_ = window[`show_${zoneId}`];
+        } else if (typeof window.show_ === 'function') {
+            window[`show_${zoneId}`] = window.show_;
+        }
+    };
+
     document.head.appendChild(script);
 }
 
-// ================= ৮. ফায়ারবেস সেটিংস সিঙ্ক (অ্যাডমিন প্যানেল কন্ট্রোল) =================
+function getMonetagFunction() {
+    const zoneId = netConfigs.monetag.zoneId;
+    if (typeof window[`show_${zoneId}`] === 'function') return window[`show_${zoneId}`];
+    if (typeof window.show_ === 'function') return window.show_;
+    if (typeof window.show === 'function') return window.show;
+    return null;
+}
+
+// ================= ৯. ফায়ারবেস সেটিংস সিঙ্ক (অ্যাডমিন প্যানেল কন্ট্রোল) =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
 
-    // পয়েন্ট টু টাকা রেট ও ওয়েলকাম বোনাস
     pointsToBdtRate = Number(data.pointsToBdtRate ?? 0.10);
     referralBonusPoints = Number(data.referralBonusPoints ?? 50);
     welcomeBonusPoints = Number(data.welcomeBonusPoints ?? 100);
 
-    // অ্যাডমিন প্যানেল দিয়ে সেট করা মিনিমাম উইথড্রয়াল পয়েন্ট
     adminMinRecharge = Number(data.minWithdrawRecharge ?? data.minWithdrawPoints ?? 200);
     adminMinBkash = Number(data.minWithdrawBkash ?? data.minWithdrawWallet ?? 500);
     adminMinNagad = Number(data.minWithdrawNagad ?? adminMinBkash ?? 500);
 
-    // বর্তমানে সিলেক্টেড মেথড অনুযায়ী লিমিট সেট করা
     if (selectedWithdrawMethod === 'recharge') {
         minWithdrawPoints = adminMinRecharge;
     } else if (selectedWithdrawMethod === 'bkash') {
@@ -542,7 +559,6 @@ db.ref('settings').on('value', (snapshot) => {
         minWithdrawPoints = adminMinNagad;
     }
 
-    // আলাদা আলাদা নেটওয়ার্ক লিমিট ও রিওয়ার্ড সিঙ্ক
     netConfigs.monetag.zoneId = data.monetagZoneId || "8765432";
     netConfigs.monetag.reward = Number(data.rewardMonetagPoints ?? 15);
     netConfigs.monetag.limit = Number(data.monetagLimit ?? data.limitMonetag ?? 15);
@@ -590,7 +606,7 @@ db.ref('settings').on('value', (snapshot) => {
     updateUI();
 });
 
-// ================= ৯. ইউজার ইনিশিয়ালাইজেশন =================
+// ================= ১০. ইউজার ইনিশিয়ালাইজেশন =================
 let userListenerAttached = false;
 
 function initUser() {
@@ -658,7 +674,6 @@ function initUser() {
                 lastCheckInDate = data.lastCheckInDate || "";
                 checkInStreak = Number(data.checkInStreak || 0);
 
-                // নতুন দিনের সূচনায় সব নেটওয়ার্কের অ্যাড কাউন্টার অটো রিসেট
                 const currentServerDay = getSafeDateKey();
                 if (data.lastAdDate !== currentServerDay) {
                     adsWatchedCount = 0;
@@ -731,19 +746,16 @@ function updateUI() {
     setElem('home-ref-count', formatNum(referralCount));
     setElem('home-ref-earnings', formatNum(referralEarnings));
 
-    // আলাদা নেটওয়ার্ক লিমিট ব্যাজ আপডেট
     setElem('monetag-counter-badge', `${formatNum(monetagWatchedCount)} / ${formatNum(netConfigs.monetag.limit)}`);
     setElem('adsgram-counter-badge', `${formatNum(adsgramWatchedCount)} / ${formatNum(netConfigs.adsgram.limit)}`);
     setElem('adsterra-counter-badge', `${formatNum(adsterraWatchedCount)} / ${formatNum(netConfigs.adsterra.limit)}`);
 
-    // মোট কাজ ও প্রোগ্রেস বার
     const totalPossibleAds = (netConfigs.monetag.limit + netConfigs.adsgram.limit + netConfigs.adsterra.limit) || 60;
     setElem('home-ad-counter', `${formatNum(adsWatchedCount)} / ${formatNum(totalPossibleAds)}`);
     const pct = Math.min((adsWatchedCount / totalPossibleAds) * 100, 100);
     const fill = document.getElementById('home-progress-fill');
     if (fill) fill.style.width = `${pct}%`;
 
-    // ফুল-ভিউ স্ক্রিন ওপেন থাকলে তার লিমিট আপডেট
     const fvLimit = document.getElementById('fv-limit-count');
     if (fvLimit && selectedNetwork) {
         let curWatched = selectedNetwork === 'monetag' ? monetagWatchedCount : (selectedNetwork === 'adsgram' ? adsgramWatchedCount : adsterraWatchedCount);
@@ -756,7 +768,6 @@ function updateUI() {
         rateTextEl.innerText = `${formatNum(100)} ${t('pts_currency')} = ${formatNum(bdtCalc)} ৳`;
     }
 
-    // অ্যাডমিন দ্বারা নির্ধারিত উইথড্রয়াল পয়েন্ট আপডেট
     const minWithdrawEl = document.getElementById('display-min-withdraw');
     if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
 
@@ -769,12 +780,20 @@ function updateUI() {
     if (pId) pId.innerText = `ID: #${formatNum(userId)}`;
 }
 
-// ================= ১০. ফুলভিউ অ্যাড স্ক্রিন =================
+// ================= ১১. ফুলভিউ অ্যাড স্ক্রিন =================
 function openNetworkFullView(networkKey) {
     playClickSound();
     triggerHaptic('light');
     selectedNetwork = networkKey;
     const screen = document.getElementById('network-fullview');
+
+    // Monetag ওপেন হলে ব্যাকগ্রাউন্ডে প্রি-লোড শুরু করে দ্রুত লোডিং নিশ্চিত করা
+    if (networkKey === 'monetag') {
+        const monetagFunc = getMonetagFunction();
+        if (typeof monetagFunc === 'function') {
+            try { monetagFunc({ type: 'preload' }).catch(() => {}); } catch (e) { }
+        }
+    }
 
     const details = {
         monetag: {
@@ -842,7 +861,7 @@ function closeNetworkFullView() {
     if (tg?.BackButton) tg.BackButton.hide();
 }
 
-// ================= ১১. অ্যাড এক্সিকিউশন ও ভেরিফিকেশন (আলাদা লিমিট চেক) =================
+// ================= ১২. অ্যাড এক্সিকিউশন ও ভেরিফিকেশন =================
 async function executeCurrentNetworkAd() {
     playClickSound();
     triggerHaptic('medium');
@@ -850,7 +869,6 @@ async function executeCurrentNetworkAd() {
     const actionBtn = document.getElementById('fv-action-btn');
     const btnText = document.getElementById('fv-btn-text');
 
-    // নির্দিষ্ট নেটওয়ার্কের লিমিট চেক করা
     let curCount = 0;
     let curLimit = 0;
 
@@ -872,23 +890,30 @@ async function executeCurrentNetworkAd() {
     try {
         if (selectedNetwork === 'monetag') {
             actionBtn.disabled = true;
-            // LibTL SDK কল
-            const sdkFunc = window[`show_${netConfigs.monetag.zoneId}`];
-            if (typeof sdkFunc === 'function') {
-                showToast(t('toast_preparing_ad'));
-                try {
-                    await sdkFunc({ type: 'rewarded' });
+            const monetagFunc = getMonetagFunction();
+
+            if (typeof monetagFunc !== 'function') {
+                actionBtn.disabled = false;
+                return showToast(t('toast_sdk_error'), 'error');
+            }
+
+            showToast(t('toast_preparing_ad'));
+
+            // অফিসিয়াল Monetag Rewarded Interstitial ইন্টিগ্রেশন: show_().then(...)
+            monetagFunc().then(async (result) => {
+                // Monetag promise resolves when user watches the ad
+                if (result && result.reward_event_type && result.reward_event_type !== 'valued') {
+                    showToast(t('toast_ad_failed'), 'error');
+                } else {
                     await creditPoints('monetag', netConfigs.monetag.reward);
                     closeNetworkFullView();
-                } catch (sdkErr) {
-                    window.open(`https://omulgous.com/4/${netConfigs.monetag.zoneId}`, '_blank');
-                    handleTimedTask('monetag', netConfigs.monetag.reward);
                 }
-            } else {
-                window.open(`https://omulgous.com/4/${netConfigs.monetag.zoneId}`, '_blank');
-                handleTimedTask('monetag', netConfigs.monetag.reward);
-            }
-            actionBtn.disabled = false;
+                actionBtn.disabled = false;
+            }).catch((err) => {
+                console.error("Monetag Ad Failed:", err);
+                showToast(t('toast_ad_failed'), 'error');
+                actionBtn.disabled = false;
+            });
         }
         else if (selectedNetwork === 'adsgram') {
             actionBtn.disabled = true;
@@ -925,7 +950,6 @@ async function executeCurrentNetworkAd() {
             actionBtn.disabled = false;
         }
         else if (selectedNetwork === 'adsterra') {
-            // ৫ সেকেন্ড বাধ্যতামূলক সক্রিয় ভিজিট সেশন
             adsterraSession = {
                 active: true,
                 startedAt: Date.now(),
@@ -1009,29 +1033,7 @@ window.addEventListener('focus', () => {
     }
 });
 
-function handleTimedTask(networkKey, pointsReward) {
-    const actionBtn = document.getElementById('fv-action-btn');
-    const btnText = document.getElementById('fv-btn-text');
-    let timerSeconds = 12;
-    btnText.innerText = `${t('toast_wait')} (${formatNum(timerSeconds)}s)...`;
-
-    const countdown = setInterval(() => {
-        if (document.hidden) return;
-
-        timerSeconds--;
-        if (timerSeconds > 0) {
-            btnText.innerText = `${t('toast_wait')} (${formatNum(timerSeconds)}s)...`;
-        } else {
-            clearInterval(countdown);
-            creditPoints(networkKey, pointsReward);
-            btnText.innerText = t('btn_watch_and_earn');
-            actionBtn.disabled = false;
-            closeNetworkFullView();
-        }
-    }, 1000);
-}
-
-// ================= ১২. পয়েন্ট ক্রেডিটিং ইঞ্জিন (নেটওয়ার্ক-স্পেসিফিক লিমিট ট্র্যাকিং) =================
+// ================= ১৩. পয়েন্ট ক্রেডিটিং ইঞ্জিন =================
 async function creditPoints(networkKey, reward) {
     if (BACKEND_API_URL) {
         try {
@@ -1051,9 +1053,7 @@ async function creditPoints(networkKey, reward) {
                 showToast(t('toast_pts_credited', { pts: reward }));
                 return;
             }
-        } catch (e) {
-            // ক্লাউডফ্লেয়ার ফলব্যাক
-        }
+        } catch (e) { }
     }
 
     const today = getSafeDateKey();
@@ -1062,7 +1062,6 @@ async function creditPoints(networkKey, reward) {
     const result = await userRef.transaction(current => {
         if (!current) return;
         
-        // তারিখ পরিবর্তন চেক
         if (current.lastAdDate !== today) {
             current.adsWatchedCount = 0;
             current.monetagWatchedCount = 0;
@@ -1076,7 +1075,7 @@ async function creditPoints(networkKey, reward) {
         const limitForNetwork = netConfigs[networkKey].limit;
 
         if (currentNetworkCount >= limitForNetwork) {
-            return; // লিমিট শেষ
+            return;
         }
 
         current.balance = Math.round(Number(current.balance || 0) + reward);
@@ -1098,7 +1097,7 @@ async function creditPoints(networkKey, reward) {
     }
 }
 
-// ================= ১৩. ক্যাশআউট কন্ট্রোলার (অ্যাডমিন লিমিট সাপোর্ট) =================
+// ================= ১৪. ক্যাশআউট কন্ট্রোলার =================
 function switchWithdrawMethod(method) {
     playClickSound();
     triggerHaptic('light');
@@ -1131,7 +1130,6 @@ function switchWithdrawMethod(method) {
 
     updateDropdownOptions();
     
-    // অ্যাডমিন দ্বারা নির্ধারিত পরিবর্তনশীল মিনিমাম উইথড্রয়াল পয়েন্ট শো করা
     const minWithdrawEl = document.getElementById('display-min-withdraw');
     if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
 
@@ -1235,7 +1233,7 @@ async function handleWithdrawSubmit(event) {
     }
 }
 
-// ================= ১৪. সাকসেস রিসিট মোডাল =================
+// ================= ১৫. সাকসেস রিসিট মোডাল =================
 function openCashoutSuccessModal(data) {
     const modal = document.getElementById('cashout-success-modal');
     if (!modal) return;
@@ -1264,7 +1262,7 @@ function closeCashoutSuccessModal() {
     if (submitText) submitText.innerText = t('btn_submit_cashout');
 }
 
-// ================= ১৫. উইথড্রয়াল হিস্ট্রি =================
+// ================= ১৬. উইথড্রয়াল হিস্ট্রি =================
 function openWithdrawHistory() {
     playClickSound();
     triggerHaptic('light');
@@ -1329,7 +1327,7 @@ function loadHistoryData() {
     });
 }
 
-// ================= ১৬. ৭-দিনের ডেইলি চেক-ইন =================
+// ================= ১৭. ৭-দিনের ডেইলি চেক-ইন =================
 function openCheckInFullView() {
     playClickSound();
     triggerHaptic('light');
@@ -1440,7 +1438,7 @@ async function claimDailyCheckIn() {
     }
 }
 
-// ================= ১৭. রেফারেল ও নেভিগেশন =================
+// ================= ১৮. রেফারেল ও নেভিগেশন =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');
@@ -1489,7 +1487,7 @@ function closeWelcomeModal() {
     triggerConfetti();
 }
 
-// ================= ১৮. অ্যাপ স্টার্টআপ =================
+// ================= ১৯. অ্যাপ স্টার্টআপ =================
 document.addEventListener('DOMContentLoaded', () => {
     const initialLetter = (userName.charAt(0) || 'U').toUpperCase();
     const hAvatar = document.getElementById('header-avatar');
