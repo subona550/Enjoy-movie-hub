@@ -1,6 +1,8 @@
 /* ==========================================================
    EARNHUB PRO - ADVANCED FINTECH THEME (v5.5.0 FINAL)
    - Edge-to-Edge Responsive Layout (Fits Any Screen Perfectly)
+   - High-Converting YouTube Tutorial Action Card
+   - Telegram Channel Verification Modal & Badges
    - Ultra-Large High-CPM Ad Network Cards (Expanded Height & Icon)
    - In-Page Full View Screen 3-Card Metrics Architecture
    - Ultra-Clean Day/Light & Obsidian Dark Theme Engine
@@ -20,6 +22,8 @@
     --accent-mint-glow: rgba(0, 229, 153, 0.28);
     --accent-blue: #0098EA;
     --accent-purple: #A855F7;
+    --accent-red: #EF4444;
+    --accent-warning: #F59E0B;
 
     --text-primary: #FFFFFF;
     --text-secondary: #94A3B8;
@@ -46,6 +50,8 @@ body.light-theme {
     --accent-mint-glow: rgba(0, 186, 124, 0.22);
     --accent-blue: #0284C7;
     --accent-purple: #9333EA;
+    --accent-red: #DC2626;
+    --accent-warning: #D97706;
 
     --text-primary: #0F172A;
     --text-secondary: #475569;
@@ -360,9 +366,9 @@ input, select, textarea {
 
 /* ================= বডি লেআউট (স্ক্রিনের দুই পাশে পারফেক্ট ফিট) ================= */
 .app-body {
-    padding: 14px 12px 28px 12px; /* স্ক্রিনের দুই পাশে পারফেক্ট স্পর্শ মার্জিন */
+    padding: 14px 12px 28px 12px;
     width: 100%;
-    max-width: 580px; /* মোবাইলে ফুল-উইডথ ও বড় স্ক্রিনে নিখুঁত সেন্টার */
+    max-width: 580px;
     margin: 0 auto;
 }
 
@@ -437,38 +443,14 @@ input, select, textarea {
     font-weight: 700;
 }
 
-/* প্রোগ্রেস বার কার্ড */
-.progress-card {
-    padding: 18px 20px;
+/* ================= ইউটিউব ভিডিও টিউটোরিয়াল কার্ড ================= */
+#card-video-tutorial {
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14.5px;
-    font-weight: 700;
-    margin-bottom: 12px;
-}
-
-.p-title { color: var(--text-secondary); }
-.p-count { color: var(--accent-mint); font-size: 16px; }
-
-.track-bar {
-    width: 100%;
-    height: 10px;
-    background: var(--input-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.track-fill {
-    width: 0%;
-    height: 100%;
-    background: var(--accent-mint);
-    box-shadow: 0 0 12px var(--accent-mint);
-    transition: width 0.35s ease;
+#card-video-tutorial:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
 }
 
 /* সেকশন হেডার */
@@ -491,7 +473,7 @@ input, select, textarea {
     color: var(--text-muted);
 }
 
-/* ================= অনেক বড় ও বিলাসবহুল স্পনসর অ্যাড কার্ড ================= */
+/* ================= বিলাসবহুল স্পনসর অ্যাড কার্ড ================= */
 .ad-card-container {
     display: flex;
     flex-direction: column;
@@ -503,8 +485,8 @@ input, select, textarea {
 .ad-card {
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 28px; /* এক্সট্রা প্রিমিয়াম রাউন্ডেড লুক */
-    padding: 30px 22px 24px 22px; /* অনেক বড় ও প্রশস্ত হাইট */
+    border-radius: 28px;
+    padding: 30px 22px 24px 22px;
     position: relative;
     cursor: pointer;
     width: 100%;
@@ -519,7 +501,6 @@ input, select, textarea {
     box-shadow: 0 4px 20px var(--accent-mint-soft);
 }
 
-/* কার্ডের উপরে ডানপাশের ব্যাজ (একক প্রিমিয়াম লুক) */
 .card-badge-group {
     position: absolute;
     top: 20px;
@@ -550,7 +531,6 @@ input, select, textarea {
     margin-top: 14px;
 }
 
-/* এক্সট্রা বড় আইকন বক্স (76px × 76px) */
 .ad-icon {
     width: 76px;
     height: 76px;
@@ -572,7 +552,7 @@ input, select, textarea {
 }
 
 .ad-title {
-    font-size: 21px; /* আরও বড় এবং স্পষ্ট টাইটেল */
+    font-size: 21px;
     font-weight: 900;
     color: var(--text-primary);
     line-height: 1.35;
@@ -1298,27 +1278,35 @@ input, select, textarea {
 .ci-num { font-weight: 700; color: var(--text-muted); display: block; font-size: 13px; }
 .ci-pts { font-weight: 800; color: var(--text-primary); margin-top: 5px; display: block; font-size: 14.5px; }
 
-/* হিস্ট্রি স্ক্রোল লিস্ট */
+/* হিস্ট্রি ও স্ট্যাটাস ব্যাজসমূহ */
 .history-list { max-height: 54vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
 .h-item { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 15px 16px; display: flex; justify-content: space-between; align-items: center; }
 .h-title { font-size: 15.5px; font-weight: 700; color: var(--text-primary); }
 .h-date { font-size: 12.5px; color: var(--text-muted); margin-top: 3px; }
 .h-pts { font-size: 16px; font-weight: 800; color: var(--accent-mint); text-align: right; }
-.h-badge { font-size: 11.5px; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; font-weight: 800; display: inline-block; margin-top: 4px; }
+.h-badge { font-size: 11.5px; padding: 5px 12px; border-radius: 8px; text-transform: uppercase; font-weight: 800; display: inline-block; }
 .st-pending { background: rgba(245, 158, 11, 0.16); color: #F59E0B; }
 .st-approved { background: rgba(0, 229, 153, 0.16); color: var(--accent-mint); }
 .st-rejected { background: rgba(239, 68, 68, 0.16); color: #EF4444; }
 
-/* মোডাল কার্ড */
+/* মোডাল ওভারলে ও মোডাল কার্ড */
 .modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 10002;
     padding: 16px;
+    animation: fadeInModal 0.2s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .modal-card {
@@ -1327,14 +1315,15 @@ input, select, textarea {
     border-radius: 28px;
     padding: 32px 22px;
     width: 100%;
-    max-width: 380px;
+    max-width: 390px;
     text-align: center;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
 }
 
 .modal-badge { font-size: 12.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--accent-mint); margin-bottom: 16px; }
-.modal-icon-wrap { color: var(--accent-mint); margin-bottom: 16px; }
+.modal-icon-wrap { color: var(--accent-mint); margin-bottom: 16px; display: flex; justify-content: center; }
 .modal-title { font-size: 23px; font-weight: 900; margin-bottom: 10px; color: var(--text-primary); }
-.modal-desc { font-size: 15.5px; color: var(--text-secondary); margin-bottom: 26px; line-height: 1.55; }
+.modal-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.55; }
 
 /* টোস্ট নোটিফিকেশন */
 #toast-container {

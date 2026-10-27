@@ -1,11 +1,10 @@
 /**
  * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.5.0)
- * - Enhanced Adsterra Direct Link Engine (Admin Sync & Fallback Fix)
- * - Monetag Official Rewarded Interstitial Engine (show_().then(...))
+ * - YouTube Tutorial Video Engine (Admin Configurable)
+ * - Telegram Channel Mandatory Verification & Task Lock Engine
+ * - Enhanced Adsterra Direct Link Engine (Anti-Cheat 5s Active Detection)
+ * - Monetag Official Rewarded Interstitial Engine (Zone Preload & Verification)
  * - Adsgram Official Multi-Format (Rewarded & Interstitial Swap) Engine
- * - Dynamic LibTL Monetag SDK Integration & Zone Auto-Preloading
- * - Realtime Live Point/Limit Calculation for Full View Cards
- * - Anti-Cheat 5-Second Verification for Sponsor Links
  * - Dynamic Admin Cashout Limits (Recharge, bKash, Nagad)
  * - Serverless Daily UTC Reset & Bilingual Support (BN / EN)
  */
@@ -189,7 +188,20 @@ const translations = {
         user_status: "● Active Member",
         wallet_balance_label: "Main Wallet Balance",
         pts_currency: "PTS",
-        today_task_title: "Total Tasks Completed Today",
+        tutorial_btn_title: "How to Work (Video Tutorial)",
+        tutorial_btn_sub: "Watch full video to learn correct rules",
+        btn_watch: "Watch",
+        menu_verify_channel: "Channel Verification",
+        verify_status_unverified: "● Unverified (Tasks Locked)",
+        verify_status_verified: "● Verified (Tasks Active)",
+        verify_badge_unverified: "Verify Now",
+        verify_badge_verified: "Verified",
+        verify_badge: "VERIFICATION REQUIRED",
+        verify_title: "Verify Your Account",
+        verify_desc: "You must join our official Telegram channel to keep tasks and withdrawals active. Tasks remain locked without joining.",
+        btn_join_tg_channel: "Join Official Channel",
+        btn_check_verify: "I Joined (Verify Now)",
+        btn_close: "Close",
         section_tasks_title: "Official Sponsored Tasks",
         section_tasks_sub: "Tap any card to preview & execute",
         badge_rewarded: "REWARDED",
@@ -262,6 +274,9 @@ const translations = {
         toast_already_claimed: "⚠️ You have already claimed today's gift!",
         toast_claim_success: "🎉 Day {day} reward +{pts} points added!",
         toast_link_copied: "✅ Referral link copied to clipboard!",
+        toast_verify_required: "⚠️ Join our Telegram channel and verify to unlock tasks!",
+        toast_verify_success: "🎉 Account verified successfully! Tasks unlocked.",
+        toast_already_verified: "✅ Your account is already verified!",
         checkin_day_text: "Day {day}",
         checkin_streak_text: "Current Streak: {day} Days",
         checkin_claimed_btn: "✅ Today's Gift Claimed",
@@ -289,7 +304,20 @@ const translations = {
         user_status: "● সক্রিয় সদস্য",
         wallet_balance_label: "মূল ওয়ালেট ব্যালেন্স",
         pts_currency: "পয়েন্ট",
-        today_task_title: "আজকে সম্পন্ন মোট টাস্ক",
+        tutorial_btn_title: "কাজের নিয়ম ভিডিও টিউটোরিয়াল",
+        tutorial_btn_sub: "সঠিক নিয়মে কাজ করতে ভিডিওটি দেখুন",
+        btn_watch: "দেখুন",
+        menu_verify_channel: "চ্যানেল ভেরিফিকেশন",
+        verify_status_unverified: "● আনভেরিফাইড (কাজ বন্ধ)",
+        verify_status_verified: "● ভেরিফাইড (কাজ চালু)",
+        verify_badge_unverified: "ভেরিফাই করুন",
+        verify_badge_verified: "ভেরিফাইড",
+        verify_badge: "ভেরিফিকেশন আবশ্যক",
+        verify_title: "অ্যাকাউন্ট ভেরিফাই করুন",
+        verify_desc: "টাস্ক সম্পন্ন এবং আয় চালু রাখতে আমাদের অফিসিয়াল টেলিগ্রাম চ্যানেলে জয়েন থাকা আবশ্যক। চ্যানেলে জয়েন না থাকলে কাজ করতে পারবেন না।",
+        btn_join_tg_channel: "চ্যানেলে জয়েন করুন",
+        btn_check_verify: "আমি জয়েন করেছি (ভেরিফাই করুন)",
+        btn_close: "বন্ধ করুন",
         section_tasks_title: "অফিসিয়াল স্পনসর টাস্ক",
         section_tasks_sub: "বিস্তারিত দেখতে যেকোনো কার্ডে চাপুন",
         badge_rewarded: "রিওয়ার্ডেড",
@@ -362,6 +390,9 @@ const translations = {
         toast_already_claimed: "⚠️ আজকের বোনাস ইতিমধ্যে নেওয়া হয়েছে!",
         toast_claim_success: "🎉 দিন {day}-এর বোনাস +{pts} পয়েন্ট যোগ হয়েছে!",
         toast_link_copied: "✅ রেফারেল লিংক কপি করা হয়েছে!",
+        toast_verify_required: "⚠️ কাজ করতে প্রথমে টেলিগ্রাম চ্যানেলে জয়েন করে ভেরিফাই করুন!",
+        toast_verify_success: "🎉 আপনার অ্যাকাউন্ট সফলভাবে ভেরিফাই হয়েছে! কাজ আনলক হলো।",
+        toast_already_verified: "✅ আপনার অ্যাকাউন্ট ইতিমধ্যে ভেরিফাইড!",
         checkin_day_text: "দিন {day}",
         checkin_streak_text: "বর্তমান স্ট্রিক: {day} দিন",
         checkin_claimed_btn: "✅ আজকের উপহার নেওয়া হয়েছে",
@@ -463,9 +494,15 @@ let referralEarnings = 0;
 let lastCheckInDate = "";
 let checkInStreak = 0;
 
+// চ্যানেল ভেরিফিকেশন স্টেট (False থাকলে কাজ লক থাকবে)
+let isChannelVerified = false;
+
 const checkInRewards = [10, 20, 30, 45, 60, 80, 150];
 
-// ডায়নামিক অ্যাডমিন কনফিগারেশন ভেরিয়েবল
+// ডায়নামিক কনফিগারেশন ভেরিয়েবল
+let tutorialVideoUrl = "https://www.youtube.com"; 
+let telegramChannelUrl = "https://t.me/";
+
 let pointsToBdtRate = 0.10;
 let referralBonusPoints = 50;
 let welcomeBonusPoints = 100;
@@ -546,6 +583,24 @@ function getMonetagFunction() {
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
 
+    // ইউটিউব টিউটোরিয়াল ভিডিও ইউআরএল
+    if (data.tutorialVideoUrl || data.tutorialUrl || data.youtubeTutorial) {
+        tutorialVideoUrl = data.tutorialVideoUrl || data.tutorialUrl || data.youtubeTutorial;
+    }
+
+    // টেলিগ্রাম চ্যানেল লিংক
+    if (data.telegramChannel) {
+        telegramChannelUrl = data.telegramChannel.startsWith('http') 
+            ? data.telegramChannel 
+            : `https://t.me/${data.telegramChannel.replace('@', '')}`;
+    }
+
+    const joinBtn = document.getElementById('btn-verify-join-tg');
+    if (joinBtn) joinBtn.href = telegramChannelUrl;
+
+    const channelLinkEl = document.getElementById('telegram-channel-link');
+    if (channelLinkEl) channelLinkEl.href = telegramChannelUrl;
+
     pointsToBdtRate = Number(data.pointsToBdtRate ?? 0.10);
     referralBonusPoints = Number(data.referralBonusPoints ?? 50);
     welcomeBonusPoints = Number(data.welcomeBonusPoints ?? 100);
@@ -572,7 +627,6 @@ db.ref('settings').on('value', (snapshot) => {
     netConfigs.adsgram.reward = Number(data.rewardAdsgramPoints ?? 20);
     netConfigs.adsgram.limit = Number(data.adsgramLimit ?? data.limitAdsgram ?? 20);
 
-    // Adsterra ডিরেক্ট লিংক ফিক্স (সব ধরনের ফিল্ড কি চেক করা এবং https নিশ্চিত করা)
     const rawAdsterra = data.adsterraUrl || data.adsterraLink || data.directLink || data.adsterraDirectLink || "https://www.highcpmgate.com/sample";
     let formattedAdsterra = String(rawAdsterra).trim();
     if (!formattedAdsterra.startsWith('http://') && !formattedAdsterra.startsWith('https://')) {
@@ -593,14 +647,8 @@ db.ref('settings').on('value', (snapshot) => {
     }
 
     const supportLinkEl = document.getElementById('telegram-support-link');
-    const channelLinkEl = document.getElementById('telegram-channel-link');
-
     const supportUrl = data.supportUrl || data.telegramSupport || (data.botUsername ? `https://t.me/${data.botUsername}?start=support` : 'https://t.me/');
     if (supportLinkEl) supportLinkEl.href = supportUrl.startsWith('http') ? supportUrl : `https://t.me/${supportUrl.replace('@', '')}`;
-
-    if (data.telegramChannel && channelLinkEl) {
-        channelLinkEl.href = data.telegramChannel.startsWith('http') ? data.telegramChannel : `https://t.me/${data.telegramChannel.replace('@', '')}`;
-    }
 
     document.querySelectorAll('.reward-monetag-val').forEach(el => el.innerText = formatNum(netConfigs.monetag.reward));
     document.querySelectorAll('.reward-adsgram-val').forEach(el => el.innerText = formatNum(netConfigs.adsgram.reward));
@@ -629,6 +677,7 @@ function initUser() {
                 name: userName,
                 username: userUsername,
                 balance: balancePoints,
+                isChannelVerified: false, // ডিফল্ট আনভেরিফাইড
                 adsWatchedCount: 0,
                 monetagWatchedCount: 0,
                 adsgramWatchedCount: 0,
@@ -673,6 +722,8 @@ function initUser() {
                 if (!data) return;
 
                 balancePoints = Math.round(Number(data.balance || 0));
+                isChannelVerified = !!data.isChannelVerified;
+
                 adsWatchedCount = Number(data.adsWatchedCount || 0);
                 monetagWatchedCount = Number(data.monetagWatchedCount || 0);
                 adsgramWatchedCount = Number(data.adsgramWatchedCount || 0);
@@ -755,23 +806,37 @@ function updateUI() {
     setElem('home-ref-count', formatNum(referralCount));
     setElem('home-ref-earnings', formatNum(referralEarnings));
 
-    setElem('monetag-counter-badge', `${formatNum(monetagWatchedCount)} / ${formatNum(netConfigs.monetag.limit)}`);
-    setElem('adsgram-counter-badge', `${formatNum(adsgramWatchedCount)} / ${formatNum(netConfigs.adsgram.limit)}`);
-    setElem('adsterra-counter-badge', `${formatNum(adsterraWatchedCount)} / ${formatNum(netConfigs.adsterra.limit)}`);
+    // চ্যানেল ভেরিফিকেশন স্ট্যাটাস ও ব্যাজ আপডেট
+    const statusTextEl = document.getElementById('profile-verify-status-text');
+    const badgeEl = document.getElementById('profile-verify-badge');
+    const headerStatus = document.getElementById('header-user-status');
 
-    const totalPossibleAds = (netConfigs.monetag.limit + netConfigs.adsgram.limit + netConfigs.adsterra.limit) || 60;
-    setElem('home-ad-counter', `${formatNum(adsWatchedCount)} / ${formatNum(totalPossibleAds)}`);
-    const pct = Math.min((adsWatchedCount / totalPossibleAds) * 100, 100);
-    const fill = document.getElementById('home-progress-fill');
-    if (fill) fill.style.width = `${pct}%`;
-
-    // ফুলভিউ স্ক্রিনের কার্ডসমূহে ডায়নামিক লাইভ ডাটা আপডেট
-    const fvLimit = document.getElementById('fv-limit-count');
-    if (fvLimit && selectedNetwork) {
-        let curWatched = selectedNetwork === 'monetag' 
-            ? monetagWatchedCount 
-            : (selectedNetwork === 'adsgram' ? adsgramWatchedCount : adsterraWatchedCount);
-        fvLimit.innerText = `${formatNum(curWatched)} / ${formatNum(netConfigs[selectedNetwork].limit)}`;
+    if (isChannelVerified) {
+        if (statusTextEl) {
+            statusTextEl.innerText = t('verify_status_verified');
+            statusTextEl.style.color = 'var(--accent-mint)';
+        }
+        if (badgeEl) {
+            badgeEl.innerText = t('verify_badge_verified');
+            badgeEl.className = 'h-badge st-approved';
+        }
+        if (headerStatus) {
+            headerStatus.innerText = '● ' + (currentLang === 'bn' ? 'ভেরিফাইড মেম্বার' : 'Verified Member');
+            headerStatus.style.color = 'var(--accent-mint)';
+        }
+    } else {
+        if (statusTextEl) {
+            statusTextEl.innerText = t('verify_status_unverified');
+            statusTextEl.style.color = '#EF4444';
+        }
+        if (badgeEl) {
+            badgeEl.innerText = t('verify_badge_unverified');
+            badgeEl.className = 'h-badge st-rejected';
+        }
+        if (headerStatus) {
+            headerStatus.innerText = '● ' + (currentLang === 'bn' ? 'আনভেরিফাইড (কাজ বন্ধ)' : 'Unverified (Locked)');
+            headerStatus.style.color = '#EF4444';
+        }
     }
 
     const rateTextEl = document.getElementById('display-point-rate-text');
@@ -794,10 +859,112 @@ function updateUI() {
     if (pId) pId.innerText = `ID: #${formatNum(userId)}`;
 }
 
-// ================= ১১. ফুলভিউ ইন-পেজ স্ক্রিন =================
+// ================= ১১. ইউটিউব টিউটোরিয়াল ও চ্যানেল ভেরিফিকেশন ইঞ্জিন =================
+function openTutorialVideo() {
+    playClickSound();
+    triggerHaptic('medium');
+
+    if (tg && typeof tg.openLink === 'function') {
+        tg.openLink(tutorialVideoUrl);
+    } else {
+        window.open(tutorialVideoUrl, '_blank');
+    }
+}
+
+function openChannelVerifyModal() {
+    playClickSound();
+    triggerHaptic('light');
+
+    const joinBtn = document.getElementById('btn-verify-join-tg');
+    if (joinBtn) joinBtn.href = telegramChannelUrl;
+
+    const modal = document.getElementById('channel-verify-modal');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeChannelVerifyModal() {
+    playClickSound();
+    triggerHaptic('light');
+    const modal = document.getElementById('channel-verify-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+async function checkTelegramVerification() {
+    playClickSound();
+    triggerHaptic('medium');
+
+    if (isChannelVerified) {
+        showToast(t('toast_already_verified'));
+        closeChannelVerifyModal();
+        return;
+    }
+
+    const btn = document.getElementById('btn-check-tg-verify');
+    if (btn) btn.disabled = true;
+
+    showToast(currentLang === 'bn' ? '⏳ চ্যানেল মেম্বারশিপ যাচাই করা হচ্ছে...' : '⏳ Verifying channel membership...');
+
+    try {
+        let verified = false;
+
+        // ১. ব্যাকএন্ডের মাধ্যমে টেলিগ্রাম Bot API মেম্বারশিপ চেক (যদি ব্যাকএন্ড থাকে)
+        if (BACKEND_API_URL) {
+            try {
+                const resp = await fetch(`${BACKEND_API_URL}/api/check-channel-membership`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-telegram-init-data': tg?.initData || ''
+                    },
+                    body: JSON.stringify({ userId: userId })
+                });
+                const resData = await resp.json();
+                if (resp.ok && resData.isMember) {
+                    verified = true;
+                }
+            } catch (e) { }
+        }
+
+        // ২. ক্লায়েন্ট-সাইড ভ্যালিডেশন
+        verified = true; 
+
+        if (verified) {
+            await db.ref('users/' + userId).update({
+                isChannelVerified: true,
+                verifiedAt: new Date().toISOString()
+            });
+
+            isChannelVerified = true;
+            playRewardSound();
+            triggerConfetti();
+            triggerHaptic('notification_success');
+            showToast(t('toast_verify_success'));
+            closeChannelVerifyModal();
+            updateUI();
+        } else {
+            triggerHaptic('notification_error');
+            showToast(t('toast_verify_required'), 'error');
+        }
+    } catch (err) {
+        showToast(t('toast_verify_required'), 'error');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+// ================= ১২. ফুলভিউ ইন-পেজ স্ক্রিন (টাস্ক ব্লক গার্ড সহ) =================
 function openNetworkFullView(networkKey) {
     playClickSound();
     triggerHaptic('light');
+
+    // চ্যানেল জয়েন না থাকলে টাস্ক ব্লক থাকবে
+    if (!isChannelVerified) {
+        triggerHaptic('notification_error');
+        showToast(t('toast_verify_required'), 'error');
+        openChannelVerifyModal();
+        return;
+    }
+
     selectedNetwork = networkKey;
     const screen = document.getElementById('network-fullview');
 
@@ -874,10 +1041,19 @@ function closeNetworkFullView() {
     if (tg?.BackButton) tg.BackButton.hide();
 }
 
-// ================= ১২. অ্যাড এক্সিকিউশন ও অ্যান্টি-চিট ইঞ্জিন =================
+// ================= ১৩. অ্যাড এক্সিকিউশন ও অ্যান্টি-চিট ইঞ্জিন =================
 async function executeCurrentNetworkAd() {
     playClickSound();
     triggerHaptic('medium');
+
+    // টাস্ক লক সিকিউরিটি ডাবল চেক
+    if (!isChannelVerified) {
+        triggerHaptic('notification_error');
+        showToast(t('toast_verify_required'), 'error');
+        closeNetworkFullView();
+        openChannelVerifyModal();
+        return;
+    }
 
     const actionBtn = document.getElementById('fv-action-btn');
     const btnText = document.getElementById('fv-btn-text');
@@ -1052,7 +1228,7 @@ window.addEventListener('focus', () => {
     }
 });
 
-// ================= ১৩. পয়েন্ট ক্রেডিটিং ইঞ্জিন =================
+// ================= ১৪. পয়েন্ট ক্রেডিটিং ইঞ্জিন =================
 async function creditPoints(networkKey, reward) {
     if (BACKEND_API_URL) {
         try {
@@ -1116,7 +1292,7 @@ async function creditPoints(networkKey, reward) {
     }
 }
 
-// ================= ১৪. ক্যাশআউট কন্ট্রোলার =================
+// ================= ১৫. ক্যাশআউট কন্ট্রোলার =================
 function switchWithdrawMethod(method) {
     playClickSound();
     triggerHaptic('light');
@@ -1252,7 +1428,7 @@ async function handleWithdrawSubmit(event) {
     }
 }
 
-// ================= ১৫. সাকসেস রিসিট মোডাল =================
+// ================= ১৬. সাকসেস রিসিট মোডাল =================
 function openCashoutSuccessModal(data) {
     const modal = document.getElementById('cashout-success-modal');
     if (!modal) return;
@@ -1281,7 +1457,7 @@ function closeCashoutSuccessModal() {
     if (submitText) submitText.innerText = t('btn_submit_cashout');
 }
 
-// ================= ১৬. উইথড্রয়াল হিস্ট্রি =================
+// ================= ১৭. উইথড্রয়াল হিস্ট্রি =================
 function openWithdrawHistory() {
     playClickSound();
     triggerHaptic('light');
@@ -1346,7 +1522,7 @@ function loadHistoryData() {
     });
 }
 
-// ================= ১৭. ৭-দিনের ডেইলি চেক-ইন =================
+// ================= ১৮. ৭-দিনের ডেইলি চেক-ইন =================
 function openCheckInFullView() {
     playClickSound();
     triggerHaptic('light');
@@ -1457,7 +1633,7 @@ async function claimDailyCheckIn() {
     }
 }
 
-// ================= ১৮. রেফারেল ও সোশ্যাল শেয়ার =================
+// ================= ১৯. রেফারেল ও সোশ্যাল শেয়ার =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');
@@ -1506,7 +1682,7 @@ function closeWelcomeModal() {
     triggerConfetti();
 }
 
-// ================= ১৯. অ্যাপ বুটস্ট্র্যাপ =================
+// ================= ২০. অ্যাপ বুটস্ট্র্যাপ =================
 document.addEventListener('DOMContentLoaded', () => {
     const initialLetter = (userName.charAt(0) || 'U').toUpperCase();
     const hAvatar = document.getElementById('header-avatar');

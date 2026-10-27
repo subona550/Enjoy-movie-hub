@@ -59,6 +59,37 @@
         </div>
     </div>
 
+    <!-- Telegram Channel Verification Modal (Lock System) -->
+    <div id="channel-verify-modal" class="modal-overlay">
+        <div class="modal-card shine-card">
+            <div class="modal-badge" style="color: #F59E0B;" data-i18n="verify_badge">VERIFICATION REQUIRED</div>
+            <div class="modal-icon-wrap" style="color: #0088cc;">
+                <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="m22 2-7 20-4-9-9-4Z"/>
+                    <path d="M22 2 11 13"/>
+                </svg>
+            </div>
+            <h3 class="modal-title" data-i18n="verify_title">অ্যাকাউন্ট ভেরিফাই করুন</h3>
+            <p class="modal-desc" data-i18n="verify_desc">
+                টাস্ক সম্পন্ন এবং আয় চালু রাখতে আমাদের অফিসিয়াল টেলিগ্রাম চ্যানেলে জয়েন থাকা আবশ্যক। চ্যানেলে জয়েন না থাকলে কাজ করতে পারবেন না।
+            </p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a id="btn-verify-join-tg" href="#" target="_blank" class="btn-primary shine-sweep" style="background: #0088cc; color: #fff; text-decoration: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <span data-i18n="btn_join_tg_channel">চ্যানেলে জয়েন করুন</span>
+                </a>
+                <button class="btn-primary shine-sweep" id="btn-check-tg-verify" onclick="checkTelegramVerification()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span data-i18n="btn_check_verify">আমি জয়েন করেছি (ভেরিফাই করুন)</span>
+                </button>
+                <button class="btn-outline-text" onclick="closeChannelVerifyModal()" style="margin-top: 4px;" data-i18n="btn_close">
+                    বন্ধ করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Cashout Success Receipt Modal -->
     <div id="cashout-success-modal" class="modal-overlay">
         <div class="modal-card shine-card receipt-card">
@@ -108,7 +139,7 @@
             <div class="user-avatar" id="header-avatar">U</div>
             <div class="user-meta">
                 <span class="user-name" id="header-name">Loading...</span>
-                <span class="user-status-text" data-i18n="user_status">● Active Member</span>
+                <span class="user-status-text" id="header-user-status" data-i18n="user_status">● Active Member</span>
             </div>
         </div>
 
@@ -156,14 +187,22 @@
                 </div>
             </div>
 
-            <!-- Total Combined Ad Progress -->
-            <div class="f-card progress-card shine-card">
-                <div class="progress-info">
-                    <span class="p-title" data-i18n="today_task_title">Total Tasks Completed Today</span>
-                    <span class="p-count font-bold" id="home-ad-counter">0 / 0</span>
+            <!-- কাজের নিয়ম / ইউটিউব ভিডিও টিউটোরিয়াল বাটন কার্ড (রিপ্লেসড সেকশন) -->
+            <div class="f-card shine-card" id="card-video-tutorial" onclick="openTutorialVideo()" style="cursor: pointer; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #FF0000; background: linear-gradient(90deg, rgba(255,0,0,0.06) 0%, var(--card-surface) 100%);">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="width: 48px; height: 48px; border-radius: 16px; background: rgba(255, 0, 0, 0.15); color: #FF0000; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 15px rgba(255,0,0,0.2);">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 3px;" data-i18n="tutorial_btn_title">কাজের নিয়ম ভিডিও টিউটোরিয়াল</h4>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin: 0;" data-i18n="tutorial_btn_sub">সঠিক নিয়মে কাজ করতে ভিডিওটি দেখুন</p>
+                    </div>
                 </div>
-                <div class="track-bar">
-                    <div class="track-fill" id="home-progress-fill"></div>
+                <div style="display: flex; align-items: center; gap: 6px; color: #FF0000; font-weight: 800; font-size: 13px;">
+                    <span data-i18n="btn_watch">দেখুন</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
             </div>
 
@@ -387,7 +426,26 @@
                 </div>
             </div>
 
+            <!-- Profile Menu Items -->
             <div class="f-card menu-list shine-card">
+                
+                <!-- ১. টেলিগ্রাম চ্যানেল অ্যাকাউন্ট ভেরিফিকেশন বাটন -->
+                <div class="menu-item" onclick="openChannelVerifyModal()">
+                    <div class="mi-left">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(0, 136, 204, 0.15); color: #0088cc; display: flex; align-items: center; justify-content: center;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="m9 12 2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span data-i18n="menu_verify_channel" style="font-weight: 800;">চ্যানেল ভেরিফিকেশন</span>
+                            <small id="profile-verify-status-text" style="display: block; font-size: 12px; color: #EF4444; font-weight: 700;">● আনভেরিফাইড (কাজ বন্ধ)</small>
+                        </div>
+                    </div>
+                    <span id="profile-verify-badge" class="h-badge st-rejected" style="font-size: 11px;">ভেরিফাই করুন</span>
+                </div>
+
                 <div class="menu-item" onclick="openWithdrawHistory()">
                     <div class="mi-left">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
