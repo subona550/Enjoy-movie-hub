@@ -22,26 +22,32 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=5.4.3">
+    <link rel="stylesheet" href="style.css?v=5.5.0">
 </head>
 <body>
 
-    <!-- Toast Notifications -->
+    <!-- Toast Notifications Floating Container -->
     <div id="toast-container"></div>
 
-    <!-- Splash Screen -->
+    <!-- Ultra-Smooth Splash Screen -->
     <div id="splash-screen">
         <div class="splash-loader"></div>
         <div class="splash-title">EARNHUB PRO</div>
         <div class="splash-bar"><div class="splash-fill" id="splash-progress"></div></div>
     </div>
 
-    <!-- Welcome Reward Modal -->
+    <!-- Welcome Reward Modal Card -->
     <div id="welcome-modal" class="modal-overlay">
         <div class="modal-card shine-card">
             <div class="modal-badge" data-i18n="welcome_badge">WELCOME REWARD</div>
             <div class="modal-icon-wrap">
-                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M20 12v10H4V12"/>
+                    <path d="M2 7h20v5H2z"/>
+                    <path d="M12 22V7"/>
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                </svg>
             </div>
             <h3 class="modal-title" data-i18n="welcome_title">Welcome to Our Platform!</h3>
             <p class="modal-desc">
@@ -74,7 +80,7 @@
                 </div>
                 <div class="receipt-row">
                     <span class="rc-label" data-i18n="rc_account">Account:</span>
-                    <span class="rc-val" id="receipt-account">01XXXXXXXXX</span>
+                    <span class="rc-val font-bold" id="receipt-account">01XXXXXXXXX</span>
                 </div>
                 <div class="receipt-row">
                     <span class="rc-label" data-i18n="rc_points">Points Deducted:</span>
@@ -112,7 +118,11 @@
             </button>
 
             <button class="icon-btn-pill" onclick="toggleLanguage()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                    <path d="M2 12h20"/>
+                </svg>
                 <span id="lang-indicator">BN</span>
             </button>
         </div>
@@ -129,7 +139,9 @@
                 <div class="b-row-top">
                     <span class="b-label" data-i18n="wallet_balance_label">Main Wallet Balance</span>
                     <button class="streak-badge-btn" onclick="openCheckInFullView()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                        </svg>
                         <span id="home-streak-status">7-Day Streak</span>
                     </button>
                 </div>
@@ -148,7 +160,7 @@
             <div class="f-card progress-card shine-card">
                 <div class="progress-info">
                     <span class="p-title" data-i18n="today_task_title">Total Tasks Completed Today</span>
-                    <span class="p-count" id="home-ad-counter">0 / 0</span>
+                    <span class="p-count font-bold" id="home-ad-counter">0 / 0</span>
                 </div>
                 <div class="track-bar">
                     <div class="track-fill" id="home-progress-fill"></div>
@@ -161,17 +173,17 @@
                 <span class="section-sub" data-i18n="section_tasks_sub">Tap any card to preview & execute</span>
             </div>
 
+            <!-- Extra Large Modern Sponsored Tasks Cards -->
             <div class="ad-card-container">
                 
                 <!-- 1. Monetag Task Card -->
                 <div class="ad-card shine-card" onclick="openNetworkFullView('monetag')">
                     <div class="card-badge-group">
-                        <span class="ad-limit-pill" id="monetag-counter-badge">0 / 15</span>
                         <span class="ad-card-badge blue-badge" data-i18n="badge_rewarded">REWARDED</span>
                     </div>
                     <div class="ad-card-main">
                         <div class="ad-icon task-blue">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-2 10h8L7 22l2-10H1z"/></svg>
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m13 2-2 10h8L7 22l2-10H1z"/></svg>
                         </div>
                         <div class="ad-meta">
                             <h4 class="ad-title" data-i18n="monetag_title">Monetag Rewarded</h4>
@@ -182,7 +194,7 @@
                         <span class="ad-reward-pill">+<span class="reward-monetag-val">15</span> <span data-i18n="pts_currency">PTS</span></span>
                         <div class="ad-cta">
                             <span data-i18n="btn_start_task">Start Task</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
                         </div>
                     </div>
                 </div>
@@ -190,12 +202,11 @@
                 <!-- 2. Adsgram Task Card -->
                 <div class="ad-card shine-card" onclick="openNetworkFullView('adsgram')">
                     <div class="card-badge-group">
-                        <span class="ad-limit-pill" id="adsgram-counter-badge">0 / 20</span>
                         <span class="ad-card-badge mint-badge" id="adsgram-mode-tag">ADSGRAM STREAM</span>
                     </div>
                     <div class="ad-card-main">
                         <div class="ad-icon task-mint">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="15" x="2" y="5" rx="2"/><polyline points="10 9 15 12.5 10 16"/></svg>
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="15" x="2" y="5" rx="2"/><polyline points="10 9 15 12.5 10 16"/></svg>
                         </div>
                         <div class="ad-meta">
                             <h4 class="ad-title" data-i18n="adsgram_title">Adsgram Ad Stream</h4>
@@ -206,20 +217,19 @@
                         <span class="ad-reward-pill">+<span class="reward-adsgram-val">20</span> <span data-i18n="pts_currency">PTS</span></span>
                         <div class="ad-cta">
                             <span data-i18n="btn_start_task">Start Task</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Adsterra Task Card -->
+                <!-- 3. Adsterra Direct Link Task Card -->
                 <div class="ad-card shine-card" onclick="openNetworkFullView('adsterra')">
                     <div class="card-badge-group">
-                        <span class="ad-limit-pill" id="adsterra-counter-badge">0 / 25</span>
                         <span class="ad-card-badge purple-badge" data-i18n="badge_direct">SPONSOR VISIT</span>
                     </div>
                     <div class="ad-card-main">
                         <div class="ad-icon task-purple">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                         </div>
                         <div class="ad-meta">
                             <h4 class="ad-title" data-i18n="adsterra_title">Direct Sponsor Link</h4>
@@ -230,7 +240,7 @@
                         <span class="ad-reward-pill">+<span class="reward-adsterra-val">15</span> <span data-i18n="pts_currency">PTS</span></span>
                         <div class="ad-cta">
                             <span data-i18n="btn_start_task">Start Task</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
                         </div>
                     </div>
                 </div>
@@ -257,7 +267,7 @@
                 </div>
 
                 <button class="btn-primary shine-sweep" id="btn-share-referral" onclick="shareReferralLink()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                     <span data-i18n="btn_share_telegram">Share via Telegram</span>
                 </button>
             </div>
@@ -404,45 +414,47 @@
 
                 <a id="telegram-channel-link" href="#" target="_blank" class="menu-item">
                     <div class="mi-left">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                         <span data-i18n="menu_tg_support">Telegram Official Channel</span>
                     </div>
                     <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </a>
             </div>
 
-            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.4.3 • Verified Telegram WebApp</div>
+            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.5.0 • Verified Telegram WebApp</div>
         </section>
 
     </main>
 
-    <!-- ================= FULL VIEW SCREEN ================= -->
+    <!-- ================= FULL VIEW SCREEN (ENHANCED CARD ARCHITECTURE) ================= -->
     <div id="network-fullview" class="inpage-screen">
         <div class="fv-topbar">
             <button class="fv-back-btn" onclick="closeNetworkFullView()" aria-label="Back">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
             <span class="fv-header-title" data-i18n="fv_task_details">Task Overview</span>
-            <div style="width: 38px;"></div>
+            <div style="width: 42px;"></div>
         </div>
 
         <div class="fv-scroll-content">
+            <!-- Full View Hero Head -->
             <div class="fv-hero">
                 <div class="fv-icon-box" id="fv-icon-box">
-                    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 </div>
                 <span class="fv-badge" id="fv-badge">OFFICIAL NETWORK</span>
                 <h2 id="fv-headline" class="fv-title">Sponsored Ad Task</h2>
                 <p id="fv-desc" class="fv-subtitle">Watch and finish the ad task completely to receive your reward.</p>
             </div>
 
+            <!-- Enhanced 3-Pill Status Grid -->
             <div class="fv-metrics-grid shine-card">
                 <div class="fv-metric-item">
                     <span class="fv-m-label" data-i18n="fv_m_reward">Task Reward</span>
                     <span class="fv-m-val text-mint font-bold" id="fv-reward-amount">+20 PTS</span>
                 </div>
                 <div class="fv-metric-item">
-                    <span class="fv-m-label" data-i18n="fv_m_limit">Daily Progress</span>
+                    <span class="fv-m-label" data-i18n="fv_m_limit">Daily Limit</span>
                     <span class="fv-m-val font-bold" id="fv-limit-count">0 / 20</span>
                 </div>
                 <div class="fv-metric-item">
@@ -451,6 +463,7 @@
                 </div>
             </div>
 
+            <!-- Rules Card -->
             <div class="fv-rules-card shine-card">
                 <h4 class="fv-rules-title" data-i18n="fv_rules_title">How to Complete This Task?</h4>
                 <div class="fv-step-item">
@@ -511,24 +524,24 @@
     <!-- ================= BOTTOM NAVIGATION BAR ================= -->
     <nav class="bottom-nav">
         <button class="nav-tab active" onclick="switchTab('home')">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span data-i18n="nav_home">Home</span>
         </button>
         <button class="nav-tab" onclick="switchTab('refer')">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <span data-i18n="nav_refer">Refer</span>
         </button>
         <button class="nav-tab" onclick="switchTab('withdraw')">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
             <span data-i18n="nav_withdraw">Cashout</span>
         </button>
         <button class="nav-tab" onclick="switchTab('profile')">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
             <span data-i18n="nav_profile">Profile</span>
         </button>
     </nav>
 
     <!-- Client Engine Script -->
-    <script src="app.js?v=5.4.3"></script>
+    <script src="app.js?v=5.5.0"></script>
 </body>
 </html>
