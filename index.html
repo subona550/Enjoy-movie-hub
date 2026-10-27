@@ -22,7 +22,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=5.6.0">
+    <link rel="stylesheet" href="style.css?v=5.5.0">
 </head>
 <body>
 
@@ -167,7 +167,7 @@
                 </div>
             </div>
 
-            <!-- Tasks Head -->
+            <!-- Ad Networks Head -->
             <div class="section-head">
                 <span class="section-title" data-i18n="section_tasks_title">Official Sponsored Tasks</span>
                 <span class="section-sub" data-i18n="section_tasks_sub">Tap any card to preview & execute</span>
@@ -222,31 +222,24 @@
                     </div>
                 </div>
 
-                <!-- 3. Social & Direct Sponsor Tasks (YouTube, TG, Web, WhatsApp, FB) -->
-                <div class="ad-card shine-card" onclick="openSocialTasksFullView()">
+                <!-- 3. Adsterra Direct Link Task Card -->
+                <div class="ad-card shine-card" onclick="openNetworkFullView('adsterra')">
                     <div class="card-badge-group">
-                        <span class="ad-card-badge purple-badge" data-i18n="badge_social_hub">SOCIAL & PARTNERS</span>
+                        <span class="ad-card-badge purple-badge" data-i18n="badge_direct">SPONSOR VISIT</span>
                     </div>
                     <div class="ad-card-main">
                         <div class="ad-icon task-purple">
-                            <!-- Multi-Platform Social Graphic Icon -->
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                <circle cx="18" cy="5" r="3"/>
-                                <circle cx="6" cy="12" r="3"/>
-                                <circle cx="18" cy="19" r="3"/>
-                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                            </svg>
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                         </div>
                         <div class="ad-meta">
-                            <h4 class="ad-title" data-i18n="social_tasks_card_title">Social & Partner Tasks</h4>
-                            <p class="ad-desc" data-i18n="social_tasks_card_desc">Join YouTube, Telegram, Website, WhatsApp & Facebook to earn</p>
+                            <h4 class="ad-title" data-i18n="adsterra_title">Direct Sponsor Link</h4>
+                            <p class="ad-desc" data-i18n="adsterra_desc">Explore sponsored partner link for at least 5 seconds</p>
                         </div>
                     </div>
                     <div class="ad-card-footer">
-                        <span class="ad-reward-pill text-mint">+<span id="social-tasks-max-reward">500</span> <span data-i18n="pts_currency">PTS</span></span>
+                        <span class="ad-reward-pill">+<span class="reward-adsterra-val">15</span> <span data-i18n="pts_currency">PTS</span></span>
                         <div class="ad-cta">
-                            <span data-i18n="btn_view_tasks">View Tasks</span>
+                            <span data-i18n="btn_start_task">Start Task</span>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
                         </div>
                     </div>
@@ -428,12 +421,12 @@
                 </a>
             </div>
 
-            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.6.0 • Verified Telegram WebApp</div>
+            <div class="footer-caption" data-i18n="footer_caption">EarnHub Pro v5.5.0 • Verified Telegram WebApp</div>
         </section>
 
     </main>
 
-    <!-- ================= FULL VIEW SCREEN: ADSGRAM & MONETAG ================= -->
+    <!-- ================= FULL VIEW SCREEN (ENHANCED CARD ARCHITECTURE) ================= -->
     <div id="network-fullview" class="inpage-screen">
         <div class="fv-topbar">
             <button class="fv-back-btn" onclick="closeNetworkFullView()" aria-label="Back">
@@ -496,50 +489,6 @@
         </div>
     </div>
 
-    <!-- ================= 5. NEW: SOCIAL & PARTNER TASKS FULL VIEW SCREEN ================= -->
-    <div id="social-tasks-fullview" class="inpage-screen">
-        <div class="fv-topbar">
-            <button class="fv-back-btn" onclick="closeSocialTasksFullView()" aria-label="Back">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <span class="fv-header-title" data-i18n="social_screen_title">Social Tasks Hub</span>
-            
-            <!-- Global How-to-work YouTube Video Tutorial Button -->
-            <button class="tutorial-pill-btn" onclick="openTutorialVideo()" title="কাজ কীভাবে করবেন টিউটোরিয়াল দেখুন">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                <span data-i18n="btn_how_to_work">কাজ শিখুন</span>
-            </button>
-        </div>
-
-        <div class="fv-scroll-content">
-            <!-- Notice / Real-time Verification Warning Banner -->
-            <div class="social-hero-banner shine-card">
-                <div class="sh-icon">
-                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <polyline points="9 12 11 14 15 10"/>
-                    </svg>
-                </div>
-                <div class="sh-content">
-                    <h4 data-i18n="social_verify_title">রিয়েল-টাইম ভেরিফাইড টাস্ক</h4>
-                    <p data-i18n="social_verify_desc">প্রতিটি টাস্কে সঠিকভাবে জয়েন অথবা ভিজিট করার পরই পয়েন্ট আনলক হবে। কোনো ফেক ক্লেইম গ্রহণযোগ্য নয়।</p>
-                </div>
-            </div>
-
-            <div class="section-head" style="margin: 14px 4px 12px 4px;">
-                <span class="section-title" data-i18n="available_social_tasks">উপলব্ধ টাস্কসমূহ</span>
-                <span class="section-sub" data-i18n="available_social_sub">টাস্ক সম্পন্ন করুন এবং সরাসরি ব্যালেন্সে পয়েন্ট যোগ করুন</span>
-            </div>
-
-            <!-- Dynamic Tasks Container (Loads YouTube, Telegram, Web, WhatsApp, FB from Firebase) -->
-            <div id="social-tasks-list" class="social-tasks-list-container">
-                <div class="loading-state" data-i18n="loading_text">Loading records...</div>
-            </div>
-        </div>
-    </div>
-
     <!-- ================= DAILY CHECK-IN BOTTOM SHEET ================= -->
     <div id="checkin-fullview" class="sheet-modal">
         <div class="sheet-box">
@@ -593,6 +542,6 @@
     </nav>
 
     <!-- Client Engine Script -->
-    <script src="app.js?v=5.6.0"></script>
+    <script src="app.js?v=5.5.0"></script>
 </body>
 </html>
