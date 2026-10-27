@@ -1,13 +1,9 @@
 /**
- * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.6.3 FINAL SECURE)
- * - Dynamic Admin-Controlled Waiting Time (Synced with Firebase 'adsterraWaitTime')
- * - Strict Cloudflare Worker & Telegram Bot Membership Verification (No Bypass)
- * - Tamper-Proof Ad Reward System (Controlled Rewards & Limits)
- * - BD Mobile Operator & Prefix Mismatch Guard (GP, BL, Robi, Airtel, Teletalk)
- * - Centralized Telegram BackButton Modal Manager
- * - Body Scroll-Lock on Modal/Sheet Open
- * - Enhanced Firebase Sync with UTC Reset
- * - Verification Guard on Withdrawal Submissions
+ * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.7.0 UPDATED)
+ * - Auto-Verify Status Check (Reverts to Unverified if user leaves Telegram Channel)
+ * - In-Screen Ad Loop (Stay inside task screen after ad completion)
+ * - Dynamic Admin-Controlled Waiting Time
+ * - BD Mobile Operator & Prefix Mismatch Guard
  */
 
 // ================= ১. ব্যাকএন্ড কনফিগারেশন =================
@@ -62,14 +58,10 @@ const openModalStack = [];
 function syncModalState() {
     if (openModalStack.length > 0) {
         document.body.style.overflow = 'hidden';
-        if (tg?.BackButton) {
-            tg.BackButton.show();
-        }
+        if (tg?.BackButton) tg.BackButton.show();
     } else {
         document.body.style.overflow = '';
-        if (tg?.BackButton) {
-            tg.BackButton.hide();
-        }
+        if (tg?.BackButton) tg.BackButton.hide();
     }
 }
 
@@ -82,9 +74,7 @@ function pushModalToStack(modalId, closeFn) {
 
 function removeModalFromStack(modalId) {
     const idx = openModalStack.findIndex(m => m.id === modalId);
-    if (idx !== -1) {
-        openModalStack.splice(idx, 1);
-    }
+    if (idx !== -1) openModalStack.splice(idx, 1);
     syncModalState();
 }
 
@@ -287,7 +277,7 @@ const translations = {
         menu_daily_bonus: "7-Day Streak Rewards",
         menu_support: "24/7 Help & Support",
         menu_tg_support: "Telegram Official Channel",
-        footer_caption: "EarnHub Pro v5.6.3 • Verified Telegram WebApp",
+        footer_caption: "EarnHub Pro v5.7.0 • Verified Telegram WebApp",
         fv_task_details: "Task Overview",
         fv_m_reward: "Task Reward",
         fv_m_limit: "Daily Limit",
@@ -406,7 +396,7 @@ const translations = {
         menu_daily_bonus: "৭ দিনের ধারাবাহিক উপহার",
         menu_support: "২৪/৭ হেল্প ও সাপোর্ট",
         menu_tg_support: "টেলিগ্রাম অফিসিয়াল চ্যানেল",
-        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৬.৩ • টেলিগ্রাম মিনি অ্যাপ",
+        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৭.০ • টেলিগ্রাম মিনি অ্যাপ",
         fv_task_details: "টাস্ক বিবরণ",
         fv_m_reward: "টাস্ক রিওয়ার্ড",
         fv_m_limit: "দৈনিক লিমিট",
@@ -438,7 +428,7 @@ const translations = {
         toast_already_claimed: "⚠️ আজকের বোনাস ইতিমধ্যে নেওয়া হয়েছে!",
         toast_claim_success: "🎉 দিন {day}-এর বোনাস +{pts} পয়েন্ট যোগ হয়েছে!",
         toast_link_copied: "✅ রেফারেল লিংক কপি করা হয়েছে!",
-        toast_verify_required: "⚠️ কাজ করতে প্রথমে টেলিগ্রাম চ্যানেলে জয়েন করে ভেরিফাই করুন!",
+        toast_verify_required: "⚠️ আপনি চ্যানেলে নেই! টেলিগ্রাম চ্যানেলে জয়েন করে ভেরিফাই করুন।",
         toast_verify_withdraw: "⚠️ টাকা উত্তোলন করতে প্রথমে টেলিগ্রাম চ্যানেলে জয়েন করে অ্যাকাউন্ট ভেরিফাই করুন!",
         toast_verify_success: "🎉 মেম্বারশিপ নিশ্চিত হয়েছে! কাজ ও উত্তোলন সক্রিয় হলো।",
         toast_already_verified: "✅ আপনার অ্যাকাউন্ট ইতিমধ্যে ভেরিফাইড!",
@@ -545,9 +535,8 @@ let lastCheckInDate = "";
 let checkInStreak = 0;
 
 let isChannelVerified = false;
-const checkInRewards = [10, 20, 30, 45, 60, 80, 150];
+const checkInRewards = [2, 3, 5, 10, 15, 20, 50];
 
-// কনফিগারেশন ভেরিয়েবল
 let tutorialVideoUrl = "https://www.youtube.com"; 
 let telegramChannelUrl = "https://t.me/";
 
@@ -561,7 +550,6 @@ let adminMinBkash = 500;
 let adminMinNagad = 500;
 let minWithdrawPoints = 200;
 
-// এডমিন প্যানেল থেকে ডায়নামিক নিয়ন্ত্রণযোগ্য ওয়েটিং টাইম (ডিফল্ট ১৫ সেকেন্ড)
 let requiredSponsorTime = 15;
 
 let selectedWithdrawMethod = 'recharge';
@@ -648,7 +636,6 @@ db.ref('settings').on('value', (snapshot) => {
     const channelLinkEl = document.getElementById('telegram-channel-link');
     if (channelLinkEl) channelLinkEl.href = telegramChannelUrl;
 
-    // এডমিন প্যানেল থেকে ডায়নামিক টাইমার সিঙ্ক (ডিফল্ট ১৫ সেকেন্ড)
     if (data.adsterraWaitTime || data.directLinkTimer) {
         requiredSponsorTime = Number(data.adsterraWaitTime || data.directLinkTimer || 15);
     }
@@ -803,8 +790,12 @@ function initUser() {
 
                 updateUI();
                 renderCheckInGrid();
+                updateFullViewMetrics();
             });
         }
+        
+        // অ্যাপে প্রবেশের সময় স্বয়ংক্রিয় রিয়েল-টাইম মেম্বারশিপ যাচাই
+        silentVerifyTelegramMembership();
     });
 
     listenToUserReferrals();
@@ -960,16 +951,43 @@ function closeChannelVerifyModal() {
     removeModalFromStack('channel-verify-modal');
 }
 
-// ১০০% সুরক্ষিত টেলিগ্রাম চ্যানেল ভেরিফিকেশন
+// সাইক্লিক/রিয়েল-টাইম মেম্বারশিপ যাচাই (লিভ নিলে স্বয়ংক্রিয়ভাবে আনভেরিফাইড করবে)
+async function silentVerifyTelegramMembership() {
+    if (!BACKEND_API_URL) return;
+    try {
+        const resp = await fetch(`${BACKEND_API_URL}/api/check-channel-membership`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-telegram-init-data': tg?.initData || ''
+            },
+            body: JSON.stringify({ 
+                userId: userId,
+                initData: tg?.initData || ''
+            })
+        });
+
+        if (resp.ok) {
+            const resData = await resp.json();
+            const isCurrentlyMember = (resData && resData.isMember === true);
+
+            if (isChannelVerified !== isCurrentlyMember) {
+                isChannelVerified = isCurrentlyMember;
+                await db.ref('users/' + userId).update({
+                    isChannelVerified: isCurrentlyMember
+                });
+                updateUI();
+            }
+            return isCurrentlyMember;
+        }
+    } catch (e) { }
+    return isChannelVerified;
+}
+
+// ম্যানুয়াল ভেরিফাই বাটন হ্যান্ডলার
 async function checkTelegramVerification() {
     playClickSound();
     triggerHaptic('medium');
-
-    if (isChannelVerified) {
-        showToast(t('toast_already_verified'));
-        closeChannelVerifyModal();
-        return;
-    }
 
     const btn = document.getElementById('btn-check-tg-verify');
     if (btn) btn.disabled = true;
@@ -1014,6 +1032,11 @@ async function checkTelegramVerification() {
             closeChannelVerifyModal();
             updateUI();
         } else {
+            isChannelVerified = false;
+            await db.ref('users/' + userId).update({
+                isChannelVerified: false
+            });
+            updateUI();
             triggerHaptic('notification_error');
             showToast(t('toast_verify_required'), 'error');
         }
@@ -1025,12 +1048,47 @@ async function checkTelegramVerification() {
     }
 }
 
-// ================= ১২. ফুলভিউ ইন-পেজ স্ক্রিন (ডায়নামিক টাইমার সহ) =================
-function openNetworkFullView(networkKey) {
+// ================= ১২. ফুলভিউ ইন-পেজ স্ক্রিন =================
+function updateFullViewMetrics() {
+    const screen = document.getElementById('network-fullview');
+    if (!screen || !screen.classList.contains('active')) return;
+
+    let curCount = 0;
+    let curLimit = 0;
+
+    if (selectedNetwork === 'monetag') {
+        curCount = monetagWatchedCount;
+        curLimit = netConfigs.monetag.limit;
+    } else if (selectedNetwork === 'adsgram') {
+        curCount = adsgramWatchedCount;
+        curLimit = netConfigs.adsgram.limit;
+    } else if (selectedNetwork === 'adsterra') {
+        curCount = adsterraWatchedCount;
+        curLimit = netConfigs.adsterra.limit;
+    }
+
+    const limitEl = document.getElementById('fv-limit-count');
+    if (limitEl) limitEl.innerText = `${formatNum(curCount)} / ${formatNum(curLimit)}`;
+
+    const actionBtn = document.getElementById('fv-action-btn');
+    const btnText = document.getElementById('fv-btn-text');
+
+    if (curCount >= curLimit) {
+        if (actionBtn) actionBtn.disabled = true;
+        if (btnText) btnText.innerText = currentLang === 'bn' ? "সীমা শেষ হয়েছে" : "Limit Reached";
+    } else {
+        if (actionBtn) actionBtn.disabled = false;
+        if (btnText) btnText.innerText = t('btn_watch_and_earn');
+    }
+}
+
+async function openNetworkFullView(networkKey) {
     playClickSound();
     triggerHaptic('light');
 
-    if (!isChannelVerified) {
+    // ইনস্ট্যান্ট মেম্বারশিপ রি-চেক (ইউজার লিভ নিলে তৎক্ষণাৎ ধরা পড়বে)
+    const isMember = await silentVerifyTelegramMembership();
+    if (!isMember) {
         triggerHaptic('notification_error');
         showToast(t('toast_verify_required'), 'error');
         openChannelVerifyModal();
@@ -1090,14 +1148,10 @@ function openNetworkFullView(networkKey) {
     document.getElementById('fv-headline').innerText = info.headline;
     document.getElementById('fv-desc').innerText = info.desc;
     document.getElementById('fv-reward-amount').innerText = `+${formatNum(netConfigs[networkKey].reward)} ${t('pts_currency')}`;
-    document.getElementById('fv-limit-count').innerText = `${formatNum(info.watched)} / ${formatNum(info.limit)}`;
     
-    const actionBtn = document.getElementById('fv-action-btn');
-    if (actionBtn) actionBtn.disabled = false;
-    document.getElementById('fv-btn-text').innerText = t('btn_watch_and_earn');
-
     screen.classList.add('active');
     pushModalToStack('network-fullview', closeNetworkFullView);
+    updateFullViewMetrics();
 }
 
 function closeNetworkFullView() {
@@ -1116,7 +1170,8 @@ async function executeCurrentNetworkAd() {
     playClickSound();
     triggerHaptic('medium');
 
-    if (!isChannelVerified) {
+    const isMember = await silentVerifyTelegramMembership();
+    if (!isMember) {
         triggerHaptic('notification_error');
         showToast(t('toast_verify_required'), 'error');
         closeNetworkFullView();
@@ -1162,7 +1217,8 @@ async function executeCurrentNetworkAd() {
                     showToast(t('toast_ad_failed'), 'error');
                 } else {
                     await creditPoints('monetag', netConfigs.monetag.reward);
-                    closeNetworkFullView();
+                    // ফুলভিউ বন্ধ করা হবে না; সরাসরি UI আপডেট হবে
+                    updateFullViewMetrics();
                 }
                 actionBtn.disabled = false;
             }).catch((err) => {
@@ -1198,7 +1254,8 @@ async function executeCurrentNetworkAd() {
             const result = await adController.show();
             if (result && result.done) {
                 await creditPoints('adsgram', netConfigs.adsgram.reward);
-                closeNetworkFullView();
+                // ফুলভিউ বন্ধ করা হবে না; সরাসরি UI আপডেট হবে
+                updateFullViewMetrics();
             } else {
                 showToast(t('toast_ad_failed'), 'error');
             }
@@ -1243,7 +1300,7 @@ async function executeCurrentNetworkAd() {
     }
 }
 
-// Adsterra ডায়নামিক সেকেন্ড সক্রিয় যাচাই ইঞ্জিন
+// Adsterra সক্রিয় যাচাই ইঞ্জিন
 function checkAdsterraCompletion() {
     if (!adsterraSession || !adsterraSession.active) return;
 
@@ -1275,7 +1332,8 @@ function checkAdsterraCompletion() {
         if (actionBtn) actionBtn.disabled = false;
 
         creditPoints('adsterra', rewardPoints);
-        closeNetworkFullView();
+        // ফুলভিউ বন্ধ করা হবে না; কাউন্টার ও বাটন আপডেট হবে
+        updateFullViewMetrics();
     }
 }
 
@@ -1298,7 +1356,7 @@ window.addEventListener('focus', () => {
     }
 });
 
-// ================= ১৪. পয়েন্ট ক্রেডিটিং ইঞ্জিন (ডাবল রিওয়ার্ড মুক্ত) =================
+// ================= ১৪. পয়েন্ট ক্রেডিটিং ইঞ্জিন =================
 async function creditPoints(networkKey, reward) {
     const validConfig = netConfigs[networkKey];
     if (!validConfig) return;
@@ -1324,6 +1382,7 @@ async function creditPoints(networkKey, reward) {
                 triggerConfetti();
                 triggerHaptic('notification_success');
                 showToast(t('toast_pts_credited', { pts: safeReward }));
+                updateFullViewMetrics();
                 return;
             } else if (resData && resData.message) {
                 return showToast(resData.message, 'error');
@@ -1370,6 +1429,7 @@ async function creditPoints(networkKey, reward) {
         triggerConfetti();
         triggerHaptic('notification_success');
         showToast(t('toast_pts_credited', { pts: safeReward }));
+        updateFullViewMetrics();
     } else {
         showToast(t('toast_limit_reached'), 'error');
     }
@@ -1431,7 +1491,6 @@ function calculateWithdrawBdt() {
     }
 }
 
-// BD মোবাইল অপারেটর প্রিফিক্স যাচাইকরণ
 const operatorPrefixes = {
     'Grameenphone': /^01[37]\d{8}$/,
     'Banglalink': /^01[49]\d{8}$/,
@@ -1445,8 +1504,8 @@ async function handleWithdrawSubmit(event) {
     playClickSound();
     triggerHaptic('medium');
 
-    // 🔒 অ্যাকাউন্ট ভেরিফিকেশন গার্ড (আনভেরিফাইড হলে উইথড্র সম্পূর্ণ বন্ধ থাকবে)
-    if (!isChannelVerified) {
+    const isMember = await silentVerifyTelegramMembership();
+    if (!isMember) {
         triggerHaptic('notification_error');
         showToast(t('toast_verify_withdraw'), 'error');
         openChannelVerifyModal(); 
@@ -1470,7 +1529,6 @@ async function handleWithdrawSubmit(event) {
         return showToast(t('toast_valid_phone'), 'error');
     }
 
-    // অপারেটর ও নম্বর যাচাই
     if (selectedWithdrawMethod === 'recharge' && operator) {
         const regex = operatorPrefixes[operator];
         if (regex && !regex.test(phone)) {

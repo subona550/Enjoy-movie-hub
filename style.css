@@ -1,5 +1,5 @@
 /* ==========================================================
-   EARNHUB PRO - ADVANCED FINTECH THEME (v5.5.0 FINAL)
+   EARNHUB PRO - ADVANCED FINTECH THEME (v5.7.0 FINAL)
    - Edge-to-Edge Responsive Layout (Fits Any Screen Perfectly)
    - High-Converting YouTube Tutorial Action Card
    - Telegram Channel Verification Modal & Badges
@@ -8,6 +8,7 @@
    - Ultra-Clean Day/Light & Obsidian Dark Theme Engine
    - Animated SVG Checkmark & Glassmorphic Receipt Card
    - Anti-Spam Tactile Feedback & Shimmer Light Animations
+   - Native Dropdown Safe-guard & Polished Loading State
 ========================================================== */
 
 :root {
@@ -1070,6 +1071,12 @@ input, select, textarea {
     border-color: var(--accent-mint);
 }
 
+/* ড্রপডাউন অপশন কালার সেফগার্ড */
+select.field-input option {
+    background-color: var(--card-surface);
+    color: var(--text-primary);
+}
+
 .preview-box {
     background: var(--input-bg);
     border: 1px dashed rgba(0, 229, 153, 0.5);
@@ -1348,6 +1355,15 @@ input, select, textarea {
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.35);
     margin-bottom: 10px;
+}
+
+/* ডাটা লোডিং স্টেট */
+.loading-state {
+    text-align: center;
+    padding: 28px 16px;
+    font-size: 14.5px;
+    color: var(--text-muted);
+    font-weight: 600;
 }
 
 .page { display: none; width: 100%; }
