@@ -1,14 +1,5 @@
 /* ==========================================================
-   EARNHUB PRO - ADVANCED FINTECH THEME (v5.7.0 FINAL)
-   - Edge-to-Edge Responsive Layout (Fits Any Screen Perfectly)
-   - High-Converting YouTube Tutorial Action Card
-   - Telegram Channel Verification Modal & Badges
-   - Ultra-Large High-CPM Ad Network Cards (Expanded Height & Icon)
-   - In-Page Full View Screen 3-Card Metrics Architecture
-   - Ultra-Clean Day/Light & Obsidian Dark Theme Engine
-   - Animated SVG Checkmark & Glassmorphic Receipt Card
-   - Anti-Spam Tactile Feedback & Shimmer Light Animations
-   - Native Dropdown Safe-guard & Polished Loading State
+   EARNHUB PRO - ADVANCED FINTECH THEME (v6.0.0 PRODUCTION)
 ========================================================== */
 
 :root {
@@ -70,7 +61,6 @@ body.light-theme {
     padding: 0;
     font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-tap-highlight-color: transparent;
-    transition: background-color 0.25s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 body {
@@ -83,6 +73,7 @@ body {
     overflow-x: hidden;
     user-select: none;
     width: 100%;
+    transition: background-color 0.25s ease, color 0.2s ease;
 }
 
 input, select, textarea {
@@ -101,10 +92,11 @@ input, select, textarea {
     color: var(--accent-mint) !important;
 }
 
-/* ================= শাইন ও প্রিমিয়াম লাইট সুইপ ================= */
+/* GPU Shimmer Effects */
 .shine-card {
     position: relative;
     overflow: hidden;
+    transform: translateZ(0);
 }
 
 .shine-card::after {
@@ -125,11 +117,13 @@ input, select, textarea {
     transform: rotate(25deg);
     animation: lightSweep 6s infinite ease-in-out;
     pointer-events: none;
+    will-change: transform;
 }
 
 .shine-sweep {
     position: relative;
     overflow: hidden;
+    transform: translateZ(0);
 }
 
 .shine-sweep::after {
@@ -143,26 +137,27 @@ input, select, textarea {
         120deg,
         rgba(255, 255, 255, 0) 0%,
         rgba(255, 255, 255, 0.28) 50%,
-        rgba(255, 255, 255, 0) 100%
+        rgba(255, 255, 255, 100%)
     );
     transform: rotate(25deg);
     animation: lightSweepBtn 4s infinite ease-in-out;
     pointer-events: none;
+    will-change: transform;
 }
 
 @keyframes lightSweep {
-    0% { left: -90%; }
-    22% { left: 140%; }
-    100% { left: 140%; }
+    0% { transform: translate3d(0, 0, 0) rotate(25deg); left: -90%; }
+    25% { transform: translate3d(0, 0, 0) rotate(25deg); left: 140%; }
+    100% { transform: translate3d(0, 0, 0) rotate(25deg); left: 140%; }
 }
 
 @keyframes lightSweepBtn {
-    0% { left: -100%; }
-    30% { left: 150%; }
-    100% { left: 150%; }
+    0% { transform: translate3d(0, 0, 0) rotate(25deg); left: -100%; }
+    30% { transform: translate3d(0, 0, 0) rotate(25deg); left: 150%; }
+    100% { transform: translate3d(0, 0, 0) rotate(25deg); left: 150%; }
 }
 
-/* ================= অ্যানিমেটেড সাকসেস চেকমার্ক ================= */
+/* Animated Checkmark */
 .success-checkmark-wrap {
     width: 86px;
     height: 86px;
@@ -207,7 +202,7 @@ input, select, textarea {
     50% { transform: scale3d(1.08, 1.08, 1); }
 }
 
-/* ক্যাশআউট রিসিট কার্ড */
+/* Receipt Card */
 .receipt-card {
     max-width: 410px !important;
     padding: 30px 22px !important;
@@ -242,7 +237,7 @@ input, select, textarea {
     font-weight: 700;
 }
 
-/* ================= স্প্ল্যাশ স্ক্রিন ================= */
+/* Splash Screen */
 #splash-screen {
     position: fixed;
     inset: 0;
@@ -289,7 +284,7 @@ input, select, textarea {
     transition: width 0.2s ease;
 }
 
-/* ================= হেডার (টপ বার) ================= */
+/* Top Nav Header */
 .top-nav {
     display: flex;
     justify-content: space-between;
@@ -330,6 +325,11 @@ input, select, textarea {
     box-shadow: 0 0 14px var(--accent-mint-soft);
 }
 
+.user-meta {
+    display: flex;
+    flex-direction: column;
+}
+
 .user-name {
     font-size: 16px;
     font-weight: 800;
@@ -365,7 +365,7 @@ input, select, textarea {
 
 .icon-btn-pill:active { transform: scale(0.95); }
 
-/* ================= বডি লেআউট (স্ক্রিনের দুই পাশে পারফেক্ট ফিট) ================= */
+/* Body Layout */
 .app-body {
     padding: 14px 12px 28px 12px;
     width: 100%;
@@ -383,7 +383,7 @@ input, select, textarea {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
 }
 
-/* হিরো ব্যালেন্স কার্ড */
+/* Balance Hero Card */
 .balance-hero {
     display: flex;
     flex-direction: column;
@@ -444,7 +444,7 @@ input, select, textarea {
     font-weight: 700;
 }
 
-/* ================= ইউটিউব ভিডিও টিউটোরিয়াল কার্ড ================= */
+/* Video Tutorial Card */
 #card-video-tutorial {
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -454,7 +454,7 @@ input, select, textarea {
     box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
 }
 
-/* সেকশন হেডার */
+/* Section Header */
 .section-head {
     display: flex;
     flex-direction: column;
@@ -474,7 +474,7 @@ input, select, textarea {
     color: var(--text-muted);
 }
 
-/* ================= বিলাসবহুল স্পনসর অ্যাড কার্ড ================= */
+/* Sponsor Task Cards */
 .ad-card-container {
     display: flex;
     flex-direction: column;
@@ -595,7 +595,7 @@ input, select, textarea {
     color: var(--text-primary);
 }
 
-/* ================= ইন-পেজ ফুল ভিউ মডেল স্ক্রিন ================= */
+/* In-Page Fullview Screen */
 .inpage-screen {
     position: fixed;
     inset: 0;
@@ -648,7 +648,8 @@ input, select, textarea {
 .fv-scroll-content {
     flex: 1;
     overflow-y: auto;
-    padding: 24px 14px 130px 14px;
+    -webkit-overflow-scrolling: touch;
+    padding: 24px 14px 140px 14px;
     max-width: 580px;
     margin: 0 auto;
     width: 100%;
@@ -701,7 +702,6 @@ input, select, textarea {
     margin: 0 auto;
 }
 
-/* ফুল ভিউয়ের ৩টি কার্ড গ্রিড */
 .fv-metrics-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -806,7 +806,7 @@ input, select, textarea {
     margin: 0 auto;
 }
 
-/* ================= বাটনস ================= */
+/* Buttons */
 .btn-primary {
     width: 100%;
     background: var(--accent-mint);
@@ -845,7 +845,7 @@ input, select, textarea {
     margin-top: 12px;
 }
 
-/* ================= রেফারেল পেজ ================= */
+/* Referral Page & Badge */
 .compact-hero {
     text-align: center;
     padding: 26px 20px;
@@ -932,6 +932,7 @@ input, select, textarea {
     gap: 12px;
     max-height: 310px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .ref-item {
@@ -969,15 +970,26 @@ input, select, textarea {
 .ref-date { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
 
 .ref-badge {
-    background: var(--accent-mint-soft);
-    color: var(--accent-mint);
     font-size: 13.5px;
     font-weight: 800;
     padding: 6px 12px;
     border-radius: 10px;
+    display: inline-block;
 }
 
-/* ================= ক্যাশআউট পেজ ================= */
+.ref-badge.pending {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #F59E0B !important;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.ref-badge.qualified {
+    background: var(--accent-mint-soft) !important;
+    color: var(--accent-mint) !important;
+    border: 1px solid rgba(0, 229, 153, 0.3);
+}
+
+/* Cashout Page */
 .balance-summary-card {
     text-align: center;
     padding: 26px 20px;
@@ -1071,7 +1083,11 @@ input, select, textarea {
     border-color: var(--accent-mint);
 }
 
-/* ড্রপডাউন অপশন কালার সেফগার্ড */
+select.field-input {
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+}
+
 select.field-input option {
     background-color: var(--card-surface);
     color: var(--text-primary);
@@ -1096,7 +1112,7 @@ select.field-input option {
     color: var(--accent-mint);
 }
 
-/* ================= প্রোফাইল ================= */
+/* Profile Page */
 .profile-card {
     text-align: center;
     padding: 30px 20px;
@@ -1171,7 +1187,7 @@ select.field-input option {
 .chevron { color: var(--text-muted); }
 .footer-caption { text-align: center; font-size: 13.5px; color: var(--text-muted); margin-top: 24px; font-weight: 600; }
 
-/* ================= বটম নেভিগেশন বার ================= */
+/* Bottom Nav Bar */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -1205,14 +1221,14 @@ select.field-input option {
     color: var(--accent-mint);
 }
 
-/* ================= বটম শিট ও মোডাল ================= */
+/* Bottom Sheet */
 .sheet-modal {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.74);
     display: none;
     align-items: flex-end;
-    z-index: 10001;
+    z-index: 10015;
 }
 
 .sheet-modal.active { display: flex; }
@@ -1226,6 +1242,7 @@ select.field-input option {
     padding: 26px 20px calc(24px + var(--safe-bottom)) 20px;
     animation: slideUp 0.25s ease;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 @keyframes slideUp {
@@ -1285,8 +1302,16 @@ select.field-input option {
 .ci-num { font-weight: 700; color: var(--text-muted); display: block; font-size: 13px; }
 .ci-pts { font-weight: 800; color: var(--text-primary); margin-top: 5px; display: block; font-size: 14.5px; }
 
-/* হিস্ট্রি ও স্ট্যাটাস ব্যাজসমূহ */
-.history-list { max-height: 54vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+/* History List */
+.history-list { 
+    max-height: 54vh; 
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+}
+
 .h-item { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 15px 16px; display: flex; justify-content: space-between; align-items: center; }
 .h-title { font-size: 15.5px; font-weight: 700; color: var(--text-primary); }
 .h-date { font-size: 12.5px; color: var(--text-muted); margin-top: 3px; }
@@ -1296,7 +1321,7 @@ select.field-input option {
 .st-approved { background: rgba(0, 229, 153, 0.16); color: var(--accent-mint); }
 .st-rejected { background: rgba(239, 68, 68, 0.16); color: #EF4444; }
 
-/* মোডাল ওভারলে ও মোডাল কার্ড */
+/* Modal Overlay */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1306,7 +1331,7 @@ select.field-input option {
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 10002;
+    z-index: 10020;
     padding: 16px;
     animation: fadeInModal 0.2s ease-out;
 }
@@ -1332,7 +1357,7 @@ select.field-input option {
 .modal-title { font-size: 23px; font-weight: 900; margin-bottom: 10px; color: var(--text-primary); }
 .modal-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.55; }
 
-/* টোস্ট নোটিফিকেশন */
+/* Toast Notifications */
 #toast-container {
     position: fixed;
     top: calc(20px + var(--safe-top));
@@ -1357,7 +1382,6 @@ select.field-input option {
     margin-bottom: 10px;
 }
 
-/* ডাটা লোডিং স্টেট */
 .loading-state {
     text-align: center;
     padding: 28px 16px;
@@ -1368,3 +1392,9 @@ select.field-input option {
 
 .page { display: none; width: 100%; }
 .page.active { display: block; }
+
+@media (max-width: 360px) {
+    .b-value { font-size: 42px; }
+    .ad-card-main { gap: 14px; }
+    .ad-icon { width: 62px; height: 62px; }
+}

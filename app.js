@@ -1,13 +1,12 @@
-/**
- * EARNHUB PRO - ADVANCED CLIENT ENGINE (v5.7.0 UPDATED)
- * - Auto-Verify Status Check (Reverts to Unverified if user leaves Telegram Channel)
- * - In-Screen Ad Loop (Stay inside task screen after ad completion)
- * - Dynamic Admin-Controlled Waiting Time
- * - BD Mobile Operator & Prefix Mismatch Guard
+/*** 
+ * EARNHUB PRO - ZERO-TRUST CLIENT ENGINE (v6.1.0 PRODUCTION FINAL)
+ * - 100% Synced with Secured Cloudflare Worker & Firebase Realtime Database
+ * - Zero Direct Firebase Writes (Zero-Tampering Architecture)
  */
 
-// ================= ১. ব্যাকএন্ড কনফিগারেশন =================
+// ================= ১. কনফিগারেশন =================
 const BACKEND_API_URL = "https://earnpro84cc.rakibkdbb.workers.dev"; 
+const DEFAULT_BOT_USERNAME = "EarnHubProBot"; 
 
 // ================= ২. ওয়েব অডিও সিন্থেসাইজার =================
 let audioCtx = null;
@@ -51,11 +50,39 @@ function playRewardSound() {
     } catch (e) { }
 }
 
-// ================= ৩. টেলিগ্রাম SDK ও গ্লোবাল ব্যাকবাটন ম্যানেজার =================
+// ================= ৩. ডিভাইস ফিঙ্গারপ্রিন্ট তৈরি =================
+function getDeviceFingerprint() {
+    let localId = localStorage.getItem('eh_device_uuid');
+    if (!localId) {
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl');
+            const renderer = gl ? gl.getParameter(gl.RENDERER) : 'generic';
+            const str = `${navigator.userAgent}_${screen.width}x${screen.height}_${screen.colorDepth}_${renderer}`;
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash |= 0;
+            }
+            localId = 'dev_' + Math.abs(hash).toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+        } catch (e) {
+            localId = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+        }
+        localStorage.setItem('eh_device_uuid', localId);
+    }
+    return localId;
+}
+const currentDeviceId = getDeviceFingerprint();
+
+// ================= ৪. টেলিগ্রাম SDK ও মোডাল নেভিগেশন =================
 const tg = window.Telegram?.WebApp;
 const openModalStack = [];
 
 function syncModalState() {
+    if (isUserBanned) {
+        if (tg?.BackButton) tg.BackButton.hide();
+        return;
+    }
     if (openModalStack.length > 0) {
         document.body.style.overflow = 'hidden';
         if (tg?.BackButton) tg.BackButton.show();
@@ -88,9 +115,9 @@ if (tg) {
 
         const applyTelegramSafeArea = () => {
             const safeTop = tg.safeAreaInset?.top || tg.contentSafeAreaInset?.top || 0;
-            if (safeTop > 0) {
-                document.documentElement.style.setProperty('--safe-top', `${safeTop}px`);
-            }
+            const safeBottom = tg.safeAreaInset?.bottom || tg.contentSafeAreaInset?.bottom || 0;
+            if (safeTop > 0) document.documentElement.style.setProperty('--safe-top', `${safeTop}px`);
+            if (safeBottom > 0) document.documentElement.style.setProperty('--safe-bottom', `${safeBottom}px`);
         };
         applyTelegramSafeArea();
         if (typeof tg.onEvent === 'function') {
@@ -98,7 +125,9 @@ if (tg) {
         }
 
         if (tg.BackButton) {
+            tg.BackButton.hide();
             tg.BackButton.onClick(() => {
+                if (isUserBanned) return;
                 if (openModalStack.length > 0) {
                     const topModal = openModalStack.pop();
                     if (topModal && typeof topModal.close === 'function') {
@@ -148,7 +177,7 @@ function triggerConfetti() {
     }
 }
 
-// ================= ৪. থিম কন্ট্রোলার =================
+// ================= ৫. থিম কন্ট্রোলার =================
 let currentTheme = localStorage.getItem('app_theme') || 'dark';
 
 function applyTheme() {
@@ -175,7 +204,7 @@ function toggleTheme() {
         : (currentLang === 'bn' ? 'ডার্ক মোড সক্রিয়' : 'Dark Mode Enabled'));
 }
 
-// ================= ৫. ফায়ারবেস কনফিগারেশন =================
+// ================= ৬. ফায়ারবেস ডেটাবেস (রিয়েলটাইম রিড-ওনলি সিঙ্ক) =================
 const firebaseConfig = {
   apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
   authDomain: "enjoy-movies-app.firebaseapp.com",
@@ -192,17 +221,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-let serverTimeOffset = 0;
-db.ref('.info/serverTimeOffset').on('value', (snap) => {
-    serverTimeOffset = snap.val() || 0;
-});
-
-function getSafeDateKey() {
-    const serverNow = new Date(Date.now() + serverTimeOffset);
-    return `${serverNow.getUTCFullYear()}-${String(serverNow.getUTCMonth() + 1).padStart(2, '0')}-${String(serverNow.getUTCDate()).padStart(2, '0')}`;
-}
-
-// ================= ৬. দ্বিভাষিক ইঞ্জিন (ইংরেজি ও বাংলা) =================
+// ================= ৭. দ্বিভাষিক ইঞ্জিন =================
 let currentLang = localStorage.getItem('app_lang') || 'en';
 const bnDigits = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
 
@@ -250,13 +269,13 @@ const translations = {
         refer_badge: "REFER & EARN",
         refer_heading: "Invite Friends & Earn Together",
         refer_sub_1: "Earn",
-        refer_sub_2: "points for every active invitee!",
+        refer_sub_2: "points when invitee verifies channel & watches {ads} ads!",
         btn_copy: "Copy",
         btn_share_telegram: "Share via Telegram",
-        stat_total_ref: "Total Referrals",
+        stat_total_ref: "Active Referrals",
         stat_ref_earnings: "Bonus Earned",
         refer_list_title: "Invited Friends",
-        refer_list_sub: "List of users who joined with your link",
+        refer_list_sub: "Bonus credited once task requirements are met",
         empty_referrals: "No referrals yet. Share your link to start earning!",
         withdraw_bal_label: "Current Withdrawable Balance",
         method_recharge: "Recharge",
@@ -277,7 +296,7 @@ const translations = {
         menu_daily_bonus: "7-Day Streak Rewards",
         menu_support: "24/7 Help & Support",
         menu_tg_support: "Telegram Official Channel",
-        footer_caption: "EarnHub Pro v5.7.0 • Verified Telegram WebApp",
+        footer_caption: "EarnHub Pro v6.1.0 • Verified Telegram WebApp",
         fv_task_details: "Task Overview",
         fv_m_reward: "Task Reward",
         fv_m_limit: "Daily Limit",
@@ -368,14 +387,14 @@ const translations = {
         btn_start_task: "টাস্ক শুরু",
         refer_badge: "রেফার ও আয়",
         refer_heading: "বন্ধুদের আমন্ত্রণ জানিয়ে আয় করুন",
-        refer_sub_1: "প্রতি সফল রেফারে সরাসরি পাবেন",
-        refer_sub_2: "পয়েন্ট ইনস্ট্যান্ট বোনাস!",
+        refer_sub_1: "আমন্ত্রিত বন্ধু চ্যানেলে জয়েন করে {ads}টি অ্যাড দেখলে পাবেন",
+        refer_sub_2: "পয়েন্ট রেফার বোনাস!",
         btn_copy: "কপি",
         btn_share_telegram: "টেলিগ্রামে পাঠান",
-        stat_total_ref: "মোট রেফারেল",
+        stat_total_ref: "সক্রিয় রেফারেল",
         stat_ref_earnings: "অর্জিত পয়েন্ট",
         refer_list_title: "আমন্ত্রিত বন্ধুদের তালিকা",
-        refer_list_sub: "আপনার রেফারেল লিংক ব্যবহার করে যারা যুক্ত হয়েছেন",
+        refer_list_sub: "বন্ধুরা শর্ত পূরণ করলেই সরাসরি বোনাস যুক্ত হবে",
         empty_referrals: "এখনও কোনো রেফারেল নেই। বন্ধুদের লিংক শেয়ার করুন!",
         withdraw_bal_label: "উত্তোলনযোগ্য মূল ব্যালেন্স",
         method_recharge: "রিচার্জ",
@@ -396,7 +415,7 @@ const translations = {
         menu_daily_bonus: "৭ দিনের ধারাবাহিক উপহার",
         menu_support: "২৪/৭ হেল্প ও সাপোর্ট",
         menu_tg_support: "টেলিগ্রাম অফিসিয়াল চ্যানেল",
-        footer_caption: "আর্নহাব প্রো সংস্করণ ৫.৭.০ • টেলিগ্রাম মিনি অ্যাপ",
+        footer_caption: "আর্নহাব প্রো সংস্করণ ৬.১.০ • টেলিগ্রাম মিনি অ্যাপ",
         fv_task_details: "টাস্ক বিবরণ",
         fv_m_reward: "টাস্ক রিওয়ার্ড",
         fv_m_limit: "দৈনিক লিমিট",
@@ -464,8 +483,8 @@ function t(key, params = {}) {
 function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[currentLang][key]) {
-            el.innerHTML = translations[currentLang][key];
+        if (translations[currentLang] && translations[currentLang][key]) {
+            el.innerHTML = translations[currentLang][key].replace(/\{ads\}/g, formatNum(requiredRefAds));
         }
     });
 
@@ -508,14 +527,19 @@ function updateDropdownOptions() {
     }
 }
 
-// ================= ৭. ইউজার স্টেট ম্যানেজমেন্ট =================
+// ================= ৮. ইউজার স্টেট ভেরিয়েবলস =================
 let tgUser = tg?.initDataUnsafe?.user;
 if (!tgUser || !tgUser.id) {
+    let mockId = localStorage.getItem('eh_dev_tester_id');
+    if (!mockId) {
+        mockId = 'test_' + Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('eh_dev_tester_id', mockId);
+    }
     tgUser = {
-        id: "87654321",
-        first_name: "Demo",
+        id: mockId,
+        first_name: "Tester",
         last_name: "User",
-        username: "demotester"
+        username: "tester_" + mockId.slice(-4)
     };
 }
 
@@ -528,6 +552,7 @@ let adsWatchedCount = 0;
 let monetagWatchedCount = 0;
 let adsgramWatchedCount = 0;
 let adsterraWatchedCount = 0;
+let totalAllTimeAds = 0;
 
 let referralCount = 0;
 let referralEarnings = 0;
@@ -535,6 +560,11 @@ let lastCheckInDate = "";
 let checkInStreak = 0;
 
 let isChannelVerified = false;
+let isUserBanned = false;
+let myReferrerId = null;
+let refRewardClaimed = false;
+
+let requiredRefAds = 3; 
 const checkInRewards = [2, 3, 5, 10, 15, 20, 50];
 
 let tutorialVideoUrl = "https://www.youtube.com"; 
@@ -543,7 +573,7 @@ let telegramChannelUrl = "https://t.me/";
 let pointsToBdtRate = 0.10;
 let referralBonusPoints = 50;
 let welcomeBonusPoints = 100;
-let myReferralLink = `https://t.me/?startapp=ref_${userId}`;
+let myReferralLink = `https://t.me/${DEFAULT_BOT_USERNAME}?start=ref_${userId}`;
 
 let adminMinRecharge = 200;
 let adminMinBkash = 500;
@@ -563,6 +593,10 @@ let netConfigs = {
 
 let adsgramNextFormat = 'rewarded';
 let adsterraSession = null;
+let adsterraTimerInterval = null;
+
+let isSplashFinished = false;
+let isFirstTimeNewUser = false;
 
 function escapeHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, c => ({
@@ -582,16 +616,16 @@ function getReferrerId() {
     }
     return null;
 }
-const referrerId = getReferrerId();
+const initialReferrerId = getReferrerId();
 
-// ================= ৮. MONETAG SDK LOADER & HELPER =================
+// ================= ৯. MONETAG SDK LOADER =================
 function injectMonetagScript(zoneId) {
     if (!zoneId) return;
-    const old = document.getElementById('monetag-sdk-dynamic');
-    if (old) old.remove();
+    const scriptId = `monetag-sdk-${zoneId}`;
+    if (document.getElementById(scriptId)) return;
 
     const script = document.createElement('script');
-    script.id = 'monetag-sdk-dynamic';
+    script.id = scriptId;
     script.src = 'https://libtl.com/sdk.js';
     script.dataset.zone = zoneId;
     script.dataset.sdk = `show_${zoneId}`;
@@ -616,7 +650,7 @@ function getMonetagFunction() {
     return null;
 }
 
-// ================= ৯. ফায়ারবেস অ্যাডমিন প্যানেল সিঙ্ক =================
+// ================= ১০. ফায়ারবেস সেটিংস সিঙ্ক =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
 
@@ -638,6 +672,10 @@ db.ref('settings').on('value', (snapshot) => {
 
     if (data.adsterraWaitTime || data.directLinkTimer) {
         requiredSponsorTime = Number(data.adsterraWaitTime || data.directLinkTimer || 15);
+    }
+
+    if (data.requiredRefAds) {
+        requiredRefAds = Number(data.requiredRefAds);
     }
 
     pointsToBdtRate = Number(data.pointsToBdtRate ?? 0.10);
@@ -677,16 +715,16 @@ db.ref('settings').on('value', (snapshot) => {
 
     injectMonetagScript(netConfigs.monetag.zoneId);
 
-    if (data.botUsername) {
-        myReferralLink = data.appShortName 
-            ? `https://t.me/${data.botUsername}/${data.appShortName}?startapp=ref_${userId}`
-            : `https://t.me/${data.botUsername}?start=ref_${userId}`;
-        const refDisplay = document.getElementById('referral-link-display');
-        if (refDisplay) refDisplay.innerText = myReferralLink;
-    }
+    const activeBotUser = (data.botUsername || DEFAULT_BOT_USERNAME).replace('@', '').trim();
+    myReferralLink = data.appShortName 
+        ? `https://t.me/${activeBotUser}/${data.appShortName}?startapp=ref_${userId}`
+        : `https://t.me/${activeBotUser}?start=ref_${userId}`;
+
+    const refDisplay = document.getElementById('referral-link-display');
+    if (refDisplay) refDisplay.innerText = myReferralLink;
 
     const supportLinkEl = document.getElementById('telegram-support-link');
-    const supportUrl = data.supportUrl || data.telegramSupport || (data.botUsername ? `https://t.me/${data.botUsername}?start=support` : 'https://t.me/');
+    const supportUrl = data.supportUrl || data.telegramSupport || (data.botUsername ? `https://t.me/${activeBotUser}?start=support` : 'https://t.me/');
     if (supportLinkEl) supportLinkEl.href = supportUrl.startsWith('http') ? supportUrl : `https://t.me/${supportUrl.replace('@', '')}`;
 
     document.querySelectorAll('.reward-monetag-val').forEach(el => el.innerText = formatNum(netConfigs.monetag.reward));
@@ -702,103 +740,104 @@ db.ref('settings').on('value', (snapshot) => {
     updateUI();
 });
 
-// ================= ১০. ইউজার ইনিশিয়ালাইজেশন =================
-let userListenerAttached = false;
-
-function initUser() {
-    const today = getSafeDateKey();
-    const userRef = db.ref('users/' + userId);
-
-    userRef.once('value', (snap) => {
-        if (!snap.exists()) {
-            balancePoints = welcomeBonusPoints;
-            const newUser = {
+// ================= ১১. সার্ভার-অথেনটিকেটেড ইউজার ইনিশিয়ালাইজেশন =================
+async function initUser() {
+    try {
+        const resp = await fetch(`${BACKEND_API_URL}/api/init-user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-telegram-init-data': tg?.initData || ''
+            },
+            body: JSON.stringify({
+                userId,
                 name: userName,
                 username: userUsername,
-                balance: balancePoints,
-                isChannelVerified: false,
-                adsWatchedCount: 0,
-                monetagWatchedCount: 0,
-                adsgramWatchedCount: 0,
-                adsterraWatchedCount: 0,
-                referralCount: 0,
-                referralEarnings: 0,
-                referredBy: (referrerId && referrerId !== userId) ? referrerId : null,
-                lastAdDate: today,
-                lastCheckInDate: "",
-                checkInStreak: 0,
-                joinedAt: new Date().toISOString()
-            };
+                deviceId: currentDeviceId,
+                referredBy: (initialReferrerId && initialReferrerId !== userId) ? initialReferrerId : null,
+                initData: tg?.initData || ''
+            })
+        });
 
-            userRef.set(newUser).then(() => {
-                if (referrerId && referrerId !== userId) {
-                    db.ref('users/' + referrerId).transaction((curr) => {
-                        if (!curr) return curr;
-                        curr.balance = Math.round(Number(curr.balance || 0) + referralBonusPoints);
-                        curr.referralCount = Number(curr.referralCount || 0) + 1;
-                        curr.referralEarnings = Math.round(Number(curr.referralEarnings || 0) + referralBonusPoints);
-                        return curr;
-                    });
+        const resData = await resp.json().catch(() => ({}));
+        if (resData && resData.user) {
+            if (resData.user.balance === welcomeBonusPoints && !localStorage.getItem('eh_welcome_claimed')) {
+                localStorage.setItem('eh_welcome_claimed', 'true');
+                if (isSplashFinished) openWelcomeModal();
+                else isFirstTimeNewUser = true;
+            }
+        }
+    } catch (e) { }
 
-                    db.ref(`referrals/${referrerId}/${userId}`).set({
-                        id: userId,
-                        name: userName,
-                        username: userUsername,
-                        bonus: referralBonusPoints,
-                        timestamp: new Date().toISOString()
-                    });
-                }
-            });
+    // ডাটাবেস থেকে শুধু রিড ও লাইভ সিঙ্ক করা (কোনো রাইট রিকোয়েস্ট নয়)
+    db.ref('users/' + userId).on('value', (s) => {
+        const data = s.val();
+        if (!data) return;
 
-            openWelcomeModal();
+        if (data.isBanned === true) {
+            isUserBanned = true;
+            const bannedModal = document.getElementById('banned-modal');
+            const devEl = document.getElementById('banned-device-id');
+            if (devEl) devEl.innerText = currentDeviceId;
+            if (bannedModal) bannedModal.style.display = 'flex';
+            syncModalState();
+            return;
         }
 
-        if (!userListenerAttached) {
-            userListenerAttached = true;
-            userRef.on('value', (s) => {
-                const data = s.val();
-                if (!data) return;
+        balancePoints = Math.round(Number(data.balance || 0));
+        isChannelVerified = !!data.isChannelVerified;
+        myReferrerId = data.referredBy || null;
+        refRewardClaimed = !!data.refRewardClaimed;
 
-                balancePoints = Math.round(Number(data.balance || 0));
-                isChannelVerified = !!data.isChannelVerified;
+        adsWatchedCount = Number(data.adsWatchedCount || 0);
+        monetagWatchedCount = Number(data.monetagWatchedCount || 0);
+        adsgramWatchedCount = Number(data.adsgramWatchedCount || 0);
+        adsterraWatchedCount = Number(data.adsterraWatchedCount || 0);
+        totalAllTimeAds = Number(data.totalAllTimeAds || 0);
 
-                adsWatchedCount = Number(data.adsWatchedCount || 0);
-                monetagWatchedCount = Number(data.monetagWatchedCount || 0);
-                adsgramWatchedCount = Number(data.adsgramWatchedCount || 0);
-                adsterraWatchedCount = Number(data.adsterraWatchedCount || 0);
+        referralCount = Number(data.referralCount || 0);
+        referralEarnings = Math.round(Number(data.referralEarnings || 0));
+        lastCheckInDate = data.lastCheckInDate || "";
+        checkInStreak = Number(data.checkInStreak || 0);
 
-                referralCount = Number(data.referralCount || 0);
-                referralEarnings = Math.round(Number(data.referralEarnings || 0));
-                lastCheckInDate = data.lastCheckInDate || "";
-                checkInStreak = Number(data.checkInStreak || 0);
-
-                const currentServerDay = getSafeDateKey();
-                if (data.lastAdDate !== currentServerDay) {
-                    adsWatchedCount = 0;
-                    monetagWatchedCount = 0;
-                    adsgramWatchedCount = 0;
-                    adsterraWatchedCount = 0;
-
-                    userRef.update({
-                        adsWatchedCount: 0,
-                        monetagWatchedCount: 0,
-                        adsgramWatchedCount: 0,
-                        adsterraWatchedCount: 0,
-                        lastAdDate: currentServerDay
-                    });
-                }
-
-                updateUI();
-                renderCheckInGrid();
-                updateFullViewMetrics();
-            });
-        }
-        
-        // অ্যাপে প্রবেশের সময় স্বয়ংক্রিয় রিয়েল-টাইম মেম্বারশিপ যাচাই
-        silentVerifyTelegramMembership();
+        updateUI();
+        renderCheckInGrid();
+        updateFullViewMetrics();
+        checkAndUnlockReferralReward(data);
     });
 
     listenToUserReferrals();
+    silentVerifyTelegramMembership();
+}
+
+// ================= ১২. সার্ভার-ভ্যালিডেটেড রেফারেল ইঞ্জিন =================
+let isUnlockingRefReward = false;
+async function checkAndUnlockReferralReward(userData) {
+    if (!userData || isUnlockingRefReward) return;
+    const refId = userData.referredBy;
+    if (!refId || userData.refRewardClaimed) return;
+
+    const totalAds = Number(userData.totalAllTimeAds || 0);
+    if (userData.isChannelVerified === true && totalAds >= requiredRefAds) {
+        isUnlockingRefReward = true;
+        try {
+            await fetch(`${BACKEND_API_URL}/api/unlock-referral`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-telegram-init-data': tg?.initData || ''
+                },
+                body: JSON.stringify({ 
+                    userId,
+                    referrerId: refId,
+                    initData: tg?.initData || ''
+                })
+            });
+        } catch (e) {
+        } finally {
+            isUnlockingRefReward = false;
+        }
+    }
 }
 
 function listenToUserReferrals() {
@@ -815,7 +854,14 @@ function listenToUserReferrals() {
         snapshot.forEach(child => {
             const item = child.val();
             const initial = (item.name?.charAt(0) || 'U').toUpperCase();
-            const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : '';
+            const dateStr = item.joinedAt ? new Date(item.joinedAt).toLocaleDateString(currentLang === 'bn' ? 'bn-BD' : 'en-US') : '';
+            const isQualified = item.status === 'qualified';
+
+            const badgeText = isQualified 
+                ? `+${formatNum(item.bonus || 50)} ${t('pts_currency')}`
+                : (currentLang === 'bn' ? 'অপেক্ষারত' : 'Pending');
+
+            const badgeClass = isQualified ? 'ref-badge qualified' : 'ref-badge pending';
 
             html = `
                 <div class="ref-item shine-card">
@@ -826,7 +872,7 @@ function listenToUserReferrals() {
                             <span class="ref-date">${escapeHtml(item.username || '')} • ${dateStr}</span>
                         </div>
                     </div>
-                    <span class="ref-badge">+${formatNum(item.bonus || 50)} ${t('pts_currency')}</span>
+                    <span class="${badgeClass}">${badgeText}</span>
                 </div>
             ` + html;
         });
@@ -889,6 +935,12 @@ function updateUI() {
     const minWithdrawEl = document.getElementById('display-min-withdraw');
     if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
 
+    const ptsInput = document.getElementById('withdraw-points');
+    if (ptsInput) {
+        ptsInput.min = minWithdrawPoints;
+        ptsInput.placeholder = currentLang === 'bn' ? `সর্বনিম্ন ${formatNum(minWithdrawPoints)} পয়েন্ট` : `Min ${minWithdrawPoints} PTS`;
+    }
+
     const modeTag = document.getElementById('adsgram-mode-tag');
     if (modeTag) {
         modeTag.innerText = netConfigs.adsgram.mode === 'swap' 
@@ -900,15 +952,14 @@ function updateUI() {
     if (pId) pId.innerText = `ID: #${formatNum(userId)}`;
 }
 
-// ================= ১১. ইউটিউব টিউটোরিয়াল ও চ্যানেল ভেরিফিকেশন ইঞ্জিন =================
+// ================= ১৩. ইউটিউব ভিডিও ও চ্যানেল ভেরিফিকেশন =================
 function openTutorialVideo() {
     playClickSound();
     triggerHaptic('medium');
-
     if (tg && typeof tg.openLink === 'function') {
         tg.openLink(tutorialVideoUrl);
     } else {
-        window.open(tutorialVideoUrl, '_blank');
+        window.open(tutorialVideoUrl, '_blank', 'noopener,noreferrer');
     }
 }
 
@@ -932,7 +983,6 @@ function closeWelcomeModal() {
 function openChannelVerifyModal() {
     playClickSound();
     triggerHaptic('light');
-
     const joinBtn = document.getElementById('btn-verify-join-tg');
     if (joinBtn) joinBtn.href = telegramChannelUrl;
 
@@ -951,9 +1001,8 @@ function closeChannelVerifyModal() {
     removeModalFromStack('channel-verify-modal');
 }
 
-// সাইক্লিক/রিয়েল-টাইম মেম্বারশিপ যাচাই (লিভ নিলে স্বয়ংক্রিয়ভাবে আনভেরিফাইড করবে)
 async function silentVerifyTelegramMembership() {
-    if (!BACKEND_API_URL) return;
+    if (!BACKEND_API_URL) return isChannelVerified;
     try {
         const resp = await fetch(`${BACKEND_API_URL}/api/check-channel-membership`, {
             method: 'POST',
@@ -961,69 +1010,40 @@ async function silentVerifyTelegramMembership() {
                 'Content-Type': 'application/json',
                 'x-telegram-init-data': tg?.initData || ''
             },
-            body: JSON.stringify({ 
-                userId: userId,
-                initData: tg?.initData || ''
-            })
+            body: JSON.stringify({ userId, initData: tg?.initData || '' })
         });
-
         if (resp.ok) {
             const resData = await resp.json();
-            const isCurrentlyMember = (resData && resData.isMember === true);
-
-            if (isChannelVerified !== isCurrentlyMember) {
-                isChannelVerified = isCurrentlyMember;
-                await db.ref('users/' + userId).update({
-                    isChannelVerified: isCurrentlyMember
-                });
+            if (resData && typeof resData.isMember === 'boolean') {
+                isChannelVerified = resData.isMember;
                 updateUI();
+                return resData.isMember;
             }
-            return isCurrentlyMember;
         }
     } catch (e) { }
     return isChannelVerified;
 }
 
-// ম্যানুয়াল ভেরিফাই বাটন হ্যান্ডলার
 async function checkTelegramVerification() {
     playClickSound();
     triggerHaptic('medium');
 
     const btn = document.getElementById('btn-check-tg-verify');
     if (btn) btn.disabled = true;
-
     showToast(t('toast_verifying_membership'));
 
     try {
-        let isMemberVerified = false;
+        const resp = await fetch(`${BACKEND_API_URL}/api/check-channel-membership`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-telegram-init-data': tg?.initData || ''
+            },
+            body: JSON.stringify({ userId, initData: tg?.initData || '' })
+        });
 
-        if (BACKEND_API_URL) {
-            const resp = await fetch(`${BACKEND_API_URL}/api/check-channel-membership`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-telegram-init-data': tg?.initData || ''
-                },
-                body: JSON.stringify({ 
-                    userId: userId,
-                    initData: tg?.initData || ''
-                })
-            });
-
-            if (resp.ok) {
-                const resData = await resp.json();
-                if (resData && resData.isMember === true) {
-                    isMemberVerified = true;
-                }
-            }
-        }
-
-        if (isMemberVerified) {
-            await db.ref('users/' + userId).update({
-                isChannelVerified: true,
-                verifiedAt: new Date().toISOString()
-            });
-
+        const resData = await resp.json();
+        if (resp.ok && resData && resData.isMember) {
             isChannelVerified = true;
             playRewardSound();
             triggerConfetti();
@@ -1033,9 +1053,6 @@ async function checkTelegramVerification() {
             updateUI();
         } else {
             isChannelVerified = false;
-            await db.ref('users/' + userId).update({
-                isChannelVerified: false
-            });
             updateUI();
             triggerHaptic('notification_error');
             showToast(t('toast_verify_required'), 'error');
@@ -1048,7 +1065,7 @@ async function checkTelegramVerification() {
     }
 }
 
-// ================= ১২. ফুলভিউ ইন-পেজ স্ক্রিন =================
+// ================= ১৪. ফুলভিউ ইন-পেজ স্ক্রিন =================
 function updateFullViewMetrics() {
     const screen = document.getElementById('network-fullview');
     if (!screen || !screen.classList.contains('active')) return;
@@ -1076,17 +1093,17 @@ function updateFullViewMetrics() {
     if (curCount >= curLimit) {
         if (actionBtn) actionBtn.disabled = true;
         if (btnText) btnText.innerText = currentLang === 'bn' ? "সীমা শেষ হয়েছে" : "Limit Reached";
-    } else {
+    } else if (!adsterraSession || !adsterraSession.active) {
         if (actionBtn) actionBtn.disabled = false;
         if (btnText) btnText.innerText = t('btn_watch_and_earn');
     }
 }
 
 async function openNetworkFullView(networkKey) {
+    if (isUserBanned) return;
     playClickSound();
     triggerHaptic('light');
 
-    // ইনস্ট্যান্ট মেম্বারশিপ রি-চেক (ইউজার লিভ নিলে তৎক্ষণাৎ ধরা পড়বে)
     const isMember = await silentVerifyTelegramMembership();
     if (!isMember) {
         triggerHaptic('notification_error');
@@ -1112,7 +1129,6 @@ async function openNetworkFullView(networkKey) {
             desc: currentLang === 'bn' ? "ভিডিওটি সম্পূর্ণ দেখলে সরাসরি পয়েন্ট অ্যাকাউন্টে যোগ হবে।" : "Watch the complete sponsored video to credit points to your account balance.",
             iconClass: "task-blue",
             iconSvg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m13 2-2 10h8L7 22l2-10H1z"/></svg>`,
-            watched: monetagWatchedCount,
             limit: netConfigs.monetag.limit
         },
         adsgram: {
@@ -1121,7 +1137,6 @@ async function openNetworkFullView(networkKey) {
             desc: currentLang === 'bn' ? "বিজ্ঞাপন সম্পন্ন হওয়া মাত্রই রিওয়ার্ড পয়েন্ট নিশ্চিত করা হবে।" : "Complete the video or interstitial stream to claim instant reward.",
             iconClass: "task-mint",
             iconSvg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="15" x="2" y="5" rx="2"/><polyline points="10 9 15 12.5 10 16"/></svg>`,
-            watched: adsgramWatchedCount,
             limit: netConfigs.adsgram.limit
         },
         adsterra: {
@@ -1132,7 +1147,6 @@ async function openNetworkFullView(networkKey) {
                 : `Visit the sponsored partner website for at least ${requiredSponsorTime} seconds to unlock reward points.`,
             iconClass: "task-purple",
             iconSvg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`,
-            watched: adsterraWatchedCount,
             limit: netConfigs.adsterra.limit
         }
     };
@@ -1157,6 +1171,10 @@ async function openNetworkFullView(networkKey) {
 function closeNetworkFullView() {
     playClickSound();
     triggerHaptic('light');
+    if (adsterraTimerInterval) {
+        clearInterval(adsterraTimerInterval);
+        adsterraTimerInterval = null;
+    }
     if (adsterraSession) {
         adsterraSession.active = false;
     }
@@ -1165,97 +1183,77 @@ function closeNetworkFullView() {
     removeModalFromStack('network-fullview');
 }
 
-// ================= ১৩. অ্যাড এক্সিকিউশন ও ডায়নামিক অ্যান্টি-চিট ইঞ্জিন =================
+// ================= ১৫. ওয়ান-টাইম টিকেট বেসড অ্যান্টি-চিট অ্যাড এক্সিকিউশন =================
 async function executeCurrentNetworkAd() {
+    if (isUserBanned) return;
     playClickSound();
     triggerHaptic('medium');
-
-    const isMember = await silentVerifyTelegramMembership();
-    if (!isMember) {
-        triggerHaptic('notification_error');
-        showToast(t('toast_verify_required'), 'error');
-        closeNetworkFullView();
-        openChannelVerifyModal();
-        return;
-    }
 
     const actionBtn = document.getElementById('fv-action-btn');
     const btnText = document.getElementById('fv-btn-text');
 
-    let curCount = 0;
-    let curLimit = 0;
-
-    if (selectedNetwork === 'monetag') {
-        curCount = monetagWatchedCount;
-        curLimit = netConfigs.monetag.limit;
-    } else if (selectedNetwork === 'adsgram') {
-        curCount = adsgramWatchedCount;
-        curLimit = netConfigs.adsgram.limit;
-    } else if (selectedNetwork === 'adsterra') {
-        curCount = adsterraWatchedCount;
-        curLimit = netConfigs.adsterra.limit;
-    }
-
-    if (curCount >= curLimit) {
-        return showToast(t('toast_limit_reached'), 'error');
-    }
+    actionBtn.disabled = true;
+    showToast(t('toast_preparing_ad'));
 
     try {
-        if (selectedNetwork === 'monetag') {
-            actionBtn.disabled = true;
-            const monetagFunc = getMonetagFunction();
+        // ১. সার্ভার থেকে ভেরিফাইড ওয়ান-টাইম টাস্ক টিকেট নেওয়া
+        const ticketResp = await fetch(`${BACKEND_API_URL}/api/start-ad-task`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-telegram-init-data': tg?.initData || ''
+            },
+            body: JSON.stringify({ userId, network: selectedNetwork, initData: tg?.initData || '' })
+        });
 
+        const ticketData = await ticketResp.json();
+        if (!ticketResp.ok || !ticketData.success) {
+            actionBtn.disabled = false;
+            return showToast(ticketData.message || t('toast_limit_reached'), 'error');
+        }
+
+        const adTicket = ticketData.ticket;
+
+        // ২. নির্দিষ্ট অ্যাড নেটওয়ার্ক রেন্ডার করা
+        if (selectedNetwork === 'monetag') {
+            const monetagFunc = getMonetagFunction();
             if (typeof monetagFunc !== 'function') {
                 actionBtn.disabled = false;
                 return showToast(t('toast_sdk_error'), 'error');
             }
 
-            showToast(t('toast_preparing_ad'));
-
-            monetagFunc().then(async (result) => {
+            Promise.resolve(monetagFunc()).then(async (result) => {
                 if (result && result.reward_event_type && result.reward_event_type !== 'valued') {
                     showToast(t('toast_ad_failed'), 'error');
                 } else {
-                    await creditPoints('monetag', netConfigs.monetag.reward);
-                    // ফুলভিউ বন্ধ করা হবে না; সরাসরি UI আপডেট হবে
-                    updateFullViewMetrics();
+                    await submitRewardClaim(selectedNetwork, adTicket);
                 }
                 actionBtn.disabled = false;
-            }).catch((err) => {
+            }).catch(() => {
                 showToast(t('toast_ad_failed'), 'error');
                 actionBtn.disabled = false;
             });
         }
         else if (selectedNetwork === 'adsgram') {
-            actionBtn.disabled = true;
             if (typeof window.Adsgram === 'undefined') {
                 actionBtn.disabled = false;
                 return showToast(t('toast_sdk_error'), 'error');
             }
 
-            let blockIdToUse = netConfigs.adsgram.rewardedBlockId;
+            let blockIdToUse = (netConfigs.adsgram.mode === 'swap')
+                ? (adsgramNextFormat === 'rewarded' ? netConfigs.adsgram.rewardedBlockId : netConfigs.adsgram.interstitialBlockId)
+                : netConfigs.adsgram.rewardedBlockId;
+
             if (netConfigs.adsgram.mode === 'swap') {
-                if (adsgramNextFormat === 'rewarded') {
-                    blockIdToUse = netConfigs.adsgram.rewardedBlockId;
-                    adsgramNextFormat = 'interstitial';
-                } else {
-                    blockIdToUse = netConfigs.adsgram.interstitialBlockId;
-                    adsgramNextFormat = 'rewarded';
-                }
-            } else if (netConfigs.adsgram.mode === 'interstitial') {
-                blockIdToUse = netConfigs.adsgram.interstitialBlockId;
-            } else {
-                blockIdToUse = netConfigs.adsgram.rewardedBlockId;
+                adsgramNextFormat = adsgramNextFormat === 'rewarded' ? 'interstitial' : 'rewarded';
             }
 
             showToast(t('toast_starting_ad'));
             const adController = window.Adsgram.init({ blockId: blockIdToUse });
-            
-            const result = await adController.show();
+            const result = await adController.show().catch(err => ({ done: false, error: err }));
+
             if (result && result.done) {
-                await creditPoints('adsgram', netConfigs.adsgram.reward);
-                // ফুলভিউ বন্ধ করা হবে না; সরাসরি UI আপডেট হবে
-                updateFullViewMetrics();
+                await submitRewardClaim(selectedNetwork, adTicket);
             } else {
                 showToast(t('toast_ad_failed'), 'error');
             }
@@ -1263,179 +1261,106 @@ async function executeCurrentNetworkAd() {
         }
         else if (selectedNetwork === 'adsterra') {
             let directUrl = netConfigs.adsterra.url;
-            if (!directUrl.startsWith('http://') && !directUrl.startsWith('https://')) {
-                directUrl = 'https://' + directUrl;
-            }
+            if (!directUrl.startsWith('http://') && !directUrl.startsWith('https://')) directUrl = 'https://' + directUrl;
 
             adsterraSession = {
                 active: true,
-                startedAt: Date.now(),
-                leftAt: null,
-                hasLeft: false,
-                reward: netConfigs.adsterra.reward
+                ticket: adTicket,
+                startedAt: Date.now()
             };
 
-            actionBtn.disabled = true;
-            btnText.innerText = currentLang === 'bn' 
-                ? `⏳ ${formatNum(requiredSponsorTime)} সেকেন্ড পেজে থেকে ফিরে আসুন...` 
-                : `⏳ Stay ${requiredSponsorTime}s in sponsor link & return...`;
-
-            showToast(currentLang === 'bn' 
-                ? `🚀 বিজ্ঞাপন ওপেন হচ্ছে! অন্তত ${formatNum(requiredSponsorTime)} সেকেন্ড পেজে থাকুন।` 
-                : `🚀 Opening sponsor! Please stay at least ${requiredSponsorTime} seconds.`);
-
-            try {
-                if (tg && typeof tg.openLink === 'function') {
-                    tg.openLink(directUrl);
+            let secondsLeft = requiredSponsorTime;
+            if (adsterraTimerInterval) clearInterval(adsterraTimerInterval);
+            adsterraTimerInterval = setInterval(() => {
+                secondsLeft--;
+                if (secondsLeft > 0) {
+                    btnText.innerText = currentLang === 'bn' ? `⏳ ${formatNum(secondsLeft)} সেকেন্ড বাকি...` : `⏳ ${secondsLeft}s remaining...`;
                 } else {
-                    window.open(directUrl, '_blank', 'noopener,noreferrer');
+                    clearInterval(adsterraTimerInterval);
+                    adsterraTimerInterval = null;
+                    checkAdsterraCompletion();
                 }
-            } catch (err) {
+            }, 1000);
+
+            showToast(currentLang === 'bn' ? `🚀 স্পনসর পেজ চালু হয়েছে! পেজে থাকুন।` : `🚀 Opening sponsor! Please stay on page.`);
+            try {
+                if (tg && typeof tg.openLink === 'function') tg.openLink(directUrl);
+                else window.open(directUrl, '_blank', 'noopener,noreferrer');
+            } catch (e) {
                 window.open(directUrl, '_blank');
             }
         }
     } catch (err) {
         showToast(t('toast_ad_failed'), 'error');
-        if (actionBtn) actionBtn.disabled = false;
+        actionBtn.disabled = false;
     }
 }
 
-// Adsterra সক্রিয় যাচাই ইঞ্জিন
 function checkAdsterraCompletion() {
     if (!adsterraSession || !adsterraSession.active) return;
-
     const actionBtn = document.getElementById('fv-action-btn');
     const btnText = document.getElementById('fv-btn-text');
-    const timeNow = Date.now();
-    
-    const startTime = adsterraSession.startedAt;
-    const secondsSpent = Math.floor((timeNow - startTime) / 1000);
+    const secondsSpent = Math.floor((Date.now() - adsterraSession.startedAt) / 1000);
 
     if (secondsSpent < requiredSponsorTime) {
-        const remainingSeconds = requiredSponsorTime - secondsSpent;
-        adsterraSession.active = false;
         if (actionBtn) actionBtn.disabled = false;
         if (btnText) btnText.innerText = t('btn_watch_and_earn');
-
         triggerHaptic('notification_error');
-        showToast(
-            currentLang === 'bn' 
-                ? `⚠️ আপনি মাত্র ${formatNum(secondsSpent)} সেকেন্ড ছিলেন! অন্তত ${formatNum(requiredSponsorTime)} সেকেন্ড থাকতে হবে। (আরও ${formatNum(remainingSeconds)} সে বাকি ছিল)` 
-                : `⚠️ You stayed only ${secondsSpent}s! Must stay at least ${requiredSponsorTime}s.`, 
-            'error'
-        );
+        showToast(currentLang === 'bn' ? `⚠️ পুরো সময় অপেক্ষা করুন!` : `⚠️ Please stay full duration!`, 'error');
     } else {
-        const rewardPoints = adsterraSession.reward;
+        const ticket = adsterraSession.ticket;
         adsterraSession.active = false;
-
         if (btnText) btnText.innerText = t('btn_watch_and_earn');
         if (actionBtn) actionBtn.disabled = false;
-
-        creditPoints('adsterra', rewardPoints);
-        // ফুলভিউ বন্ধ করা হবে না; কাউন্টার ও বাটন আপডেট হবে
-        updateFullViewMetrics();
+        submitRewardClaim('adsterra', ticket);
     }
 }
 
 document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        if (adsterraSession && adsterraSession.active) {
-            adsterraSession.hasLeft = true;
-            adsterraSession.leftAt = Date.now();
-        }
-    } else {
-        if (adsterraSession && adsterraSession.active && adsterraSession.hasLeft) {
+    if (!document.hidden && adsterraSession && adsterraSession.active) {
+        const secondsSpent = Math.floor((Date.now() - adsterraSession.startedAt) / 1000);
+        if (secondsSpent >= requiredSponsorTime) {
+            if (adsterraTimerInterval) clearInterval(adsterraTimerInterval);
             checkAdsterraCompletion();
         }
     }
 });
 
-window.addEventListener('focus', () => {
-    if (adsterraSession && adsterraSession.active && adsterraSession.hasLeft) {
-        checkAdsterraCompletion();
-    }
-});
+// ================= ১৬. ১০০% নিরাপদ সার্ভার রিওয়ার্ড সাবমিশন =================
+async function submitRewardClaim(networkKey, ticket) {
+    try {
+        const resp = await fetch(`${BACKEND_API_URL}/api/claim-ad-reward`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-telegram-init-data': tg?.initData || ''
+            },
+            body: JSON.stringify({ 
+                network: networkKey, 
+                ticket,
+                userId,
+                initData: tg?.initData || ''
+            })
+        });
 
-// ================= ১৪. পয়েন্ট ক্রেডিটিং ইঞ্জিন =================
-async function creditPoints(networkKey, reward) {
-    const validConfig = netConfigs[networkKey];
-    if (!validConfig) return;
-    const safeReward = Number(validConfig.reward);
-
-    if (BACKEND_API_URL) {
-        try {
-            const resp = await fetch(`${BACKEND_API_URL}/api/claim-ad-reward`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-telegram-init-data': tg?.initData || ''
-                },
-                body: JSON.stringify({ 
-                    network: networkKey, 
-                    reward: safeReward,
-                    userId: userId 
-                })
-            });
-            const resData = await resp.json();
-            if (resp.ok && resData.success) {
-                playRewardSound();
-                triggerConfetti();
-                triggerHaptic('notification_success');
-                showToast(t('toast_pts_credited', { pts: safeReward }));
-                updateFullViewMetrics();
-                return;
-            } else if (resData && resData.message) {
-                return showToast(resData.message, 'error');
-            }
-        } catch (e) {
-            return showToast(t('toast_ad_failed'), 'error');
+        const resData = await resp.json().catch(() => ({}));
+        if (resp.ok && resData && resData.success) {
+            playRewardSound();
+            triggerConfetti();
+            triggerHaptic('notification_success');
+            showToast(t('toast_pts_credited', { pts: resData.reward }));
+            updateFullViewMetrics();
+        } else {
+            triggerHaptic('notification_error');
+            showToast(resData.message || t('toast_ad_failed'), 'error');
         }
-        return; 
-    }
-
-    const today = getSafeDateKey();
-    const userRef = db.ref('users/' + userId);
-
-    const result = await userRef.transaction(current => {
-        if (!current) return;
-        
-        if (current.lastAdDate !== today) {
-            current.adsWatchedCount = 0;
-            current.monetagWatchedCount = 0;
-            current.adsgramWatchedCount = 0;
-            current.adsterraWatchedCount = 0;
-            current.lastAdDate = today;
-        }
-
-        const netCountKey = `${networkKey}WatchedCount`;
-        const currentNetworkCount = Number(current[netCountKey] || 0);
-        const limitForNetwork = validConfig.limit;
-
-        if (currentNetworkCount >= limitForNetwork) {
-            return;
-        }
-
-        current.balance = Math.round(Number(current.balance || 0) + safeReward);
-        current.adsWatchedCount = Number(current.adsWatchedCount || 0) + 1;
-        current[netCountKey] = currentNetworkCount + 1;
-        current.lastAdDate = today;
-        current.lastAdTimestamp = Date.now();
-
-        return current;
-    });
-
-    if (result.committed) {
-        playRewardSound();
-        triggerConfetti();
-        triggerHaptic('notification_success');
-        showToast(t('toast_pts_credited', { pts: safeReward }));
-        updateFullViewMetrics();
-    } else {
-        showToast(t('toast_limit_reached'), 'error');
+    } catch (e) {
+        triggerHaptic('notification_error');
+        showToast("⚠️ পয়েন্ট নিশ্চিত করা যায়নি!", 'error');
     }
 }
 
-// ================= ১৫. ক্যাশআউট কন্ট্রোলার ও অপারেটর গার্ড =================
+// ================= ১৭. ক্যাশআউট কন্ট্রোলার ও অপারেটর গার্ড =================
 function switchWithdrawMethod(method) {
     playClickSound();
     triggerHaptic('light');
@@ -1467,13 +1392,11 @@ function switchWithdrawMethod(method) {
     }
 
     updateDropdownOptions();
-    
     const minWithdrawEl = document.getElementById('display-min-withdraw');
     if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
 
     const ptsInput = document.getElementById('withdraw-points');
     if (ptsInput) ptsInput.min = minWithdrawPoints;
-    
     calculateWithdrawBdt();
 }
 
@@ -1501,6 +1424,7 @@ const operatorPrefixes = {
 
 async function handleWithdrawSubmit(event) {
     event.preventDefault();
+    if (isUserBanned) return;
     playClickSound();
     triggerHaptic('medium');
 
@@ -1518,32 +1442,20 @@ async function handleWithdrawSubmit(event) {
     const pointsToDeduct = Number(document.getElementById('withdraw-points').value);
     const phone = document.getElementById('withdraw-phone').value.trim();
     const accountType = document.getElementById('withdraw-account-type').value;
-    const operator = selectedWithdrawMethod === 'recharge' 
-        ? document.getElementById('withdraw-operator').value 
-        : '';
+    const operator = selectedWithdrawMethod === 'recharge' ? document.getElementById('withdraw-operator').value : '';
 
-    if (pointsToDeduct < minWithdrawPoints) {
-        return showToast(t('toast_min_limit', { pts: minWithdrawPoints }), 'error');
-    }
-    if (!/^01[3-9]\d{8}$/.test(phone)) {
-        return showToast(t('toast_valid_phone'), 'error');
-    }
+    if (pointsToDeduct < minWithdrawPoints) return showToast(t('toast_min_limit', { pts: minWithdrawPoints }), 'error');
+    if (!/^01[3-9]\d{8}$/.test(phone)) return showToast(t('toast_valid_phone'), 'error');
 
     if (selectedWithdrawMethod === 'recharge' && operator) {
         const regex = operatorPrefixes[operator];
-        if (regex && !regex.test(phone)) {
-            return showToast(t('toast_operator_mismatch'), 'error');
-        }
+        if (regex && !regex.test(phone)) return showToast(t('toast_operator_mismatch'), 'error');
     }
 
-    if (pointsToDeduct > balancePoints) {
-        return showToast(t('toast_insufficient_bal'), 'error');
-    }
+    if (pointsToDeduct > balancePoints) return showToast(t('toast_insufficient_bal'), 'error');
 
     const calculatedBdt = (pointsToDeduct * pointsToBdtRate).toFixed(2);
-    let methodName = 'Mobile Recharge';
-    if (selectedWithdrawMethod === 'bkash') methodName = 'bKash';
-    if (selectedWithdrawMethod === 'nagad') methodName = 'Nagad';
+    let methodName = selectedWithdrawMethod === 'bkash' ? 'bKash' : (selectedWithdrawMethod === 'nagad' ? 'Nagad' : 'Mobile Recharge');
 
     if (submitBtn) {
         submitBtn.disabled = true;
@@ -1551,43 +1463,44 @@ async function handleWithdrawSubmit(event) {
     }
 
     try {
-        const userRef = db.ref('users/' + userId);
-        const tx = await userRef.transaction(current => {
-            if (!current) return;
-            const curBal = Number(current.balance || 0);
-            if (curBal < pointsToDeduct) return;
-            current.balance = Math.round(curBal - pointsToDeduct);
-            return current;
+        const resp = await fetch(`${BACKEND_API_URL}/api/submit-withdraw`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-telegram-init-data': tg?.initData || ''
+            },
+            body: JSON.stringify({
+                userId,
+                userName,
+                userUsername,
+                deviceId: currentDeviceId,
+                method: methodName,
+                operator,
+                accountType,
+                phone,
+                pointsToDeduct,
+                amountBdt: calculatedBdt,
+                initData: tg?.initData || ''
+            })
         });
 
-        if (!tx.committed) throw new Error('INSUFFICIENT_FUNDS');
-
-        await db.ref('withdrawals').push({
-            userId,
-            userName,
-            userUsername,
-            method: methodName,
-            operator,
-            accountType,
-            phone,
-            pointsDeducted: pointsToDeduct,
-            amountBdt: calculatedBdt,
-            status: 'Pending',
-            timestamp: new Date().toISOString()
-        });
-
-        form.reset();
-        calculateWithdrawBdt();
-
-        openCashoutSuccessModal({
-            method: methodName + (operator ? ` (${operator})` : ''),
-            account: `${phone} (${accountType})`,
-            points: pointsToDeduct,
-            bdt: calculatedBdt
-        });
-
+        const resData = await resp.json().catch(() => ({}));
+        if (resp.ok && resData && resData.success) {
+            form.reset();
+            calculateWithdrawBdt();
+            openCashoutSuccessModal({
+                method: methodName + (operator ? ` (${operator})` : ''),
+                account: `${phone} (${accountType})`,
+                points: pointsToDeduct,
+                bdt: calculatedBdt
+            });
+        } else {
+            throw new Error(resData.message || t('toast_cashout_error'));
+        }
     } catch (err) {
-        showToast(t('toast_cashout_error'), 'error');
+        triggerHaptic('notification_error');
+        showToast(err.message || t('toast_cashout_error'), 'error');
+    } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
             if (submitText) submitText.innerText = t('btn_submit_cashout');
@@ -1595,7 +1508,7 @@ async function handleWithdrawSubmit(event) {
     }
 }
 
-// ================= ১৬. সাকসেস রিসিট মোডাল =================
+// ================= ১৮. ক্যাশআউট রিসিট ও হিস্ট্রি =================
 function openCashoutSuccessModal(data) {
     const modal = document.getElementById('cashout-success-modal');
     if (!modal) return;
@@ -1608,7 +1521,6 @@ function openCashoutSuccessModal(data) {
 
     modal.style.display = 'flex';
     pushModalToStack('cashout-success-modal', closeCashoutSuccessModal);
-
     playRewardSound();
     triggerConfetti();
     triggerHaptic('notification_success');
@@ -1620,14 +1532,8 @@ function closeCashoutSuccessModal() {
     const modal = document.getElementById('cashout-success-modal');
     if (modal) modal.style.display = 'none';
     removeModalFromStack('cashout-success-modal');
-
-    const submitBtn = document.getElementById('btn-submit-withdraw');
-    const submitText = document.getElementById('btn-submit-text');
-    if (submitBtn) submitBtn.disabled = false;
-    if (submitText) submitText.innerText = t('btn_submit_cashout');
 }
 
-// ================= ১৭. উইথড্রয়াল হিস্ট্রি =================
 function openWithdrawHistory() {
     playClickSound();
     triggerHaptic('light');
@@ -1663,8 +1569,7 @@ function loadHistoryData() {
             const item = child.val();
             const statusLower = (item.status || 'Pending').toLowerCase();
             const badgeClass = statusLower === 'approved' ? 'st-approved' : (statusLower === 'rejected' ? 'st-rejected' : 'st-pending');
-            const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : '';
-
+            const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString(currentLang === 'bn' ? 'bn-BD' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' }) : '';
             let displayStatus = item.status;
             if (currentLang === 'bn') {
                 if (statusLower === 'pending') displayStatus = 'অপেক্ষারত';
@@ -1685,12 +1590,11 @@ function loadHistoryData() {
                 </div>
             ` + itemsHTML;
         });
-
         listContainer.innerHTML = itemsHTML;
     });
 }
 
-// ================= ১৮. ৭-দিনের ডেইলি চেক-ইন =================
+// ================= ১৯. ৭-দিনের ডেইলি চেক-ইন (সার্ভার-অথেনটিকেটেড) =================
 function openCheckInFullView() {
     playClickSound();
     triggerHaptic('light');
@@ -1716,8 +1620,8 @@ function renderCheckInGrid() {
     const homeStreakText = document.getElementById('home-streak-status');
     const claimBtn = document.getElementById('btn-claim-checkin');
 
-    const today = getSafeDateKey();
-    const isClaimedToday = (lastCheckInDate === today);
+    const today = new Date().toISOString().slice(0, 10);
+    const isClaimedToday = (lastCheckInDate.startsWith(today));
 
     if (statusText) statusText.innerText = t('checkin_streak_text', { day: checkInStreak });
     if (homeStreakText) {
@@ -1761,57 +1665,75 @@ function renderCheckInGrid() {
 }
 
 async function claimDailyCheckIn() {
+    if (isUserBanned) return;
     playClickSound();
     triggerHaptic('medium');
-    const today = getSafeDateKey();
     const claimBtn = document.getElementById('btn-claim-checkin');
 
-    if (lastCheckInDate === today) {
-        return showToast(t('toast_already_claimed'), 'error');
-    }
-
     if (claimBtn) claimBtn.disabled = true;
-    const userRef = db.ref('users/' + userId);
 
     try {
-        let earnedPoints = 0;
-        const tx = await userRef.transaction(curr => {
-            if (!curr || curr.lastCheckInDate === today) return;
-            const newStreak = (Number(curr.checkInStreak || 0) % 7) + 1;
-            earnedPoints = checkInRewards[newStreak - 1];
-
-            curr.balance = Math.round(Number(curr.balance || 0) + earnedPoints);
-            curr.checkInStreak = newStreak;
-            curr.lastCheckInDate = today;
-            return curr;
+        const resp = await fetch(`${BACKEND_API_URL}/api/claim-checkin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-telegram-init-data': tg?.initData || ''
+            },
+            body: JSON.stringify({ userId, initData: tg?.initData || '' })
         });
 
-        if (!tx.committed) return showToast(t('toast_already_claimed'), 'error');
-
-        playRewardSound();
-        triggerConfetti();
-        triggerHaptic('notification_success');
-        showToast(t('toast_claim_success', { day: tx.snapshot.val().checkInStreak, pts: earnedPoints }));
-        renderCheckInGrid();
+        const resData = await resp.json().catch(() => ({}));
+        if (resp.ok && resData && resData.success) {
+            playRewardSound();
+            triggerConfetti();
+            triggerHaptic('notification_success');
+            showToast(t('toast_claim_success', { day: resData.streak, pts: resData.reward }));
+            checkInStreak = resData.streak;
+            renderCheckInGrid();
+        } else {
+            showToast(resData.message || t('toast_already_claimed'), 'error');
+            if (claimBtn) claimBtn.disabled = false;
+        }
     } catch (err) {
         showToast(t('toast_cashout_error'), 'error');
         if (claimBtn) claimBtn.disabled = false;
     }
 }
 
-// ================= ১৯. রেফারেল ও সোশ্যাল শেয়ার =================
+// ================= ২০. রেফারেল ও সোশ্যাল শেয়ার =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');
-    navigator.clipboard.writeText(myReferralLink).then(() => {
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(myReferralLink).then(() => {
+            showToast(t('toast_link_copied'));
+        }).catch(() => fallbackCopy(myReferralLink));
+    } else {
+        fallbackCopy(myReferralLink);
+    }
+}
+
+function fallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+        document.execCommand('copy');
         showToast(t('toast_link_copied'));
-    });
+    } catch (e) {
+        showToast("Error copying link", "error");
+    }
+    document.body.removeChild(textArea);
 }
 
 function shareReferralLink() {
     playClickSound();
     triggerHaptic('light');
-
     const shareBtn = document.getElementById('btn-share-referral');
     if (shareBtn) {
         shareBtn.disabled = true;
@@ -1821,10 +1743,14 @@ function shareReferralLink() {
     const shareText = currentLang === 'bn' 
         ? `🎉 আমাদের আর্নহাব প্রো প্ল্যাটফর্মে যোগ দিন এবং সহজ বিজ্ঞাপন দেখে জিতে নিন পয়েন্ট!\n\n👇 জয়েন লিংক:\n${myReferralLink}`
         : `🎉 Join EarnHub Pro and earn verified points by completing simple sponsored tasks!\n\n👇 Join Link:\n${myReferralLink}`;
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(myReferralLink)}&text=${encodeURIComponent(shareText)}`, '_blank');
+    
+    const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(myReferralLink)}&text=${encodeURIComponent(shareText)}`;
+    if (tg && typeof tg.openTelegramLink === 'function') tg.openTelegramLink(tgShareUrl);
+    else window.open(tgShareUrl, '_blank', 'noopener,noreferrer');
 }
 
 function switchTab(pageId) {
+    if (isUserBanned) return;
     playClickSound();
     triggerHaptic('light');
 
@@ -1840,7 +1766,7 @@ function switchTab(pageId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ================= ২০. অ্যাপ বুটস্ট্র্যাপ =================
+// ================= ২১. অ্যাপ্লিকেশন বুটস্ট্র্যাপ =================
 document.addEventListener('DOMContentLoaded', () => {
     const initialLetter = (userName.charAt(0) || 'U').toUpperCase();
     const hAvatar = document.getElementById('header-avatar');
@@ -1871,7 +1797,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) {
                     splash.style.opacity = '0';
-                    setTimeout(() => splash.remove(), 250);
+                    setTimeout(() => {
+                        splash.remove();
+                        isSplashFinished = true;
+                        if (isFirstTimeNewUser) openWelcomeModal();
+                    }, 250);
                 }
             }, 150);
         }
