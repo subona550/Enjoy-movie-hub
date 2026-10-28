@@ -1296,6 +1296,7 @@ async function executeCurrentNetworkAd() {
     }
 }
 
+// ✅ নতুন ও নিরাপদ কোড (এটি রিপ্লেস করে বসান):
 function checkAdsterraCompletion() {
     if (!adsterraSession || !adsterraSession.active) return;
     const actionBtn = document.getElementById('fv-action-btn');
@@ -1303,24 +1304,58 @@ function checkAdsterraCompletion() {
     const secondsSpent = Math.floor((Date.now() - adsterraSession.startedAt) / 1000);
 
     if (secondsSpent < requiredSponsorTime) {
+        // নির্ধারিত সময়ের কম হলে সেশন বাতিল
+        if (adsterraTimerInterval) {
+            clearInterval(adsterraTimerInterval);
+            adsterraTimerInterval = null;
+        }
+        adsterraSession.active = false;
         if (actionBtn) actionBtn.disabled = false;
         if (btnText) btnText.innerText = t('btn_watch_and_earn');
         triggerHaptic('notification_error');
-        showToast(currentLang === 'bn' ? `⚠️ পুরো সময় অপেক্ষা করুন!` : `⚠️ Please stay full duration!`, 'error');
+        showToast(currentLang === 'bn' 
+            ? `⚠️ পুরো ${formatNum(requiredSponsorTime)} সেকেন্ড অপেক্ষা করতে হবে!` 
+            : `⚠️ Please stay full ${requiredSponsorTime} seconds!`, 'error');
     } else {
         const ticket = adsterraSession.ticket;
         adsterraSession.active = false;
+        if (adsterraTimerInterval) {
+            clearInterval(adsterraTimerInterval);
+            adsterraTimerInterval = null;
+        }
         if (btnText) btnText.innerText = t('btn_watch_and_earn');
         if (actionBtn) actionBtn.disabled = false;
         submitRewardClaim('adsterra', ticket);
     }
 }
 
+// ইউজার লিংকে গিয়ে অ্যাপে ফিরে (Back) আসলে এটি কাজ করবে
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden && adsterraSession && adsterraSession.active) {
         const secondsSpent = Math.floor((Date.now() - adsterraSession.startedAt) / 1000);
-        if (secondsSpent >= requiredSponsorTime) {
-            if (adsterraTimerInterval) clearInterval(adsterraTimerInterval);
+        const actionBtn = document.getElementById('fv-action-btn');
+        const btnText = document.getElementById('fv-btn-text');
+
+        if (secondsSpent < requiredSponsorTime) {
+            // যদি ইউজার সময়ের আগেই ব্যাক আসে -> সাথে সাথে বাতিল হবে
+            if (adsterraTimerInterval) {
+                clearInterval(adsterraTimerInterval);
+                adsterraTimerInterval = null;
+            }
+            adsterraSession.active = false;
+            if (actionBtn) actionBtn.disabled = false;
+            if (btnText) btnText.innerText = t('btn_watch_and_earn');
+
+            triggerHaptic('notification_error');
+            showToast(currentLang === 'bn' 
+                ? `⚠️ আপনি আগেই ব্যাক চলে এসেছেন! পুরো ${formatNum(requiredSponsorTime)} সেকেন্ড থাকতে হবে।` 
+                : `⚠️ You returned too early! Stay full ${requiredSponsorTime} seconds.`, 'error');
+        } else {
+            // যদি সম্পূর্ণ সময় পার করে ফেরে -> পয়েন্ট নিশ্চিত করবে
+            if (adsterraTimerInterval) {
+                clearInterval(adsterraTimerInterval);
+                adsterraTimerInterval = null;
+            }
             checkAdsterraCompletion();
         }
     }
