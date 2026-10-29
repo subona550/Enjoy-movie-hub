@@ -7,7 +7,7 @@
 
 // ================= ১. কোর কনফিগারেশন =================
 const BACKEND_API_URL = "https://earnpro84cc.rakibkdbb.workers.dev"; 
-const DEFAULT_BOT_USERNAME = "EarnHubProBot"; 
+const DEFAULT_BOT_USERNAME = "EarnHubPrime_Bot"; 
 
 // ================= ২. সাইবার ওয়েব অডিও সিন্থেসাইজার =================
 let audioCtx = null;
