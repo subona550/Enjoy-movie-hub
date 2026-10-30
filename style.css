@@ -2,6 +2,7 @@
    AETHERIA ARCADE - CYBER GAMING & HUD THEME (v7.0.0 PRODUCTION)
    - Decoupled Web3 Arcade Aesthetics
    - Glassmorphism & Cyber Bento Grid Engine
+   - 100% Policy-Compliant Proof & Disclosure UI
 ========================================================== */
 
 :root {
@@ -894,6 +895,77 @@ input, select, textarea {
     color: var(--neon-emerald);
 }
 
+/* POLICY COMPLIANCE: Live Proof Channel Banner */
+.proof-channel-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(0, 255, 157, 0.3);
+    background: linear-gradient(90deg, rgba(0, 255, 157, 0.08) 0%, var(--card-surface) 100%);
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 16px;
+    padding: 16px 18px;
+    transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.proof-channel-card:active {
+    transform: scale(0.985);
+    border-color: var(--neon-emerald);
+}
+
+.proof-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.proof-icon-pulse {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--neon-emerald-soft);
+    color: var(--neon-emerald);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 16px rgba(0, 255, 157, 0.25);
+}
+
+.proof-text-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.proof-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.verified-dot {
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--neon-emerald);
+    letter-spacing: 0.5px;
+}
+
+.proof-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+}
+
+.proof-arrow {
+    color: var(--neon-emerald);
+    display: flex;
+    align-items: center;
+}
+
 .cyber-tabs-nav {
     display: flex;
     background: var(--card-surface);
@@ -1288,6 +1360,20 @@ input, select, textarea {
     font-size: 14px;
     color: var(--text-secondary);
     line-height: 1.5;
+}
+
+/* POLICY COMPLIANCE: Ad Transparency Disclosure */
+.ad-transparency-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px auto 0 auto;
+    font-size: 12px;
+    color: var(--text-muted);
+    justify-content: center;
+    text-align: center;
+    max-width: 460px;
+    line-height: 1.4;
 }
 
 .mission-sticky-footer {

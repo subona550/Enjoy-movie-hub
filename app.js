@@ -3,11 +3,12 @@
  * - 100% Synced with Secured Cloudflare Worker & Firebase Database
  * - Realtime Mini-Arcade Tap Reflex System
  * - Zero Direct Firebase Writes (Tamper-Proof Architecture)
+ * - Adsgram & Telegram Moderation Policy Compliant
  */
 
 // ================= ১. কোর কনফিগারেশন =================
 const BACKEND_API_URL = "https://earnpro84cc.rakibkdbb.workers.dev"; 
-const DEFAULT_BOT_USERNAME = "EarnHubPrime_Bot"; 
+const DEFAULT_BOT_USERNAME = "EarnHubProBot"; 
 
 // ================= ২. সাইবার ওয়েব অডিও সিন্থেসাইজার =================
 let audioCtx = null;
@@ -268,7 +269,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-// ================= ৭. দ্বিভাষিক ইঞ্জিন ও সাইবার আর্কেড ডিকশনারি =================
+// ================= ৭. দ্বিভাষিক ইঞ্জিন ও পলিসি-বান্ধব ডিকশনারি =================
 let currentLang = localStorage.getItem('app_lang') || 'bn';
 const bnDigits = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
 
@@ -304,7 +305,7 @@ const translations = {
         btn_check_verify: "Confirm Comms Link",
         btn_close: "Dismiss",
         section_tasks_title: "Power Boosters & Sponsor Missions",
-        section_tasks_sub: "Activate any booster to recharge your game credits",
+        section_tasks_sub: "Stream sponsor videos to recharge your credits",
         badge_rewarded: "CHRONO BOOST",
         badge_direct: "SPONSOR EXPEDITION",
         monetag_title: "Chrono Overdrive",
@@ -353,7 +354,7 @@ const translations = {
         fv_rules_title: "Mission Execution Rules:",
         fv_rule_step1: 'Tap the <strong>"Deploy Mission Booster"</strong> action button below.',
         fv_rule_step2: "Do not minimize or close the portal while sponsored stream is active.",
-        fv_rule_step3: "Upon verified completion, energy credits will immediately credit to your vault.",
+        fv_rule_step3: "Clicking on advertisements is <strong>never mandatory</strong>. Complete the video to receive rewards immediately.",
         btn_watch_and_earn: "Deploy Mission Booster",
         checkin_modal_title: "7-Day Daily Protocol Gifts",
         history_modal_title: "Redemption & Cashout History",
@@ -403,7 +404,7 @@ const translations = {
         welcome_badge: "পাইলট এয়ারড্রপ",
         welcome_title: "এয়ারড্রপ রিওয়ার্ড আনলকড!",
         welcome_desc_1: "আর্কেড নেটওয়ার্কে প্রথম যোগদানের জন্য আপনি পেয়েছেন",
-        welcome_desc_2: "পয়েন্ট ক্রিপ্টো এনার্জি ক্রেডিট!",
+        welcome_desc_2: "পয়েন্ট ক্রিপ্টো এনার্জি ক্রেডিট!",
         btn_claim_welcome: "ক্লেইম এনার্জি ক্রেডিট",
         user_status: "● ভেরিফাইড অপারেটর",
         wallet_balance_label: "টোটাল পাওয়ার ক্রেডিট",
@@ -424,7 +425,7 @@ const translations = {
         btn_check_verify: "ভেরিফিকেশন চেক করুন",
         btn_close: "পরে করব",
         section_tasks_title: "পাওয়ার বুস্টার ও স্পনসর মিশন",
-        section_tasks_sub: "যেকোনো বুস্টারে চাপ দিয়ে পাওয়ার চার্জ করুন",
+        section_tasks_sub: "স্পনসর ভিডিও সম্পন্ন করে পাওয়ার রিচার্জ করুন",
         badge_rewarded: "ক্রোনো বুস্ট",
         badge_direct: "স্পনসর এক্সপিডিশন",
         monetag_title: "Chrono Overdrive",
@@ -473,7 +474,7 @@ const translations = {
         fv_rules_title: "মিশন সম্পন্ন করার নিয়ম:",
         fv_rule_step1: 'নিচের <strong>"মিশন বুস্ট শুরু করুন"</strong> অ্যাকশন বাটনে চাপুন।',
         fv_rule_step2: "স্পনসর কন্টেন্ট চলাকালীন স্ক্রিন ক্লোজ করবেন না বা ব্যাক করবেন না।",
-        fv_rule_step3: "সম্পূর্ণ হওয়া মাত্রই ক্রেডিট ব্যালেন্সে স্বয়ংক্রিয়ভাবে বুস্ট হয়ে যাবে।",
+        fv_rule_step3: "বিজ্ঞাপনে ক্লিক করা <strong>বাধ্যতামূলক নয়</strong>। শুধুমাত্র ভিডিওটি সম্পূর্ণ সমাপ্ত হলেই স্বয়ংক্রিয়ভাবে ক্রেডিট যুক্ত হবে।",
         btn_watch_and_earn: "মিশন বুস্ট শুরু করুন",
         checkin_modal_title: "৭-দিনের ডেইলি গিফট ড্রপ",
         history_modal_title: "রিডিমশন ও ক্যাশআউট হিস্ট্রি",
@@ -618,6 +619,7 @@ const checkInRewards = [2, 3, 5, 10, 15, 20, 50];
 
 let tutorialVideoUrl = "https://www.youtube.com"; 
 let telegramChannelUrl = "https://t.me/";
+let telegramPayoutProofUrl = "https://t.me/";
 
 let pointsToBdtRate = 0.10;
 let referralBonusPoints = 50;
@@ -703,7 +705,7 @@ function getMonetagFunction() {
     return null;
 }
 
-// ================= ১০. ফায়ারবেস সেটিংস সিঙ্ক =================
+// ================= ১০. ফায়ারবেস সেটিংস ও প্রুফ চ্যানেল সিঙ্ক =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
 
@@ -716,6 +718,22 @@ db.ref('settings').on('value', (snapshot) => {
             ? data.telegramChannel 
             : `https://t.me/${data.telegramChannel.replace('@', '')}`;
     }
+
+    // পলিসি কমপ্লায়েন্স: পাবলিক পেমেন্ট প্রুফ চ্যানেল সিঙ্ক
+    const rawProof = data.payoutProofChannel || data.proofChannel || data.paymentProofChannel || data.telegramChannel;
+    if (rawProof) {
+        telegramPayoutProofUrl = String(rawProof).startsWith('http') 
+            ? String(rawProof) 
+            : `https://t.me/${String(rawProof).replace('@', '')}`;
+    } else {
+        telegramPayoutProofUrl = telegramChannelUrl;
+    }
+
+    const proofCardEl = document.getElementById('telegram-payout-proof-link');
+    if (proofCardEl) proofCardEl.href = telegramPayoutProofUrl;
+
+    const profileProofEl = document.getElementById('profile-proof-link');
+    if (profileProofEl) profileProofEl.href = telegramPayoutProofUrl;
 
     const joinBtn = document.getElementById('btn-verify-join-tg');
     if (joinBtn) joinBtn.href = telegramChannelUrl;
@@ -879,10 +897,8 @@ function handleArcadeTap(e) {
         setTimeout(() => { node.style.transform = 'scale(1)'; }, 100);
     }
 
-    // স্ক্রিনে ফ্লোটিং স্পার্ক / প্লাস টেক্সট তৈরি
     createTapSpark(e);
 
-    // প্রতি ২০টি সফল ট্যাপে কম্বো রিফিল বুস্ট নোটিফিকেশন
     if (arcadeComboCounter % 20 === 0) {
         triggerHaptic('notification_success');
         showToast(currentLang === 'bn' ? `⚡ দারুণ রিফ্লেক্স! ${formatNum(arcadeComboCounter)} কম্বো চার্জড!` : `⚡ Reflex Combo! ${arcadeComboCounter} Charges!`);
@@ -1221,7 +1237,7 @@ async function openNetworkFullView(networkKey) {
 
     const details = {
         monetag: {
-            badge: currentLang === 'bn' ? "ক্রোনো বুস্টার" : "CHRONO OVERDRIVE",
+            badge: currentLang === 'bn' ? "ক্রোনো বুস্টার (ভিডিও)" : "CHRONO OVERDRIVE (VIDEO)",
             headline: currentLang === 'bn' ? "Chrono Overdrive মিশন" : "Chrono Overdrive Mission",
             desc: currentLang === 'bn' ? "স্পনসর স্ট্রীম সম্পূর্ণ সমাপ্ত করে ইনস্ট্যান্ট পাওয়ার এনার্জি ক্রেডিট আপনার ভল্টে রিচার্জ করুন।" : "Complete the sponsored stream to inject direct power credits into your vault balance.",
             iconClass: "icon-blue",
@@ -1229,7 +1245,7 @@ async function openNetworkFullView(networkKey) {
             limit: netConfigs.monetag.limit
         },
         adsgram: {
-            badge: currentLang === 'bn' ? "কোয়ান্টাম ক্যাশ" : "QUANTUM CACHE",
+            badge: currentLang === 'bn' ? "কোয়ান্টাম ক্যাশ (বিজ্ঞাপন)" : "QUANTUM CACHE (AD)",
             headline: currentLang === 'bn' ? "Quantum Cache মিশন" : "Quantum Cache Mission",
             desc: currentLang === 'bn' ? "হাই-ব্যান্ডউইথ ভিডিও ডাটা সম্পন্ন হওয়া মাত্রই স্বয়ংক্রিয়ভাবে ক্রেডিট ভল্টে যুক্ত হবে।" : "Stream the high-bandwidth video data cache to unlock immediate energy credits.",
             iconClass: "icon-mint",
@@ -1347,6 +1363,7 @@ async function executeCurrentNetworkAd() {
             const adController = window.Adsgram.init({ blockId: blockIdToUse });
             const result = await adController.show().catch(err => ({ done: false, error: err }));
 
+            // পলিসি সম্মত: ইউজার বিজ্ঞাপন পুরো দেখলেই রিওয়ার্ড ক্রেডিট হবে
             if (result && result.done) {
                 await submitRewardClaim(selectedNetwork, adTicket);
             } else {
