@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Aetheria Arcade - Cyber Quest & Gaming Arena</title>
+    <title>Aetheria Arcade - Cyber Quest & Reflex Arena</title>
 
     <!-- Google Fonts: Outfit & Hind Siliguri -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,38 +16,18 @@
     <!-- Adsgram Official SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
-    <!-- Libraries: Canvas Confetti & Firebase SDKs -->
+    <!-- Canvas Confetti & Firebase SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=7.0.0">
+    <link rel="stylesheet" href="style.css?v=7.1.0">
 </head>
 <body class="cyber-theme">
 
     <!-- Toast Notification Engine -->
     <div id="toast-container" class="toast-viewport"></div>
-
-    <!-- Security Quarantine / Banned Protocol Modal -->
-    <div id="banned-modal" class="cyber-modal-overlay" style="display: none; z-index: 999999;">
-        <div class="cyber-modal-box quarantine-border" onclick="event.stopPropagation()">
-            <div class="quarantine-symbol">
-                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-                </svg>
-            </div>
-            <h3 class="glitch-text" data-text="অ্যাক্সেস ব্লক করা হয়েছে!">অ্যাক্সেস ব্লক করা হয়েছে!</h3>
-            <p class="modal-subtext">
-                মাল্টিপল অ্যাকাউন্ট বা সিকিউরিটি পলিসি লঙ্ঘনের কারণে এই ডিভাইস থেকে অ্যাক্সেস স্থায়ীভাবে বাতিল করা হয়েছে।
-            </p>
-            <div class="security-chip">
-                <span>TERMINAL_ID:</span>
-                <span id="banned-device-id" class="neon-alert">DETECTING...</span>
-            </div>
-        </div>
-    </div>
 
     <!-- Futuristic Cyber Boot Loader -->
     <div id="splash-screen" class="cyber-boot-screen">
@@ -58,14 +38,54 @@
                 <div class="core-dot"></div>
             </div>
             <div class="boot-logo">Aetheria<span>_Arcade</span></div>
-            <div class="boot-status-text" id="boot-status">INITIALIZING SYSTEM...</div>
+            <div class="boot-status-text" id="boot-status">INITIALIZING ARENA ENGINE...</div>
             <div class="boot-progress-track">
                 <div class="boot-progress-glow" id="splash-progress"></div>
             </div>
         </div>
     </div>
 
-    <!-- Welcome Agent Drop Modal -->
+    <!-- GAME OVER & REVIVE MODAL (Adsgram Policy Compliant Placement) -->
+    <div id="game-over-modal" class="cyber-modal-overlay" style="display: none;">
+        <div class="cyber-modal-box neon-border" onclick="event.stopPropagation()">
+            <div class="modal-tag-badge neon-alert" data-i18n="modal_gameover_badge">MISSION TERMINATED</div>
+            <div class="holo-icon-wrap" style="color: var(--neon-alert);">
+                <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+            </div>
+            <h3 class="modal-title" data-i18n="modal_gameover_title">পাইলট ডাউন!</h3>
+            <p class="modal-subtext">
+                <span data-i18n="final_score_label">আপনার ম্যাচ স্কোর:</span> 
+                <strong id="modal-final-score" class="neon-gem" style="font-size: 22px;">0</strong>
+            </p>
+
+            <div class="cyber-terminal-card" style="margin-bottom: 16px;">
+                <div class="terminal-row">
+                    <span class="t-muted" data-i18n="earned_credits_label">অর্জিত এনার্জি ক্রেডিট:</span>
+                    <span class="neon-emerald font-bold" id="modal-match-credits">+0 CREDITS</span>
+                </div>
+                <div class="terminal-row">
+                    <span class="t-muted" data-i18n="high_score_status">সর্বোচ্চ স্কোর:</span>
+                    <span class="t-light font-bold" id="modal-best-score">0</span>
+                </div>
+            </div>
+
+            <!-- Adsgram Rewarded Trigger: Watch video to revive with 1 extra life -->
+            <button type="button" class="cyber-btn primary-glow" id="btn-revive-game" onclick="triggerReviveWithAd()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                <span data-i18n="btn_revive">লাইফ রিভাইভ করুন (১টি স্পনসর ভিডিও)</span>
+            </button>
+
+            <button type="button" class="cyber-link-btn" onclick="closeGameOverModal()" data-i18n="btn_finish_match">
+                ম্যাচ সমাপ্ত করে স্কোর জমা দিন
+            </button>
+        </div>
+    </div>
+
+    <!-- Pilot Airdrop Starter Modal -->
     <div id="welcome-modal" class="cyber-modal-overlay" onclick="closeWelcomeModal()">
         <div class="cyber-modal-box neon-border" onclick="event.stopPropagation()">
             <div class="modal-tag-badge" data-i18n="welcome_badge">PILOT AIRDROP</div>
@@ -74,88 +94,14 @@
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                 </svg>
             </div>
-            <h3 class="modal-title" data-i18n="welcome_title">এয়ারড্রপ রিওয়ার্ড আনলকড!</h3>
+            <h3 class="modal-title" data-i18n="welcome_title">এয়ারড্রপ ক্রেডিট আনলকড!</h3>
             <p class="modal-subtext">
-                <span data-i18n="welcome_desc_1">আর্কেড নেটওয়ার্কে প্রথম যোগদানের জন্য আপনি পেয়েছেন</span> 
+                <span data-i18n="welcome_desc_1">আর্টিফিশিয়াল আর্কেডে প্রথম লগইনের জন্য আপনি পেয়েছেন</span> 
                 <strong id="welcome-bonus-modal" class="neon-gem">100</strong> 
-                <span data-i18n="welcome_desc_2">পয়েন্ট ক্রিপ্টো এনার্জি ক্রেডিট!</span>
+                <span data-i18n="welcome_desc_2">পাওয়ার এনার্জি ক্রেডিট!</span>
             </p>
             <button type="button" class="cyber-btn primary-glow" onclick="closeWelcomeModal()" data-i18n="btn_claim_welcome">
-                ক্লেইম এনার্জি ক্রেডিট
-            </button>
-        </div>
-    </div>
-
-    <!-- Telegram Comms Link Verification Modal -->
-    <div id="channel-verify-modal" class="cyber-modal-overlay" onclick="closeChannelVerifyModal()">
-        <div class="cyber-modal-box comms-border" onclick="event.stopPropagation()">
-            <div class="modal-tag-badge comms-badge" data-i18n="verify_badge">NETWORK COMMS SYNC</div>
-            <div class="holo-icon-wrap comms-color">
-                <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 2L11 13"/>
-                    <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
-                </svg>
-            </div>
-            <h3 class="modal-title" data-i18n="verify_title">অফিসিয়াল কমস লিংক সিঙ্ক</h3>
-            <p class="modal-subtext" data-i18n="verify_desc">
-                গেমিং টাস্ক, আর্কেড রেটিং এবং ওয়ালেট উত্তোলন সচল রাখতে আমাদের টেলিগ্রাম কমিউনিটিতে সিঙ্ক থাকা আবশ্যক।
-            </p>
-            
-            <div class="action-stack">
-                <a id="btn-verify-join-tg" href="#" target="_blank" rel="noopener noreferrer" class="cyber-btn comms-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    <span data-i18n="btn_join_tg_channel">কমিউনিটিতে যুক্ত হোন</span>
-                </a>
-                <button type="button" class="cyber-btn primary-glow" id="btn-check-tg-verify" onclick="checkTelegramVerification()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span data-i18n="btn_check_verify">ভেরিফিকেশন চেক করুন</span>
-                </button>
-                <button type="button" class="cyber-link-btn" onclick="closeChannelVerifyModal()" data-i18n="btn_close">
-                    পরে করব
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Reward Redemption Confirmation Modal -->
-    <div id="cashout-success-modal" class="cyber-modal-overlay" onclick="closeCashoutSuccessModal()">
-        <div class="cyber-modal-box vault-border receipt-modal" onclick="event.stopPropagation()">
-            <div class="receipt-pulse-ring">
-                <svg class="circuit-check" viewBox="0 0 52 52">
-                    <circle class="check-circ" cx="26" cy="26" r="23" fill="none"/>
-                    <path class="check-tick" fill="none" d="M14 27l8 8 16-17"/>
-                </svg>
-            </div>
-
-            <div class="modal-tag-badge vault-badge" data-i18n="receipt_badge">TRANSACTION ORDERED</div>
-            <h3 class="modal-title" data-i18n="receipt_title">রিডিমশন সফল হয়েছে!</h3>
-            <p class="modal-subtext" data-i18n="receipt_desc">আপনার অর্ডারটি প্রসেসিং কিউ-তে যুক্ত করা হয়েছে। খুব দ্রুত সম্পন্ন হবে।</p>
-
-            <div class="cyber-terminal-card">
-                <div class="terminal-row">
-                    <span class="t-muted" data-i18n="rc_method">পেমেন্ট চ্যানেল:</span>
-                    <span class="t-highlight font-bold" id="receipt-method">bKash</span>
-                </div>
-                <div class="terminal-row">
-                    <span class="t-muted" data-i18n="rc_account">অ্যাকাউন্ট নম্বর:</span>
-                    <span class="t-light font-bold" id="receipt-account">01XXXXXXXXX</span>
-                </div>
-                <div class="terminal-row">
-                    <span class="t-muted" data-i18n="rc_points">পয়েন্ট ডেবিট:</span>
-                    <span class="neon-gem font-bold" id="receipt-points">-0 PTS</span>
-                </div>
-                <div class="terminal-row">
-                    <span class="t-muted" data-i18n="rc_amount">মোট মূল্য:</span>
-                    <span class="neon-emerald font-bold" id="receipt-amount">৳ 0.00</span>
-                </div>
-                <div class="terminal-row">
-                    <span class="t-muted" data-i18n="rc_status">বর্তমান স্ট্যাটাস:</span>
-                    <span class="cyber-chip status-pending" id="receipt-status" data-i18n="status_pending">ইন-রিভিউ</span>
-                </div>
-            </div>
-
-            <button type="button" class="cyber-btn primary-glow" onclick="closeCashoutSuccessModal()" data-i18n="btn_done">
-                অর্ডার ক্লোজ করুন
+                অ্যাক্টিভেট এনার্জি কোর
             </button>
         </div>
     </div>
@@ -165,19 +111,19 @@
         <div class="hud-profile-chip" onclick="switchTab('profile')">
             <div class="pilot-avatar-frame">
                 <div class="pilot-avatar-img" id="header-avatar">P</div>
-                <span class="pilot-level-tag">LV.1</span>
+                <span class="pilot-level-tag" id="header-level-tag">LV.1</span>
             </div>
             <div class="pilot-status-column">
                 <div class="pilot-title-row">
                     <span class="pilot-callsign" id="header-name">Loading...</span>
                     <span class="hud-online-beacon"></span>
                 </div>
-                <span class="pilot-rank-badge" id="header-user-status" data-i18n="user_status">● ভেরিফাইড অপারেটর</span>
+                <span class="pilot-rank-badge" id="header-user-status" data-i18n="user_status">● সক্রিয় অপারেটর</span>
             </div>
         </div>
 
         <div class="hud-quick-controls">
-            <!-- Audio / SFX Toggle -->
+            <!-- Audio Toggle -->
             <button type="button" class="hud-circle-btn" id="btn-audio-toggle" onclick="toggleAudioFx()" title="Toggle Sound">
                 <svg id="audio-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
@@ -185,7 +131,7 @@
                 </svg>
             </button>
 
-            <!-- Light/Dark Mode Switch -->
+            <!-- Theme Toggle -->
             <button type="button" class="hud-circle-btn" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
                 <span id="theme-icon">🌙</span>
             </button>
@@ -202,17 +148,17 @@
         </div>
     </header>
 
-    <!-- Main Container Layout -->
+    <!-- Main Container Viewport -->
     <main class="app-viewport">
 
-        <!-- ================= 1. ARENA & ARCADE TAB (HOME) ================= -->
+        <!-- ================= 1. ARENA & CYBER ARCADE (HOME) ================= -->
         <section id="arena" class="view-panel active">
             
-            <!-- Bento Hero Vault Matrix -->
+            <!-- Dashboard Energy & Score Matrix -->
             <div class="bento-box hero-matrix neon-glow">
                 <div class="matrix-topbar">
                     <div class="matrix-label-group">
-                        <span class="matrix-eyebrow" data-i18n="wallet_balance_label">টোটাল পাওয়ার ক্রেডিট</span>
+                        <span class="matrix-eyebrow" data-i18n="credits_balance_label">টোটাল এনার্জি ক্রেডিট</span>
                         <div class="gem-counter">
                             <span id="user-balance" class="gem-digits">0</span>
                             <span class="gem-unit" data-i18n="pts_currency">CREDITS</span>
@@ -225,46 +171,59 @@
                     </button>
                 </div>
 
-                <!-- Energy Gauge Bar -->
                 <div class="energy-dock">
                     <div class="energy-label-row">
-                        <span class="energy-title">⚡ সাইবার এনার্জি কোটা</span>
-                        <span class="energy-val" id="display-point-rate-text">100 CREDITS = 10.00 BDT</span>
+                        <span class="energy-title">⚡ সাইবার এনার্জি স্ট্যাটাস</span>
+                        <span class="energy-val" id="display-arcade-lives">৩ / ৩ লাইভস</span>
                     </div>
                     <div class="energy-progress-track">
-                        <div class="energy-fill-active" style="width: 82%;"></div>
+                        <div class="energy-fill-active" id="energy-gauge-bar" style="width: 100%;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Arcade Playable Challenge Mini-Game Module -->
+            <!-- FUNCTIONAL PLAYABLE CYBER ARCADE CANVAS GAME -->
             <div class="bento-box mini-arcade-console">
                 <div class="console-header">
                     <div class="console-title-wrap">
-                        <span class="console-pill">ARCADE ARENA</span>
-                        <h4 class="console-name">Cyber Tap Reflex</h4>
+                        <span class="console-pill">CYBER REFLEX PROTOCOL</span>
+                        <h4 class="console-name">Quantum Target Matrix</h4>
                     </div>
                     <div class="console-score-pill">
-                        <span>কম্বো মাল্টিপ্লায়ার:</span>
-                        <strong class="neon-emerald">x2.5</strong>
+                        <span data-i18n="current_score_lbl">স্কোর:</span>
+                        <strong class="neon-emerald" id="arcade-current-score">0</strong>
                     </div>
                 </div>
 
-                <div class="arcade-interactive-pad" id="arcade-interactive-arena" onclick="handleArcadeTap(event)">
-                    <div class="cyber-target-node" id="arcade-target">
-                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <!-- Interactive Game Stage Canvas -->
+                <div class="arcade-interactive-pad" id="arcade-interactive-arena" onclick="handleArcadeBoardClick(event)">
+                    
+                    <!-- Pre-Game Start Overlay Screen -->
+                    <div id="game-overlay-screen" style="position: absolute; inset:0; background: rgba(7,9,14,0.85); display: flex; flex-direction: column; align-items:center; justify-content:center; z-index: 10;">
+                        <button type="button" class="cyber-btn primary-glow" style="width: auto; padding: 12px 28px;" onclick="startArcadeMatch(event)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span data-i18n="btn_start_match">ম্যাচ শুরু করুন</span>
+                        </button>
+                        <small style="margin-top: 10px; color: var(--text-muted);" data-i18n="game_objective">দ্রুত নিয়ন নোডগুলোতে ট্যাপ করে স্কোর ও কম্বো বাড়ান</small>
+                    </div>
+
+                    <!-- Dynamic Moving Target Node -->
+                    <div class="cyber-target-node" id="arcade-target" style="display: none; position: absolute;">
+                        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                         </svg>
-                        <span class="node-label">TAP TO BOOST</span>
+                        <span class="node-label" id="target-label">HIT!</span>
                     </div>
+
                     <div class="arena-scanline"></div>
                 </div>
+
                 <div class="arcade-footer-stats">
-                    <small data-i18n="arcade_hint">⚡ ট্যাপ করে কম্বো চার্জ করুন এবং ফ্রি পাওয়ার রিফিল পান</small>
+                    <span data-i18n="arcade_hint">⚡ লক্ষ্যভেদ করুন! মিস করলে লাইফ কমবে, হিট করলে ক্রেডিট রিওয়ার্ড পাবেন</span>
                 </div>
             </div>
 
-            <!-- Academy Field Manual Video Tutorial -->
+            <!-- Arcade Training Video Tutorial Card -->
             <div class="bento-box field-training-card" onclick="openTutorialVideo()">
                 <div class="field-training-left">
                     <div class="training-icon-badge">
@@ -273,97 +232,70 @@
                         </svg>
                     </div>
                     <div class="training-copy">
-                        <h4 data-i18n="tutorial_btn_title">আর্কেড ট্রেনিং ভিডিও গাইড</h4>
-                        <p data-i18n="tutorial_btn_sub">হাই-স্কোর ও সঠিক রিওয়ার্ড নেওয়ার নিয়ম দেখুন</p>
+                        <h4 data-i18n="tutorial_btn_title">আর্টিফিশিয়াল ট্রেনিং ডক</h4>
+                        <p data-i18n="tutorial_btn_sub">হাই-স্কোর ও আর্কেড র‍্যাঙ্কিং গাইডলাইন দেখুন</p>
                     </div>
                 </div>
                 <div class="field-training-action">
-                    <span data-i18n="btn_watch">ভিডিও</span>
+                    <span data-i18n="btn_watch">গাইড</span>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
             </div>
 
-            <!-- Tactical Boosters (Ad Tasks with Clear Policy-Friendly Disclosures) -->
+            <!-- SPONSOR OVERCHARGE BOOSTERS (Strictly Rewarded, Policy-Compliant) -->
             <div class="section-badge-row">
                 <div class="section-title-wrap">
-                    <span class="section-glow-title" data-i18n="section_tasks_title">পাওয়ার বুস্টার ও স্পনসর মিশন</span>
-                    <span class="section-subtext" data-i18n="section_tasks_sub">স্পনসর ভিডিও সম্পন্ন করে পাওয়ার রিচার্জ করুন</span>
+                    <span class="section-glow-title" data-i18n="section_boosters_title">পাওয়ার চার্জার ও স্পনসর বুস্টার</span>
+                    <span class="section-subtext" data-i18n="section_boosters_sub">স্পনসর ভিডিও সম্পন্ন করে তাৎক্ষণিক এনার্জি রিফিল পান</span>
                 </div>
             </div>
 
             <div class="tactical-grid">
                 
-                <!-- 1. Monetag Rewarded -->
-                <div class="tactical-card booster-blue" onclick="openNetworkFullView('monetag')">
+                <!-- Rewarded Video Booster 1: Instant Life Refill -->
+                <div class="tactical-card booster-mint" onclick="triggerEnergyRefillAd()">
                     <div class="card-glass-glow"></div>
-                    <div class="card-status-flag" data-i18n="badge_rewarded">CHRONO BOOST</div>
+                    <div class="card-status-flag" data-i18n="badge_overdrive">SPONSOR OVERDRIVE</div>
+                    <div class="card-body-layout">
+                        <div class="tactical-icon-wrap icon-mint">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                        </div>
+                        <div class="tactical-meta">
+                            <h4 class="tactical-title" data-i18n="booster_energy_title">Instant Core Recharge</h4>
+                            <p class="tactical-desc" data-i18n="booster_energy_desc">একটি শর্ট স্পনসর ব্রডকাস্ট দেখে ফুল লাইভস এবং অতিরিক্ত ক্রেডিট নিন</p>
+                        </div>
+                    </div>
+                    <div class="tactical-bottom-strip">
+                        <span class="tactical-bounty">+25 <span data-i18n="pts_currency">CREDITS</span></span>
+                        <div class="tactical-action-arrow">
+                            <span data-i18n="btn_charge">চার্জ</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rewarded Video Booster 2: Score Multiplier -->
+                <div class="tactical-card booster-blue" onclick="triggerMultiplierAd()">
+                    <div class="card-glass-glow"></div>
+                    <div class="card-status-flag" data-i18n="badge_multiplier">2X MULTIPLIER</div>
                     <div class="card-body-layout">
                         <div class="tactical-icon-wrap icon-blue">
                             <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
+                                <path d="M16 12l-4-4-4 4M12 16V8"/>
                             </svg>
                         </div>
                         <div class="tactical-meta">
-                            <h4 class="tactical-title" data-i18n="monetag_title">Chrono Overdrive</h4>
-                            <p class="tactical-desc" data-i18n="monetag_desc">ফুল স্পনসর স্ট্রীম কমপ্লিট করে তাৎক্ষণিক পাওয়ার ক্রেডিট নিন</p>
+                            <h4 class="tactical-title" data-i18n="booster_multiplier_title">Quantum 2x Boost</h4>
+                            <p class="tactical-desc" data-i18n="booster_multiplier_desc">পরবর্তী ৩টি ম্যাচের জন্য আপনার অর্জিত স্কোর ও ক্রেডিট দ্বিগুণ করুন</p>
                         </div>
                     </div>
                     <div class="tactical-bottom-strip">
-                        <span class="tactical-bounty">+<span class="reward-monetag-val">15</span> <span data-i18n="pts_currency">CREDITS</span></span>
+                        <span class="tactical-bounty" data-i18n="badge_active_buff">BUFF ACTIVE</span>
                         <div class="tactical-action-arrow">
-                            <span data-i18n="btn_start_task">এক্টিভেট</span>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Adsgram Rewarded/Interstitial Cache -->
-                <div class="tactical-card booster-mint" onclick="openNetworkFullView('adsgram')">
-                    <div class="card-glass-glow"></div>
-                    <div class="card-status-flag" id="adsgram-mode-tag">QUANTUM CACHE</div>
-                    <div class="card-body-layout">
-                        <div class="tactical-icon-wrap icon-mint">
-                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                <rect width="20" height="15" x="2" y="5" rx="2"/>
-                                <polygon points="10 9 15 12.5 10 16"/>
-                            </svg>
-                        </div>
-                        <div class="tactical-meta">
-                            <h4 class="tactical-title" data-i18n="adsgram_title">Quantum Loot Cache</h4>
-                            <p class="tactical-desc" data-i18n="adsgram_desc">হাই-সিপিএম ভিডিও বিজ্ঞাপন দেখে সরাসরি ক্রেডিট জেনারেট করুন</p>
-                        </div>
-                    </div>
-                    <div class="tactical-bottom-strip">
-                        <span class="tactical-bounty">+<span class="reward-adsgram-val">20</span> <span data-i18n="pts_currency">CREDITS</span></span>
-                        <div class="tactical-action-arrow">
-                            <span data-i18n="btn_start_task">এক্টিভেট</span>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Adsterra Expedition -->
-                <div class="tactical-card booster-purple" onclick="openNetworkFullView('adsterra')">
-                    <div class="card-glass-glow"></div>
-                    <div class="card-status-flag" data-i18n="badge_direct">SPONSOR EXPEDITION</div>
-                    <div class="card-body-layout">
-                        <div class="tactical-icon-wrap icon-purple">
-                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-                                <path d="M2 12h20"/>
-                            </svg>
-                        </div>
-                        <div class="tactical-meta">
-                            <h4 class="tactical-title" data-i18n="adsterra_title">Cyber Nexus Recon</h4>
-                            <p class="tactical-desc" data-i18n="adsterra_desc">স্পনসর পার্টনার পোর্টালে ভিজিট করে নির্দিষ্ট সময় অবস্থান করুন</p>
-                        </div>
-                    </div>
-                    <div class="tactical-bottom-strip">
-                        <span class="tactical-bounty">+<span class="reward-adsterra-val">15</span> <span data-i18n="pts_currency">CREDITS</span></span>
-                        <div class="tactical-action-arrow">
-                            <span data-i18n="btn_start_task">এক্টিভেট</span>
+                            <span data-i18n="btn_activate">অ্যাক্টিভেট</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                         </div>
                     </div>
@@ -372,18 +304,79 @@
             </div>
         </section>
 
-        <!-- ================= 2. GUILD / SYNDICATE TAB (REFERRAL) ================= -->
-        <section id="guild" class="view-panel">
+        <!-- ================= 2. ARMORY & UPGRADES (IN-GAME STORE) ================= -->
+        <section id="armory" class="view-panel">
             <div class="bento-box guild-hero-box neon-purple-glow">
-                <span class="guild-pill" data-i18n="refer_badge">SYNDICATE RECRUITMENT</span>
-                <h3 class="guild-headline" data-i18n="refer_heading">স্কোয়াড বিল্ড করুন ও আর্ন শেয়ার পান</h3>
-                <p class="guild-subtext" id="hero-sub-text">
-                    <span data-i18n="refer_sub_1">প্রতিটি অ্যাক্টিভ পাইলট জয়েনিংয়ে পান</span> 
-                    <strong id="display-ref-bonus" class="neon-gem">50</strong> 
-                    <span data-i18n="refer_sub_2">ক্রেডিট এবং আজীবন শেয়ারিং বোনাস!</span>
+                <span class="guild-pill" data-i18n="armory_pill">CYBER ARMORY & UPGRADES</span>
+                <h3 class="guild-headline" data-i18n="armory_headline">পাইলট গিয়ার ও কাস্টমাইজেশন</h3>
+                <p class="guild-subtext" data-i18n="armory_subtext">
+                    আর্কেড ক্রেডিট দিয়ে নতুন সাইবার স্কিন, রিফ্লেক্স বুস্টার এবং ব্যাজ আনলক করুন।
                 </p>
             </div>
 
+            <!-- Upgrades Grid -->
+            <div class="section-badge-row">
+                <span class="section-glow-title" data-i18n="armory_catalog_title">অ্যাভাট্যার কোর ও পাওয়ার-আপ</span>
+            </div>
+
+            <div class="tactical-grid">
+                
+                <!-- Upgrade Item 1 -->
+                <div class="tactical-card booster-purple" onclick="purchaseSkin('cyber_neon')">
+                    <div class="card-body-layout">
+                        <div class="tactical-icon-wrap icon-purple">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                                <polyline points="2 17 12 22 22 17"/>
+                                <polyline points="2 12 12 17 22 12"/>
+                            </svg>
+                        </div>
+                        <div class="tactical-meta">
+                            <h4 class="tactical-title">Neon Cyber Frame</h4>
+                            <p class="tactical-desc" data-i18n="skin_desc_1">প্রোফাইলে এক্সক্লুসিভ গ্লোইং বর্ডার এবং +৫% রিফ্লেক্স বোনাস</p>
+                        </div>
+                    </div>
+                    <div class="tactical-bottom-strip">
+                        <span class="tactical-bounty">250 <span data-i18n="pts_currency">CREDITS</span></span>
+                        <button type="button" class="cyber-chip-btn" id="btn-skin-1" data-i18n="btn_unlock">আনলক</button>
+                    </div>
+                </div>
+
+                <!-- Upgrade Item 2 -->
+                <div class="tactical-card booster-blue" onclick="purchaseSkin('reflex_overload')">
+                    <div class="card-body-layout">
+                        <div class="tactical-icon-wrap icon-blue">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="6"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="tactical-meta">
+                            <h4 class="tactical-title">Reflex Stabilizer</h4>
+                            <p class="tactical-desc" data-i18n="skin_desc_2">টার্গেট নোডের অবস্থান ০.৫ সেকেন্ড বেশি স্থির থাকবে</p>
+                        </div>
+                    </div>
+                    <div class="tactical-bottom-strip">
+                        <span class="tactical-bounty">500 <span data-i18n="pts_currency">CREDITS</span></span>
+                        <button type="button" class="cyber-chip-btn" id="btn-skin-2" data-i18n="btn_unlock">আনলক</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= 3. LEADERBOARD & GUILD (RANKING) ================= -->
+        <section id="rankings" class="view-panel">
+            <div class="bento-box guild-hero-box neon-purple-glow">
+                <span class="guild-pill" data-i18n="leaderboard_pill">PILOT ARENA LEADERBOARD</span>
+                <h3 class="guild-headline" data-i18n="leaderboard_heading">টপ অপারেটর র‍্যাঙ্কিং</h3>
+                <p class="guild-subtext" data-i18n="leaderboard_subtext">
+                    সর্বোচ্চ স্কোর অর্জনকারী পাইলটদের তালিকা ও স্কোয়াড চ্যালেঞ্জ।
+                </p>
+            </div>
+
+            <!-- Squad Recruitment -->
             <div class="bento-box invite-terminal">
                 <div class="terminal-input-wrap">
                     <span id="referral-link-display" class="terminal-text-val">লিংক জেনারেট হচ্ছে...</span>
@@ -392,130 +385,29 @@
 
                 <button type="button" class="cyber-btn primary-glow" id="btn-share-referral" onclick="shareReferralLink()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    <span data-i18n="btn_share_telegram">টেলিগ্রাম স্কোয়াডে শেয়ার করুন</span>
+                    <span data-i18n="btn_challenge_squad">বন্ধুদের সাথে স্কোয়াড চ্যালেঞ্জ করুন</span>
                 </button>
             </div>
 
             <div class="bento-stat-pair">
                 <div class="bento-box stat-tile">
-                    <span class="tile-label" data-i18n="stat_total_ref">রিক্রুটেড পাইলট</span>
+                    <span class="tile-label" data-i18n="stat_squad_pilots">স্কোয়াড পার্টনার</span>
                     <span class="tile-val font-bold" id="home-ref-count">0</span>
                 </div>
                 <div class="bento-box stat-tile">
-                    <span class="tile-label" data-i18n="stat_ref_earnings">টোটাল গিল্ড বোনাস</span>
-                    <span class="tile-val neon-gem font-bold" id="home-ref-earnings">0</span>
+                    <span class="tile-label" data-i18n="stat_high_score">সর্বোচ্চ স্কোর</span>
+                    <span class="tile-val neon-gem font-bold" id="profile-best-score-badge">0</span>
                 </div>
             </div>
 
             <div class="section-badge-row" style="margin-top: 18px;">
-                <div class="section-title-wrap">
-                    <span class="section-glow-title" data-i18n="refer_list_title">রিক্রুটেড এজেন্ট তালিকা</span>
-                    <span class="section-subtext" data-i18n="refer_list_sub">শর্ত পূরণ হওয়ার সাথে সাথে বোনাস যোগ হবে</span>
-                </div>
+                <span class="section-glow-title" data-i18n="leaderboard_list_title">গ্লোবাল পাইলট রোস্টার</span>
             </div>
 
             <div class="bento-box roster-scroll-box">
-                <div id="referrals-container" class="roster-dynamic-list">
+                <div id="leaderboard-container" class="roster-dynamic-list">
                     <div class="loading-state" data-i18n="loading_text">ডাটা রিড করা হচ্ছে...</div>
                 </div>
-            </div>
-        </section>
-
-        <!-- ================= 3. VAULT / PRIZE REDEEM TAB (CASHOUT) ================= -->
-        <section id="vault" class="view-panel">
-            
-            <div class="bento-box vault-balance-hero neon-emerald-glow">
-                <span class="vault-tag-label" data-i18n="withdraw_bal_label">রিডিমযোগ্য ভল্ট ব্যালেন্স</span>
-                <div class="vault-numeric-amount">
-                    <span id="withdraw-page-balance">0</span> 
-                    <small data-i18n="pts_currency">CREDITS</small>
-                </div>
-            </div>
-
-            <!-- Official Payout Proof & Transparency Badge (Policy Requirement: Confirmation of payouts) -->
-            <a id="telegram-payout-proof-link" href="#" target="_blank" rel="noopener noreferrer" class="bento-box proof-channel-card">
-                <div class="proof-left">
-                    <div class="proof-icon-pulse">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            <polyline points="9 12 12 15 16 10"/>
-                        </svg>
-                    </div>
-                    <div class="proof-text-wrap">
-                        <div class="proof-title">
-                            <span>লাইভ পেমেন্ট প্রুফ চ্যানেল</span>
-                            <span class="verified-dot">● LIVE LEDGER</span>
-                        </div>
-                        <p class="proof-desc">প্রতিটি সফল ক্যাশআউট ট্রানজ্যাকশন পাবলিকলি ভেরিফাই করুন</p>
-                    </div>
-                </div>
-                <div class="proof-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>
-            </a>
-
-            <!-- Segmented Cyber Method Picker -->
-            <div class="cyber-tabs-nav">
-                <button type="button" class="c-tab-btn active" id="btn-method-recharge" onclick="switchWithdrawMethod('recharge')" data-i18n="method_recharge">
-                    মোবাইল রিচার্জ
-                </button>
-                <button type="button" class="c-tab-btn" id="btn-method-bkash" onclick="switchWithdrawMethod('bkash')" data-i18n="method_bkash">
-                    বিকাশ
-                </button>
-                <button type="button" class="c-tab-btn" id="btn-method-nagad" onclick="switchWithdrawMethod('nagad')" data-i18n="method_nagad">
-                    নগদ
-                </button>
-            </div>
-
-            <div class="bento-box vault-form-card">
-                <form id="form-withdraw" onsubmit="handleWithdrawSubmit(event)">
-
-                    <div class="cyber-input-group" id="group-operator">
-                        <label class="input-tag-label" data-i18n="label_operator">টেলিকম নেটওয়ার্ক নির্বাচন:</label>
-                        <select id="withdraw-operator" class="cyber-form-control">
-                            <option value="Grameenphone">Grameenphone (GP)</option>
-                            <option value="Banglalink">Banglalink (BL)</option>
-                            <option value="Robi">Robi (Robi)</option>
-                            <option value="Airtel">Airtel (Airtel)</option>
-                            <option value="Teletalk">Teletalk (Teletalk)</option>
-                        </select>
-                    </div>
-
-                    <div class="cyber-input-group" id="group-acc-type">
-                        <label id="label-acc-type" class="input-tag-label" data-i18n="label_sim_type">সংযোগ প্রটোকল:</label>
-                        <select id="withdraw-account-type" class="cyber-form-control">
-                            <option value="Prepaid">Prepaid</option>
-                            <option value="Postpaid">Postpaid</option>
-                        </select>
-                    </div>
-
-                    <div class="cyber-input-group">
-                        <label id="label-withdraw-phone" class="input-tag-label" data-i18n="label_phone">অ্যাকাউন্ট মোবাইল নম্বর:</label>
-                        <input type="tel" id="withdraw-phone" class="cyber-form-control font-bold" placeholder="01XXXXXXXXX" pattern="[0-9]{11}" maxlength="11" inputmode="numeric" required>
-                    </div>
-
-                    <div class="cyber-input-group">
-                        <div class="label-split-row">
-                            <label class="input-tag-label" data-i18n="label_points">পয়েন্ট পরিমাণ:</label>
-                            <span class="sub-alert"><span data-i18n="label_min">সর্বনিম্ন:</span> <strong id="display-min-withdraw">200</strong> <span data-i18n="pts_currency">CREDITS</span></span>
-                        </div>
-                        <input type="number" id="withdraw-points" class="cyber-form-control font-bold" placeholder="পয়েন্ট দিন" min="200" inputmode="numeric" oninput="calculateWithdrawBdt()" required>
-                    </div>
-
-                    <!-- Dynamic Conversion Realtime Preview -->
-                    <div id="withdraw-preview-summary" class="vault-conversion-preview">
-                        <span data-i18n="label_you_will_get">মোট প্রাইজ ভ্যালু:</span>
-                        <div class="preview-cash">৳ <span id="summary-bdt-val">0.00</span></div>
-                    </div>
-
-                    <button type="submit" id="btn-submit-withdraw" class="cyber-btn primary-glow">
-                        <span id="btn-submit-text" data-i18n="btn_submit_cashout">রিডিমশন অর্ডার প্লেস করুন</span>
-                    </button>
-                </form>
-
-                <button type="button" class="cyber-link-btn" onclick="openWithdrawHistory()" data-i18n="btn_view_history">
-                    ট্রানজ্যাকশন হিস্ট্রি দেখুন
-                </button>
             </div>
         </section>
 
@@ -524,7 +416,6 @@
             <div class="bento-box pilot-dossier-card">
                 <div class="dossier-avatar-wrap">
                     <div class="dossier-avatar-core" id="profile-avatar">P</div>
-                    <div class="dossier-status-pulse"></div>
                 </div>
                 <h3 class="pilot-identity-name" id="profile-page-name">অপারেটর নাম</h3>
                 <span class="pilot-telegram-tag" id="profile-page-username">@username</span>
@@ -532,63 +423,19 @@
 
                 <div class="dossier-stat-deck">
                     <div class="deck-cell">
-                        <span class="deck-lbl" data-i18n="profile_stat_bal">পাওয়ার লেভেল</span>
+                        <span class="deck-lbl" data-i18n="profile_stat_bal">পাওয়ার ক্রেডিট</span>
                         <span class="deck-val" id="profile-stat-balance">0 CREDITS</span>
                     </div>
                     <div class="deck-cell">
-                        <span class="deck-lbl" data-i18n="profile_stat_ref">স্কোয়াড মেম্বার</span>
-                        <span class="deck-val neon-gem" id="profile-stat-ref">0 Users</span>
+                        <span class="deck-lbl" data-i18n="profile_stat_matches">ম্যাচ খেলা হয়েছে</span>
+                        <span class="deck-val neon-gem" id="profile-stat-matches">0 Matches</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Tactical Setting & Info Rows -->
+            <!-- Settings & Community Links -->
             <div class="bento-box action-list-dock">
                 
-                <div class="dock-action-row" onclick="openChannelVerifyModal()">
-                    <div class="dock-left-cell">
-                        <div class="dock-icon-box comms-icon-bg">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                <polyline points="9 12 12 15 16 10"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <span class="dock-title" data-i18n="menu_verify_channel">টেলিগ্রাম চ্যানেল ভেরিফিকেশন</span>
-                            <small id="profile-verify-status-text" class="dock-desc text-danger">● আনভেরিফাইড (টাস্ক ব্লক)</small>
-                        </div>
-                    </div>
-                    <span id="profile-verify-badge" class="cyber-chip chip-danger">ভেরিফাই করুন</span>
-                </div>
-
-                <div class="dock-action-row" onclick="openWithdrawHistory()">
-                    <div class="dock-left-cell">
-                        <div class="dock-icon-box">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-                        </div>
-                        <span class="dock-title" data-i18n="menu_payment_history">রিডিমশন ও পেআউট লগ</span>
-                    </div>
-                    <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>
-
-                <!-- Proof Channel Row for Reviewers -->
-                <a id="profile-proof-link" href="#" target="_blank" rel="noopener noreferrer" class="dock-action-row">
-                    <div class="dock-left-cell">
-                        <div class="dock-icon-box" style="color: var(--neon-emerald);">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                <line x1="8" y1="21" x2="16" y2="21"/>
-                                <line x1="12" y1="17" x2="12" y2="21"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <span class="dock-title">পেমেন্ট হিস্ট্রি ও প্রুফ চ্যানেল</span>
-                            <small class="dock-desc" style="color: var(--neon-emerald);">● পাবলিকলি ভেরিফাইড ট্রানজ্যাকশন</small>
-                        </div>
-                    </div>
-                    <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
-
                 <div class="dock-action-row" onclick="openCheckInFullView()">
                     <div class="dock-left-cell">
                         <div class="dock-icon-box">
@@ -599,6 +446,16 @@
                     <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
 
+                <a id="telegram-channel-link" href="#" target="_blank" rel="noopener noreferrer" class="dock-action-row">
+                    <div class="dock-left-cell">
+                        <div class="dock-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+                        </div>
+                        <span class="dock-title" data-i18n="menu_tg_support">অফিসিয়াল টেলিগ্রাম কমিউনিটি</span>
+                    </div>
+                    <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+
                 <a id="telegram-support-link" href="#" target="_blank" rel="noopener noreferrer" class="dock-action-row">
                     <div class="dock-left-cell">
                         <div class="dock-icon-box">
@@ -608,92 +465,14 @@
                     </div>
                     <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </a>
-
-                <a id="telegram-channel-link" href="#" target="_blank" rel="noopener noreferrer" class="dock-action-row">
-                    <div class="dock-left-cell">
-                        <div class="dock-icon-box">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                        </div>
-                        <span class="dock-title" data-i18n="menu_tg_support">অফিসিয়াল টেলিগ্রাম কমস</span>
-                    </div>
-                    <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
             </div>
 
-            <!-- Footer Compliance Caption -->
-            <div class="cyber-footer-tag" data-i18n="footer_caption">Aetheria Arcade Engine v7.0.0 • Decoupled WebApp</div>
+            <div class="cyber-footer-tag">Aetheria Arcade v7.1.0 • Verified Telegram Gaming Platform</div>
         </section>
 
     </main>
 
-    <!-- ================= FULLVIEW MISSION SCREEN ================= -->
-    <div id="network-fullview" class="cyber-inpage-viewport">
-        <div class="mission-topbar">
-            <button type="button" class="mission-back-btn" onclick="closeNetworkFullView()" aria-label="Back">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <span class="mission-bar-title" data-i18n="fv_task_details">মিশন ব্রিফিং</span>
-            <div style="width: 44px;"></div>
-        </div>
-
-        <div class="mission-scroll-area">
-            <div class="mission-hero-banner">
-                <div class="mission-icon-beacon" id="fv-icon-box">
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                </div>
-                <span class="mission-badge-flag" id="fv-badge">OFFICIAL SPONSORED MISSION</span>
-                <h2 id="fv-headline" class="mission-headline">স্পনসর পাওয়ার বুস্ট</h2>
-                <p id="fv-desc" class="mission-tagline">ভিডিও স্ট্রিম সম্পূর্ণ দেখুন এবং ভল্ট এনার্জি ক্রেডিট বুস্ট করুন।</p>
-            </div>
-
-            <div class="bento-box mission-metrics-grid">
-                <div class="metric-cell">
-                    <span class="m-cell-lbl" data-i18n="fv_m_reward">মিশন রিওয়ার্ড</span>
-                    <span class="m-cell-val neon-gem font-bold" id="fv-reward-amount">+20 CREDITS</span>
-                </div>
-                <div class="metric-cell">
-                    <span class="m-cell-lbl" data-i18n="fv_m_limit">দৈনিক ক্যাপ</span>
-                    <span class="m-cell-val font-bold" id="fv-limit-count">0 / 20</span>
-                </div>
-                <div class="metric-cell">
-                    <span class="m-cell-lbl" data-i18n="fv_m_status">স্ট্যাটাস</span>
-                    <span class="m-cell-val neon-emerald font-bold" data-i18n="fv_active">● সক্রিয়</span>
-                </div>
-            </div>
-
-            <!-- Clear Compliance Rules: Click is strictly OPTIONAL (satisfies policy against forced clicks) -->
-            <div class="bento-box mission-protocol-card">
-                <h4 class="protocol-header" data-i18n="fv_rules_title">মিশন সম্পন্ন করার নিয়ম:</h4>
-                <div class="protocol-step">
-                    <span class="step-badge" id="step-num-1">1</span>
-                    <span class="step-text" data-i18n="fv_rule_step1">নিচের <strong>"মিশন বুস্ট শুরু করুন"</strong> অ্যাকশন বাটনে চাপুন।</span>
-                </div>
-                <div class="protocol-step">
-                    <span class="step-badge" id="step-num-2">2</span>
-                    <span class="step-text" data-i18n="fv_rule_step2">স্পনসর কন্টেন্ট চলাকালীন স্ক্রিন ক্লোজ করবেন না বা ব্যাক করবেন না।</span>
-                </div>
-                <div class="protocol-step">
-                    <span class="step-badge" id="step-num-3">3</span>
-                    <span class="step-text">বিজ্ঞাপনে ক্লিক করা <strong>বাধ্যতামূলক নয়</strong>। শুধুমাত্র ভিডিওটি সম্পূর্ণ সমাপ্ত হলেই স্বয়ংক্রিয়ভাবে ক্রেডিট যুক্ত হবে।</span>
-                </div>
-            </div>
-
-            <!-- Ad Notice & Transparency Note -->
-            <div class="ad-transparency-note">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                <span>This rewarded video is powered by certified ad partners (Adsgram / Monetag). Never forced to click.</span>
-            </div>
-        </div>
-
-        <div class="mission-sticky-footer">
-            <button type="button" id="fv-action-btn" class="cyber-btn primary-glow trigger-btn" onclick="executeCurrentNetworkAd()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                <span id="fv-btn-text" data-i18n="btn_watch_and_earn">মিশন বুস্ট শুরু করুন</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- ================= DAILY CHECK-IN BOTTOM DRAWER ================= -->
+    <!-- ================= 7-DAY PROTOCOL REWARD DRAWER ================= -->
     <div id="checkin-fullview" class="cyber-drawer-overlay" onclick="closeCheckInFullView()">
         <div class="cyber-drawer-sheet" onclick="event.stopPropagation()">
             <div class="drawer-drag-pill"></div>
@@ -713,41 +492,27 @@
         </div>
     </div>
 
-    <!-- ================= WITHDRAWAL HISTORY BOTTOM DRAWER ================= -->
-    <div id="history-modal-overlay" class="cyber-drawer-overlay" onclick="closeWithdrawHistory()">
-        <div class="cyber-drawer-sheet" onclick="event.stopPropagation()">
-            <div class="drawer-drag-pill"></div>
-            <div class="drawer-header-row">
-                <h3 data-i18n="history_modal_title">রিডিমশন ও ক্যাশআউট হিস্ট্রি</h3>
-                <button type="button" class="drawer-close-btn" onclick="closeWithdrawHistory()">✕</button>
-            </div>
-            <div id="history-scroll-list" class="cyber-history-list">
-                <div class="loading-state" data-i18n="loading_text">ডাটা রিড করা হচ্ছে...</div>
-            </div>
-        </div>
-    </div>
-
     <!-- HUD Tactical Bottom Navigation Dock -->
     <nav class="cyber-hud-nav">
         <button type="button" class="hud-nav-tab active" onclick="switchTab('arena')">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
             <span data-i18n="nav_home">আর্কেড</span>
         </button>
-        <button type="button" class="hud-nav-tab" onclick="switchTab('guild')">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span data-i18n="nav_refer">গিল্ড</span>
+        <button type="button" class="hud-nav-tab" onclick="switchTab('armory')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span data-i18n="nav_armory">আর্মোরি</span>
         </button>
-        <button type="button" class="hud-nav-tab" onclick="switchTab('vault')">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-            <span data-i18n="nav_withdraw">ভল্ট</span>
+        <button type="button" class="hud-nav-tab" onclick="switchTab('rankings')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            <span data-i18n="nav_ranking">র‍্যাঙ্কিং</span>
         </button>
         <button type="button" class="hud-nav-tab" onclick="switchTab('profile')">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
-            <span data-i18n="nav_profile">অপারেটর</span>
+            <span data-i18n="nav_profile">পাইলট</span>
         </button>
     </nav>
 
     <!-- Client Script -->
-    <script src="app.js?v=7.0.0"></script>
+    <script src="app.js?v=7.1.0"></script>
 </body>
 </html>

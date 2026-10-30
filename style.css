@@ -1,8 +1,8 @@
 /* ==========================================================
-   AETHERIA ARCADE - CYBER GAMING & HUD THEME (v7.0.0 PRODUCTION)
-   - Decoupled Web3 Arcade Aesthetics
+   AETHERIA ARCADE - CYBER GAMING & REFLEX HUD THEME (v7.1.0)
+   - 100% Policy-Compliant Telegram Gaming Architecture
    - Glassmorphism & Cyber Bento Grid Engine
-   - 100% Policy-Compliant Proof & Disclosure UI
+   - Fluid Target Reflex Mini-Game UI
 ========================================================== */
 
 :root {
@@ -357,7 +357,6 @@ input, select, textarea {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* Hero Matrix Card */
 .hero-matrix {
     border: 1px solid rgba(0, 240, 255, 0.25);
     background: linear-gradient(175deg, var(--card-surface) 0%, rgba(0, 240, 255, 0.04) 100%);
@@ -385,7 +384,7 @@ input, select, textarea {
 }
 
 .gem-digits {
-    font-size: 48px;
+    font-size: 46px;
     font-weight: 900;
     letter-spacing: -1.2px;
     color: var(--text-primary);
@@ -443,9 +442,10 @@ input, select, textarea {
     background: linear-gradient(90deg, var(--neon-cyan), var(--neon-emerald));
     box-shadow: 0 0 10px var(--neon-emerald-glow);
     border-radius: 6px;
+    transition: width 0.25s ease, background 0.25s ease;
 }
 
-/* ================= 4. MINI ARCADE CONSOLE ================= */
+/* ================= 4. PLAYABLE MINI ARCADE CONSOLE ================= */
 .mini-arcade-console {
     background: linear-gradient(180deg, var(--card-surface) 0%, #060910 100%);
     border: 1.5px solid rgba(0, 255, 157, 0.25);
@@ -475,37 +475,43 @@ input, select, textarea {
 .console-score-pill {
     background: var(--neon-emerald-soft);
     border: 1px solid rgba(0, 255, 157, 0.3);
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 13px;
     font-weight: 700;
 }
 
 .arcade-interactive-pad {
     position: relative;
-    height: 140px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(0, 0, 0, 0.45) 80%);
+    height: 230px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(0, 0, 0, 0.6) 85%);
     border: 1px dashed rgba(0, 240, 255, 0.3);
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 20px;
     overflow: hidden;
-    cursor: pointer;
+    cursor: crosshair;
     touch-action: manipulation;
 }
 
 .arcade-interactive-pad:active {
-    background: radial-gradient(circle, rgba(0, 255, 157, 0.15) 0%, rgba(0, 0, 0, 0.45) 80%);
+    border-color: var(--neon-cyan);
 }
 
 .cyber-target-node {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     color: var(--neon-cyan);
-    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    user-select: none;
+    z-index: 5;
+    animation: targetPulse 0.4s ease alternate infinite;
+    transform-origin: center;
+}
+
+@keyframes targetPulse {
+    0% { transform: scale(0.96); filter: drop-shadow(0 0 6px var(--neon-cyan)); }
+    100% { transform: scale(1.05); filter: drop-shadow(0 0 16px var(--neon-cyan)); }
 }
 
 .cyber-target-node svg {
@@ -513,16 +519,19 @@ input, select, textarea {
 }
 
 .node-label {
-    font-size: 13px;
+    font-size: 10.5px;
     font-weight: 900;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
+    background: rgba(0, 240, 255, 0.2);
+    padding: 2px 6px;
+    border-radius: 6px;
 }
 
 .arena-scanline {
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, transparent 0%, rgba(0, 240, 255, 0.08) 50%, transparent 100%);
-    height: 30%;
+    height: 25%;
     animation: scanAnim 3s linear infinite;
     pointer-events: none;
 }
@@ -535,17 +544,18 @@ input, select, textarea {
 .tap-spark {
     position: absolute;
     color: var(--neon-emerald);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 900;
     pointer-events: none;
-    animation: sparkFloat 0.7s ease-out forwards;
+    animation: sparkFloat 0.6s ease-out forwards;
     transform: translate(-50%, -50%);
     text-shadow: 0 0 8px var(--neon-emerald);
+    z-index: 15;
 }
 
 @keyframes sparkFloat {
     0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
-    100% { opacity: 0; transform: translate(-50%, -100px) scale(1.3); }
+    100% { opacity: 0; transform: translate(-50%, -70px) scale(1.3); }
 }
 
 .arcade-footer-stats {
@@ -607,7 +617,7 @@ input, select, textarea {
     color: var(--neon-alert);
 }
 
-/* ================= 6. TACTICAL GRID (BOOSTERS) ================= */
+/* ================= 6. TACTICAL GRID (BOOSTERS & ARMORY) ================= */
 .section-badge-row {
     margin: 22px 4px 14px 4px;
 }
@@ -636,7 +646,7 @@ input, select, textarea {
     background: var(--card-surface);
     border: 1px solid var(--card-border);
     border-radius: 26px;
-    padding: 24px 20px 20px 20px;
+    padding: 22px 20px 18px 20px;
     position: relative;
     cursor: pointer;
     overflow: hidden;
@@ -671,14 +681,14 @@ input, select, textarea {
 .card-body-layout {
     display: flex;
     align-items: center;
-    gap: 18px;
-    margin: 10px 0 20px 0;
+    gap: 16px;
+    margin: 8px 0 16px 0;
 }
 
 .tactical-icon-wrap {
-    width: 66px;
-    height: 66px;
-    border-radius: 20px;
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -691,16 +701,16 @@ input, select, textarea {
 .icon-purple { background: var(--neon-purple-soft); color: var(--neon-purple); border-color: rgba(189, 0, 255, 0.3); }
 
 .tactical-title {
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 900;
     color: var(--text-primary);
     line-height: 1.3;
 }
 
 .tactical-desc {
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--text-secondary);
-    margin-top: 5px;
+    margin-top: 4px;
     line-height: 1.45;
 }
 
@@ -709,15 +719,15 @@ input, select, textarea {
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--card-border);
-    padding-top: 15px;
+    padding-top: 14px;
 }
 
 .tactical-bounty {
     background: var(--neon-cyan-soft);
     color: var(--neon-cyan);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 900;
-    padding: 7px 15px;
+    padding: 6px 14px;
     border-radius: 12px;
 }
 
@@ -725,12 +735,12 @@ input, select, textarea {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
     color: var(--text-primary);
 }
 
-/* ================= 7. GUILD & RECRUITS ================= */
+/* ================= 7. LEADERBOARD & GUILD ================= */
 .guild-hero-box {
     text-align: center;
     padding: 26px 18px;
@@ -780,11 +790,17 @@ input, select, textarea {
     background: var(--chip-bg);
     border: 1px solid var(--card-border);
     color: var(--text-primary);
-    padding: 9px 18px;
+    padding: 8px 16px;
     border-radius: 12px;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 800;
     cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cyber-chip-btn:active {
+    transform: scale(0.95);
+    background: var(--neon-cyan-soft);
 }
 
 .bento-stat-pair {
@@ -819,7 +835,7 @@ input, select, textarea {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 300px;
+    max-height: 380px;
     overflow-y: auto;
 }
 
@@ -868,192 +884,7 @@ input, select, textarea {
 .chip-pending { background: rgba(255, 184, 0, 0.12); color: var(--neon-warning); border: 1px solid rgba(255, 184, 0, 0.3); }
 .chip-danger { background: var(--neon-alert-soft); color: var(--neon-alert); border: 1px solid rgba(255, 51, 102, 0.3); }
 
-/* ================= 8. VAULT / PRIZE REDEEM ================= */
-.vault-balance-hero {
-    text-align: center;
-    padding: 26px 18px;
-    border: 1px solid rgba(0, 255, 157, 0.25);
-    background: linear-gradient(180deg, var(--card-surface) 0%, rgba(0, 255, 157, 0.04) 100%);
-}
-
-.vault-tag-label {
-    font-size: 13.5px;
-    color: var(--text-secondary);
-    font-weight: 700;
-}
-
-.vault-numeric-amount {
-    font-size: 46px;
-    font-weight: 900;
-    color: var(--text-primary);
-    margin-top: 6px;
-    letter-spacing: -1px;
-}
-
-.vault-numeric-amount small {
-    font-size: 18px;
-    color: var(--neon-emerald);
-}
-
-/* POLICY COMPLIANCE: Live Proof Channel Banner */
-.proof-channel-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid rgba(0, 255, 157, 0.3);
-    background: linear-gradient(90deg, rgba(0, 255, 157, 0.08) 0%, var(--card-surface) 100%);
-    text-decoration: none;
-    cursor: pointer;
-    margin-bottom: 16px;
-    padding: 16px 18px;
-    transition: transform 0.15s ease, border-color 0.2s ease;
-}
-
-.proof-channel-card:active {
-    transform: scale(0.985);
-    border-color: var(--neon-emerald);
-}
-
-.proof-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.proof-icon-pulse {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    background: var(--neon-emerald-soft);
-    color: var(--neon-emerald);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 0 16px rgba(0, 255, 157, 0.25);
-}
-
-.proof-text-wrap {
-    display: flex;
-    flex-direction: column;
-}
-
-.proof-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--text-primary);
-}
-
-.verified-dot {
-    font-size: 10px;
-    font-weight: 900;
-    color: var(--neon-emerald);
-    letter-spacing: 0.5px;
-}
-
-.proof-desc {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-top: 3px;
-}
-
-.proof-arrow {
-    color: var(--neon-emerald);
-    display: flex;
-    align-items: center;
-}
-
-.cyber-tabs-nav {
-    display: flex;
-    background: var(--card-surface);
-    border: 1px solid var(--card-border);
-    border-radius: 18px;
-    padding: 5px;
-    gap: 6px;
-    margin-bottom: 16px;
-}
-
-.c-tab-btn {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    padding: 13px;
-    border-radius: 14px;
-    font-size: 14.5px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.c-tab-btn.active {
-    background: var(--chip-bg);
-    color: var(--text-primary);
-    border: 1px solid var(--card-border);
-}
-
-.cyber-input-group {
-    margin-bottom: 18px;
-}
-
-.input-tag-label {
-    display: block;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-}
-
-.label-split-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sub-alert {
-    font-size: 12.5px;
-    color: var(--neon-cyan);
-    font-weight: 700;
-}
-
-.cyber-form-control {
-    width: 100%;
-    background: var(--input-bg);
-    border: 1px solid var(--card-border);
-    color: var(--text-primary);
-    padding: 15px 16px;
-    border-radius: 16px;
-    font-size: 15.5px;
-    outline: none;
-    transition: border 0.2s;
-}
-
-.cyber-form-control:focus {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 12px var(--neon-cyan-soft);
-}
-
-.vault-conversion-preview {
-    background: var(--input-bg);
-    border: 1px dashed rgba(0, 240, 255, 0.45);
-    border-radius: 16px;
-    padding: 15px 18px;
-    display: none;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
-}
-
-.preview-cash {
-    font-size: 22px;
-    font-weight: 900;
-    color: var(--neon-emerald);
-}
-
-/* ================= 9. PILOT / PROFILE ================= */
+/* ================= 8. PILOT / PROFILE ================= */
 .pilot-dossier-card {
     text-align: center;
     padding: 28px 18px;
@@ -1142,7 +973,6 @@ input, select, textarea {
 }
 
 .dock-title { font-size: 15.5px; font-weight: 800; display: block; }
-.dock-desc { font-size: 12px; font-weight: 700; display: block; margin-top: 2px; }
 .chevron-arrow { color: var(--text-muted); }
 
 .cyber-footer-tag {
@@ -1153,7 +983,7 @@ input, select, textarea {
     font-weight: 700;
 }
 
-/* ================= 10. CYBER BUTTON ENGINE ================= */
+/* ================= 9. CYBER BUTTON ENGINE ================= */
 .cyber-btn {
     width: 100%;
     background: var(--neon-cyan);
@@ -1161,7 +991,7 @@ input, select, textarea {
     border: none;
     padding: 16px 22px;
     border-radius: 18px;
-    font-size: 16px;
+    font-size: 15.5px;
     font-weight: 900;
     cursor: pointer;
     display: flex;
@@ -1178,13 +1008,6 @@ input, select, textarea {
     box-shadow: 0 0 24px var(--neon-cyan-glow);
 }
 
-.comms-btn {
-    background: #0088cc;
-    color: #ffffff;
-    box-shadow: 0 0 20px rgba(0, 136, 204, 0.35);
-    text-decoration: none;
-}
-
 .cyber-link-btn {
     width: 100%;
     background: transparent;
@@ -1197,205 +1020,79 @@ input, select, textarea {
     margin-top: 10px;
 }
 
-/* ================= 11. IN-PAGE MISSION VIEWPORT ================= */
-.cyber-inpage-viewport {
+/* ================= 10. MODALS & REVIVE ENGINE ================= */
+.cyber-modal-overlay {
     position: fixed;
     inset: 0;
-    background: var(--bg-base);
-    z-index: 10005;
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: none;
-    flex-direction: column;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
-}
-
-.cyber-inpage-viewport.active {
-    display: flex;
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.mission-topbar {
-    display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding-top: calc(14px + var(--safe-top));
-    padding-bottom: 14px;
-    padding-left: 16px;
-    padding-right: 16px;
-    background: var(--hud-bg);
-    border-bottom: 1px solid var(--card-border);
+    justify-content: center;
+    z-index: 10020;
+    padding: 16px;
+    animation: modalScale 0.2s ease;
 }
 
-.mission-back-btn {
-    width: 42px;
-    height: 42px;
+@keyframes modalScale {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.cyber-modal-box {
     background: var(--card-surface);
-    border: 1px solid var(--card-border);
-    color: var(--text-primary);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.mission-bar-title {
-    font-size: 18px;
-    font-weight: 800;
-}
-
-.mission-scroll-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 22px 14px 130px 14px;
-    max-width: 580px;
-    margin: 0 auto;
+    border: 1.5px solid var(--card-border);
+    border-radius: 28px;
+    padding: 30px 20px;
     width: 100%;
-}
-
-.mission-hero-banner {
+    max-width: 380px;
     text-align: center;
-    margin-bottom: 24px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
 }
 
-.mission-icon-beacon {
-    width: 86px;
-    height: 86px;
-    border-radius: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px auto;
-}
+.neon-border { border-color: rgba(0, 240, 255, 0.4); }
 
-.mission-badge-flag {
+.modal-tag-badge {
     font-size: 12px;
     font-weight: 900;
     letter-spacing: 1px;
-    padding: 5px 14px;
-    border-radius: 14px;
-    background: var(--chip-bg);
-    color: var(--text-secondary);
-    display: inline-block;
-    margin-bottom: 12px;
-}
-
-.mission-headline {
-    font-size: 24px;
-    font-weight: 900;
-    margin-bottom: 8px;
-}
-
-.mission-tagline {
-    font-size: 14.5px;
-    color: var(--text-secondary);
-    max-width: 440px;
-    margin: 0 auto;
-}
-
-.mission-metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 14px;
-    text-align: center;
-}
-
-.metric-cell {
-    background: var(--input-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 12px 6px;
-}
-
-.m-cell-lbl {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 700;
-    display: block;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-}
-
-.m-cell-val {
-    font-size: 15.5px;
-    font-weight: 900;
-}
-
-.mission-protocol-card {
-    padding: 22px 18px;
-}
-
-.protocol-header {
-    font-size: 16px;
-    font-weight: 800;
-    margin-bottom: 16px;
-}
-
-.protocol-step {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 16px;
-}
-
-.step-badge {
-    width: 28px;
-    height: 28px;
-    background: var(--neon-cyan-soft);
     color: var(--neon-cyan);
-    font-size: 14px;
-    font-weight: 900;
-    border-radius: 50%;
+    margin-bottom: 14px;
+}
+
+.holo-icon-wrap {
+    color: var(--neon-cyan);
+    margin-bottom: 14px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    border: 1px solid rgba(0, 240, 255, 0.3);
 }
 
-.step-text {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
+.modal-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.modal-subtext { font-size: 14.5px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; }
 
-/* POLICY COMPLIANCE: Ad Transparency Disclosure */
-.ad-transparency-note {
+.cyber-terminal-card {
+    background: var(--input-bg);
+    border: 1px dashed rgba(0, 240, 255, 0.4);
+    border-radius: 16px;
+    padding: 16px;
     display: flex;
+    flex-direction: column;
+    gap: 11px;
+    text-align: left;
+}
+
+.terminal-row {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
-    margin: 16px auto 0 auto;
-    font-size: 12px;
-    color: var(--text-muted);
-    justify-content: center;
-    text-align: center;
-    max-width: 460px;
-    line-height: 1.4;
+    font-size: 14px;
 }
 
-.mission-sticky-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: var(--hud-bg);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-top: 1px solid var(--card-border);
-    padding: 16px 14px calc(16px + var(--safe-bottom)) 14px;
-    z-index: 10006;
-}
+.t-muted { color: var(--text-secondary); }
+.t-light { color: var(--text-primary); }
 
-.trigger-btn {
-    height: 54px;
-    max-width: 580px;
-    margin: 0 auto;
-}
-
-/* ================= 12. BOTTOM DRAWERS & MODALS ================= */
+/* ================= 11. BOTTOM DRAWERS (STREAK GIFTS) ================= */
 .cyber-drawer-overlay {
     position: fixed;
     inset: 0;
@@ -1483,150 +1180,7 @@ input, select, textarea {
 .tile-day-lbl { font-size: 12px; color: var(--text-muted); font-weight: 700; display: block; }
 .tile-pts-val { font-size: 14px; font-weight: 900; color: var(--text-primary); margin-top: 4px; display: block; }
 
-.cyber-history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: 52vh;
-    overflow-y: auto;
-}
-
-.cyber-history-item {
-    background: var(--input-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.h-title { font-size: 14.5px; font-weight: 800; }
-.h-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-.h-pts { font-size: 15.5px; font-weight: 900; color: var(--neon-cyan); }
-
-/* Modals */
-.cyber-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.86);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 10020;
-    padding: 16px;
-    animation: modalScale 0.2s ease;
-}
-
-@keyframes modalScale {
-    from { opacity: 0; transform: scale(0.96); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.cyber-modal-box {
-    background: var(--card-surface);
-    border: 1.5px solid var(--card-border);
-    border-radius: 28px;
-    padding: 30px 20px;
-    width: 100%;
-    max-width: 380px;
-    text-align: center;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
-}
-
-.quarantine-border { border-color: var(--neon-alert); }
-.quarantine-symbol {
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    background: var(--neon-alert-soft);
-    color: var(--neon-alert);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px auto;
-}
-
-.security-chip {
-    font-size: 12px;
-    font-weight: 800;
-    background: var(--input-bg);
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid var(--card-border);
-    margin-top: 18px;
-    word-break: break-all;
-}
-
-.modal-tag-badge {
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    color: var(--neon-cyan);
-    margin-bottom: 14px;
-}
-
-.holo-icon-wrap {
-    color: var(--neon-cyan);
-    margin-bottom: 14px;
-    display: flex;
-    justify-content: center;
-}
-
-.modal-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-.modal-subtext { font-size: 14.5px; color: var(--text-secondary); margin-bottom: 22px; line-height: 1.5; }
-
-/* Receipt Terminal Box */
-.receipt-pulse-ring {
-    width: 76px;
-    height: 76px;
-    margin: 0 auto 16px auto;
-}
-
-.circuit-check {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    stroke: var(--neon-emerald);
-    stroke-width: 3.5;
-    box-shadow: 0 0 24px var(--neon-emerald-glow);
-}
-
-.check-circ {
-    stroke-dasharray: 160;
-    stroke-dashoffset: 0;
-}
-
-.check-tick {
-    stroke-dasharray: 50;
-    stroke-dashoffset: 0;
-}
-
-.cyber-terminal-card {
-    background: var(--input-bg);
-    border: 1px dashed rgba(0, 255, 157, 0.4);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-    text-align: left;
-}
-
-.terminal-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-}
-
-.t-muted { color: var(--text-secondary); }
-.t-light { color: var(--text-primary); }
-
-/* ================= 13. HUD BOTTOM NAV ================= */
+/* ================= 12. HUD BOTTOM NAVIGATION ================= */
 .cyber-hud-nav {
     position: fixed;
     bottom: 0;
@@ -1665,7 +1219,7 @@ input, select, textarea {
     filter: drop-shadow(0 0 8px var(--neon-cyan-glow));
 }
 
-/* Toast Container */
+/* ================= 13. TOAST & LOADERS ================= */
 .toast-viewport {
     position: fixed;
     top: calc(16px + var(--safe-top));

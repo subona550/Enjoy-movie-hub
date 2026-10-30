@@ -1,18 +1,19 @@
 /*** 
- * AETHERIA ARCADE - CYBER GAMING & REWARD ENGINE (v7.0.0 PRODUCTION)
- * - 100% Synced with Secured Cloudflare Worker & Firebase Database
- * - Realtime Mini-Arcade Tap Reflex System
- * - Zero Direct Firebase Writes (Tamper-Proof Architecture)
- * - Adsgram & Telegram Moderation Policy Compliant
+ * AETHERIA ARCADE - CYBER GAMING & REFLEX ENGINE (v7.1.0 PRODUCTION)
+ * - 100% Policy-Compliant for Adsgram & Telegram Mini Apps
+ * - Realtime Playable Reflex Matrix Mini-Game Engine
+ * - Natural Rewarded Placements: Revive, Energy Refills & Multipliers
+ * - In-Game Armory Upgrades & Global Pilot Leaderboard
  */
 
-// ================= ১. কোর কনফিগারেশন =================
+// ================= ১. কনফিগারেশন ও গেম কনস্ট্যান্ট =================
 const BACKEND_API_URL = "https://earnpro84cc.rakibkdbb.workers.dev"; 
 const DEFAULT_BOT_USERNAME = "EarnHubProBot"; 
+let ADSGRAM_BLOCK_ID = "26019"; // ডিফল্ট বা ফায়ারবেস থেকে সিঙ্ক করা Adsgram Block ID
 
 // ================= ২. সাইবার ওয়েব অডিও সিন্থেসাইজার =================
 let audioCtx = null;
-let isAudioEnabled = localStorage.getItem('app_audio_enabled') !== 'false';
+let isAudioEnabled = localStorage.getItem('arcade_audio_enabled') !== 'false';
 
 function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -22,10 +23,10 @@ function getAudioContext() {
 
 function toggleAudioFx() {
     isAudioEnabled = !isAudioEnabled;
-    localStorage.setItem('app_audio_enabled', isAudioEnabled);
+    localStorage.setItem('arcade_audio_enabled', isAudioEnabled);
     updateAudioIcon();
     if (isAudioEnabled) {
-        playClickSound();
+        playHitSound();
         showToast(currentLang === 'bn' ? 'সাউন্ড সক্রিয় করা হয়েছে' : 'Audio SFX Enabled');
     } else {
         showToast(currentLang === 'bn' ? 'সাউন্ড মিউট করা হয়েছে' : 'Audio SFX Muted');
@@ -49,9 +50,9 @@ function playClickSound() {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(750, ctx.currentTime);
+        osc.frequency.setValueAtTime(650, ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.04);
-        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.04);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -60,21 +61,39 @@ function playClickSound() {
     } catch (e) { }
 }
 
-function playTapArcadeSound() {
+function playHitSound() {
     if (!isAudioEnabled) return;
     try {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(400 + Math.random() * 300, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(850, ctx.currentTime + 0.06);
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        osc.frequency.setValueAtTime(450 + Math.random() * 250, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.06);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + 0.06);
+    } catch (e) { }
+}
+
+function playMissSound() {
+    if (!isAudioEnabled) return;
+    try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(280, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.15);
     } catch (e) { }
 }
 
@@ -84,52 +103,24 @@ function playRewardSound() {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(600, ctx.currentTime);
-        osc.frequency.setValueAtTime(950, ctx.currentTime + 0.08);
-        osc.frequency.setValueAtTime(1400, ctx.currentTime + 0.16);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, ctx.currentTime);
+        osc.frequency.setValueAtTime(780, ctx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(1040, ctx.currentTime + 0.16);
         gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.38);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.38);
+        osc.stop(ctx.currentTime + 0.35);
     } catch (e) { }
 }
 
-// ================= ৩. ডিভাইস সিকিউরিটি ও ফিঙ্গারপ্রিন্ট =================
-function getDeviceFingerprint() {
-    let localId = localStorage.getItem('eh_device_uuid');
-    if (!localId) {
-        try {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl');
-            const renderer = gl ? gl.getParameter(gl.RENDERER) : 'generic';
-            const str = `${navigator.userAgent}_${screen.width}x${screen.height}_${screen.colorDepth}_${renderer}`;
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = ((hash << 5) - hash) + str.charCodeAt(i);
-                hash |= 0;
-            }
-            localId = 'pilot_' + Math.abs(hash).toString(36) + '_' + Math.random().toString(36).substring(2, 8);
-        } catch (e) {
-            localId = 'pilot_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
-        }
-        localStorage.setItem('eh_device_uuid', localId);
-    }
-    return localId;
-}
-const currentDeviceId = getDeviceFingerprint();
-
-// ================= ৪. টেলিগ্রাম ওয়েবঅ্যাপ ও মোডাল নেভিগেশন =================
+// ================= ৩. টেলিগ্রাম ওয়েবঅ্যাপ ও ব্যাক বাটন নেভিগেশন =================
 const tg = window.Telegram?.WebApp;
 const openModalStack = [];
 
 function syncModalState() {
-    if (isUserBanned) {
-        if (tg?.BackButton) tg.BackButton.hide();
-        return;
-    }
     if (openModalStack.length > 0) {
         document.body.style.overflow = 'hidden';
         if (tg?.BackButton) tg.BackButton.show();
@@ -156,9 +147,7 @@ if (tg) {
     try {
         tg.ready();
         tg.expand();
-        if (typeof tg.enableClosingConfirmation === 'function') {
-            tg.enableClosingConfirmation();
-        }
+        if (typeof tg.enableClosingConfirmation === 'function') tg.enableClosingConfirmation();
 
         const applyTelegramSafeArea = () => {
             const safeTop = tg.safeAreaInset?.top || tg.contentSafeAreaInset?.top || 0;
@@ -167,19 +156,14 @@ if (tg) {
             if (safeBottom > 0) document.documentElement.style.setProperty('--safe-bottom', `${safeBottom}px`);
         };
         applyTelegramSafeArea();
-        if (typeof tg.onEvent === 'function') {
-            tg.onEvent('safeAreaChanged', applyTelegramSafeArea);
-        }
+        if (typeof tg.onEvent === 'function') tg.onEvent('safeAreaChanged', applyTelegramSafeArea);
 
         if (tg.BackButton) {
             tg.BackButton.hide();
             tg.BackButton.onClick(() => {
-                if (isUserBanned) return;
                 if (openModalStack.length > 0) {
                     const topModal = openModalStack.pop();
-                    if (topModal && typeof topModal.close === 'function') {
-                        topModal.close();
-                    }
+                    if (topModal && typeof topModal.close === 'function') topModal.close();
                     syncModalState();
                 }
             });
@@ -217,16 +201,16 @@ function showToast(message, type = 'success') {
 function triggerConfetti() {
     if (typeof confetti === 'function') {
         confetti({
-            particleCount: 80,
-            spread: 90,
-            origin: { y: 0.65 },
+            particleCount: 70,
+            spread: 80,
+            origin: { y: 0.6 },
             colors: ['#00FF9D', '#00F0FF', '#BD00FF', '#FFFFFF']
         });
     }
 }
 
-// ================= ৫. থিম কন্ট্রোলার =================
-let currentTheme = localStorage.getItem('app_theme') || 'dark';
+// ================= ৪. থিম কন্ট্রোলার =================
+let currentTheme = localStorage.getItem('arcade_theme') || 'dark';
 
 function applyTheme() {
     const iconEl = document.getElementById('theme-icon');
@@ -245,14 +229,14 @@ function toggleTheme() {
     playClickSound();
     triggerHaptic('light');
     currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('app_theme', currentTheme);
+    localStorage.setItem('arcade_theme', currentTheme);
     applyTheme();
     showToast(currentTheme === 'light' 
-        ? (currentLang === 'bn' ? 'লাইট মোড সক্রিয়' : 'Light Matrix Enabled') 
-        : (currentLang === 'bn' ? 'ডার্ক মোড সক্রিয়' : 'Dark Matrix Enabled'));
+        ? (currentLang === 'bn' ? 'লাইট মোড সক্রিয়' : 'Light Matrix Active') 
+        : (currentLang === 'bn' ? 'ডার্ক মোড সক্রিয়' : 'Dark Matrix Active'));
 }
 
-// ================= ৬. ফায়ারবেস ডেটাবেস সিঙ্ক =================
+// ================= ৫. ফায়ারবেস ডেটাবেস ইনিট =================
 const firebaseConfig = {
   apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
   authDomain: "enjoy-movies-app.firebaseapp.com",
@@ -269,8 +253,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-// ================= ৭. দ্বিভাষিক ইঞ্জিন ও পলিসি-বান্ধব ডিকশনারি =================
-let currentLang = localStorage.getItem('app_lang') || 'bn';
+// ================= ৬. দ্বিভাষিক ইঞ্জিন (Language System) =================
+let currentLang = localStorage.getItem('arcade_lang') || 'bn';
 const bnDigits = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
 
 function formatNum(val) {
@@ -282,243 +266,151 @@ function formatNum(val) {
 const translations = {
     en: {
         welcome_badge: "PILOT AIRDROP",
-        welcome_title: "Airdrop Vault Unlocked!",
-        welcome_desc_1: "For synchronizing with Aetheria Arcade, you received",
-        welcome_desc_2: "Energy Credits as starter bounty!",
-        btn_claim_welcome: "Claim Energy Credits",
+        welcome_title: "Airdrop Credits Unlocked!",
+        welcome_desc_1: "Welcome to Aetheria Arcade. You received",
+        welcome_desc_2: "Power Energy Credits as starter booster!",
+        btn_claim_welcome: "Activate Energy Core",
         user_status: "● Active Operator",
-        wallet_balance_label: "Total Power Credits",
+        credits_balance_label: "Total Power Credits",
         pts_currency: "CREDITS",
-        arcade_hint: "⚡ Tap node repeatedly to build combo and charge energy",
-        tutorial_btn_title: "Arcade Training Video Guide",
-        tutorial_btn_sub: "Learn gameplay tactics & prize redemption",
-        btn_watch: "Watch",
-        menu_verify_channel: "Telegram Comms Sync",
-        verify_status_unverified: "● Unverified (Tasks Locked)",
-        verify_status_verified: "● Verified Comms (Active)",
-        verify_badge_unverified: "Verify Now",
-        verify_badge_verified: "Verified",
-        verify_badge: "NETWORK COMMS SYNC",
-        verify_title: "Sync Official Comms Channel",
-        verify_desc: "You must link with our official Telegram comms to keep energy boosts and reward prize redemptions unlocked.",
-        btn_join_tg_channel: "Join Comms Channel",
-        btn_check_verify: "Confirm Comms Link",
-        btn_close: "Dismiss",
-        section_tasks_title: "Power Boosters & Sponsor Missions",
-        section_tasks_sub: "Stream sponsor videos to recharge your credits",
-        badge_rewarded: "CHRONO BOOST",
-        badge_direct: "SPONSOR EXPEDITION",
-        monetag_title: "Chrono Overdrive",
-        monetag_desc: "Stream full sponsored mission to inject instant power credits",
-        adsgram_title: "Quantum Loot Cache",
-        adsgram_desc: "Engage high-CPM video data stream for rapid energy surplus",
-        adsterra_title: "Cyber Nexus Recon",
-        adsterra_desc: "Scout sponsored portal and maintain connection for set seconds",
-        btn_start_task: "Activate",
-        refer_badge: "SYNDICATE RECRUITMENT",
-        refer_heading: "Build Squad & Earn Lifetime Bounty",
-        refer_sub_1: "Earn",
-        refer_sub_2: "Credits when recruited agent verifies comms & finishes {ads} missions!",
+        current_score_lbl: "SCORE:",
+        btn_start_match: "Start Match",
+        game_objective: "Quickly tap neon target nodes to build combo & score",
+        arcade_hint: "⚡ Strike nodes! Misses drain core life, hits reward power credits",
+        tutorial_btn_title: "Arcade Training Doc",
+        tutorial_btn_sub: "Review gameplay tactics & high score guide",
+        btn_watch: "Guide",
+        section_boosters_title: "Power Chargers & Sponsor Boosters",
+        section_boosters_sub: "Stream sponsor broadcasts to recharge your energy instantly",
+        badge_overdrive: "SPONSOR OVERDRIVE",
+        booster_energy_title: "Instant Core Recharge",
+        booster_energy_desc: "Watch a short sponsor broadcast for full lives & bonus credits",
+        btn_charge: "Recharge",
+        badge_multiplier: "2X MULTIPLIER",
+        booster_multiplier_title: "Quantum 2x Boost",
+        booster_multiplier_desc: "Double your earned score & credits for the next 3 matches",
+        badge_active_buff: "BOOST ACTIVE",
+        btn_activate: "Activate",
+        armory_pill: "CYBER ARMORY & UPGRADES",
+        armory_headline: "Pilot Gear & Customization",
+        armory_subtext: "Unlock exclusive cyber skins, reflex boosters, and badges using credits.",
+        armory_catalog_title: "Avatar Cores & Power-ups",
+        skin_desc_1: "Exclusive neon glowing profile border with +5% reflex score bonus",
+        skin_desc_2: "Target nodes remain stable for 0.5s longer before moving",
+        btn_unlock: "Unlock",
+        btn_equipped: "Equipped",
+        leaderboard_pill: "PILOT ARENA LEADERBOARD",
+        leaderboard_heading: "Top Operator Rankings",
+        leaderboard_subtext: "Global pilots leaderboard and squad challenge hub.",
         btn_copy: "Copy",
-        btn_share_telegram: "Share via Telegram",
-        stat_total_ref: "Recruited Pilots",
-        stat_ref_earnings: "Syndicate Bounty",
-        refer_list_title: "Recruited Agent Squad",
-        refer_list_sub: "Bounties unlock once required missions are completed",
-        empty_referrals: "No squad recruits found. Broadcast your link to recruit pilots!",
-        withdraw_bal_label: "Redeemable Vault Balance",
-        method_recharge: "Airtime Top-up",
-        method_bkash: "bKash Payout",
-        method_nagad: "Nagad Transfer",
-        label_operator: "Select Telecom Carrier:",
-        label_sim_type: "Connection Protocol:",
-        label_phone: "Account / Mobile Number:",
-        label_points: "Credits to Redeem:",
-        label_min: "Minimum:",
-        label_you_will_get: "Total Prize Value:",
-        btn_submit_cashout: "Place Redemption Order",
-        btn_submitting: "Deploying Order...",
-        btn_view_history: "View Transaction History",
-        profile_stat_bal: "Power Level",
-        profile_stat_ref: "Squad Members",
-        menu_payment_history: "Redemption & Payout Logs",
-        menu_daily_bonus: "7-Day Protocol Log",
+        btn_challenge_squad: "Challenge Friends via Squad Link",
+        stat_squad_pilots: "Squad Pilots",
+        stat_high_score: "Best Score",
+        leaderboard_list_title: "Global Pilot Roster",
+        profile_stat_bal: "Power Credits",
+        profile_stat_matches: "Matches Played",
+        menu_daily_bonus: "7-Day Protocol Vault",
+        menu_tg_support: "Official Telegram Community",
         menu_support: "24/7 Pilot Help Desk",
-        menu_tg_support: "Official Telegram Comms",
-        footer_caption: "Aetheria Arcade Engine v7.0.0 • Decoupled WebApp",
-        fv_task_details: "Mission Briefing",
-        fv_m_reward: "Mission Reward",
-        fv_m_limit: "Daily Cap",
-        fv_m_status: "Status",
-        fv_active: "● Active",
-        fv_rules_title: "Mission Execution Rules:",
-        fv_rule_step1: 'Tap the <strong>"Deploy Mission Booster"</strong> action button below.',
-        fv_rule_step2: "Do not minimize or close the portal while sponsored stream is active.",
-        fv_rule_step3: "Clicking on advertisements is <strong>never mandatory</strong>. Complete the video to receive rewards immediately.",
-        btn_watch_and_earn: "Deploy Mission Booster",
         checkin_modal_title: "7-Day Daily Protocol Gifts",
-        history_modal_title: "Redemption & Cashout History",
         loading_text: "Accessing core data...",
         nav_home: "Arcade",
-        nav_refer: "Guild",
-        nav_withdraw: "Vault",
+        nav_armory: "Armory",
+        nav_ranking: "Rankings",
         nav_profile: "Pilot",
-        toast_limit_reached: "⚠️ Today's mission cap reached for this booster!",
-        toast_preparing_ad: "⚡ Synchronizing mission stream...",
-        toast_starting_ad: "🎬 Deploying sponsored booster...",
-        toast_ad_failed: "⚠️ Mission aborted or streaming interrupted.",
-        toast_sdk_error: "⚠️ Booster SDK failed to initialize or adblocker detected!",
-        toast_pts_credited: "🎉 +{pts} Power Credits injected to vault!",
-        toast_min_limit: "⚠️ Minimum redemption threshold is {pts} credits.",
-        toast_valid_phone: "⚠️ Enter a valid 11-digit mobile number.",
-        toast_operator_mismatch: "⚠️ Carrier prefix does not match mobile number!",
-        toast_insufficient_bal: "⚠️ Insufficient credits in vault balance.",
-        toast_cashout_error: "⚠️ Insufficient credits or terminal gateway error.",
-        toast_already_claimed: "⚠️ Daily protocol gift already claimed today!",
-        toast_claim_success: "🎉 Day {day} reward +{pts} credits claimed!",
-        toast_link_copied: "✅ Recruitment link copied to clipboard!",
-        toast_verify_required: "⚠️ Comms link required! Join Telegram channel to activate.",
-        toast_verify_withdraw: "⚠️ You must synchronize official Telegram comms before prize redemption!",
-        toast_verify_success: "🎉 Comms link verified! Missions & Vault unlocked.",
-        toast_already_verified: "✅ Pilot comms already verified!",
-        toast_verifying_membership: "⏳ Verifying official comms link...",
+        modal_gameover_badge: "MISSION TERMINATED",
+        modal_gameover_title: "Pilot Down!",
+        final_score_label: "Match Score:",
+        earned_credits_label: "Energy Credits Earned:",
+        high_score_status: "Personal High Score:",
+        btn_revive: "Revive Core (+1 Life via Sponsor)",
+        btn_finish_match: "Conclude Match & Deposit Score",
         checkin_day_text: "Day {day}",
         checkin_streak_text: "Current Streak: {day} Days",
-        checkin_claimed_btn: "✅ Today's Bounty Claimed",
+        checkin_claimed_btn: "✅ Today's Gift Claimed",
         checkin_claim_btn: "🎁 Claim Day {day} Bounty (+{pts} CREDITS)",
         home_streak_claimed: "Streak: {day} Days (Claimed)",
-        home_streak_ready: "Day {day} Bounty",
-        empty_history: "No previous redemption records found in archive.",
-        receipt_badge: "TRANSACTION ORDERED",
-        receipt_title: "Redemption Successful!",
-        receipt_desc: "Your prize order has been securely deployed and is in queue.",
-        rc_method: "Payment Channel:",
-        rc_account: "Account Number:",
-        rc_points: "Credits Debited:",
-        rc_amount: "Cash Value:",
-        rc_status: "Status:",
-        status_pending: "In-Review",
-        btn_done: "Dismiss Order"
+        home_streak_ready: "Day {day} Gift",
+        toast_revive_success: "⚡ Core Revived! Match Resumed!",
+        toast_multiplier_active: "⚡ 2X Score Multiplier Active for 3 matches!",
+        toast_full_recharge: "⚡ Energy Core fully recharged! +25 Credits!",
+        toast_unlocked_skin: "🎉 Upgrade unlocked and equipped!",
+        toast_not_enough_credits: "⚠️ Not enough energy credits in vault!",
+        toast_link_copied: "✅ Squad invitation link copied!"
     },
     bn: {
         welcome_badge: "পাইলট এয়ারড্রপ",
-        welcome_title: "এয়ারড্রপ রিওয়ার্ড আনলকড!",
-        welcome_desc_1: "আর্কেড নেটওয়ার্কে প্রথম যোগদানের জন্য আপনি পেয়েছেন",
-        welcome_desc_2: "পয়েন্ট ক্রিপ্টো এনার্জি ক্রেডিট!",
-        btn_claim_welcome: "ক্লেইম এনার্জি ক্রেডিট",
-        user_status: "● ভেরিফাইড অপারেটর",
-        wallet_balance_label: "টোটাল পাওয়ার ক্রেডিট",
+        welcome_title: "এয়ারড্রপ ক্রেডিট আনলকড!",
+        welcome_desc_1: "আর্টিফিশিয়াল আর্কেডে প্রথম লগইনের জন্য আপনি পেয়েছেন",
+        welcome_desc_2: "পাওয়ার এনার্জি ক্রেডিট!",
+        btn_claim_welcome: "অ্যাক্টিভেট এনার্জি কোর",
+        user_status: "● সক্রিয় অপারেটর",
+        credits_balance_label: "টোটাল এনার্জি ক্রেডিট",
         pts_currency: "ক্রেডিট",
-        arcade_hint: "⚡ ট্যাপ করে কম্বো চার্জ করুন এবং ফ্রি পাওয়ার রিফিল পান",
-        tutorial_btn_title: "আর্কেড ট্রেনিং ভিডিও গাইড",
-        tutorial_btn_sub: "হাই-স্কোর ও সঠিক রিওয়ার্ড নেওয়ার নিয়ম দেখুন",
-        btn_watch: "ভিডিও",
-        menu_verify_channel: "টেলিগ্রাম চ্যানেল ভেরিফিকেশন",
-        verify_status_unverified: "● আনভেরিফাইড (টাস্ক ব্লক)",
-        verify_status_verified: "● ভেরিফাইড চ্যানেল (সক্রিয়)",
-        verify_badge_unverified: "ভেরিফাই করুন",
-        verify_badge_verified: "ভেরিফাইড",
-        verify_badge: "নেটওয়ার্ক কমস সিঙ্ক",
-        verify_title: "অফিসিয়াল কমস লিংক সিঙ্ক",
-        verify_desc: "গেমিং টাস্ক, আর্কেড রেটিং এবং ওয়ালেট উত্তোলন সচল রাখতে আমাদের টেলিগ্রাম কমিউনিটিতে সিঙ্ক থাকা আবশ্যক।",
-        btn_join_tg_channel: "কমিউনিটিতে যুক্ত হোন",
-        btn_check_verify: "ভেরিফিকেশন চেক করুন",
-        btn_close: "পরে করব",
-        section_tasks_title: "পাওয়ার বুস্টার ও স্পনসর মিশন",
-        section_tasks_sub: "স্পনসর ভিডিও সম্পন্ন করে পাওয়ার রিচার্জ করুন",
-        badge_rewarded: "ক্রোনো বুস্ট",
-        badge_direct: "স্পনসর এক্সপিডিশন",
-        monetag_title: "Chrono Overdrive",
-        monetag_desc: "ফুল স্পনসর স্ট্রীম কমপ্লিট করে তাৎক্ষণিক পাওয়ার ক্রেডিট নিন",
-        adsgram_title: "Quantum Loot Cache",
-        adsgram_desc: "হাই-সিপিএম ভিডিও বিজ্ঞাপন দেখে সরাসরি ক্রেডিট জেনারেট করুন",
-        adsterra_title: "Cyber Nexus Recon",
-        adsterra_desc: "স্পনসর পার্টনার পোর্টালে ভিজিট করে নির্দিষ্ট সময় অবস্থান করুন",
-        btn_start_task: "এক্টিভেট",
-        refer_badge: "স্কোয়াড রিক্রুটমেন্ট",
-        refer_heading: "স্কোয়াড বিল্ড করুন ও আর্ন শেয়ার পান",
-        refer_sub_1: "আমন্ত্রিত পাইলট কমস ভেরিফাই করে {ads}টি মিশন সম্পন্ন করলেই পাবেন",
-        refer_sub_2: "পয়েন্ট ক্রেডিট বোনাস!",
+        current_score_lbl: "স্কোর:",
+        btn_start_match: "ম্যাচ শুরু করুন",
+        game_objective: "দ্রুত নিয়ন নোডগুলোতে ট্যাপ করে স্কোর ও কম্বো বাড়ান",
+        arcade_hint: "⚡ লক্ষ্যভেদ করুন! মিস করলে লাইফ কমবে, হিট করলে ক্রেডিট রিওয়ার্ড পাবেন",
+        tutorial_btn_title: "আর্টিফিশিয়াল ট্রেনিং ডক",
+        tutorial_btn_sub: "হাই-স্কোর ও আর্কেড র‍্যাঙ্কিং গাইডলাইন দেখুন",
+        btn_watch: "গাইড",
+        section_boosters_title: "পাওয়ার চার্জার ও স্পনসর বুস্টার",
+        section_boosters_sub: "স্পনসর ভিডিও সম্পন্ন করে তাৎক্ষণিক এনার্জি রিফিল পান",
+        badge_overdrive: "স্পনসর ওভারড্রাইভ",
+        booster_energy_title: "Instant Core Recharge",
+        booster_energy_desc: "একটি শর্ট স্পনসর ব্রডকাস্ট দেখে ফুল লাইভস এবং অতিরিক্ত ক্রেডিট নিন",
+        btn_charge: "চার্জ",
+        badge_multiplier: "২X মাল্টিপ্লায়ার",
+        booster_multiplier_title: "Quantum 2x Boost",
+        booster_multiplier_desc: "পরবর্তী ৩টি ম্যাচের জন্য আপনার অর্জিত স্কোর ও ক্রেডিট দ্বিগুণ করুন",
+        badge_active_buff: "বুস্ট সক্রিয়",
+        btn_activate: "অ্যাক্টিভেট",
+        armory_pill: "সাইবার আর্মোরি ও আপগ্রেডস",
+        armory_headline: "পাইলট গিয়ার ও কাস্টমাইজেশন",
+        armory_subtext: "আর্কেড ক্রেডিট দিয়ে নতুন সাইবার স্কিন, রিফ্লেক্স বুস্টার এবং ব্যাজ আনলক করুন।",
+        armory_catalog_title: "অ্যাভাট্যার কোর ও পাওয়ার-আপ",
+        skin_desc_1: "প্রোফাইলে এক্সক্লুসিভ গ্লোইং বর্ডার এবং +৫% রিফ্লেক্স বোনাস",
+        skin_desc_2: "টার্গেট নোডের অবস্থান ০.৫ সেকেন্ড বেশি স্থির থাকবে",
+        btn_unlock: "আনলক",
+        btn_equipped: "ব্যবহৃত",
+        leaderboard_pill: "পাইলট এরিনা লিডারবোর্ড",
+        leaderboard_heading: "টপ অপারেটর র‍্যাঙ্কিং",
+        leaderboard_subtext: "সর্বোচ্চ স্কোর অর্জনকারী পাইলটদের তালিকা ও স্কোয়াড চ্যালেঞ্জ।",
         btn_copy: "কপি",
-        btn_share_telegram: "টেলিগ্রাম স্কোয়াডে শেয়ার করুন",
-        stat_total_ref: "রিক্রুটেড পাইলট",
-        stat_ref_earnings: "টোটাল গিল্ড বোনাস",
-        refer_list_title: "রিক্রুটেড এজেন্ট তালিকা",
-        refer_list_sub: "শর্ত পূরণ হওয়ার সাথে সাথে বোনাস যোগ হবে",
-        empty_referrals: "কোনো রিক্রুট পাওয়া যায়নি। স্কোয়াড গড়তে লিংক শেয়ার করুন!",
-        withdraw_bal_label: "রিডিমযোগ্য ভল্ট ব্যালেন্স",
-        method_recharge: "মোবাইল রিচার্জ",
-        method_bkash: "বিকাশ",
-        method_nagad: "নগদ",
-        label_operator: "টেলিকম নেটওয়ার্ক নির্বাচন:",
-        label_sim_type: "সংযোগ প্রটোকল:",
-        label_phone: "অ্যাকাউন্ট মোবাইল নম্বর:",
-        label_points: "পয়েন্ট পরিমাণ:",
-        label_min: "সর্বনিম্ন:",
-        label_you_will_get: "মোট প্রাইজ ভ্যালু:",
-        btn_submit_cashout: "রিডিমশন অর্ডার প্লেস করুন",
-        btn_submitting: "প্রসেসিং হচ্ছে...",
-        btn_view_history: "ট্রানজ্যাকশন হিস্ট্রি দেখুন",
-        profile_stat_bal: "পাওয়ার লেভেল",
-        profile_stat_ref: "স্কোয়াড মেম্বার",
-        menu_payment_history: "রিডিমশন ও পেআউট লগ",
+        btn_challenge_squad: "বন্ধুদের সাথে স্কোয়াড চ্যালেঞ্জ করুন",
+        stat_squad_pilots: "স্কোয়াড পার্টনার",
+        stat_high_score: "সর্বোচ্চ স্কোর",
+        leaderboard_list_title: "গ্লোবাল পাইলট রোস্টার",
+        profile_stat_bal: "পাওয়ার ক্রেডিট",
+        profile_stat_matches: "ম্যাচ খেলা হয়েছে",
         menu_daily_bonus: "৭-দিনের স্ট্রিক ভল্ট",
+        menu_tg_support: "অফিসিয়াল টেলিগ্রাম কমিউনিটি",
         menu_support: "২৪/৭ পাইলট সাপোর্ট ডেস্ক",
-        menu_tg_support: "অফিসিয়াল টেলিগ্রাম কমস",
-        footer_caption: "Aetheria Arcade Engine v7.0.0 • Decoupled WebApp",
-        fv_task_details: "মিশন ব্রিফিং",
-        fv_m_reward: "মিশন রিওয়ার্ড",
-        fv_m_limit: "দৈনিক ক্যাপ",
-        fv_m_status: "স্ট্যাটাস",
-        fv_active: "● সক্রিয়",
-        fv_rules_title: "মিশন সম্পন্ন করার নিয়ম:",
-        fv_rule_step1: 'নিচের <strong>"মিশন বুস্ট শুরু করুন"</strong> অ্যাকশন বাটনে চাপুন।',
-        fv_rule_step2: "স্পনসর কন্টেন্ট চলাকালীন স্ক্রিন ক্লোজ করবেন না বা ব্যাক করবেন না।",
-        fv_rule_step3: "বিজ্ঞাপনে ক্লিক করা <strong>বাধ্যতামূলক নয়</strong>। শুধুমাত্র ভিডিওটি সম্পূর্ণ সমাপ্ত হলেই স্বয়ংক্রিয়ভাবে ক্রেডিট যুক্ত হবে।",
-        btn_watch_and_earn: "মিশন বুস্ট শুরু করুন",
         checkin_modal_title: "৭-দিনের ডেইলি গিফট ড্রপ",
-        history_modal_title: "রিডিমশন ও ক্যাশআউট হিস্ট্রি",
         loading_text: "ডাটা রিড করা হচ্ছে...",
         nav_home: "আর্কেড",
-        nav_refer: "গিল্ড",
-        nav_withdraw: "ভল্ট",
-        nav_profile: "অপারেটর",
-        toast_limit_reached: "⚠️ আজকের জন্য এই বুস্টারের লিমিট শেষ!",
-        toast_preparing_ad: "⚡ বুস্টার স্ট্রিম লোড হচ্ছে...",
-        toast_starting_ad: "🎬 স্পনসর বুস্টার শুরু হচ্ছে...",
-        toast_ad_failed: "⚠️ মিশন বাতিল হয়েছে বা স্ট্রিম বন্ধ করা হয়েছে।",
-        toast_sdk_error: "⚠️ বুস্টার প্লাগইন ব্লকড হয়েছে বা কাজ করছে না!",
-        toast_pts_credited: "🎉 +{pts} পাওয়ার ক্রেডিট ভল্টে যোগ হয়েছে!",
-        toast_min_limit: "⚠️ সর্বনিম্ন রিডিমশন কোটা {pts} ক্রেডিট।",
-        toast_valid_phone: "⚠️ সঠিক ১১ ডিজিটের মোবাইল নম্বর প্রদান করুন।",
-        toast_operator_mismatch: "⚠️ নির্বাচিত অপারেটরের সাথে মোবাইল নম্বরের মিল নেই!",
-        toast_insufficient_bal: "⚠️ ভল্টে পর্যাপ্ত পাওয়ার ক্রেডিট নেই।",
-        toast_cashout_error: "⚠️ পর্যাপ্ত পয়েন্ট নেই অথবা সার্ভার সংযোগ বিচ্ছিন্ন।",
-        toast_already_claimed: "⚠️ আজকের প্রটোকল গিফট ইতিমধ্যে নেওয়া হয়েছে!",
-        toast_claim_success: "🎉 দিন {day}-এর উপহার +{pts} ক্রেডিট যুক্ত হয়েছে!",
-        toast_link_copied: "✅ রিক্রুটমেন্ট লিংক ক্লিপবোর্ডে কপি হয়েছে!",
-        toast_verify_required: "⚠️ অফিসিয়াল টেলিগ্রাম চ্যানেলে জয়েন করে ভেরিফাই করুন!",
-        toast_verify_withdraw: "⚠️ প্রাইজ রিডিম করতে টেলিগ্রাম কমস ভেরিফিকেশন সম্পন্ন করুন!",
-        toast_verify_success: "🎉 মেম্বারশিপ নিশ্চিত হয়েছে! আর্কেড বুস্টার সক্রিয়।",
-        toast_already_verified: "✅ পাইলট কমস ইতিমধ্যে ভেরিফাইড!",
-        toast_verifying_membership: "⏳ কমস লিংক সার্ভার যাচাই করা হচ্ছে...",
+        nav_armory: "আর্মোরি",
+        nav_ranking: "র‍্যাঙ্কিং",
+        nav_profile: "পাইলট",
+        modal_gameover_badge: "মিশন সমাপ্ত",
+        modal_gameover_title: "পাইলট ডাউন!",
+        final_score_label: "আপনার ম্যাচ স্কোর:",
+        earned_credits_label: "অর্জিত এনার্জি ক্রেডিট:",
+        high_score_status: "ব্যক্তিগত সর্বোচ্চ স্কোর:",
+        btn_revive: "লাইফ রিভাইভ করুন (+১ লাইফ স্পনসর)",
+        btn_finish_match: "ম্যাচ সমাপ্ত করে স্কোর জমা দিন",
         checkin_day_text: "দিন {day}",
         checkin_streak_text: "বর্তমান স্ট্রিক: {day} দিন",
         checkin_claimed_btn: "✅ আজকের গিফট নেওয়া হয়েছে",
         checkin_claim_btn: "🎁 দিন {day}-এর উপহার নিন (+{pts} ক্রেডিট)",
         home_streak_claimed: "স্ট্রিক: {day} দিন (ক্লেইমড)",
         home_streak_ready: "দিন {day} গিফট",
-        empty_history: "কোনো পূর্ববর্তী রিডিমশন রেকর্ড পাওয়া যায়নি।",
-        receipt_badge: "অর্ডার কনফার্মড",
-        receipt_title: "রিডিমশন সফল হয়েছে!",
-        receipt_desc: "আপনার প্রাইজ রিকোয়েস্ট সফলভাবে জমা হয়েছে এবং কিউতে রয়েছে।",
-        rc_method: "পেমেন্ট চ্যানেল:",
-        rc_account: "অ্যাকাউন্ট নম্বর:",
-        rc_points: "পয়েন্ট ডেবিট:",
-        rc_amount: "মোট মূল্য:",
-        rc_status: "স্ট্যাটাস:",
-        status_pending: "ইন-রিভিউ",
-        btn_done: "অর্ডার ক্লোজ করুন"
+        toast_revive_success: "⚡ কোর রিভাইভড! ম্যাচ পুনরায় শুরু হয়েছে!",
+        toast_multiplier_active: "⚡ পরবর্তী ৩টি ম্যাচের জন্য ২X স্কোর বুস্ট সক্রিয়!",
+        toast_full_recharge: "⚡ এনার্জি কোর ফুল রিচার্জড! +২৫ ক্রেডিট যুক্ত হয়েছে!",
+        toast_unlocked_skin: "🎉 আপগ্রেড আনলক ও সিলেক্ট করা হয়েছে!",
+        toast_not_enough_credits: "⚠️ ভল্টে পর্যাপ্ত এনার্জি ক্রেডিট নেই!",
+        toast_link_copied: "✅ স্কোয়াড ইনভাইটেশন লিংক কপি হয়েছে!"
     }
 };
 
@@ -534,21 +426,13 @@ function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[currentLang] && translations[currentLang][key]) {
-            el.innerHTML = translations[currentLang][key].replace(/\{ads\}/g, formatNum(requiredRefAds));
+            el.innerHTML = translations[currentLang][key];
         }
     });
 
     const langInd = document.getElementById('lang-indicator');
     if (langInd) langInd.innerText = currentLang === 'en' ? 'BN' : 'EN';
 
-    const step1 = document.getElementById('step-num-1');
-    const step2 = document.getElementById('step-num-2');
-    const step3 = document.getElementById('step-num-3');
-    if (step1) step1.innerText = formatNum(1);
-    if (step2) step2.innerText = formatNum(2);
-    if (step3) step3.innerText = formatNum(3);
-
-    updateDropdownOptions();
     updateUI();
     renderCheckInGrid();
 }
@@ -557,33 +441,18 @@ function toggleLanguage() {
     playClickSound();
     triggerHaptic('light');
     currentLang = currentLang === 'en' ? 'bn' : 'en';
-    localStorage.setItem('app_lang', currentLang);
+    localStorage.setItem('arcade_lang', currentLang);
     applyLanguage();
-    showToast(currentLang === 'en' ? 'Switched to English Interface' : 'ভাষা বাংলায় পরিবর্তন করা হয়েছে');
+    showToast(currentLang === 'en' ? 'Switched to English' : 'বাংলা ভাষা সক্রিয় করা হয়েছে');
 }
 
-function updateDropdownOptions() {
-    const selectAcc = document.getElementById('withdraw-account-type');
-    if (!selectAcc) return;
-
-    if (selectedWithdrawMethod === 'recharge') {
-        selectAcc.innerHTML = currentLang === 'bn' 
-            ? '<option value="Prepaid">প্রিপেইড (Prepaid)</option><option value="Postpaid">পোস্টপেইড (Postpaid)</option>'
-            : '<option value="Prepaid">Prepaid</option><option value="Postpaid">Postpaid</option>';
-    } else {
-        selectAcc.innerHTML = currentLang === 'bn'
-            ? '<option value="Personal">পার্সোনাল (Personal)</option><option value="Agent">এজেন্ট (Agent)</option>'
-            : '<option value="Personal">Personal</option><option value="Agent">Agent</option>';
-    }
-}
-
-// ================= ৮. ইউজার স্টেট ভেরিয়েবলস =================
+// ================= ৭. ইউজার স্টেট ভেরিয়েবলস =================
 let tgUser = tg?.initDataUnsafe?.user;
 if (!tgUser || !tgUser.id) {
-    let mockId = localStorage.getItem('eh_dev_tester_id');
+    let mockId = localStorage.getItem('eh_pilot_id');
     if (!mockId) {
         mockId = 'pilot_' + Math.floor(100000 + Math.random() * 900000);
-        localStorage.setItem('eh_dev_tester_id', mockId);
+        localStorage.setItem('eh_pilot_id', mockId);
     }
     tgUser = {
         id: mockId,
@@ -597,194 +466,44 @@ const userId = tgUser.id.toString();
 const userName = (tgUser.first_name || 'Pilot') + (tgUser.last_name ? ' ' + tgUser.last_name : '');
 const userUsername = tgUser.username ? '@' + tgUser.username : '@pilot_' + userId.slice(-4);
 
-let balancePoints = 0;
-let adsWatchedCount = 0;
-let monetagWatchedCount = 0;
-let adsgramWatchedCount = 0;
-let adsterraWatchedCount = 0;
-let totalAllTimeAds = 0;
+// গেম ও প্রোফাইল ডাটা
+let balanceCredits = 100;
+let personalHighScore = 0;
+let totalMatchesPlayed = 0;
+let unlockedUpgrades = JSON.parse(localStorage.getItem('unlocked_skins') || '[]');
+let activeMultiplierMatches = 0; // 2X buff counter
 
 let referralCount = 0;
-let referralEarnings = 0;
 let lastCheckInDate = "";
 let checkInStreak = 0;
+const checkInRewards = [10, 15, 25, 40, 60, 80, 150];
 
-let isChannelVerified = false;
-let isUserBanned = false;
-let myReferrerId = null;
-let refRewardClaimed = false;
-
-let requiredRefAds = 3; 
-const checkInRewards = [2, 3, 5, 10, 15, 20, 50];
-
-let tutorialVideoUrl = "https://www.youtube.com"; 
-let telegramChannelUrl = "https://t.me/";
-let telegramPayoutProofUrl = "https://t.me/";
-
-let pointsToBdtRate = 0.10;
-let referralBonusPoints = 50;
-let welcomeBonusPoints = 100;
+let tutorialVideoUrl = "https://www.youtube.com";
+let telegramCommunityUrl = "https://t.me/";
 let myReferralLink = `https://t.me/${DEFAULT_BOT_USERNAME}?start=ref_${userId}`;
 
-let adminMinRecharge = 200;
-let adminMinBkash = 500;
-let adminMinNagad = 500;
-let minWithdrawPoints = 200;
+// গেম মেকানিক্স স্টেট
+let isMatchActive = false;
+let currentMatchScore = 0;
+let arcadeLives = 3;
+const MAX_LIVES = 3;
+let targetTimer = null;
+let targetSpawnInterval = 1300; // ms
+let currentCombo = 1;
+let hasRevivedThisMatch = false;
 
-let requiredSponsorTime = 15;
-
-let selectedWithdrawMethod = 'recharge';
-let selectedNetwork = 'monetag';
-
-let netConfigs = {
-    monetag: { zoneId: "8765432", reward: 15, limit: 15 },
-    adsgram: { rewardedBlockId: "26019", interstitialBlockId: "26020", mode: "swap", reward: 20, limit: 20 },
-    adsterra: { url: "https://www.highcpmgate.com/sample", reward: 15, limit: 25 }
-};
-
-let adsgramNextFormat = 'rewarded';
-let adsterraSession = null;
-let adsterraTimerInterval = null;
-
-let isSplashFinished = false;
-let isFirstTimeNewUser = false;
-
-// মিনি-আর্কেড গেম স্টেট
-let arcadeComboCounter = 0;
-let arcadeLastTapTime = 0;
-
-function escapeHtml(str) {
-    return String(str ?? '').replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    })[c]);
-}
-
-function getReferrerId() {
-    let param = tg?.initDataUnsafe?.start_param;
-    if (!param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        param = urlParams.get('startapp') || urlParams.get('tgWebAppStartParam') || urlParams.get('start');
-    }
-    if (param) {
-        if (param.startsWith('ref_')) return param.replace('ref_', '');
-        if (/^\d+$/.test(param)) return param;
-    }
-    return null;
-}
-const initialReferrerId = getReferrerId();
-
-// ================= ৯. MONETAG SDK লোডার =================
-function injectMonetagScript(zoneId) {
-    if (!zoneId) return;
-    const scriptId = `monetag-sdk-${zoneId}`;
-    if (document.getElementById(scriptId)) return;
-
-    const script = document.createElement('script');
-    script.id = scriptId;
-    script.src = 'https://libtl.com/sdk.js';
-    script.dataset.zone = zoneId;
-    script.dataset.sdk = `show_${zoneId}`;
-    script.async = true;
-
-    script.onload = () => {
-        if (typeof window[`show_${zoneId}`] === 'function') {
-            window.show_ = window[`show_${zoneId}`];
-        } else if (typeof window.show_ === 'function') {
-            window[`show_${zoneId}`] = window.show_;
-        }
-    };
-
-    document.head.appendChild(script);
-}
-
-function getMonetagFunction() {
-    const zoneId = netConfigs.monetag.zoneId;
-    if (typeof window[`show_${zoneId}`] === 'function') return window[`show_${zoneId}`];
-    if (typeof window.show_ === 'function') return window.show_;
-    if (typeof window.show === 'function') return window.show;
-    return null;
-}
-
-// ================= ১০. ফায়ারবেস সেটিংস ও প্রুফ চ্যানেল সিঙ্ক =================
+// ================= ৮. ফায়ারবেস সেটিংস ও ক্লাউড সিঙ্ক =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
+    if (data.tutorialUrl || data.youtubeTutorial) tutorialVideoUrl = data.tutorialUrl || data.youtubeTutorial;
+    if (data.telegramChannel) telegramCommunityUrl = data.telegramChannel.startsWith('http') ? data.telegramChannel : `https://t.me/${data.telegramChannel.replace('@', '')}`;
+    if (data.adsgramBlockId) ADSGRAM_BLOCK_ID = String(data.adsgramBlockId);
 
-    if (data.tutorialVideoUrl || data.tutorialUrl || data.youtubeTutorial) {
-        tutorialVideoUrl = data.tutorialVideoUrl || data.tutorialUrl || data.youtubeTutorial;
-    }
+    const chLink = document.getElementById('telegram-channel-link');
+    if (chLink) chLink.href = telegramCommunityUrl;
 
-    if (data.telegramChannel) {
-        telegramChannelUrl = data.telegramChannel.startsWith('http') 
-            ? data.telegramChannel 
-            : `https://t.me/${data.telegramChannel.replace('@', '')}`;
-    }
-
-    // পলিসি কমপ্লায়েন্স: পাবলিক পেমেন্ট প্রুফ চ্যানেল সিঙ্ক
-    const rawProof = data.payoutProofChannel || data.proofChannel || data.paymentProofChannel || data.telegramChannel;
-    if (rawProof) {
-        telegramPayoutProofUrl = String(rawProof).startsWith('http') 
-            ? String(rawProof) 
-            : `https://t.me/${String(rawProof).replace('@', '')}`;
-    } else {
-        telegramPayoutProofUrl = telegramChannelUrl;
-    }
-
-    const proofCardEl = document.getElementById('telegram-payout-proof-link');
-    if (proofCardEl) proofCardEl.href = telegramPayoutProofUrl;
-
-    const profileProofEl = document.getElementById('profile-proof-link');
-    if (profileProofEl) profileProofEl.href = telegramPayoutProofUrl;
-
-    const joinBtn = document.getElementById('btn-verify-join-tg');
-    if (joinBtn) joinBtn.href = telegramChannelUrl;
-
-    const channelLinkEl = document.getElementById('telegram-channel-link');
-    if (channelLinkEl) channelLinkEl.href = telegramChannelUrl;
-
-    if (data.adsterraWaitTime || data.directLinkTimer) {
-        requiredSponsorTime = Number(data.adsterraWaitTime || data.directLinkTimer || 15);
-    }
-
-    if (data.requiredRefAds) {
-        requiredRefAds = Number(data.requiredRefAds);
-    }
-
-    pointsToBdtRate = Number(data.pointsToBdtRate ?? 0.10);
-    referralBonusPoints = Number(data.referralBonusPoints ?? 50);
-    welcomeBonusPoints = Number(data.welcomeBonusPoints ?? 100);
-
-    adminMinRecharge = Number(data.minWithdrawRecharge ?? data.minWithdrawPoints ?? 200);
-    adminMinBkash = Number(data.minWithdrawBkash ?? data.minWithdrawWallet ?? 500);
-    adminMinNagad = Number(data.minWithdrawNagad ?? adminMinBkash ?? 500);
-
-    if (selectedWithdrawMethod === 'recharge') {
-        minWithdrawPoints = adminMinRecharge;
-    } else if (selectedWithdrawMethod === 'bkash') {
-        minWithdrawPoints = adminMinBkash;
-    } else if (selectedWithdrawMethod === 'nagad') {
-        minWithdrawPoints = adminMinNagad;
-    }
-
-    netConfigs.monetag.zoneId = data.monetagZoneId || "8765432";
-    netConfigs.monetag.reward = Number(data.rewardMonetagPoints ?? 15);
-    netConfigs.monetag.limit = Number(data.monetagLimit ?? data.limitMonetag ?? 15);
-
-    netConfigs.adsgram.rewardedBlockId = data.adsgramRewardedBlockId || data.adsgramBlockId || "26019";
-    netConfigs.adsgram.interstitialBlockId = data.adsgramInterstitialBlockId || "26020";
-    netConfigs.adsgram.mode = (data.adsgramMode || "swap").toLowerCase();
-    netConfigs.adsgram.reward = Number(data.rewardAdsgramPoints ?? 20);
-    netConfigs.adsgram.limit = Number(data.adsgramLimit ?? data.limitAdsgram ?? 20);
-
-    const rawAdsterra = data.adsterraUrl || data.adsterraLink || data.directLink || data.adsterraDirectLink || "https://www.highcpmgate.com/sample";
-    let formattedAdsterra = String(rawAdsterra).trim();
-    if (!formattedAdsterra.startsWith('http://') && !formattedAdsterra.startsWith('https://')) {
-        formattedAdsterra = 'https://' + formattedAdsterra;
-    }
-    netConfigs.adsterra.url = formattedAdsterra;
-    netConfigs.adsterra.reward = Number(data.rewardAdsterraPoints ?? 15);
-    netConfigs.adsterra.limit = Number(data.adsterraLimit ?? data.limitAdsterra ?? 25);
-
-    injectMonetagScript(netConfigs.monetag.zoneId);
+    const supLink = document.getElementById('telegram-support-link');
+    if (supLink) supLink.href = telegramCommunityUrl;
 
     const activeBotUser = (data.botUsername || DEFAULT_BOT_USERNAME).replace('@', '').trim();
     myReferralLink = data.appShortName 
@@ -793,949 +512,436 @@ db.ref('settings').on('value', (snapshot) => {
 
     const refDisplay = document.getElementById('referral-link-display');
     if (refDisplay) refDisplay.innerText = myReferralLink;
-
-    const supportLinkEl = document.getElementById('telegram-support-link');
-    const supportUrl = data.supportUrl || data.telegramSupport || (data.botUsername ? `https://t.me/${activeBotUser}?start=support` : 'https://t.me/');
-    if (supportLinkEl) supportLinkEl.href = supportUrl.startsWith('http') ? supportUrl : `https://t.me/${supportUrl.replace('@', '')}`;
-
-    document.querySelectorAll('.reward-monetag-val').forEach(el => el.innerText = formatNum(netConfigs.monetag.reward));
-    document.querySelectorAll('.reward-adsgram-val').forEach(el => el.innerText = formatNum(netConfigs.adsgram.reward));
-    document.querySelectorAll('.reward-adsterra-val').forEach(el => el.innerText = formatNum(netConfigs.adsterra.reward));
-
-    const wbModal = document.getElementById('welcome-bonus-modal');
-    if (wbModal) wbModal.innerText = formatNum(welcomeBonusPoints);
-
-    const refBonusEl = document.getElementById('display-ref-bonus');
-    if (refBonusEl) refBonusEl.innerText = formatNum(referralBonusPoints);
-
-    updateUI();
 });
 
-// ================= ১১. ইউজার ইনিশিয়ালাইজেশন =================
-async function initUser() {
-    try {
-        const resp = await fetch(`${BACKEND_API_URL}/api/init-user`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-telegram-init-data': tg?.initData || ''
-            },
-            body: JSON.stringify({
-                userId,
-                name: userName,
-                username: userUsername,
-                deviceId: currentDeviceId,
-                referredBy: (initialReferrerId && initialReferrerId !== userId) ? initialReferrerId : null,
-                initData: tg?.initData || ''
-            })
-        });
-
-        const resData = await resp.json().catch(() => ({}));
-        if (resData && resData.user) {
-            if (resData.user.balance === welcomeBonusPoints && !localStorage.getItem('eh_welcome_claimed')) {
-                localStorage.setItem('eh_welcome_claimed', 'true');
-                if (isSplashFinished) openWelcomeModal();
-                else isFirstTimeNewUser = true;
-            }
-        }
-    } catch (e) { }
-
+function initUser() {
     db.ref('users/' + userId).on('value', (s) => {
         const data = s.val();
-        if (!data) return;
-
-        if (data.isBanned === true) {
-            isUserBanned = true;
-            const bannedModal = document.getElementById('banned-modal');
-            const devEl = document.getElementById('banned-device-id');
-            if (devEl) devEl.innerText = currentDeviceId;
-            if (bannedModal) bannedModal.style.display = 'flex';
-            syncModalState();
+        if (!data) {
+            // নতুন পাইলট রেজিস্ট্রেশন
+            db.ref('users/' + userId).set({
+                id: userId,
+                name: userName,
+                username: userUsername,
+                balance: 100,
+                highScore: 0,
+                matchesPlayed: 0,
+                createdAt: Date.now()
+            });
+            openWelcomeModal();
             return;
         }
 
-        balancePoints = Math.round(Number(data.balance || 0));
-        isChannelVerified = !!data.isChannelVerified;
-        myReferrerId = data.referredBy || null;
-        refRewardClaimed = !!data.refRewardClaimed;
-
-        adsWatchedCount = Number(data.adsWatchedCount || 0);
-        monetagWatchedCount = Number(data.monetagWatchedCount || 0);
-        adsgramWatchedCount = Number(data.adsgramWatchedCount || 0);
-        adsterraWatchedCount = Number(data.adsterraWatchedCount || 0);
-        totalAllTimeAds = Number(data.totalAllTimeAds || 0);
-
+        balanceCredits = Math.round(Number(data.balance || 0));
+        personalHighScore = Math.round(Number(data.highScore || 0));
+        totalMatchesPlayed = Number(data.matchesPlayed || 0);
         referralCount = Number(data.referralCount || 0);
-        referralEarnings = Math.round(Number(data.referralEarnings || 0));
         lastCheckInDate = data.lastCheckInDate || "";
         checkInStreak = Number(data.checkInStreak || 0);
 
         updateUI();
         renderCheckInGrid();
-        updateFullViewMetrics();
-        checkAndUnlockReferralReward(data);
     });
 
-    listenToUserReferrals();
-    silentVerifyTelegramMembership();
+    listenToLeaderboard();
 }
 
-// ================= ১২. মিনি আর্কেড ট্যাপ মেকানিক =================
-function handleArcadeTap(e) {
-    if (isUserBanned) return;
-    const now = Date.now();
-    if (now - arcadeLastTapTime < 100) return; // স্প্যাম প্রিভেনশন
-    arcadeLastTapTime = now;
+// ================= ৯. বাস্তব গেমপ্লে ইঞ্জিন (Quantum Target Matrix) =================
+function startArcadeMatch(e) {
+    if (e) e.stopPropagation();
+    playClickSound();
+    triggerHaptic('medium');
 
-    playTapArcadeSound();
+    isMatchActive = true;
+    currentMatchScore = 0;
+    arcadeLives = MAX_LIVES;
+    currentCombo = 1;
+    targetSpawnInterval = 1350;
+    hasRevivedThisMatch = false;
+
+    // যদি স্ট্যাবিলাইজার আপগ্রেড থাকে
+    if (unlockedUpgrades.includes('reflex_overload')) {
+        targetSpawnInterval += 400;
+    }
+
+    document.getElementById('game-overlay-screen').style.display = 'none';
+    document.getElementById('arcade-target').style.display = 'flex';
+    document.getElementById('btn-revive-game').style.display = 'flex';
+
+    updateArcadeHUD();
+    spawnNextTarget();
+}
+
+function spawnNextTarget() {
+    if (!isMatchActive) return;
+
+    if (targetTimer) clearTimeout(targetTimer);
+
+    const arena = document.getElementById('arcade-interactive-arena');
+    const target = document.getElementById('arcade-target');
+    if (!arena || !target) return;
+
+    const maxX = arena.clientWidth - 70;
+    const maxY = arena.clientHeight - 70;
+    const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+    const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+    target.style.left = `${randomX}px`;
+    target.style.top = `${randomY}px`;
+    target.style.transform = 'scale(1)';
+
+    // মিস টাইমার: সময়মতো না ছুঁলে লাইফ কমবে
+    targetTimer = setTimeout(() => {
+        handleTargetMiss();
+    }, targetSpawnInterval);
+}
+
+function handleArcadeBoardClick(e) {
+    if (!isMatchActive) return;
+
+    // টার্গেটে সরাসরি হিট হয়েছে কি না যাচাই
+    const target = document.getElementById('arcade-target');
+    const targetRect = target.getBoundingClientRect();
+    const isDirectHit = (
+        e.clientX >= targetRect.left &&
+        e.clientX <= targetRect.right &&
+        e.clientY >= targetRect.top &&
+        e.clientY <= targetRect.bottom
+    );
+
+    if (isDirectHit) {
+        handleTargetHit(e);
+    } else {
+        // ফাঁকা জায়গায় ক্লিক করলে মিস
+        handleTargetMiss();
+    }
+}
+
+function handleTargetHit(e) {
+    playHitSound();
     triggerHaptic('light');
 
-    arcadeComboCounter++;
-    const node = document.getElementById('arcade-target');
-    if (node) {
-        node.style.transform = 'scale(0.92)';
-        setTimeout(() => { node.style.transform = 'scale(1)'; }, 100);
-    }
+    if (targetTimer) clearTimeout(targetTimer);
 
-    createTapSpark(e);
+    // স্কোর গণনা
+    let scoreAdd = 10 * currentCombo;
+    if (activeMultiplierMatches > 0) scoreAdd *= 2;
+    if (unlockedUpgrades.includes('cyber_neon')) scoreAdd = Math.round(scoreAdd * 1.05);
 
-    if (arcadeComboCounter % 20 === 0) {
-        triggerHaptic('notification_success');
-        showToast(currentLang === 'bn' ? `⚡ দারুণ রিফ্লেক্স! ${formatNum(arcadeComboCounter)} কম্বো চার্জড!` : `⚡ Reflex Combo! ${arcadeComboCounter} Charges!`);
+    currentMatchScore += scoreAdd;
+    currentCombo = Math.min(5, currentCombo + 1);
+
+    // গতি বৃদ্ধি (Speed Progression)
+    if (targetSpawnInterval > 650) targetSpawnInterval -= 25;
+
+    createHitSpark(e.clientX, e.clientY, `+${scoreAdd}`);
+    updateArcadeHUD();
+    spawnNextTarget();
+}
+
+function handleTargetMiss() {
+    if (!isMatchActive) return;
+    playMissSound();
+    triggerHaptic('notification_error');
+
+    currentCombo = 1;
+    arcadeLives--;
+    updateArcadeHUD();
+
+    if (arcadeLives <= 0) {
+        endArcadeMatch();
+    } else {
+        spawnNextTarget();
     }
 }
 
-function createTapSpark(e) {
+function updateArcadeHUD() {
+    const scoreEl = document.getElementById('arcade-current-score');
+    if (scoreEl) scoreEl.innerText = formatNum(currentMatchScore);
+
+    const livesEl = document.getElementById('display-arcade-lives');
+    if (livesEl) livesEl.innerText = `${formatNum(arcadeLives)} / ${formatNum(MAX_LIVES)} ${currentLang === 'bn' ? 'লাইভস' : 'LIVES'}`;
+
+    const gauge = document.getElementById('energy-gauge-bar');
+    if (gauge) {
+        const percent = Math.max(0, (arcadeLives / MAX_LIVES) * 100);
+        gauge.style.width = percent + '%';
+        gauge.style.background = percent > 35 ? 'linear-gradient(90deg, var(--neon-cyan), var(--neon-emerald))' : 'var(--neon-alert)';
+    }
+}
+
+function createHitSpark(x, y, text) {
     const arena = document.getElementById('arcade-interactive-arena');
     if (!arena) return;
 
     const rect = arena.getBoundingClientRect();
-    const x = e.clientX ? (e.clientX - rect.left) : (rect.width / 2);
-    const y = e.clientY ? (e.clientY - rect.top) : (rect.height / 2);
+    const relX = x - rect.left;
+    const relY = y - rect.top;
 
     const spark = document.createElement('div');
     spark.className = 'tap-spark';
-    spark.innerText = '+1 BOOST';
-    spark.style.left = `${x}px`;
-    spark.style.top = `${y}px`;
+    spark.innerText = text;
+    spark.style.left = `${relX}px`;
+    spark.style.top = `${relY}px`;
     arena.appendChild(spark);
 
-    setTimeout(() => spark.remove(), 700);
+    setTimeout(() => spark.remove(), 600);
 }
 
-// ================= ১৩. রেফারেল ইঞ্জিন =================
-let isUnlockingRefReward = false;
-async function checkAndUnlockReferralReward(userData) {
-    if (!userData || isUnlockingRefReward) return;
-    const refId = userData.referredBy;
-    if (!refId || userData.refRewardClaimed) return;
+function endArcadeMatch() {
+    isMatchActive = false;
+    if (targetTimer) clearTimeout(targetTimer);
 
-    const totalAds = Number(userData.totalAllTimeAds || 0);
-    if (userData.isChannelVerified === true && totalAds >= requiredRefAds) {
-        isUnlockingRefReward = true;
-        try {
-            await fetch(`${BACKEND_API_URL}/api/unlock-referral`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-telegram-init-data': tg?.initData || ''
-                },
-                body: JSON.stringify({ 
-                    userId,
-                    referrerId: refId,
-                    initData: tg?.initData || ''
-                })
-            });
-        } catch (e) {
-        } finally {
-            isUnlockingRefReward = false;
+    document.getElementById('arcade-target').style.display = 'none';
+
+    // স্কোর থেকে ক্রেডিট আর্নিং
+    const earnedCredits = Math.floor(currentMatchScore / 4);
+    balanceCredits += earnedCredits;
+    totalMatchesPlayed++;
+
+    if (activeMultiplierMatches > 0) activeMultiplierMatches--;
+
+    const isNewHigh = currentMatchScore > personalHighScore;
+    if (isNewHigh) {
+        personalHighScore = currentMatchScore;
+        triggerConfetti();
+    }
+
+    // ক্লাউড ডেটাবেস আপডেট
+    db.ref('users/' + userId).update({
+        balance: balanceCredits,
+        highScore: personalHighScore,
+        matchesPlayed: totalMatchesPlayed
+    });
+
+    // গেম ওভার মোডাল ডাটা
+    document.getElementById('modal-final-score').innerText = formatNum(currentMatchScore);
+    document.getElementById('modal-match-credits').innerText = `+${formatNum(earnedCredits)} ${t('pts_currency')}`;
+    document.getElementById('modal-best-score').innerText = formatNum(personalHighScore);
+
+    const modal = document.getElementById('game-over-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        pushModalToStack('game-over-modal', closeGameOverModal);
+    }
+
+    updateUI();
+}
+
+function closeGameOverModal() {
+    playClickSound();
+    triggerHaptic('light');
+    const modal = document.getElementById('game-over-modal');
+    if (modal) modal.style.display = 'none';
+    removeModalFromStack('game-over-modal');
+
+    document.getElementById('game-overlay-screen').style.display = 'flex';
+}
+
+// ================= ১০. ADSGRAM রিওয়ার্ডেড ইন্টিগ্রেশন (REVIVE & BOOSTERS) =================
+async function triggerReviveWithAd() {
+    if (hasRevivedThisMatch) return;
+    playClickSound();
+    triggerHaptic('medium');
+
+    showToast(currentLang === 'bn' ? '⚡ স্পনসর ব্রডকাস্ট লোড হচ্ছে...' : '⚡ Loading sponsor stream...');
+
+    if (typeof window.Adsgram === 'undefined') {
+        return showToast(currentLang === 'bn' ? 'বিজ্ঞাপন লোড করা যায়নি বা অ্যাডব্লকার সক্রিয়!' : 'Ad failed to load or Adblock detected!', 'error');
+    }
+
+    try {
+        const adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+        const result = await adController.show().catch(err => ({ done: false }));
+
+        if (result && result.done) {
+            hasRevivedThisMatch = true;
+            document.getElementById('btn-revive-game').style.display = 'none'; // ১ ম্যাচে মাত্র ১ বার রিভাইভ
+            closeGameOverModal();
+
+            // খেলা পুনরায় চালু করা (+১ লাইফ)
+            isMatchActive = true;
+            arcadeLives = 1;
+            updateArcadeHUD();
+            document.getElementById('game-overlay-screen').style.display = 'none';
+            document.getElementById('arcade-target').style.display = 'flex';
+
+            playRewardSound();
+            triggerHaptic('notification_success');
+            showToast(t('toast_revive_success'));
+            spawnNextTarget();
+        } else {
+            showToast(currentLang === 'bn' ? 'ভিডিও সম্পূর্ণ না দেখলে রিভাইভ পাওয়া যাবে না।' : 'Stream not finished.', 'error');
         }
+    } catch (e) {
+        showToast(currentLang === 'bn' ? 'বিজ্ঞাপন লোড ত্রুটি!' : 'Ad stream error!', 'error');
     }
 }
 
-function listenToUserReferrals() {
-    const refContainer = document.getElementById('referrals-container');
-    if (!refContainer) return;
+async function triggerEnergyRefillAd() {
+    playClickSound();
+    triggerHaptic('medium');
 
-    db.ref(`referrals/${userId}`).on('value', snapshot => {
+    if (typeof window.Adsgram === 'undefined') {
+        return showToast('Adblocker detected!', 'error');
+    }
+
+    try {
+        const adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+        const res = await adController.show().catch(() => ({ done: false }));
+
+        if (res && res.done) {
+            balanceCredits += 25;
+            arcadeLives = MAX_LIVES;
+            updateArcadeHUD();
+            db.ref('users/' + userId).update({ balance: balanceCredits });
+
+            playRewardSound();
+            triggerConfetti();
+            triggerHaptic('notification_success');
+            showToast(t('toast_full_recharge'));
+            updateUI();
+        }
+    } catch (e) {
+        showToast('Error loading sponsor stream', 'error');
+    }
+}
+
+async function triggerMultiplierAd() {
+    playClickSound();
+    triggerHaptic('medium');
+
+    if (typeof window.Adsgram === 'undefined') {
+        return showToast('Adblocker detected!', 'error');
+    }
+
+    try {
+        const adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+        const res = await adController.show().catch(() => ({ done: false }));
+
+        if (res && res.done) {
+            activeMultiplierMatches += 3;
+            playRewardSound();
+            triggerConfetti();
+            triggerHaptic('notification_success');
+            showToast(t('toast_multiplier_active'));
+        }
+    } catch (e) {
+        showToast('Error loading sponsor stream', 'error');
+    }
+}
+
+// ================= ১১. আর্মোরি ও কাস্টমাইজেশন শপ =================
+function purchaseSkin(skinId) {
+    playClickSound();
+    triggerHaptic('medium');
+
+    if (unlockedUpgrades.includes(skinId)) {
+        return showToast(currentLang === 'bn' ? 'এটি ইতিমধ্যে আপনার সংগ্রহে রয়েছে!' : 'Already unlocked!');
+    }
+
+    const prices = {
+        'cyber_neon': 250,
+        'reflex_overload': 500
+    };
+
+    const cost = prices[skinId] || 999;
+    if (balanceCredits < cost) {
+        return showToast(t('toast_not_enough_credits'), 'error');
+    }
+
+    balanceCredits -= cost;
+    unlockedUpgrades.push(skinId);
+    localStorage.setItem('unlocked_skins', JSON.stringify(unlockedUpgrades));
+
+    db.ref('users/' + userId).update({ balance: balanceCredits });
+
+    playRewardSound();
+    triggerConfetti();
+    showToast(t('toast_unlocked_skin'));
+    updateUI();
+}
+
+// ================= ১২. গ্লোবাল লিডারবোর্ড সিঙ্ক =================
+function listenToLeaderboard() {
+    const container = document.getElementById('leaderboard-container');
+    if (!container) return;
+
+    db.ref('users').orderByChild('highScore').limitToLast(20).on('value', snapshot => {
         if (!snapshot.exists()) {
-            refContainer.innerHTML = `<div style="text-align:center; padding:22px; font-size:14px; color:var(--text-muted);">${t('empty_referrals')}</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">${t('loading_text')}</div>`;
             return;
         }
 
-        let html = '';
+        const pilots = [];
         snapshot.forEach(child => {
-            const item = child.val();
-            const initial = (item.name?.charAt(0) || 'P').toUpperCase();
-            const dateStr = item.joinedAt ? new Date(item.joinedAt).toLocaleDateString(currentLang === 'bn' ? 'bn-BD' : 'en-US') : '';
-            const isQualified = item.status === 'qualified';
-
-            const badgeText = isQualified 
-                ? `+${formatNum(item.bonus || 50)} ${t('pts_currency')}`
-                : (currentLang === 'bn' ? 'পেন্ডিং' : 'Pending');
-
-            const badgeClass = isQualified ? 'cyber-chip chip-success' : 'cyber-chip chip-pending';
-
-            html = `
-                <div class="roster-item">
-                    <div class="roster-left">
-                        <div class="roster-avatar">${escapeHtml(initial)}</div>
-                        <div class="roster-details">
-                            <span class="roster-title">${escapeHtml(item.name || 'Pilot')}</span>
-                            <span class="roster-sub">${escapeHtml(item.username || '')} • ${dateStr}</span>
-                        </div>
-                    </div>
-                    <span class="${badgeClass}">${badgeText}</span>
-                </div>
-            ` + html;
+            pilots.push(child.val());
         });
 
-        refContainer.innerHTML = html;
+        pilots.reverse(); // সর্বোচ্চ স্কোর প্রথমে
+
+        let html = '';
+        pilots.forEach((pilot, idx) => {
+            const initial = (pilot.name?.charAt(0) || 'P').toUpperCase();
+            const rankBadge = idx === 0 ? '👑' : `#${formatNum(idx + 1)}`;
+
+            html += `
+                <div class="roster-item">
+                    <div class="roster-left">
+                        <div class="roster-avatar" style="${idx === 0 ? 'border-color: #FFB800; color: #FFB800;' : ''}">${escapeHtml(initial)}</div>
+                        <div class="roster-details">
+                            <span class="roster-title">${escapeHtml(pilot.name || 'Pilot')}</span>
+                            <span class="roster-sub">${escapeHtml(pilot.username || '')}</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="cyber-chip chip-success">${formatNum(pilot.highScore || 0)} PTS</span>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">${rankBadge}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
     });
 }
 
+function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[c]);
+}
+
+// ================= ১৩. UI আপডেট ও প্রোটোকল গিফট =================
 function updateUI() {
     const setElem = (id, text) => {
         const el = document.getElementById(id);
         if (el) el.innerText = text;
     };
 
-    setElem('user-balance', formatNum(balancePoints));
-    setElem('withdraw-page-balance', formatNum(balancePoints));
-    setElem('profile-stat-balance', `${formatNum(balancePoints)} ${t('pts_currency')}`);
-    setElem('profile-stat-ref', `${formatNum(referralCount)} ${currentLang === 'bn' ? 'জন' : 'Pilots'}`);
+    setElem('user-balance', formatNum(balanceCredits));
+    setElem('profile-stat-balance', `${formatNum(balanceCredits)} ${t('pts_currency')}`);
+    setElem('profile-stat-matches', `${formatNum(totalMatchesPlayed)} Matches`);
     setElem('home-ref-count', formatNum(referralCount));
-    setElem('home-ref-earnings', formatNum(referralEarnings));
+    setElem('profile-best-score-badge', formatNum(personalHighScore));
 
-    const statusTextEl = document.getElementById('profile-verify-status-text');
-    const badgeEl = document.getElementById('profile-verify-badge');
-    const headerStatus = document.getElementById('header-user-status');
-
-    if (isChannelVerified) {
-        if (statusTextEl) {
-            statusTextEl.innerText = t('verify_status_verified');
-            statusTextEl.className = 'dock-desc text-success';
-        }
-        if (badgeEl) {
-            badgeEl.innerText = t('verify_badge_verified');
-            badgeEl.className = 'cyber-chip chip-success';
-        }
-        if (headerStatus) {
-            headerStatus.innerText = '● ' + (currentLang === 'bn' ? 'ভেরিফাইড মেম্বার' : 'Verified Operator');
-            headerStatus.style.color = 'var(--neon-emerald)';
-        }
-    } else {
-        if (statusTextEl) {
-            statusTextEl.innerText = t('verify_status_unverified');
-            statusTextEl.className = 'dock-desc text-danger';
-        }
-        if (badgeEl) {
-            badgeEl.innerText = t('verify_badge_unverified');
-            badgeEl.className = 'cyber-chip chip-danger';
-        }
-        if (headerStatus) {
-            headerStatus.innerText = '● ' + (currentLang === 'bn' ? 'আনভেরিফাইড (ব্লকড)' : 'Unverified (Locked)');
-            headerStatus.style.color = 'var(--neon-alert)';
-        }
+    // আপগ্রেড বাটনের স্ট্যাটাস
+    const btn1 = document.getElementById('btn-skin-1');
+    if (btn1 && unlockedUpgrades.includes('cyber_neon')) {
+        btn1.innerText = t('btn_equipped');
+        btn1.classList.add('chip-success');
     }
 
-    const rateTextEl = document.getElementById('display-point-rate-text');
-    if (rateTextEl) {
-        const bdtCalc = (100 * pointsToBdtRate).toFixed(2);
-        rateTextEl.innerText = `${formatNum(100)} ${t('pts_currency')} = ${formatNum(bdtCalc)} BDT`;
-    }
-
-    const minWithdrawEl = document.getElementById('display-min-withdraw');
-    if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
-
-    const ptsInput = document.getElementById('withdraw-points');
-    if (ptsInput) {
-        ptsInput.min = minWithdrawPoints;
-        ptsInput.placeholder = currentLang === 'bn' ? `সর্বনিম্ন ${formatNum(minWithdrawPoints)} ক্রেডিট` : `Min ${minWithdrawPoints} Credits`;
-    }
-
-    const modeTag = document.getElementById('adsgram-mode-tag');
-    if (modeTag) {
-        modeTag.innerText = netConfigs.adsgram.mode === 'swap' 
-            ? (currentLang === 'bn' ? 'কোয়ান্টাম সোয়াপ' : 'QUANTUM SWAP') 
-            : (netConfigs.adsgram.mode.toUpperCase());
+    const btn2 = document.getElementById('btn-skin-2');
+    if (btn2 && unlockedUpgrades.includes('reflex_overload')) {
+        btn2.innerText = t('btn_equipped');
+        btn2.classList.add('chip-success');
     }
 
     const pId = document.getElementById('profile-page-id');
     if (pId) pId.innerText = `ID: #${formatNum(userId)}`;
 }
 
-// ================= ১৪. কমস লিংক ও ভিডিও গাইড =================
-function openTutorialVideo() {
-    playClickSound();
-    triggerHaptic('medium');
-    if (tg && typeof tg.openLink === 'function') {
-        tg.openLink(tutorialVideoUrl);
-    } else {
-        window.open(tutorialVideoUrl, '_blank', 'noopener,noreferrer');
-    }
-}
-
-function openWelcomeModal() {
-    const modal = document.getElementById('welcome-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        pushModalToStack('welcome-modal', closeWelcomeModal);
-    }
-}
-
-function closeWelcomeModal() {
-    playRewardSound();
-    triggerHaptic('light');
-    const modal = document.getElementById('welcome-modal');
-    if (modal) modal.style.display = 'none';
-    removeModalFromStack('welcome-modal');
-    triggerConfetti();
-}
-
-function openChannelVerifyModal() {
-    playClickSound();
-    triggerHaptic('light');
-    const joinBtn = document.getElementById('btn-verify-join-tg');
-    if (joinBtn) joinBtn.href = telegramChannelUrl;
-
-    const modal = document.getElementById('channel-verify-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        pushModalToStack('channel-verify-modal', closeChannelVerifyModal);
-    }
-}
-
-function closeChannelVerifyModal() {
-    playClickSound();
-    triggerHaptic('light');
-    const modal = document.getElementById('channel-verify-modal');
-    if (modal) modal.style.display = 'none';
-    removeModalFromStack('channel-verify-modal');
-}
-
-async function silentVerifyTelegramMembership() {
-    if (!BACKEND_API_URL) return isChannelVerified;
-    try {
-        const resp = await fetch(`${BACKEND_API_URL}/api/check-channel-membership`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-telegram-init-data': tg?.initData || ''
-            },
-            body: JSON.stringify({ userId, initData: tg?.initData || '' })
-        });
-        if (resp.ok) {
-            const resData = await resp.json();
-            if (resData && typeof resData.isMember === 'boolean') {
-                isChannelVerified = resData.isMember;
-                updateUI();
-                return resData.isMember;
-            }
-        }
-    } catch (e) { }
-    return isChannelVerified;
-}
-
-async function checkTelegramVerification() {
-    playClickSound();
-    triggerHaptic('medium');
-
-    const btn = document.getElementById('btn-check-tg-verify');
-    if (btn) btn.disabled = true;
-    showToast(t('toast_verifying_membership'));
-
-    try {
-        const resp = await fetch(`${BACKEND_API_URL}/api/check-channel-membership`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-telegram-init-data': tg?.initData || ''
-            },
-            body: JSON.stringify({ userId, initData: tg?.initData || '' })
-        });
-
-        const resData = await resp.json();
-        if (resp.ok && resData && resData.isMember) {
-            isChannelVerified = true;
-            playRewardSound();
-            triggerConfetti();
-            triggerHaptic('notification_success');
-            showToast(t('toast_verify_success'));
-            closeChannelVerifyModal();
-            updateUI();
-        } else {
-            isChannelVerified = false;
-            updateUI();
-            triggerHaptic('notification_error');
-            showToast(t('toast_verify_required'), 'error');
-        }
-    } catch (err) {
-        triggerHaptic('notification_error');
-        showToast(t('toast_verify_required'), 'error');
-    } finally {
-        if (btn) btn.disabled = false;
-    }
-}
-
-// ================= ১৫. মিশন ফুলভিউ ইন্টারফেস =================
-function updateFullViewMetrics() {
-    const screen = document.getElementById('network-fullview');
-    if (!screen || !screen.classList.contains('active')) return;
-
-    let curCount = 0;
-    let curLimit = 0;
-
-    if (selectedNetwork === 'monetag') {
-        curCount = monetagWatchedCount;
-        curLimit = netConfigs.monetag.limit;
-    } else if (selectedNetwork === 'adsgram') {
-        curCount = adsgramWatchedCount;
-        curLimit = netConfigs.adsgram.limit;
-    } else if (selectedNetwork === 'adsterra') {
-        curCount = adsterraWatchedCount;
-        curLimit = netConfigs.adsterra.limit;
-    }
-
-    const limitEl = document.getElementById('fv-limit-count');
-    if (limitEl) limitEl.innerText = `${formatNum(curCount)} / ${formatNum(curLimit)}`;
-
-    const actionBtn = document.getElementById('fv-action-btn');
-    const btnText = document.getElementById('fv-btn-text');
-
-    if (curCount >= curLimit) {
-        if (actionBtn) actionBtn.disabled = true;
-        if (btnText) btnText.innerText = currentLang === 'bn' ? "মিশন ক্যাপ পূর্ণ" : "Daily Cap Reached";
-    } else if (!adsterraSession || !adsterraSession.active) {
-        if (actionBtn) actionBtn.disabled = false;
-        if (btnText) btnText.innerText = t('btn_watch_and_earn');
-    }
-}
-
-async function openNetworkFullView(networkKey) {
-    if (isUserBanned) return;
-    playClickSound();
-    triggerHaptic('light');
-
-    const isMember = await silentVerifyTelegramMembership();
-    if (!isMember) {
-        triggerHaptic('notification_error');
-        showToast(t('toast_verify_required'), 'error');
-        openChannelVerifyModal();
-        return;
-    }
-
-    selectedNetwork = networkKey;
-    const screen = document.getElementById('network-fullview');
-
-    if (networkKey === 'monetag') {
-        const monetagFunc = getMonetagFunction();
-        if (typeof monetagFunc === 'function') {
-            try { monetagFunc({ type: 'preload' }).catch(() => {}); } catch (e) { }
-        }
-    }
-
-    const details = {
-        monetag: {
-            badge: currentLang === 'bn' ? "ক্রোনো বুস্টার (ভিডিও)" : "CHRONO OVERDRIVE (VIDEO)",
-            headline: currentLang === 'bn' ? "Chrono Overdrive মিশন" : "Chrono Overdrive Mission",
-            desc: currentLang === 'bn' ? "স্পনসর স্ট্রীম সম্পূর্ণ সমাপ্ত করে ইনস্ট্যান্ট পাওয়ার এনার্জি ক্রেডিট আপনার ভল্টে রিচার্জ করুন।" : "Complete the sponsored stream to inject direct power credits into your vault balance.",
-            iconClass: "icon-blue",
-            iconSvg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-            limit: netConfigs.monetag.limit
-        },
-        adsgram: {
-            badge: currentLang === 'bn' ? "কোয়ান্টাম ক্যাশ (বিজ্ঞাপন)" : "QUANTUM CACHE (AD)",
-            headline: currentLang === 'bn' ? "Quantum Cache মিশন" : "Quantum Cache Mission",
-            desc: currentLang === 'bn' ? "হাই-ব্যান্ডউইথ ভিডিও ডাটা সম্পন্ন হওয়া মাত্রই স্বয়ংক্রিয়ভাবে ক্রেডিট ভল্টে যুক্ত হবে।" : "Stream the high-bandwidth video data cache to unlock immediate energy credits.",
-            iconClass: "icon-mint",
-            iconSvg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="15" x="2" y="5" rx="2"/><polygon points="10 9 15 12.5 10 16"/></svg>`,
-            limit: netConfigs.adsgram.limit
-        },
-        adsterra: {
-            badge: currentLang === 'bn' ? "সাইবার নেক্সাস রিকন" : "CYBER NEXUS RECON",
-            headline: currentLang === 'bn' ? "Nexus Recon এক্সপিডিশন" : "Nexus Recon Expedition",
-            desc: currentLang === 'bn' 
-                ? `স্পনসর পার্টনার পোর্টালে অন্তত ${formatNum(requiredSponsorTime)} সেকেন্ড একটিভ কানেকশনে থাকুন।` 
-                : `Scout partner portal and maintain a verified link for at least ${requiredSponsorTime} seconds.`,
-            iconClass: "icon-purple",
-            iconSvg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`,
-            limit: netConfigs.adsterra.limit
-        }
-    };
-
-    const info = details[networkKey];
-    const iconBox = document.getElementById('fv-icon-box');
-    if (iconBox) {
-        iconBox.innerHTML = info.iconSvg;
-        iconBox.className = `mission-icon-beacon ${info.iconClass}`;
-    }
-
-    document.getElementById('fv-badge').innerText = info.badge;
-    document.getElementById('fv-headline').innerText = info.headline;
-    document.getElementById('fv-desc').innerText = info.desc;
-    document.getElementById('fv-reward-amount').innerText = `+${formatNum(netConfigs[networkKey].reward)} ${t('pts_currency')}`;
-    
-    screen.classList.add('active');
-    pushModalToStack('network-fullview', closeNetworkFullView);
-    updateFullViewMetrics();
-}
-
-function closeNetworkFullView() {
-    playClickSound();
-    triggerHaptic('light');
-    if (adsterraTimerInterval) {
-        clearInterval(adsterraTimerInterval);
-        adsterraTimerInterval = null;
-    }
-    if (adsterraSession) {
-        adsterraSession.active = false;
-    }
-    const screen = document.getElementById('network-fullview');
-    if (screen) screen.classList.remove('active');
-    removeModalFromStack('network-fullview');
-}
-
-// ================= ১৬. অ্যান্টি-চিট মিশন এক্সিকিউশন =================
-async function executeCurrentNetworkAd() {
-    if (isUserBanned) return;
-    playClickSound();
-    triggerHaptic('medium');
-
-    const actionBtn = document.getElementById('fv-action-btn');
-    const btnText = document.getElementById('fv-btn-text');
-
-    actionBtn.disabled = true;
-    showToast(t('toast_preparing_ad'));
-
-    try {
-        const ticketResp = await fetch(`${BACKEND_API_URL}/api/start-ad-task`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-telegram-init-data': tg?.initData || ''
-            },
-            body: JSON.stringify({ userId, network: selectedNetwork, initData: tg?.initData || '' })
-        });
-
-        const ticketData = await ticketResp.json();
-        if (!ticketResp.ok || !ticketData.success) {
-            actionBtn.disabled = false;
-            return showToast(ticketData.message || t('toast_limit_reached'), 'error');
-        }
-
-        const adTicket = ticketData.ticket;
-
-        if (selectedNetwork === 'monetag') {
-            const monetagFunc = getMonetagFunction();
-            if (typeof monetagFunc !== 'function') {
-                actionBtn.disabled = false;
-                return showToast(t('toast_sdk_error'), 'error');
-            }
-
-            Promise.resolve(monetagFunc()).then(async (result) => {
-                if (result && result.reward_event_type && result.reward_event_type !== 'valued') {
-                    showToast(t('toast_ad_failed'), 'error');
-                } else {
-                    await submitRewardClaim(selectedNetwork, adTicket);
-                }
-                actionBtn.disabled = false;
-            }).catch(() => {
-                showToast(t('toast_ad_failed'), 'error');
-                actionBtn.disabled = false;
-            });
-        }
-        else if (selectedNetwork === 'adsgram') {
-            if (typeof window.Adsgram === 'undefined') {
-                actionBtn.disabled = false;
-                return showToast(t('toast_sdk_error'), 'error');
-            }
-
-            let blockIdToUse = (netConfigs.adsgram.mode === 'swap')
-                ? (adsgramNextFormat === 'rewarded' ? netConfigs.adsgram.rewardedBlockId : netConfigs.adsgram.interstitialBlockId)
-                : netConfigs.adsgram.rewardedBlockId;
-
-            if (netConfigs.adsgram.mode === 'swap') {
-                adsgramNextFormat = adsgramNextFormat === 'rewarded' ? 'interstitial' : 'rewarded';
-            }
-
-            showToast(t('toast_starting_ad'));
-            const adController = window.Adsgram.init({ blockId: blockIdToUse });
-            const result = await adController.show().catch(err => ({ done: false, error: err }));
-
-            // পলিসি সম্মত: ইউজার বিজ্ঞাপন পুরো দেখলেই রিওয়ার্ড ক্রেডিট হবে
-            if (result && result.done) {
-                await submitRewardClaim(selectedNetwork, adTicket);
-            } else {
-                showToast(t('toast_ad_failed'), 'error');
-            }
-            actionBtn.disabled = false;
-        }
-        else if (selectedNetwork === 'adsterra') {
-            let directUrl = netConfigs.adsterra.url;
-            if (!directUrl.startsWith('http://') && !directUrl.startsWith('https://')) directUrl = 'https://' + directUrl;
-
-            adsterraSession = {
-                active: true,
-                ticket: adTicket,
-                startedAt: Date.now()
-            };
-
-            let secondsLeft = requiredSponsorTime;
-            if (adsterraTimerInterval) clearInterval(adsterraTimerInterval);
-            adsterraTimerInterval = setInterval(() => {
-                secondsLeft--;
-                if (secondsLeft > 0) {
-                    btnText.innerText = currentLang === 'bn' ? `⏳ ${formatNum(secondsLeft)} সেকেন্ড বাকি...` : `⏳ ${secondsLeft}s link stable...`;
-                } else {
-                    clearInterval(adsterraTimerInterval);
-                    adsterraTimerInterval = null;
-                    checkAdsterraCompletion();
-                }
-            }, 1000);
-
-            showToast(currentLang === 'bn' ? `🚀 পোর্টালে সংযুক্ত হচ্ছে! পেজে থাকুন।` : `🚀 Portal linked! Maintain connection.`);
-            try {
-                if (tg && typeof tg.openLink === 'function') tg.openLink(directUrl);
-                else window.open(directUrl, '_blank', 'noopener,noreferrer');
-            } catch (e) {
-                window.open(directUrl, '_blank');
-            }
-        }
-    } catch (err) {
-        showToast(t('toast_ad_failed'), 'error');
-        actionBtn.disabled = false;
-    }
-}
-
-function checkAdsterraCompletion() {
-    if (!adsterraSession || !adsterraSession.active) return;
-    const actionBtn = document.getElementById('fv-action-btn');
-    const btnText = document.getElementById('fv-btn-text');
-    const secondsSpent = Math.floor((Date.now() - adsterraSession.startedAt) / 1000);
-
-    if (secondsSpent < requiredSponsorTime) {
-        if (adsterraTimerInterval) {
-            clearInterval(adsterraTimerInterval);
-            adsterraTimerInterval = null;
-        }
-        adsterraSession.active = false;
-        if (actionBtn) actionBtn.disabled = false;
-        if (btnText) btnText.innerText = t('btn_watch_and_earn');
-        triggerHaptic('notification_error');
-        showToast(currentLang === 'bn' 
-            ? `⚠️ পুরো ${formatNum(requiredSponsorTime)} সেকেন্ড লিংকে থাকতে হবে!` 
-            : `⚠️ Maintain link for full ${requiredSponsorTime} seconds!`, 'error');
-    } else {
-        const ticket = adsterraSession.ticket;
-        adsterraSession.active = false;
-        if (adsterraTimerInterval) {
-            clearInterval(adsterraTimerInterval);
-            adsterraTimerInterval = null;
-        }
-        if (btnText) btnText.innerText = t('btn_watch_and_earn');
-        if (actionBtn) actionBtn.disabled = false;
-        submitRewardClaim('adsterra', ticket);
-    }
-}
-
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && adsterraSession && adsterraSession.active) {
-        const secondsSpent = Math.floor((Date.now() - adsterraSession.startedAt) / 1000);
-        const actionBtn = document.getElementById('fv-action-btn');
-        const btnText = document.getElementById('fv-btn-text');
-
-        if (secondsSpent < requiredSponsorTime) {
-            if (adsterraTimerInterval) {
-                clearInterval(adsterraTimerInterval);
-                adsterraTimerInterval = null;
-            }
-            adsterraSession.active = false;
-            if (actionBtn) actionBtn.disabled = false;
-            if (btnText) btnText.innerText = t('btn_watch_and_earn');
-
-            triggerHaptic('notification_error');
-            showToast(currentLang === 'bn' 
-                ? `⚠️ সময়ের পূর্বেই ডিসকানেক্ট হয়েছেন! পূর্ণ ${formatNum(requiredSponsorTime)} সেকেন্ড কানেকশন রাখুন।` 
-                : `⚠️ Disconnected too early! Maintain connection for full ${requiredSponsorTime}s.`, 'error');
-        } else {
-            if (adsterraTimerInterval) {
-                clearInterval(adsterraTimerInterval);
-                adsterraTimerInterval = null;
-            }
-            checkAdsterraCompletion();
-        }
-    }
-});
-
-async function submitRewardClaim(networkKey, ticket) {
-    try {
-        const resp = await fetch(`${BACKEND_API_URL}/api/claim-ad-reward`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-telegram-init-data': tg?.initData || ''
-            },
-            body: JSON.stringify({ 
-                network: networkKey, 
-                ticket,
-                userId,
-                initData: tg?.initData || ''
-            })
-        });
-
-        const resData = await resp.json().catch(() => ({}));
-        if (resp.ok && resData && resData.success) {
-            playRewardSound();
-            triggerConfetti();
-            triggerHaptic('notification_success');
-            showToast(t('toast_pts_credited', { pts: resData.reward }));
-            updateFullViewMetrics();
-        } else {
-            triggerHaptic('notification_error');
-            showToast(resData.message || t('toast_ad_failed'), 'error');
-        }
-    } catch (e) {
-        triggerHaptic('notification_error');
-        showToast("⚠️ ক্রেডিট আপডেট করা যায়নি!", 'error');
-    }
-}
-
-// ================= ১৭. ভল্ট প্রাইজ রিডিমশন =================
-function switchWithdrawMethod(method) {
-    playClickSound();
-    triggerHaptic('light');
-    selectedWithdrawMethod = method;
-
-    document.querySelectorAll('.c-tab-btn').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.getElementById(`btn-method-${method}`);
-    if (activeBtn) activeBtn.classList.add('active');
-
-    const grpOperator = document.getElementById('group-operator');
-    const labelAcc = document.getElementById('label-acc-type');
-    const phoneInput = document.getElementById('withdraw-phone');
-
-    if (method === 'recharge') {
-        if (grpOperator) grpOperator.style.display = 'block';
-        if (labelAcc) labelAcc.innerText = currentLang === 'bn' ? 'সংযোগ প্রটোকল:' : 'Connection Protocol:';
-        if (phoneInput) phoneInput.placeholder = '01XXXXXXXXX';
-        minWithdrawPoints = adminMinRecharge;
-    } else if (method === 'bkash') {
-        if (grpOperator) grpOperator.style.display = 'none';
-        if (labelAcc) labelAcc.innerText = currentLang === 'bn' ? 'অ্যাকাউন্টের ধরন:' : 'Account Protocol:';
-        if (phoneInput) phoneInput.placeholder = '01XXXXXXXXX (bKash)';
-        minWithdrawPoints = adminMinBkash;
-    } else {
-        if (grpOperator) grpOperator.style.display = 'none';
-        if (labelAcc) labelAcc.innerText = currentLang === 'bn' ? 'অ্যাকাউন্টের ধরন:' : 'Account Protocol:';
-        if (phoneInput) phoneInput.placeholder = '01XXXXXXXXX (Nagad)';
-        minWithdrawPoints = adminMinNagad;
-    }
-
-    updateDropdownOptions();
-    const minWithdrawEl = document.getElementById('display-min-withdraw');
-    if (minWithdrawEl) minWithdrawEl.innerText = formatNum(minWithdrawPoints);
-
-    const ptsInput = document.getElementById('withdraw-points');
-    if (ptsInput) ptsInput.min = minWithdrawPoints;
-    calculateWithdrawBdt();
-}
-
-function calculateWithdrawBdt() {
-    const ptsInput = document.getElementById('withdraw-points');
-    const pointsValue = parseFloat(ptsInput ? ptsInput.value : 0) || 0;
-    const previewBox = document.getElementById('withdraw-preview-summary');
-    const bdtValueEl = document.getElementById('summary-bdt-val');
-
-    if (pointsValue > 0) {
-        if (previewBox) previewBox.style.display = 'flex';
-        if (bdtValueEl) bdtValueEl.innerText = formatNum((pointsValue * pointsToBdtRate).toFixed(2));
-    } else {
-        if (previewBox) previewBox.style.display = 'none';
-    }
-}
-
-const operatorPrefixes = {
-    'Grameenphone': /^01[37]\d{8}$/,
-    'Banglalink': /^01[49]\d{8}$/,
-    'Robi': /^018\d{8}$/,
-    'Airtel': /^016\d{8}$/,
-    'Teletalk': /^015\d{8}$/
-};
-
-async function handleWithdrawSubmit(event) {
-    event.preventDefault();
-    if (isUserBanned) return;
-    playClickSound();
-    triggerHaptic('medium');
-
-    const isMember = await silentVerifyTelegramMembership();
-    if (!isMember) {
-        triggerHaptic('notification_error');
-        showToast(t('toast_verify_withdraw'), 'error');
-        openChannelVerifyModal(); 
-        return;
-    }
-
-    const form = event.currentTarget;
-    const submitBtn = document.getElementById('btn-submit-withdraw');
-    const submitText = document.getElementById('btn-submit-text');
-    const pointsToDeduct = Number(document.getElementById('withdraw-points').value);
-    const phone = document.getElementById('withdraw-phone').value.trim();
-    const accountType = document.getElementById('withdraw-account-type').value;
-    const operator = selectedWithdrawMethod === 'recharge' ? document.getElementById('withdraw-operator').value : '';
-
-    if (pointsToDeduct < minWithdrawPoints) return showToast(t('toast_min_limit', { pts: minWithdrawPoints }), 'error');
-    if (!/^01[3-9]\d{8}$/.test(phone)) return showToast(t('toast_valid_phone'), 'error');
-
-    if (selectedWithdrawMethod === 'recharge' && operator) {
-        const regex = operatorPrefixes[operator];
-        if (regex && !regex.test(phone)) return showToast(t('toast_operator_mismatch'), 'error');
-    }
-
-    if (pointsToDeduct > balancePoints) return showToast(t('toast_insufficient_bal'), 'error');
-
-    const calculatedBdt = (pointsToDeduct * pointsToBdtRate).toFixed(2);
-    let methodName = selectedWithdrawMethod === 'bkash' ? 'bKash' : (selectedWithdrawMethod === 'nagad' ? 'Nagad' : 'Airtime Recharge');
-
-    if (submitBtn) {
-        submitBtn.disabled = true;
-        if (submitText) submitText.innerText = t('btn_submitting');
-    }
-
-    try {
-        const resp = await fetch(`${BACKEND_API_URL}/api/submit-withdraw`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-telegram-init-data': tg?.initData || ''
-            },
-            body: JSON.stringify({
-                userId,
-                userName,
-                userUsername,
-                deviceId: currentDeviceId,
-                method: methodName,
-                operator,
-                accountType,
-                phone,
-                pointsToDeduct,
-                amountBdt: calculatedBdt,
-                initData: tg?.initData || ''
-            })
-        });
-
-        const resData = await resp.json().catch(() => ({}));
-        if (resp.ok && resData && resData.success) {
-            form.reset();
-            calculateWithdrawBdt();
-            openCashoutSuccessModal({
-                method: methodName + (operator ? ` (${operator})` : ''),
-                account: `${phone} (${accountType})`,
-                points: pointsToDeduct,
-                bdt: calculatedBdt
-            });
-        } else {
-            throw new Error(resData.message || t('toast_cashout_error'));
-        }
-    } catch (err) {
-        triggerHaptic('notification_error');
-        showToast(err.message || t('toast_cashout_error'), 'error');
-    } finally {
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            if (submitText) submitText.innerText = t('btn_submit_cashout');
-        }
-    }
-}
-
-function openCashoutSuccessModal(data) {
-    const modal = document.getElementById('cashout-success-modal');
-    if (!modal) return;
-
-    document.getElementById('receipt-method').innerText = data.method;
-    document.getElementById('receipt-account').innerText = data.account;
-    document.getElementById('receipt-points').innerText = `-${formatNum(data.points)} ${t('pts_currency')}`;
-    document.getElementById('receipt-amount').innerText = `৳ ${formatNum(data.bdt)}`;
-    document.getElementById('receipt-status').innerText = t('status_pending');
-
-    modal.style.display = 'flex';
-    pushModalToStack('cashout-success-modal', closeCashoutSuccessModal);
-    playRewardSound();
-    triggerConfetti();
-    triggerHaptic('notification_success');
-}
-
-function closeCashoutSuccessModal() {
-    playClickSound();
-    triggerHaptic('light');
-    const modal = document.getElementById('cashout-success-modal');
-    if (modal) modal.style.display = 'none';
-    removeModalFromStack('cashout-success-modal');
-}
-
-// ================= ১৮. ট্রানজ্যাকশন ও ড্রয়ার হিস্ট্রি =================
-function openWithdrawHistory() {
-    playClickSound();
-    triggerHaptic('light');
-    const overlay = document.getElementById('history-modal-overlay');
-    if (overlay) {
-        overlay.classList.add('active');
-        pushModalToStack('history-modal-overlay', closeWithdrawHistory);
-    }
-    loadHistoryData();
-}
-
-function closeWithdrawHistory() {
-    playClickSound();
-    triggerHaptic('light');
-    const overlay = document.getElementById('history-modal-overlay');
-    if (overlay) overlay.classList.remove('active');
-    removeModalFromStack('history-modal-overlay');
-}
-
-function loadHistoryData() {
-    const listContainer = document.getElementById('history-scroll-list');
-    if (!listContainer) return;
-    listContainer.innerHTML = `<div class="loading-state">${t('loading_text')}</div>`;
-
-    db.ref('withdrawals').orderByChild('userId').equalTo(userId).once('value', snapshot => {
-        if (!snapshot.exists()) {
-            listContainer.innerHTML = `<div style="text-align:center; padding:28px; font-size:14px; color:var(--text-muted);">${t('empty_history')}</div>`;
-            return;
-        }
-
-        let itemsHTML = '';
-        snapshot.forEach(child => {
-            const item = child.val();
-            const statusLower = (item.status || 'Pending').toLowerCase();
-            const badgeClass = statusLower === 'approved' ? 'chip-success' : (statusLower === 'rejected' ? 'chip-danger' : 'chip-pending');
-            const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString(currentLang === 'bn' ? 'bn-BD' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' }) : '';
-            let displayStatus = item.status;
-            if (currentLang === 'bn') {
-                if (statusLower === 'pending') displayStatus = 'ইন-রিভিউ';
-                else if (statusLower === 'approved') displayStatus = 'অনুমোদিত';
-                else if (statusLower === 'rejected') displayStatus = 'বাতিল';
-            }
-
-            itemsHTML = `
-                <div class="cyber-history-item">
-                    <div>
-                        <div class="h-title">${escapeHtml(item.method)} (${escapeHtml(item.phone)})</div>
-                        <div class="h-date">${dateStr}</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <div class="h-pts">- ${formatNum(item.pointsDeducted)} ${t('pts_currency')}</div>
-                        <span class="cyber-chip ${badgeClass}">${escapeHtml(displayStatus)}</span>
-                    </div>
-                </div>
-            ` + itemsHTML;
-        });
-        listContainer.innerHTML = itemsHTML;
-    });
-}
-
-// ================= ১৯. ৭-দিনের প্রটোকল উপহার =================
 function openCheckInFullView() {
     playClickSound();
     triggerHaptic('light');
@@ -1805,43 +1011,35 @@ function renderCheckInGrid() {
     }
 }
 
-async function claimDailyCheckIn() {
-    if (isUserBanned) return;
+function claimDailyCheckIn() {
     playClickSound();
     triggerHaptic('medium');
-    const claimBtn = document.getElementById('btn-claim-checkin');
 
-    if (claimBtn) claimBtn.disabled = true;
+    const today = new Date().toISOString().slice(0, 10);
+    if (lastCheckInDate.startsWith(today)) return;
 
-    try {
-        const resp = await fetch(`${BACKEND_API_URL}/api/claim-checkin`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-telegram-init-data': tg?.initData || ''
-            },
-            body: JSON.stringify({ userId, initData: tg?.initData || '' })
-        });
+    const currentTargetDay = (checkInStreak % 7) + 1;
+    const rewardPts = checkInRewards[currentTargetDay - 1];
 
-        const resData = await resp.json().catch(() => ({}));
-        if (resp.ok && resData && resData.success) {
-            playRewardSound();
-            triggerConfetti();
-            triggerHaptic('notification_success');
-            showToast(t('toast_claim_success', { day: resData.streak, pts: resData.reward }));
-            checkInStreak = resData.streak;
-            renderCheckInGrid();
-        } else {
-            showToast(resData.message || t('toast_already_claimed'), 'error');
-            if (claimBtn) claimBtn.disabled = false;
-        }
-    } catch (err) {
-        showToast(t('toast_cashout_error'), 'error');
-        if (claimBtn) claimBtn.disabled = false;
-    }
+    checkInStreak++;
+    lastCheckInDate = today;
+    balanceCredits += rewardPts;
+
+    db.ref('users/' + userId).update({
+        checkInStreak,
+        lastCheckInDate,
+        balance: balanceCredits
+    });
+
+    playRewardSound();
+    triggerConfetti();
+    triggerHaptic('notification_success');
+    showToast(currentLang === 'bn' ? `🎉 +${formatNum(rewardPts)} ক্রেডিট যুক্ত হয়েছে!` : `🎉 +${rewardPts} Credits claimed!`);
+    renderCheckInGrid();
+    updateUI();
 }
 
-// ================= ২০. সোশ্যাল রিক্রুটমেন্ট ও শেয়ারিং =================
+// ================= ১৪. সোশ্যাল শেয়ারিং ও মডালস =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');
@@ -1849,50 +1047,51 @@ function copyReferralLink() {
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(myReferralLink).then(() => {
             showToast(t('toast_link_copied'));
-        }).catch(() => fallbackCopy(myReferralLink));
+        });
     } else {
-        fallbackCopy(myReferralLink);
-    }
-}
-
-function fallbackCopy(text) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    try {
-        document.execCommand('copy');
         showToast(t('toast_link_copied'));
-    } catch (e) {
-        showToast("Error copying link", "error");
     }
-    document.body.removeChild(textArea);
 }
 
 function shareReferralLink() {
     playClickSound();
     triggerHaptic('light');
-    const shareBtn = document.getElementById('btn-share-referral');
-    if (shareBtn) {
-        shareBtn.disabled = true;
-        setTimeout(() => { shareBtn.disabled = false; }, 1200);
-    }
 
     const shareText = currentLang === 'bn' 
-        ? `🎮 Aetheria Arcade নেটওয়ার্কে জয়েন করে পাওয়ার এনার্জি রিফিল করুন এবং ক্রিপ্টো প্রাইজ আনলক করুন!\n\n👇 জয়েন লিংক:\n${myReferralLink}`
-        : `🎮 Join the Aetheria Cyber Arcade squad! Play reflex missions & win verified prize rewards!\n\n👇 Squad Link:\n${myReferralLink}`;
+        ? `🎮 Aetheria Cyber Arcade-এ আমার সাথে খেলুন! আমার হাই-স্কোর বিট করতে পারবেন?\n\n👇 গেম লিংক:\n${myReferralLink}`
+        : `🎮 Challenge my high score in Aetheria Cyber Arcade!\n\n👇 Play Link:\n${myReferralLink}`;
     
     const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(myReferralLink)}&text=${encodeURIComponent(shareText)}`;
     if (tg && typeof tg.openTelegramLink === 'function') tg.openTelegramLink(tgShareUrl);
     else window.open(tgShareUrl, '_blank', 'noopener,noreferrer');
 }
 
-// ================= ২১. ট্যাব নেভিগেশন ও ইনিশিয়াল বুটস্ট্র্যাপ =================
+function openTutorialVideo() {
+    playClickSound();
+    triggerHaptic('medium');
+    if (tg && typeof tg.openLink === 'function') tg.openLink(tutorialVideoUrl);
+    else window.open(tutorialVideoUrl, '_blank', 'noopener,noreferrer');
+}
+
+function openWelcomeModal() {
+    const modal = document.getElementById('welcome-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        pushModalToStack('welcome-modal', closeWelcomeModal);
+    }
+}
+
+function closeWelcomeModal() {
+    playRewardSound();
+    triggerHaptic('light');
+    const modal = document.getElementById('welcome-modal');
+    if (modal) modal.style.display = 'none';
+    removeModalFromStack('welcome-modal');
+    triggerConfetti();
+}
+
+// ================= ১৫. ট্যাব নেভিগেশন ও অ্যাপ বুটস্ট্র্যাপ =================
 function switchTab(viewId) {
-    if (isUserBanned) return;
     playClickSound();
     triggerHaptic('light');
 
@@ -1926,12 +1125,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAudioIcon();
     applyLanguage();
     initUser();
-    switchWithdrawMethod('recharge');
 
-    // সাইবার বুট লোডার প্রসেসিং
+    // সাইবার বুট স্ক্রিন রিমুভাল
     let splashProgress = 0;
     const splashTimer = setInterval(() => {
-        splashProgress += 25;
+        splashProgress += 30;
         const bar = document.getElementById('splash-progress');
         if (bar) bar.style.width = splashProgress + '%';
         if (splashProgress >= 100) {
@@ -1940,13 +1138,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) {
                     splash.style.opacity = '0';
-                    setTimeout(() => {
-                        splash.remove();
-                        isSplashFinished = true;
-                        if (isFirstTimeNewUser) openWelcomeModal();
-                    }, 250);
+                    setTimeout(() => splash.remove(), 250);
                 }
-            }, 120);
+            }, 100);
         }
     }, 35);
 });
