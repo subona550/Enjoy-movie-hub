@@ -1,15 +1,15 @@
 /*** 
- * AETHERIA ARCADE - CYBER GAMING & REFLEX ENGINE (v7.1.0 PRODUCTION)
+ * AETHERIA ARCADE - REALTIME CYBER REFLEX ENGINE (v8.0.0 PRODUCTION)
  * - 100% Policy-Compliant for Adsgram & Telegram Mini Apps
- * - Realtime Playable Reflex Matrix Mini-Game Engine
- * - Natural Rewarded Placements: Revive, Energy Refills & Multipliers
- * - In-Game Armory Upgrades & Global Pilot Leaderboard
+ * - Wave-Based Reflex Grid (Cyan Nodes, Gold Targets & Red Glitch Hazards)
+ * - Natural Gaming Placements: Second Chance Shield & Emergency Power Refills
+ * - Armory Hardware Modules & Realtime Firebase Leaderboard
  */
 
 // ================= ১. কনফিগারেশন ও গেম কনস্ট্যান্ট =================
-const BACKEND_API_URL = "https://earnpro84cc.rakibkdbb.workers.dev"; 
-const DEFAULT_BOT_USERNAME = "EarnHubProBot"; 
-let ADSGRAM_BLOCK_ID = "26019"; // ডিফল্ট বা ফায়ারবেস থেকে সিঙ্ক করা Adsgram Block ID
+const BACKEND_API_URL = "https://aetheria-arcade-api.rakibkdbb.workers.dev"; 
+const DEFAULT_BOT_USERNAME = "AetheriaArcadeBot"; 
+let ADSGRAM_BLOCK_ID = "26019"; // Adsgram Block ID
 
 // ================= ২. সাইবার ওয়েব অডিও সিন্থেসাইজার =================
 let audioCtx = null;
@@ -27,9 +27,9 @@ function toggleAudioFx() {
     updateAudioIcon();
     if (isAudioEnabled) {
         playHitSound();
-        showToast(currentLang === 'bn' ? 'সাউন্ড সক্রিয় করা হয়েছে' : 'Audio SFX Enabled');
+        showToast(currentLang === 'bn' ? 'অডিও এফেক্ট সক্রিয়' : 'Audio SFX Enabled');
     } else {
-        showToast(currentLang === 'bn' ? 'সাউন্ড মিউট করা হয়েছে' : 'Audio SFX Muted');
+        showToast(currentLang === 'bn' ? 'অডিও এফেক্ট মিউট করা হয়েছে' : 'Audio SFX Muted');
     }
 }
 
@@ -61,39 +61,40 @@ function playClickSound() {
     } catch (e) { }
 }
 
-function playHitSound() {
+function playHitSound(isGold = false) {
     if (!isAudioEnabled) return;
     try {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(450 + Math.random() * 250, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.06);
-        gain.gain.setValueAtTime(0.18, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
+        osc.type = isGold ? 'sine' : 'triangle';
+        const startFreq = isGold ? 800 : 450 + Math.random() * 200;
+        osc.frequency.setValueAtTime(startFreq, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(isGold ? 1400 : 900, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.06);
+        osc.stop(ctx.currentTime + 0.08);
     } catch (e) { }
 }
 
-function playMissSound() {
+function playHazardSound() {
     if (!isAudioEnabled) return;
     try {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(280, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.18, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        osc.frequency.setValueAtTime(180, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(60, ctx.currentTime + 0.22);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.22);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.15);
+        osc.stop(ctx.currentTime + 0.22);
     } catch (e) { }
 }
 
@@ -265,152 +266,138 @@ function formatNum(val) {
 
 const translations = {
     en: {
-        welcome_badge: "PILOT AIRDROP",
-        welcome_title: "Airdrop Credits Unlocked!",
-        welcome_desc_1: "Welcome to Aetheria Arcade. You received",
-        welcome_desc_2: "Power Energy Credits as starter booster!",
-        btn_claim_welcome: "Activate Energy Core",
-        user_status: "● Active Operator",
-        credits_balance_label: "Total Power Credits",
-        pts_currency: "CREDITS",
+        welcome_badge: "PILOT PROTOCOL",
+        welcome_title: "Operator License Active!",
+        welcome_desc_1: "Welcome to Aetheria Arena. You received",
+        welcome_desc_2: "starter Energy Cells for high-reflex missions!",
+        btn_claim_welcome: "Activate Arena Engine",
+        user_status: "● Online Operator",
+        credits_balance_label: "Total Power Cells",
+        pts_currency: "CELLS",
+        shield_status_lbl: "🛡️ Core Shield Status",
         current_score_lbl: "SCORE:",
-        btn_start_match: "Start Match",
-        game_objective: "Quickly tap neon target nodes to build combo & score",
-        arcade_hint: "⚡ Strike nodes! Misses drain core life, hits reward power credits",
-        tutorial_btn_title: "Arcade Training Doc",
-        tutorial_btn_sub: "Review gameplay tactics & high score guide",
-        btn_watch: "Guide",
-        section_boosters_title: "Power Chargers & Sponsor Boosters",
-        section_boosters_sub: "Stream sponsor broadcasts to recharge your energy instantly",
-        badge_overdrive: "SPONSOR OVERDRIVE",
-        booster_energy_title: "Instant Core Recharge",
-        booster_energy_desc: "Watch a short sponsor broadcast for full lives & bonus credits",
-        btn_charge: "Recharge",
-        badge_multiplier: "2X MULTIPLIER",
-        booster_multiplier_title: "Quantum 2x Boost",
-        booster_multiplier_desc: "Double your earned score & credits for the next 3 matches",
-        badge_active_buff: "BOOST ACTIVE",
-        btn_activate: "Activate",
+        btn_start_match: "Launch Mission",
+        game_objective: "Strike Cyan and Gold targets quickly! Avoid Red Glitches.",
+        arcade_hint: "⚡ Increase your combo with fast reflex hits. Glitch taps damage your shields.",
+        recharge_title: "⚡ Core Power Cell Recharge",
+        recharge_desc: "Recharge your emergency shield and core cells when critical.",
+        btn_recharge: "Recharge (+25)",
+        tutorial_btn_title: "Operator Tactical Docs",
+        tutorial_btn_sub: "Review gameplay strategy and high-score combos",
+        btn_watch: "Docs",
         armory_pill: "CYBER ARMORY & UPGRADES",
-        armory_headline: "Pilot Gear & Customization",
-        armory_subtext: "Unlock exclusive cyber skins, reflex boosters, and badges using credits.",
-        armory_catalog_title: "Avatar Cores & Power-ups",
-        skin_desc_1: "Exclusive neon glowing profile border with +5% reflex score bonus",
-        skin_desc_2: "Target nodes remain stable for 0.5s longer before moving",
+        armory_headline: "Tactical Gear Vault",
+        armory_subtext: "Unlock reflex stabilizers and shield modules using your Power Cells.",
+        armory_catalog_title: "Operator Module Catalog",
+        skin_desc_1: "Boosts reflex score by +15% per successful strike",
+        skin_desc_2: "Target nodes remain stable for 0.4s longer before moving",
+        skin_desc_3: "Automatically nullifies 1 hazard glitch tap per mission",
         btn_unlock: "Unlock",
         btn_equipped: "Equipped",
-        leaderboard_pill: "PILOT ARENA LEADERBOARD",
+        leaderboard_pill: "ARENA GLOBAL LADDER",
         leaderboard_heading: "Top Operator Rankings",
         leaderboard_subtext: "Global pilots leaderboard and squad challenge hub.",
         btn_copy: "Copy",
         btn_challenge_squad: "Challenge Friends via Squad Link",
-        stat_squad_pilots: "Squad Pilots",
-        stat_high_score: "Best Score",
+        stat_squad_pilots: "Squad Members",
+        stat_high_score: "Best Record",
         leaderboard_list_title: "Global Pilot Roster",
-        profile_stat_bal: "Power Credits",
-        profile_stat_matches: "Matches Played",
+        profile_stat_bal: "Power Cells",
+        profile_stat_matches: "Missions Run",
         menu_daily_bonus: "7-Day Protocol Vault",
         menu_tg_support: "Official Telegram Community",
-        menu_support: "24/7 Pilot Help Desk",
-        checkin_modal_title: "7-Day Daily Protocol Gifts",
-        loading_text: "Accessing core data...",
-        nav_home: "Arcade",
+        menu_support: "24/7 Operator Helpdesk",
+        checkin_modal_title: "7-Day Protocol Drop",
+        loading_text: "Syncing arena data...",
+        nav_home: "Arena",
         nav_armory: "Armory",
         nav_ranking: "Rankings",
         nav_profile: "Pilot",
-        modal_gameover_badge: "MISSION TERMINATED",
-        modal_gameover_title: "Pilot Down!",
+        modal_gameover_badge: "SYSTEM BREACHED",
+        modal_gameover_title: "Mission Terminated!",
         final_score_label: "Match Score:",
-        earned_credits_label: "Energy Credits Earned:",
-        high_score_status: "Personal High Score:",
-        btn_revive: "Revive Core (+1 Life via Sponsor)",
-        btn_finish_match: "Conclude Match & Deposit Score",
+        earned_credits_label: "Energy Cells Earned:",
+        high_score_status: "Personal Record:",
+        btn_revive: "Second Chance (Shield +1)",
+        btn_finish_match: "Submit Score & Conclude",
         checkin_day_text: "Day {day}",
         checkin_streak_text: "Current Streak: {day} Days",
-        checkin_claimed_btn: "✅ Today's Gift Claimed",
-        checkin_claim_btn: "🎁 Claim Day {day} Bounty (+{pts} CREDITS)",
+        checkin_claimed_btn: "✅ Today's Protocol Claimed",
+        checkin_claim_btn: "⚡ Claim Day {day} Bounty (+{pts} CELLS)",
         home_streak_claimed: "Streak: {day} Days (Claimed)",
-        home_streak_ready: "Day {day} Gift",
-        toast_revive_success: "⚡ Core Revived! Match Resumed!",
-        toast_multiplier_active: "⚡ 2X Score Multiplier Active for 3 matches!",
-        toast_full_recharge: "⚡ Energy Core fully recharged! +25 Credits!",
-        toast_unlocked_skin: "🎉 Upgrade unlocked and equipped!",
-        toast_not_enough_credits: "⚠️ Not enough energy credits in vault!",
-        toast_link_copied: "✅ Squad invitation link copied!"
+        home_streak_ready: "Day {day} Protocol",
+        toast_revive_success: "⚡ Shield Restored! Match Continued!",
+        toast_full_recharge: "⚡ Core fully recharged! +25 Cells added!",
+        toast_unlocked_skin: "🎉 Tactical module unlocked and equipped!",
+        toast_not_enough_credits: "⚠️ Insufficient Power Cells in vault!",
+        toast_link_copied: "✅ Squad mission invite link copied!"
     },
     bn: {
-        welcome_badge: "পাইলট এয়ারড্রপ",
-        welcome_title: "এয়ারড্রপ ক্রেডিট আনলকড!",
-        welcome_desc_1: "আর্টিফিশিয়াল আর্কেডে প্রথম লগইনের জন্য আপনি পেয়েছেন",
-        welcome_desc_2: "পাওয়ার এনার্জি ক্রেডিট!",
-        btn_claim_welcome: "অ্যাক্টিভেট এনার্জি কোর",
-        user_status: "● সক্রিয় অপারেটর",
-        credits_balance_label: "টোটাল এনার্জি ক্রেডিট",
-        pts_currency: "ক্রেডিট",
+        welcome_badge: "পাইলট প্রোটোকল",
+        welcome_title: "অপারেটর লাইসেন্স সক্রিয়!",
+        welcome_desc_1: "আর্টিফিশিয়াল অ্যারেনায় আপনাকে দেওয়া হয়েছে",
+        welcome_desc_2: "স্টার্টার এনার্জি সেল!",
+        btn_claim_welcome: "অ্যারেনা এক্টিভেট করুন",
+        user_status: "● অনলাইন অপারেটর",
+        credits_balance_label: "টোটাল এনার্জি সেল",
+        pts_currency: "CELLS",
+        shield_status_lbl: "🛡️ কোর শিল্ড ও এনার্জি",
         current_score_lbl: "স্কোর:",
-        btn_start_match: "ম্যাচ শুরু করুন",
-        game_objective: "দ্রুত নিয়ন নোডগুলোতে ট্যাপ করে স্কোর ও কম্বো বাড়ান",
-        arcade_hint: "⚡ লক্ষ্যভেদ করুন! মিস করলে লাইফ কমবে, হিট করলে ক্রেডিট রিওয়ার্ড পাবেন",
-        tutorial_btn_title: "আর্টিফিশিয়াল ট্রেনিং ডক",
-        tutorial_btn_sub: "হাই-স্কোর ও আর্কেড র‍্যাঙ্কিং গাইডলাইন দেখুন",
-        btn_watch: "গাইড",
-        section_boosters_title: "পাওয়ার চার্জার ও স্পনসর বুস্টার",
-        section_boosters_sub: "স্পনসর ভিডিও সম্পন্ন করে তাৎক্ষণিক এনার্জি রিফিল পান",
-        badge_overdrive: "স্পনসর ওভারড্রাইভ",
-        booster_energy_title: "Instant Core Recharge",
-        booster_energy_desc: "একটি শর্ট স্পনসর ব্রডকাস্ট দেখে ফুল লাইভস এবং অতিরিক্ত ক্রেডিট নিন",
-        btn_charge: "চার্জ",
-        badge_multiplier: "২X মাল্টিপ্লায়ার",
-        booster_multiplier_title: "Quantum 2x Boost",
-        booster_multiplier_desc: "পরবর্তী ৩টি ম্যাচের জন্য আপনার অর্জিত স্কোর ও ক্রেডিট দ্বিগুণ করুন",
-        badge_active_buff: "বুস্ট সক্রিয়",
-        btn_activate: "অ্যাক্টিভেট",
-        armory_pill: "সাইবার আর্মোরি ও আপগ্রেডস",
-        armory_headline: "পাইলট গিয়ার ও কাস্টমাইজেশন",
-        armory_subtext: "আর্কেড ক্রেডিট দিয়ে নতুন সাইবার স্কিন, রিফ্লেক্স বুস্টার এবং ব্যাজ আনলক করুন।",
-        armory_catalog_title: "অ্যাভাট্যার কোর ও পাওয়ার-আপ",
-        skin_desc_1: "প্রোফাইলে এক্সক্লুসিভ গ্লোইং বর্ডার এবং +৫% রিফ্লেক্স বোনাস",
-        skin_desc_2: "টার্গেট নোডের অবস্থান ০.৫ সেকেন্ড বেশি স্থির থাকবে",
+        btn_start_match: "মিশন শুরু করুন",
+        game_objective: "রেড গ্লিচ নোড এড়িয়ে সঠিক নিয়ন টার্গেটে দ্রুত ট্যাপ করুন",
+        arcade_hint: "⚡ দ্রুত লক্ষ্যভেদ করে কম্বো বৃদ্ধি করুন। ভুল ট্যাপে শিল্ড ক্ষতিগ্রস্ত হবে।",
+        recharge_title: "⚡ কোর এনার্জি সেল রিফিল",
+        recharge_desc: "জরুরি পরিস্থিতিতে অ্যারেনা শিল্ড ও কোর এনার্জি পুনরুদ্ধার করুন।",
+        btn_recharge: "রিচার্জ (+২৫)",
+        tutorial_btn_title: "অপারেটর ট্যাকটিক্স গাইড",
+        tutorial_btn_sub: "হাই-স্কোর রিফ্লেক্স এবং টেকনিক্যাল টিপস দেখুন",
+        btn_watch: "ডকস",
+        armory_pill: "CYBER ARMORY & UPGRADES",
+        armory_headline: "ট্যাকটিক্যাল গিয়ার ভল্ট",
+        armory_subtext: "অর্জিত এনার্জি সেল দিয়ে রিফ্লেক্স স্ট্যাবিলাইজার ও শিল্ড মডিউল আপগ্রেড করুন।",
+        armory_catalog_title: "অপারেটর মডিউল ক্যাটালগ",
+        skin_desc_1: "প্রতিটি সফল হিটে অতিরিক্ত +১৫% স্কোর বুস্ট",
+        skin_desc_2: "টার্গেট নোডের অবস্থান ০.৪ সেকেন্ড বেশি স্থির থাকবে",
+        skin_desc_3: "ম্যাচে ১টি রেড গ্লিচ ট্যাপের ক্ষতি স্বয়ংক্রিয়ভাবে ব্লক করবে",
         btn_unlock: "আনলক",
         btn_equipped: "ব্যবহৃত",
-        leaderboard_pill: "পাইলট এরিনা লিডারবোর্ড",
-        leaderboard_heading: "টপ অপারেটর র‍্যাঙ্কিং",
-        leaderboard_subtext: "সর্বোচ্চ স্কোর অর্জনকারী পাইলটদের তালিকা ও স্কোয়াড চ্যালেঞ্জ।",
+        leaderboard_pill: "ARENA GLOBAL LADDER",
+        leaderboard_heading: "শীর্ষ অপারেটর লিডারবোর্ড",
+        leaderboard_subtext: "সর্বোচ্চ স্কোর অর্জনকারী পাইলটদের গ্লোবাল র্যাঙ্ক ও স্কোয়াড তালিকা।",
         btn_copy: "কপি",
-        btn_challenge_squad: "বন্ধুদের সাথে স্কোয়াড চ্যালেঞ্জ করুন",
-        stat_squad_pilots: "স্কোয়াড পার্টনার",
-        stat_high_score: "সর্বোচ্চ স্কোর",
+        btn_challenge_squad: "বন্ধুদের সাথে স্কোয়াড চ্যালেঞ্জ শেয়ার করুন",
+        stat_squad_pilots: "স্কোয়াড মেম্বার",
+        stat_high_score: "ব্যক্তিগত সেরা",
         leaderboard_list_title: "গ্লোবাল পাইলট রোস্টার",
-        profile_stat_bal: "পাওয়ার ক্রেডিট",
-        profile_stat_matches: "ম্যাচ খেলা হয়েছে",
-        menu_daily_bonus: "৭-দিনের স্ট্রিক ভল্ট",
+        profile_stat_bal: "এনার্জি সেল",
+        profile_stat_matches: "সম্পন্ন মিশন",
+        menu_daily_bonus: "৭-দিনের প্রোটোকল ভল্ট",
         menu_tg_support: "অফিসিয়াল টেলিগ্রাম কমিউনিটি",
-        menu_support: "২৪/৭ পাইলট সাপোর্ট ডেস্ক",
-        checkin_modal_title: "৭-দিনের ডেইলি গিফট ড্রপ",
-        loading_text: "ডাটা রিড করা হচ্ছে...",
-        nav_home: "আর্কেড",
+        menu_support: "২৪/৭ অপারেটর হেল্পডেস্ক",
+        checkin_modal_title: "৭-দিনের প্রোটোকল ড্রপ",
+        loading_text: "ডাটা সিঙ্ক হচ্ছে...",
+        nav_home: "অ্যারেনা",
         nav_armory: "আর্মোরি",
         nav_ranking: "র‍্যাঙ্কিং",
         nav_profile: "পাইলট",
-        modal_gameover_badge: "মিশন সমাপ্ত",
-        modal_gameover_title: "পাইলট ডাউন!",
-        final_score_label: "আপনার ম্যাচ স্কোর:",
-        earned_credits_label: "অর্জিত এনার্জি ক্রেডিট:",
-        high_score_status: "ব্যক্তিগত সর্বোচ্চ স্কোর:",
-        btn_revive: "লাইফ রিভাইভ করুন (+১ লাইফ স্পনসর)",
-        btn_finish_match: "ম্যাচ সমাপ্ত করে স্কোর জমা দিন",
+        modal_gameover_badge: "SYSTEM BREACHED",
+        modal_gameover_title: "অপারেশন ব্যর্থ!",
+        final_score_label: "ম্যাচ স্কোর:",
+        earned_credits_label: "অর্জিত এনার্জি সেল:",
+        high_score_status: "সেরা রেকর্ড:",
+        btn_revive: "Second Chance (Shield +1)",
+        btn_finish_match: "ফলাফল জমা দিন ও বের হন",
         checkin_day_text: "দিন {day}",
         checkin_streak_text: "বর্তমান স্ট্রিক: {day} দিন",
-        checkin_claimed_btn: "✅ আজকের গিফট নেওয়া হয়েছে",
-        checkin_claim_btn: "🎁 দিন {day}-এর উপহার নিন (+{pts} ক্রেডিট)",
-        home_streak_claimed: "স্ট্রিক: {day} দিন (ক্লেইমড)",
-        home_streak_ready: "দিন {day} গিফট",
-        toast_revive_success: "⚡ কোর রিভাইভড! ম্যাচ পুনরায় শুরু হয়েছে!",
-        toast_multiplier_active: "⚡ পরবর্তী ৩টি ম্যাচের জন্য ২X স্কোর বুস্ট সক্রিয়!",
-        toast_full_recharge: "⚡ এনার্জি কোর ফুল রিচার্জড! +২৫ ক্রেডিট যুক্ত হয়েছে!",
-        toast_unlocked_skin: "🎉 আপগ্রেড আনলক ও সিলেক্ট করা হয়েছে!",
-        toast_not_enough_credits: "⚠️ ভল্টে পর্যাপ্ত এনার্জি ক্রেডিট নেই!",
-        toast_link_copied: "✅ স্কোয়াড ইনভাইটেশন লিংক কপি হয়েছে!"
+        checkin_claimed_btn: "✅ আজকের প্রোটোকল সম্পন্ন",
+        checkin_claim_btn: "⚡ দিন {day}-এর বাউন্টি নিন (+{pts} CELLS)",
+        home_streak_claimed: "স্ট্রিক: {day} দিন (সম্পন্ন)",
+        home_streak_ready: "দিন {day} প্রোটোকল",
+        toast_revive_success: "⚡ কোর শিল্ড অ্যাক্টিভেটেড! ম্যাচ পুনরায় শুরু হয়েছে!",
+        toast_full_recharge: "⚡ এনার্জি কোর ফুল রিচার্জড! +২৫ সেলস যোগ হয়েছে!",
+        toast_unlocked_skin: "🎉 ট্যাকটিক্যাল মডিউল আনলক ও সুসজ্জিত হয়েছে!",
+        toast_not_enough_credits: "⚠️ ভল্টে পর্যাপ্ত এনার্জি সেল নেই!",
+        toast_link_copied: "✅ স্কোয়াড চ্যালেঞ্জ লিংক কপি হয়েছে!"
     }
 };
 
@@ -446,7 +433,7 @@ function toggleLanguage() {
     showToast(currentLang === 'en' ? 'Switched to English' : 'বাংলা ভাষা সক্রিয় করা হয়েছে');
 }
 
-// ================= ৭. ইউজার স্টেট ভেরিয়েবলস =================
+// ================= ৭. ইউজার স্টেট ও ডেটা ইনিশিয়ালাইজেশন =================
 let tgUser = tg?.initDataUnsafe?.user;
 if (!tgUser || !tgUser.id) {
     let mockId = localStorage.getItem('eh_pilot_id');
@@ -466,36 +453,38 @@ const userId = tgUser.id.toString();
 const userName = (tgUser.first_name || 'Pilot') + (tgUser.last_name ? ' ' + tgUser.last_name : '');
 const userUsername = tgUser.username ? '@' + tgUser.username : '@pilot_' + userId.slice(-4);
 
-// গেম ও প্রোফাইল ডাটা
 let balanceCredits = 100;
 let personalHighScore = 0;
 let totalMatchesPlayed = 0;
 let unlockedUpgrades = JSON.parse(localStorage.getItem('unlocked_skins') || '[]');
-let activeMultiplierMatches = 0; // 2X buff counter
 
 let referralCount = 0;
 let lastCheckInDate = "";
 let checkInStreak = 0;
-const checkInRewards = [10, 15, 25, 40, 60, 80, 150];
+const checkInRewards = [10, 20, 35, 50, 75, 100, 150];
 
 let tutorialVideoUrl = "https://www.youtube.com";
 let telegramCommunityUrl = "https://t.me/";
 let myReferralLink = `https://t.me/${DEFAULT_BOT_USERNAME}?start=ref_${userId}`;
 
-// গেম মেকানিক্স স্টেট
+// গেম মেকানিক্স ও স্টেট
 let isMatchActive = false;
 let currentMatchScore = 0;
 let arcadeLives = 3;
 const MAX_LIVES = 3;
 let targetTimer = null;
-let targetSpawnInterval = 1300; // ms
+let currentSpawnInterval = 1250;
 let currentCombo = 1;
+let currentWave = 1;
+let successfulHitsInWave = 0;
+let isCurrentTargetGold = false;
 let hasRevivedThisMatch = false;
+let hasUsedHazardBlock = false;
 
-// ================= ৮. ফায়ারবেস সেটিংস ও ক্লাউড সিঙ্ক =================
+// ================= ৮. ফায়ারবেস ক্লাউড সিঙ্ক =================
 db.ref('settings').on('value', (snapshot) => {
     const data = snapshot.val() || {};
-    if (data.tutorialUrl || data.youtubeTutorial) tutorialVideoUrl = data.tutorialUrl || data.youtubeTutorial;
+    if (data.tutorialUrl) tutorialVideoUrl = data.tutorialUrl;
     if (data.telegramChannel) telegramCommunityUrl = data.telegramChannel.startsWith('http') ? data.telegramChannel : `https://t.me/${data.telegramChannel.replace('@', '')}`;
     if (data.adsgramBlockId) ADSGRAM_BLOCK_ID = String(data.adsgramBlockId);
 
@@ -518,7 +507,6 @@ function initUser() {
     db.ref('users/' + userId).on('value', (s) => {
         const data = s.val();
         if (!data) {
-            // নতুন পাইলট রেজিস্ট্রেশন
             db.ref('users/' + userId).set({
                 id: userId,
                 name: userName,
@@ -546,7 +534,7 @@ function initUser() {
     listenToLeaderboard();
 }
 
-// ================= ৯. বাস্তব গেমপ্লে ইঞ্জিন (Quantum Target Matrix) =================
+// ================= ৯. বাস্তব গেমপ্লে ইঞ্জিন (Wave-Based Reflex Protocol) =================
 function startArcadeMatch(e) {
     if (e) e.stopPropagation();
     playClickSound();
@@ -556,12 +544,15 @@ function startArcadeMatch(e) {
     currentMatchScore = 0;
     arcadeLives = MAX_LIVES;
     currentCombo = 1;
-    targetSpawnInterval = 1350;
+    currentWave = 1;
+    successfulHitsInWave = 0;
+    currentSpawnInterval = 1250;
     hasRevivedThisMatch = false;
+    hasUsedHazardBlock = false;
 
-    // যদি স্ট্যাবিলাইজার আপগ্রেড থাকে
+    // Time Dilator মডিউল থাকলে স্পিড ০.৪ সে. সহনশীল থাকবে
     if (unlockedUpgrades.includes('reflex_overload')) {
-        targetSpawnInterval += 400;
+        currentSpawnInterval += 400;
     }
 
     document.getElementById('game-overlay-screen').style.display = 'none';
@@ -579,69 +570,150 @@ function spawnNextTarget() {
 
     const arena = document.getElementById('arcade-interactive-arena');
     const target = document.getElementById('arcade-target');
+    const hazard = document.getElementById('arcade-hazard');
     if (!arena || !target) return;
 
-    const maxX = arena.clientWidth - 70;
-    const maxY = arena.clientHeight - 70;
-    const randomX = Math.max(10, Math.floor(Math.random() * maxX));
-    const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+    const maxX = Math.max(20, arena.clientWidth - 70);
+    const maxY = Math.max(20, arena.clientHeight - 70);
+
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
 
     target.style.left = `${randomX}px`;
     target.style.top = `${randomY}px`;
-    target.style.transform = 'scale(1)';
 
-    // মিস টাইমার: সময়মতো না ছুঁলে লাইফ কমবে
+    // ২০% সম্ভাবনা গোল্ডেন বোনাস টার্গেট আসার
+    isCurrentTargetGold = Math.random() < 0.22;
+    const label = document.getElementById('target-label');
+    
+    if (isCurrentTargetGold) {
+        target.classList.add('gold-node');
+        if (label) label.innerText = 'GOLD!';
+    } else {
+        target.classList.remove('gold-node');
+        if (label) label.innerText = 'STRIKE';
+    }
+
+    // ওয়েভ ২ বা তার উপরে থাকলে মাঝে মাঝে হ্যাজার্ড গ্লিচ স্পন হবে
+    if (currentWave >= 2 && Math.random() < 0.45 && hazard) {
+        let hX = Math.floor(Math.random() * maxX);
+        let hY = Math.floor(Math.random() * maxY);
+        // টার্গেটের বেশি কাছে যাতে না বসে
+        if (Math.abs(hX - randomX) < 60) hX = (hX + 90) % maxX;
+        hazard.style.left = `${hX}px`;
+        hazard.style.top = `${hY}px`;
+        hazard.style.display = 'flex';
+    } else if (hazard) {
+        hazard.style.display = 'none';
+    }
+
+    // মিস কাউন্টডাউন
     targetTimer = setTimeout(() => {
         handleTargetMiss();
-    }, targetSpawnInterval);
+    }, currentSpawnInterval);
 }
 
 function handleArcadeBoardClick(e) {
     if (!isMatchActive) return;
 
-    // টার্গেটে সরাসরি হিট হয়েছে কি না যাচাই
     const target = document.getElementById('arcade-target');
-    const targetRect = target.getBoundingClientRect();
+    const hazard = document.getElementById('arcade-hazard');
+
+    // হ্যাজার্ড/রেড গ্লিচে ক্লিক করেছে কি না চেক
+    if (hazard && hazard.style.display !== 'none') {
+        const hRect = hazard.getBoundingClientRect();
+        if (
+            e.clientX >= hRect.left && e.clientX <= hRect.right &&
+            e.clientY >= hRect.top && e.clientY <= hRect.bottom
+        ) {
+            handleHazardHit(e);
+            return;
+        }
+    }
+
+    // টার্গেটে হিট চেক
+    const tRect = target.getBoundingClientRect();
     const isDirectHit = (
-        e.clientX >= targetRect.left &&
-        e.clientX <= targetRect.right &&
-        e.clientY >= targetRect.top &&
-        e.clientY <= targetRect.bottom
+        e.clientX >= tRect.left && e.clientX <= tRect.right &&
+        e.clientY >= tRect.top && e.clientY <= tRect.bottom
     );
 
     if (isDirectHit) {
         handleTargetHit(e);
     } else {
-        // ফাঁকা জায়গায় ক্লিক করলে মিস
         handleTargetMiss();
     }
 }
 
 function handleTargetHit(e) {
-    playHitSound();
+    playHitSound(isCurrentTargetGold);
     triggerHaptic('light');
 
     if (targetTimer) clearTimeout(targetTimer);
 
-    // স্কোর গণনা
-    let scoreAdd = 10 * currentCombo;
-    if (activeMultiplierMatches > 0) scoreAdd *= 2;
-    if (unlockedUpgrades.includes('cyber_neon')) scoreAdd = Math.round(scoreAdd * 1.05);
+    // বেস স্কোর গণনা
+    let basePts = isCurrentTargetGold ? 30 : 10;
+    let scoreAdd = basePts * currentCombo;
+
+    // Overclock Core থাকলে +১৫% বোনাস
+    if (unlockedUpgrades.includes('cyber_neon')) {
+        scoreAdd = Math.round(scoreAdd * 1.15);
+    }
 
     currentMatchScore += scoreAdd;
-    currentCombo = Math.min(5, currentCombo + 1);
+    currentCombo = Math.min(8, currentCombo + 1);
+    successfulHitsInWave++;
 
-    // গতি বৃদ্ধি (Speed Progression)
-    if (targetSpawnInterval > 650) targetSpawnInterval -= 25;
+    // প্রতি ৫টি সফল হিটে ওয়েভ বৃদ্ধি এবং স্পিড বৃদ্ধি
+    if (successfulHitsInWave >= 5) {
+        currentWave++;
+        successfulHitsInWave = 0;
+        if (currentSpawnInterval > 550) currentSpawnInterval -= 45;
+        showToast(currentLang === 'bn' ? `⚡ ওয়েভ ${formatNum(currentWave)} সক্রিয়!` : `⚡ Wave ${currentWave} Active!`);
+    }
 
     createHitSpark(e.clientX, e.clientY, `+${scoreAdd}`);
     updateArcadeHUD();
     spawnNextTarget();
 }
 
+function handleHazardHit(e) {
+    // যদি Hazard Nullifier আপগ্রেড থাকে এবং এখনো ব্যবহার না হয়ে থাকে
+    if (unlockedUpgrades.includes('hazard_shield') && !hasUsedHazardBlock) {
+        hasUsedHazardBlock = true;
+        showToast(currentLang === 'bn' ? '🛡️ গ্লিচ অ্যাটাক ব্লক হয়েছে!' : '🛡️ Glitch Attack Blocked!');
+        playRewardSound();
+        const hazard = document.getElementById('arcade-hazard');
+        if (hazard) hazard.style.display = 'none';
+        return;
+    }
+
+    playHazardSound();
+    triggerHaptic('notification_error');
+
+    // স্ক্রিন শেক এফেক্ট
+    const wrapper = document.getElementById('arcade-wrapper');
+    if (wrapper) {
+        wrapper.classList.add('screen-shake');
+        setTimeout(() => wrapper.classList.remove('screen-shake'), 320);
+    }
+
+    currentCombo = 1;
+    arcadeLives--;
+    updateArcadeHUD();
+
+    createHitSpark(e.clientX, e.clientY, `CRITICAL!`, true);
+
+    if (arcadeLives <= 0) {
+        endArcadeMatch();
+    } else {
+        spawnNextTarget();
+    }
+}
+
 function handleTargetMiss() {
     if (!isMatchActive) return;
-    playMissSound();
+    playHazardSound();
     triggerHaptic('notification_error');
 
     currentCombo = 1;
@@ -659,8 +731,14 @@ function updateArcadeHUD() {
     const scoreEl = document.getElementById('arcade-current-score');
     if (scoreEl) scoreEl.innerText = formatNum(currentMatchScore);
 
+    const waveEl = document.getElementById('wave-indicator');
+    if (waveEl) waveEl.innerText = `WAVE ${formatNum(currentWave)}`;
+
+    const comboEl = document.getElementById('combo-multiplier');
+    if (comboEl) comboEl.innerText = `${formatNum(currentCombo)}X COMBO`;
+
     const livesEl = document.getElementById('display-arcade-lives');
-    if (livesEl) livesEl.innerText = `${formatNum(arcadeLives)} / ${formatNum(MAX_LIVES)} ${currentLang === 'bn' ? 'লাইভস' : 'LIVES'}`;
+    if (livesEl) livesEl.innerText = `${formatNum(arcadeLives)} / ${formatNum(MAX_LIVES)} ${currentLang === 'bn' ? 'শিল্ড' : 'SHIELDS'}`;
 
     const gauge = document.getElementById('energy-gauge-bar');
     if (gauge) {
@@ -670,7 +748,7 @@ function updateArcadeHUD() {
     }
 }
 
-function createHitSpark(x, y, text) {
+function createHitSpark(x, y, text, isDanger = false) {
     const arena = document.getElementById('arcade-interactive-arena');
     if (!arena) return;
 
@@ -680,12 +758,13 @@ function createHitSpark(x, y, text) {
 
     const spark = document.createElement('div');
     spark.className = 'tap-spark';
+    if (isDanger) spark.classList.add('danger-spark');
     spark.innerText = text;
     spark.style.left = `${relX}px`;
     spark.style.top = `${relY}px`;
     arena.appendChild(spark);
 
-    setTimeout(() => spark.remove(), 600);
+    setTimeout(() => spark.remove(), 650);
 }
 
 function endArcadeMatch() {
@@ -693,13 +772,13 @@ function endArcadeMatch() {
     if (targetTimer) clearTimeout(targetTimer);
 
     document.getElementById('arcade-target').style.display = 'none';
+    const hazard = document.getElementById('arcade-hazard');
+    if (hazard) hazard.style.display = 'none';
 
-    // স্কোর থেকে ক্রেডিট আর্নিং
+    // প্রতি ৪ পয়েন্ট স্কোরে ১টি এনার্জি সেল
     const earnedCredits = Math.floor(currentMatchScore / 4);
     balanceCredits += earnedCredits;
     totalMatchesPlayed++;
-
-    if (activeMultiplierMatches > 0) activeMultiplierMatches--;
 
     const isNewHigh = currentMatchScore > personalHighScore;
     if (isNewHigh) {
@@ -707,14 +786,12 @@ function endArcadeMatch() {
         triggerConfetti();
     }
 
-    // ক্লাউড ডেটাবেস আপডেট
     db.ref('users/' + userId).update({
         balance: balanceCredits,
         highScore: personalHighScore,
         matchesPlayed: totalMatchesPlayed
     });
 
-    // গেম ওভার মোডাল ডাটা
     document.getElementById('modal-final-score').innerText = formatNum(currentMatchScore);
     document.getElementById('modal-match-credits').innerText = `+${formatNum(earnedCredits)} ${t('pts_currency')}`;
     document.getElementById('modal-best-score').innerText = formatNum(personalHighScore);
@@ -738,28 +815,25 @@ function closeGameOverModal() {
     document.getElementById('game-overlay-screen').style.display = 'flex';
 }
 
-// ================= ১০. ADSGRAM রিওয়ার্ডেড ইন্টিগ্রেশন (REVIVE & BOOSTERS) =================
+// ================= ১০. ন্যাচারাল অ্যাড মেকানিক্স (Adsgram Rewarded Placements) =================
 async function triggerReviveWithAd() {
     if (hasRevivedThisMatch) return;
     playClickSound();
     triggerHaptic('medium');
 
-    showToast(currentLang === 'bn' ? '⚡ স্পনসর ব্রডকাস্ট লোড হচ্ছে...' : '⚡ Loading sponsor stream...');
-
     if (typeof window.Adsgram === 'undefined') {
-        return showToast(currentLang === 'bn' ? 'বিজ্ঞাপন লোড করা যায়নি বা অ্যাডব্লকার সক্রিয়!' : 'Ad failed to load or Adblock detected!', 'error');
+        return showToast(currentLang === 'bn' ? 'অ্যাড নেটওয়ার্ক লোড করা যায়নি!' : 'Ad network failed to load!', 'error');
     }
 
     try {
         const adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
-        const result = await adController.show().catch(err => ({ done: false }));
+        const result = await adController.show().catch(() => ({ done: false }));
 
         if (result && result.done) {
             hasRevivedThisMatch = true;
-            document.getElementById('btn-revive-game').style.display = 'none'; // ১ ম্যাচে মাত্র ১ বার রিভাইভ
+            document.getElementById('btn-revive-game').style.display = 'none';
             closeGameOverModal();
 
-            // খেলা পুনরায় চালু করা (+১ লাইফ)
             isMatchActive = true;
             arcadeLives = 1;
             updateArcadeHUD();
@@ -771,10 +845,10 @@ async function triggerReviveWithAd() {
             showToast(t('toast_revive_success'));
             spawnNextTarget();
         } else {
-            showToast(currentLang === 'bn' ? 'ভিডিও সম্পূর্ণ না দেখলে রিভাইভ পাওয়া যাবে না।' : 'Stream not finished.', 'error');
+            showToast(currentLang === 'bn' ? 'ব্রডকাস্ট সম্পন্ন না হলে শিল্ড পাওয়া যাবে না।' : 'Broadcast not finished.', 'error');
         }
     } catch (e) {
-        showToast(currentLang === 'bn' ? 'বিজ্ঞাপন লোড ত্রুটি!' : 'Ad stream error!', 'error');
+        showToast(currentLang === 'bn' ? 'কোর সংযোগ ত্রুটি!' : 'Core connection error!', 'error');
     }
 }
 
@@ -783,7 +857,7 @@ async function triggerEnergyRefillAd() {
     triggerHaptic('medium');
 
     if (typeof window.Adsgram === 'undefined') {
-        return showToast('Adblocker detected!', 'error');
+        return showToast('Ad network offline!', 'error');
     }
 
     try {
@@ -803,46 +877,23 @@ async function triggerEnergyRefillAd() {
             updateUI();
         }
     } catch (e) {
-        showToast('Error loading sponsor stream', 'error');
+        showToast('Error syncing power core', 'error');
     }
 }
 
-async function triggerMultiplierAd() {
-    playClickSound();
-    triggerHaptic('medium');
-
-    if (typeof window.Adsgram === 'undefined') {
-        return showToast('Adblocker detected!', 'error');
-    }
-
-    try {
-        const adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
-        const res = await adController.show().catch(() => ({ done: false }));
-
-        if (res && res.done) {
-            activeMultiplierMatches += 3;
-            playRewardSound();
-            triggerConfetti();
-            triggerHaptic('notification_success');
-            showToast(t('toast_multiplier_active'));
-        }
-    } catch (e) {
-        showToast('Error loading sponsor stream', 'error');
-    }
-}
-
-// ================= ১১. আর্মোরি ও কাস্টমাইজেশন শপ =================
+// ================= ১১. আর্মোরি ও হার্ডওয়্যার মডিউল শপ =================
 function purchaseSkin(skinId) {
     playClickSound();
     triggerHaptic('medium');
 
     if (unlockedUpgrades.includes(skinId)) {
-        return showToast(currentLang === 'bn' ? 'এটি ইতিমধ্যে আপনার সংগ্রহে রয়েছে!' : 'Already unlocked!');
+        return showToast(currentLang === 'bn' ? 'মডিউলটি ইতোমধ্যে সক্রিয় রয়েছে!' : 'Module already active!');
     }
 
     const prices = {
         'cyber_neon': 250,
-        'reflex_overload': 500
+        'reflex_overload': 500,
+        'hazard_shield': 750
     };
 
     const cost = prices[skinId] || 999;
@@ -862,12 +913,12 @@ function purchaseSkin(skinId) {
     updateUI();
 }
 
-// ================= ১২. গ্লোবাল লিডারবোর্ড সিঙ্ক =================
+// ================= ১২. গ্লোবাল পাইলট লিডারবোর্ড =================
 function listenToLeaderboard() {
     const container = document.getElementById('leaderboard-container');
     if (!container) return;
 
-    db.ref('users').orderByChild('highScore').limitToLast(20).on('value', snapshot => {
+    db.ref('users').orderByChild('highScore').limitToLast(25).on('value', snapshot => {
         if (!snapshot.exists()) {
             container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">${t('loading_text')}</div>`;
             return;
@@ -878,12 +929,12 @@ function listenToLeaderboard() {
             pilots.push(child.val());
         });
 
-        pilots.reverse(); // সর্বোচ্চ স্কোর প্রথমে
+        pilots.reverse();
 
         let html = '';
         pilots.forEach((pilot, idx) => {
             const initial = (pilot.name?.charAt(0) || 'P').toUpperCase();
-            const rankBadge = idx === 0 ? '👑' : `#${formatNum(idx + 1)}`;
+            const rankBadge = idx === 0 ? '👑 TOP PILOT' : `#${formatNum(idx + 1)}`;
 
             html += `
                 <div class="roster-item">
@@ -912,7 +963,7 @@ function escapeHtml(str) {
     })[c]);
 }
 
-// ================= ১৩. UI আপডেট ও প্রোটোকল গিফট =================
+// ================= ১৩. UI আপডেট ও ডেইলি প্রোটোকল ড্রপ =================
 function updateUI() {
     const setElem = (id, text) => {
         const el = document.getElementById(id);
@@ -925,7 +976,7 @@ function updateUI() {
     setElem('home-ref-count', formatNum(referralCount));
     setElem('profile-best-score-badge', formatNum(personalHighScore));
 
-    // আপগ্রেড বাটনের স্ট্যাটাস
+    // আর্মোরি বাটন স্টেট
     const btn1 = document.getElementById('btn-skin-1');
     if (btn1 && unlockedUpgrades.includes('cyber_neon')) {
         btn1.innerText = t('btn_equipped');
@@ -936,6 +987,12 @@ function updateUI() {
     if (btn2 && unlockedUpgrades.includes('reflex_overload')) {
         btn2.innerText = t('btn_equipped');
         btn2.classList.add('chip-success');
+    }
+
+    const btn3 = document.getElementById('btn-skin-3');
+    if (btn3 && unlockedUpgrades.includes('hazard_shield')) {
+        btn3.innerText = t('btn_equipped');
+        btn3.classList.add('chip-success');
     }
 
     const pId = document.getElementById('profile-page-id');
@@ -1034,12 +1091,12 @@ function claimDailyCheckIn() {
     playRewardSound();
     triggerConfetti();
     triggerHaptic('notification_success');
-    showToast(currentLang === 'bn' ? `🎉 +${formatNum(rewardPts)} ক্রেডিট যুক্ত হয়েছে!` : `🎉 +${rewardPts} Credits claimed!`);
+    showToast(currentLang === 'bn' ? `⚡ +${formatNum(rewardPts)} পাওয়ার সেল যুক্ত হয়েছে!` : `⚡ +${rewardPts} Cells claimed!`);
     renderCheckInGrid();
     updateUI();
 }
 
-// ================= ১৪. সোশ্যাল শেয়ারিং ও মডালস =================
+// ================= ১৪. সোশ্যাল ও স্কোয়াড মিশন শেয়ার =================
 function copyReferralLink() {
     playClickSound();
     triggerHaptic('light');
@@ -1058,8 +1115,8 @@ function shareReferralLink() {
     triggerHaptic('light');
 
     const shareText = currentLang === 'bn' 
-        ? `🎮 Aetheria Cyber Arcade-এ আমার সাথে খেলুন! আমার হাই-স্কোর বিট করতে পারবেন?\n\n👇 গেম লিংক:\n${myReferralLink}`
-        : `🎮 Challenge my high score in Aetheria Cyber Arcade!\n\n👇 Play Link:\n${myReferralLink}`;
+        ? `🎮 Aetheria Cyber Arcade-এ আমার সাথে খেলুন! আমার হাই-স্কোর ${formatNum(personalHighScore)} বিট করতে পারবেন?\n\n👇 অ্যারেনা লিংক:\n${myReferralLink}`
+        : `🎮 Join me on Aetheria Cyber Arcade! Can you beat my high score of ${personalHighScore}?\n\n👇 Play Link:\n${myReferralLink}`;
     
     const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(myReferralLink)}&text=${encodeURIComponent(shareText)}`;
     if (tg && typeof tg.openTelegramLink === 'function') tg.openTelegramLink(tgShareUrl);
@@ -1126,7 +1183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyLanguage();
     initUser();
 
-    // সাইবার বুট স্ক্রিন রিমুভাল
+    // বুট স্ক্রিন স্মুথ লোডার
     let splashProgress = 0;
     const splashTimer = setInterval(() => {
         splashProgress += 30;

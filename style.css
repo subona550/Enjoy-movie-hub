@@ -1,8 +1,7 @@
 /* ==========================================================
-   AETHERIA ARCADE - CYBER GAMING & REFLEX HUD THEME (v7.1.0)
+   AETHERIA ARCADE - REALTIME CYBER REFLEX ENGINE (v8.0.0)
    - 100% Policy-Compliant Telegram Gaming Architecture
-   - Glassmorphism & Cyber Bento Grid Engine
-   - Fluid Target Reflex Mini-Game UI
+   - Wave & Hazard Mini-Game Arena & Bento Grid HUD
 ========================================================== */
 
 :root {
@@ -23,6 +22,10 @@
     --neon-purple: #BD00FF;
     --neon-purple-soft: rgba(189, 0, 255, 0.12);
     --neon-purple-glow: rgba(189, 0, 255, 0.35);
+
+    --neon-gold: #FFB800;
+    --neon-gold-soft: rgba(255, 184, 0, 0.15);
+    --neon-gold-glow: rgba(255, 184, 0, 0.35);
 
     --neon-alert: #FF3366;
     --neon-alert-soft: rgba(255, 51, 102, 0.15);
@@ -60,6 +63,10 @@ body.light-theme {
     --neon-purple: #7C3AED;
     --neon-purple-soft: rgba(124, 58, 237, 0.1);
     --neon-purple-glow: rgba(124, 58, 237, 0.25);
+
+    --neon-gold: #D97706;
+    --neon-gold-soft: rgba(217, 119, 6, 0.12);
+    --neon-gold-glow: rgba(217, 119, 6, 0.25);
 
     --neon-alert: #E11D48;
     --neon-alert-soft: rgba(225, 29, 72, 0.12);
@@ -107,7 +114,19 @@ input, select, textarea {
 .text-danger { color: var(--neon-alert) !important; }
 .text-success { color: var(--neon-emerald) !important; }
 
-/* ================= 1. CYBER BOOT LOADER (SPLASH) ================= */
+/* Damage Screen Shake */
+.screen-shake {
+    animation: shakeAnim 0.3s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shakeAnim {
+    10%, 90% { transform: translate3d(-3px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+    40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+/* ================= 1. CYBER BOOT LOADER ================= */
 .cyber-boot-screen {
     position: fixed;
     inset: 0;
@@ -322,10 +341,7 @@ input, select, textarea {
 .hud-circle-btn:active { transform: scale(0.92); }
 
 .hud-lang-pill {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: 12px;
     background: var(--card-surface);
     border: 1px solid var(--card-border);
@@ -445,7 +461,7 @@ input, select, textarea {
     transition: width 0.25s ease, background 0.25s ease;
 }
 
-/* ================= 4. PLAYABLE MINI ARCADE CONSOLE ================= */
+/* ================= 4. PLAYABLE CYBER ARCADE CONSOLE ================= */
 .mini-arcade-console {
     background: linear-gradient(180deg, var(--card-surface) 0%, #060910 100%);
     border: 1.5px solid rgba(0, 255, 157, 0.25);
@@ -472,6 +488,22 @@ input, select, textarea {
     color: var(--text-primary);
 }
 
+.console-metrics {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.combo-badge {
+    background: rgba(189, 0, 255, 0.15);
+    border: 1px solid var(--neon-purple);
+    color: var(--neon-purple);
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 900;
+}
+
 .console-score-pill {
     background: var(--neon-emerald-soft);
     border: 1px solid rgba(0, 255, 157, 0.3);
@@ -483,8 +515,8 @@ input, select, textarea {
 
 .arcade-interactive-pad {
     position: relative;
-    height: 230px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(0, 0, 0, 0.6) 85%);
+    height: 270px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(0, 0, 0, 0.65) 85%);
     border: 1px dashed rgba(0, 240, 255, 0.3);
     border-radius: 20px;
     overflow: hidden;
@@ -496,6 +528,39 @@ input, select, textarea {
     border-color: var(--neon-cyan);
 }
 
+.arcade-start-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 9, 14, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding: 16px;
+    text-align: center;
+}
+
+.rules-pill-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.rule-chip {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.chip-cyan { background: var(--neon-cyan-soft); color: var(--neon-cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+.chip-gold { background: var(--neon-gold-soft); color: var(--neon-gold); border: 1px solid rgba(255, 184, 0, 0.3); }
+.chip-red { background: var(--neon-alert-soft); color: var(--neon-alert); border: 1px solid rgba(255, 51, 102, 0.3); }
+
+/* NORMAL CYAN TARGET */
 .cyber-target-node {
     display: flex;
     flex-direction: column;
@@ -505,24 +570,64 @@ input, select, textarea {
     cursor: pointer;
     user-select: none;
     z-index: 5;
-    animation: targetPulse 0.4s ease alternate infinite;
+    animation: targetPulse 0.45s ease alternate infinite;
     transform-origin: center;
 }
 
 @keyframes targetPulse {
-    0% { transform: scale(0.96); filter: drop-shadow(0 0 6px var(--neon-cyan)); }
-    100% { transform: scale(1.05); filter: drop-shadow(0 0 16px var(--neon-cyan)); }
-}
-
-.cyber-target-node svg {
-    filter: drop-shadow(0 0 12px var(--neon-cyan));
+    0% { transform: scale(0.95); filter: drop-shadow(0 0 6px var(--neon-cyan)); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 16px var(--neon-cyan)); }
 }
 
 .node-label {
-    font-size: 10.5px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background: rgba(0, 240, 255, 0.2);
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+/* GOLDEN BONUS TARGET */
+.cyber-target-node.gold-node {
+    color: var(--neon-gold);
+    animation: goldPulse 0.35s ease alternate infinite;
+}
+
+@keyframes goldPulse {
+    0% { transform: scale(1.0); filter: drop-shadow(0 0 8px var(--neon-gold)); }
+    100% { transform: scale(1.15); filter: drop-shadow(0 0 20px var(--neon-gold)); }
+}
+
+.cyber-target-node.gold-node .node-label {
+    background: rgba(255, 184, 0, 0.25);
+    color: var(--neon-gold);
+}
+
+/* RED GLITCH HAZARD NODE */
+.cyber-hazard-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--neon-alert);
+    cursor: pointer;
+    user-select: none;
+    z-index: 6;
+    animation: hazardFlicker 0.2s infinite;
+}
+
+@keyframes hazardFlicker {
+    0%, 100% { filter: drop-shadow(0 0 6px var(--neon-alert)); opacity: 1; }
+    50% { filter: drop-shadow(0 0 16px var(--neon-alert)); opacity: 0.75; }
+}
+
+.hazard-label {
+    font-size: 9.5px;
     font-weight: 900;
     letter-spacing: 1.2px;
-    background: rgba(0, 240, 255, 0.2);
+    background: rgba(255, 51, 102, 0.25);
+    color: var(--neon-alert);
     padding: 2px 6px;
     border-radius: 6px;
 }
@@ -553,6 +658,11 @@ input, select, textarea {
     z-index: 15;
 }
 
+.tap-spark.danger-spark {
+    color: var(--neon-alert);
+    text-shadow: 0 0 10px var(--neon-alert);
+}
+
 @keyframes sparkFloat {
     0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
     100% { opacity: 0; transform: translate(-50%, -70px) scale(1.3); }
@@ -561,17 +671,45 @@ input, select, textarea {
 .arcade-footer-stats {
     text-align: center;
     margin-top: 12px;
-    font-size: 12.5px;
+    font-size: 12px;
     color: var(--text-muted);
 }
 
-/* ================= 5. TRAINING VIDEO CARD ================= */
+/* ================= 5. RECHARGE & GUIDE CARDS ================= */
+.recharge-banner-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.08) 0%, var(--card-surface) 100%);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    gap: 14px;
+}
+
+.recharge-copy h4 {
+    font-size: 15.5px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.recharge-copy p {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.compact-btn {
+    width: auto !important;
+    padding: 10px 18px !important;
+    font-size: 13.5px !important;
+    flex-shrink: 0;
+}
+
 .field-training-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-left: 4px solid var(--neon-alert);
-    background: linear-gradient(90deg, rgba(255, 51, 102, 0.08) 0%, var(--card-surface) 100%);
+    border-left: 4px solid var(--neon-cyan);
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.08) 0%, var(--card-surface) 100%);
     cursor: pointer;
     transition: transform 0.15s ease;
 }
@@ -585,26 +723,25 @@ input, select, textarea {
 }
 
 .training-icon-badge {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 14px;
-    background: var(--neon-alert-soft);
-    color: var(--neon-alert);
+    background: var(--neon-cyan-soft);
+    color: var(--neon-cyan);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 0 16px rgba(255, 51, 102, 0.25);
 }
 
 .training-copy h4 {
-    font-size: 15.5px;
+    font-size: 15px;
     font-weight: 800;
     color: var(--text-primary);
 }
 
 .training-copy p {
-    font-size: 12.5px;
+    font-size: 12px;
     color: var(--text-secondary);
 }
 
@@ -614,16 +751,16 @@ input, select, textarea {
     gap: 6px;
     font-size: 13.5px;
     font-weight: 800;
-    color: var(--neon-alert);
+    color: var(--neon-cyan);
 }
 
-/* ================= 6. TACTICAL GRID (BOOSTERS & ARMORY) ================= */
+/* ================= 6. TACTICAL GRID (ARMORY) ================= */
 .section-badge-row {
-    margin: 22px 4px 14px 4px;
+    margin: 20px 4px 14px 4px;
 }
 
 .section-glow-title {
-    font-size: 18.5px;
+    font-size: 18px;
     font-weight: 900;
     color: var(--text-primary);
     display: block;
@@ -631,63 +768,37 @@ input, select, textarea {
 }
 
 .section-subtext {
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--text-muted);
 }
 
 .tactical-grid {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
     margin-bottom: 24px;
 }
 
 .tactical-card {
     background: var(--card-surface);
     border: 1px solid var(--card-border);
-    border-radius: 26px;
-    padding: 22px 20px 18px 20px;
+    border-radius: 24px;
+    padding: 20px 18px 16px 18px;
     position: relative;
-    cursor: pointer;
     overflow: hidden;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
-
-.tactical-card:active {
-    transform: scale(0.985);
-    background: var(--card-hover);
-    border-color: var(--neon-cyan);
-    box-shadow: 0 4px 22px var(--neon-cyan-soft);
-}
-
-.card-status-flag {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    padding: 5px 12px;
-    border-radius: 10px;
-    text-transform: uppercase;
-    background: var(--chip-bg);
-    color: var(--text-secondary);
-}
-
-.booster-blue .card-status-flag { background: var(--neon-cyan-soft); color: var(--neon-cyan); }
-.booster-mint .card-status-flag { background: var(--neon-emerald-soft); color: var(--neon-emerald); }
-.booster-purple .card-status-flag { background: var(--neon-purple-soft); color: var(--neon-purple); }
 
 .card-body-layout {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 8px 0 16px 0;
+    margin: 4px 0 16px 0;
 }
 
 .tactical-icon-wrap {
-    width: 62px;
-    height: 62px;
+    width: 58px;
+    height: 58px;
     border-radius: 18px;
     display: flex;
     align-items: center;
@@ -701,14 +812,13 @@ input, select, textarea {
 .icon-purple { background: var(--neon-purple-soft); color: var(--neon-purple); border-color: rgba(189, 0, 255, 0.3); }
 
 .tactical-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 900;
     color: var(--text-primary);
-    line-height: 1.3;
 }
 
 .tactical-desc {
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-secondary);
     margin-top: 4px;
     line-height: 1.45;
@@ -719,71 +829,16 @@ input, select, textarea {
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--card-border);
-    padding-top: 14px;
+    padding-top: 12px;
 }
 
 .tactical-bounty {
     background: var(--neon-cyan-soft);
     color: var(--neon-cyan);
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 900;
     padding: 6px 14px;
     border-radius: 12px;
-}
-
-.tactical-action-arrow {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text-primary);
-}
-
-/* ================= 7. LEADERBOARD & GUILD ================= */
-.guild-hero-box {
-    text-align: center;
-    padding: 26px 18px;
-    border: 1px solid rgba(189, 0, 255, 0.3);
-    background: linear-gradient(180deg, var(--card-surface) 0%, rgba(189, 0, 255, 0.05) 100%);
-}
-
-.guild-pill {
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-    color: var(--neon-purple);
-}
-
-.guild-headline {
-    font-size: 22px;
-    font-weight: 900;
-    margin: 8px 0;
-}
-
-.guild-subtext {
-    font-size: 14.5px;
-    color: var(--text-secondary);
-}
-
-.terminal-input-wrap {
-    display: flex;
-    align-items: center;
-    background: var(--input-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    padding: 8px 10px 8px 16px;
-    margin-bottom: 16px;
-}
-
-.terminal-text-val {
-    flex: 1;
-    font-size: 14px;
-    color: var(--neon-cyan);
-    font-weight: 700;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .cyber-chip-btn {
@@ -803,6 +858,52 @@ input, select, textarea {
     background: var(--neon-cyan-soft);
 }
 
+/* ================= 7. LEADERBOARD & GUILD ================= */
+.guild-hero-box {
+    text-align: center;
+    padding: 24px 18px;
+    border: 1px solid rgba(189, 0, 255, 0.3);
+    background: linear-gradient(180deg, var(--card-surface) 0%, rgba(189, 0, 255, 0.05) 100%);
+}
+
+.guild-pill {
+    font-size: 11.5px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: var(--neon-purple);
+}
+
+.guild-headline {
+    font-size: 21px;
+    font-weight: 900;
+    margin: 8px 0;
+}
+
+.guild-subtext {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+}
+
+.terminal-input-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 8px 10px 8px 16px;
+    margin-bottom: 14px;
+}
+
+.terminal-text-val {
+    flex: 1;
+    font-size: 13.5px;
+    color: var(--neon-cyan);
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .bento-stat-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -811,25 +912,23 @@ input, select, textarea {
 
 .stat-tile {
     text-align: center;
-    padding: 20px 14px;
+    padding: 18px 14px;
 }
 
 .tile-label {
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-muted);
     font-weight: 700;
 }
 
 .tile-val {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 900;
     margin-top: 6px;
     display: block;
 }
 
-.roster-scroll-box {
-    padding: 12px;
-}
+.roster-scroll-box { padding: 12px; }
 
 .roster-dynamic-list {
     display: flex;
@@ -869,68 +968,70 @@ input, select, textarea {
 }
 
 .roster-details { display: flex; flex-direction: column; }
-.roster-title { font-size: 14.5px; font-weight: 800; }
-.roster-sub { font-size: 12px; color: var(--text-muted); }
+.roster-title { font-size: 14px; font-weight: 800; }
+.roster-sub { font-size: 11.5px; color: var(--text-muted); }
 
 .cyber-chip {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 800;
-    padding: 5px 11px;
+    padding: 4px 10px;
     border-radius: 8px;
-    text-transform: uppercase;
 }
 
-.chip-success { background: var(--neon-emerald-soft); color: var(--neon-emerald); border: 1px solid rgba(0, 255, 157, 0.3); }
-.chip-pending { background: rgba(255, 184, 0, 0.12); color: var(--neon-warning); border: 1px solid rgba(255, 184, 0, 0.3); }
-.chip-danger { background: var(--neon-alert-soft); color: var(--neon-alert); border: 1px solid rgba(255, 51, 102, 0.3); }
+.chip-success {
+    background: var(--neon-emerald-soft);
+    color: var(--neon-emerald);
+    border: 1px solid rgba(0, 255, 157, 0.3);
+}
 
 /* ================= 8. PILOT / PROFILE ================= */
 .pilot-dossier-card {
     text-align: center;
-    padding: 28px 18px;
+    padding: 26px 18px;
 }
 
 .dossier-avatar-wrap {
     position: relative;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 16px auto;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 14px auto;
 }
 
 .dossier-avatar-core {
     width: 100%;
     height: 100%;
-    border-radius: 24px;
+    border-radius: 22px;
     background: var(--input-bg);
     border: 2px solid var(--neon-cyan);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 900;
     color: var(--neon-cyan);
-    box-shadow: 0 0 22px var(--neon-cyan-soft);
+    box-shadow: 0 0 20px var(--neon-cyan-soft);
 }
 
-.pilot-identity-name { font-size: 21px; font-weight: 900; }
-.pilot-telegram-tag { font-size: 14px; color: var(--text-muted); display: block; margin-top: 4px; }
+.pilot-identity-name { font-size: 20px; font-weight: 900; }
+.pilot-telegram-tag { font-size: 13.5px; color: var(--text-muted); display: block; margin-top: 3px; }
+
 .pilot-terminal-uuid {
     display: inline-block;
     background: var(--chip-bg);
     color: var(--text-secondary);
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 700;
-    padding: 5px 12px;
+    padding: 4px 12px;
     border-radius: 12px;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .dossier-stat-deck {
     display: flex;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 18px;
     border-top: 1px solid var(--card-border);
-    padding-top: 18px;
+    padding-top: 16px;
 }
 
 .deck-cell {
@@ -940,18 +1041,16 @@ input, select, textarea {
     padding: 12px;
 }
 
-.deck-lbl { font-size: 12px; color: var(--text-muted); font-weight: 700; display: block; }
-.deck-val { font-size: 17px; font-weight: 800; margin-top: 4px; display: block; }
+.deck-lbl { font-size: 11.5px; color: var(--text-muted); font-weight: 700; display: block; }
+.deck-val { font-size: 16px; font-weight: 800; margin-top: 4px; display: block; }
 
-.action-list-dock {
-    padding: 6px 14px;
-}
+.action-list-dock { padding: 4px 14px; }
 
 .dock-action-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 17px 4px;
+    padding: 16px 4px;
     border-bottom: 1px solid var(--card-border);
     cursor: pointer;
     text-decoration: none;
@@ -972,26 +1071,26 @@ input, select, textarea {
     color: var(--neon-cyan);
 }
 
-.dock-title { font-size: 15.5px; font-weight: 800; display: block; }
+.dock-title { font-size: 15px; font-weight: 800; display: block; }
 .chevron-arrow { color: var(--text-muted); }
 
 .cyber-footer-tag {
     text-align: center;
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-muted);
     margin-top: 20px;
     font-weight: 700;
 }
 
-/* ================= 9. CYBER BUTTON ENGINE ================= */
+/* ================= 9. BUTTON ENGINES ================= */
 .cyber-btn {
     width: 100%;
     background: var(--neon-cyan);
     color: #04101A;
     border: none;
-    padding: 16px 22px;
+    padding: 15px 22px;
     border-radius: 18px;
-    font-size: 15.5px;
+    font-size: 15px;
     font-weight: 900;
     cursor: pointer;
     display: flex;
@@ -1013,14 +1112,14 @@ input, select, textarea {
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    padding: 14px;
-    font-size: 14.5px;
+    padding: 13px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
-/* ================= 10. MODALS & REVIVE ENGINE ================= */
+/* ================= 10. MODALS ================= */
 .cyber-modal-overlay {
     position: fixed;
     inset: 0;
@@ -1044,7 +1143,7 @@ input, select, textarea {
     background: var(--card-surface);
     border: 1.5px solid var(--card-border);
     border-radius: 28px;
-    padding: 30px 20px;
+    padding: 28px 20px;
     width: 100%;
     max-width: 380px;
     text-align: center;
@@ -1054,31 +1153,31 @@ input, select, textarea {
 .neon-border { border-color: rgba(0, 240, 255, 0.4); }
 
 .modal-tag-badge {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 900;
     letter-spacing: 1px;
     color: var(--neon-cyan);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .holo-icon-wrap {
     color: var(--neon-cyan);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     display: flex;
     justify-content: center;
 }
 
-.modal-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-.modal-subtext { font-size: 14.5px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; }
+.modal-title { font-size: 21px; font-weight: 900; margin-bottom: 6px; }
+.modal-subtext { font-size: 14px; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; }
 
 .cyber-terminal-card {
     background: var(--input-bg);
     border: 1px dashed rgba(0, 240, 255, 0.4);
     border-radius: 16px;
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 11px;
+    gap: 10px;
     text-align: left;
 }
 
@@ -1086,13 +1185,13 @@ input, select, textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    font-size: 13.5px;
 }
 
 .t-muted { color: var(--text-secondary); }
 .t-light { color: var(--text-primary); }
 
-/* ================= 11. BOTTOM DRAWERS (STREAK GIFTS) ================= */
+/* ================= 11. BOTTOM DRAWERS (PROTOCOL REWARDS) ================= */
 .cyber-drawer-overlay {
     position: fixed;
     inset: 0;
@@ -1133,10 +1232,10 @@ input, select, textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
-.drawer-header-row h3 { font-size: 19px; font-weight: 900; }
+.drawer-header-row h3 { font-size: 18.5px; font-weight: 900; }
 
 .drawer-close-btn {
     background: var(--chip-bg);
@@ -1150,17 +1249,17 @@ input, select, textarea {
 }
 
 .drawer-streak-counter {
-    font-size: 14.5px;
+    font-size: 14px;
     color: var(--neon-cyan);
     font-weight: 800;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .cyber-checkin-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 }
 
 .cyber-checkin-tile {
@@ -1176,11 +1275,11 @@ input, select, textarea {
     background: var(--neon-cyan-soft);
 }
 
-.cyber-checkin-tile.claimed { opacity: 0.45; }
-.tile-day-lbl { font-size: 12px; color: var(--text-muted); font-weight: 700; display: block; }
-.tile-pts-val { font-size: 14px; font-weight: 900; color: var(--text-primary); margin-top: 4px; display: block; }
+.cyber-checkin-tile.claimed { opacity: 0.4; }
+.tile-day-lbl { font-size: 11.5px; color: var(--text-muted); font-weight: 700; display: block; }
+.tile-pts-val { font-size: 13.5px; font-weight: 900; color: var(--text-primary); margin-top: 4px; display: block; }
 
-/* ================= 12. HUD BOTTOM NAVIGATION ================= */
+/* ================= 12. BOTTOM NAVIGATION ================= */
 .cyber-hud-nav {
     position: fixed;
     bottom: 0;
@@ -1205,7 +1304,7 @@ input, select, textarea {
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 800;
     cursor: pointer;
     transition: color 0.2s ease;
@@ -1235,9 +1334,9 @@ input, select, textarea {
     background: var(--card-surface);
     border: 1.5px solid var(--neon-cyan);
     color: var(--text-primary);
-    padding: 13px 16px;
+    padding: 12px 16px;
     border-radius: 14px;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 800;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -1257,7 +1356,7 @@ input, select, textarea {
 .loading-state {
     text-align: center;
     padding: 24px;
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--text-muted);
     font-weight: 700;
 }
