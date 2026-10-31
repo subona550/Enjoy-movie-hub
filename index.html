@@ -25,12 +25,26 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <!-- External Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=9.0.0">
+    <link rel="stylesheet" href="style.css?v=9.1.0">
 </head>
 <body class="cyber-theme">
 
-    <!-- Toast Notification Viewport -->
+    <!-- Global Toast Notification Viewport -->
     <div id="toast-container" class="toast-viewport" aria-live="polite"></div>
+
+    <!-- Admin Controllable System Maintenance Screen -->
+    <div id="maintenance-screen" class="cyber-boot-screen" style="display: none; z-index: 100000;">
+        <div class="boot-matrix" style="padding: 24px; max-width: 420px;">
+            <div style="font-size: 50px; margin-bottom: 12px;">🛠️</div>
+            <div class="boot-logo" style="color: var(--neon-alert);">SYSTEM <span>OFFLINE</span></div>
+            <div class="boot-status-text" id="maintenance-msg" style="color: var(--text-secondary); margin: 14px 0 24px 0; font-size: 13.5px; line-height: 1.6;">
+                সার্ভার রক্ষণাবেক্ষণ চলছে। অ্যাডমিন সিস্টেমের কাজ সম্পন্ন হলে অ্যাপটি পুনরায় সচল হবে।
+            </div>
+            <button type="button" class="cyber-btn compact-btn" onclick="location.reload()">
+                🔄 রিলোড দিন
+            </button>
+        </div>
+    </div>
 
     <!-- Cyber Boot Loader (Splash Screen) -->
     <div id="splash-screen" class="cyber-boot-screen">
@@ -41,7 +55,7 @@
                 <div class="core-dot"></div>
             </div>
             <div class="boot-logo">AETHERIA<span>_ARCADE</span></div>
-            <div class="boot-status-text" id="boot-status">SYSTEM PROTOCOLS INITIALIZING...</div>
+            <div class="boot-status-text" id="boot-status">CONNECTING CLOUD MATRIX...</div>
             <div class="boot-progress-track">
                 <div class="boot-progress-glow" id="splash-progress"></div>
             </div>
@@ -53,7 +67,7 @@
         <div class="hud-profile-chip" onclick="switchTab('profile')" role="button" tabindex="0">
             <div class="pilot-avatar-frame">
                 <div class="pilot-avatar-img" id="header-avatar">P</div>
-                <span class="pilot-level-tag">V9</span>
+                <span class="pilot-level-tag" id="header-level-tag">V9</span>
             </div>
             <div class="pilot-status-column">
                 <div class="pilot-title-row">
@@ -65,14 +79,14 @@
         </div>
 
         <div class="hud-quick-controls">
-            <!-- Audio Toggle -->
+            <!-- Audio FX Toggle -->
             <button type="button" class="hud-circle-btn" id="btn-audio-toggle" onclick="toggleAudioFx()" title="Audio Toggle" aria-label="Audio FX">
                 <svg id="audio-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
                 </svg>
             </button>
-            <!-- Day/Night Theme Toggle -->
+            <!-- Dark / Light Theme Toggle -->
             <button type="button" class="hud-circle-btn" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
                 <span id="theme-icon">🌙</span>
             </button>
@@ -85,6 +99,12 @@
 
     <!-- Main Viewport Deck -->
     <main class="app-viewport">
+
+        <!-- Admin Live Notice / Announcement Banner -->
+        <div id="admin-broadcast-banner" class="economy-explainer-banner" style="display: none; margin-bottom: 15px; background: rgba(255, 184, 0, 0.08); border-color: rgba(255, 184, 0, 0.35); color: var(--neon-gold);">
+            <span style="font-size: 16px;">📢</span>
+            <span id="admin-broadcast-text">জরুরি আপডেট চলছে...</span>
+        </div>
 
         <!-- ================= 1. HOME VIEW: TASKS & TICKETS HUB ================= -->
         <section id="home" class="view-panel active">
@@ -114,7 +134,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                         <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
                     </svg>
-                    <span data-i18n="msg_economy_hint">টাস্ক ও রেফার থেকে টিকেট সংগ্রহ করুন ➔ গেম খেলে রূপান্তরযোগ্য CELLS আয় করুন!</span>
+                    <span id="txt-economy-hint" data-i18n="msg_economy_hint">টাস্ক ও রেফার থেকে টিকেট সংগ্রহ করুন ➔ গেম খেলে রূপান্তরযোগ্য CELLS আয় করুন!</span>
                 </div>
 
                 <div class="quick-action-strip">
@@ -122,23 +142,23 @@
                         <span data-i18n="btn_daily_streak">⚡ ডেইলি বোনাস টিকেট</span>
                     </button>
                     <button type="button" class="cyber-streak-pill accent-btn" onclick="switchTab('game')">
-                        <span data-i18n="btn_play_arena">🎮 এরেনায় যান (১ টিকেট)</span>
+                        <span id="btn-quick-play-lbl">🎮 এরেনায় যান (১ টিকেট)</span>
                     </button>
                 </div>
             </div>
 
-            <!-- SECTION A: SPONSORED AD STATIONS (STRICT 1-MIN COOLDOWN -> GIVES TICKETS) -->
+            <!-- SECTION A: SPONSORED AD STATIONS (DYNAMIC COOLDOWN & ADMIN CONTROLLED) -->
             <div class="section-badge-row">
                 <div class="badge-title-wrap">
                     <span class="section-glow-title" data-i18n="title_ad_missions">📺 স্পনসর ভিডিও ও অ্যাড মিশন</span>
-                    <span class="section-sub-glow" data-i18n="sub_ad_missions">ভিডিও দেখে ফ্রি এন্ট্রি টিকেট রিফিল করুন (১ মিনিট কুলডাউন)</span>
+                    <span class="section-sub-glow" id="sub-ad-missions-text" data-i18n="sub_ad_missions">ভিডিও দেখে ফ্রি এন্ট্রি টিকেট রিফিল করুন (১ মিনিট কুলডাউন)</span>
                 </div>
             </div>
             <div id="ad-tasks-container" class="tasks-vertical-stack">
-                <!-- Adsgram, Monetag, Adsterra Dynamic Elements -->
+                <div class="loading-state" data-i18n="msg_syncing">ডাটা সিঙ্ক হচ্ছে...</div>
             </div>
 
-            <!-- SECTION B: TELEGRAM SOCIAL MISSIONS -->
+            <!-- SECTION B: TELEGRAM SOCIAL MISSIONS (LOADED DYNAMICALLY FROM ADMIN) -->
             <div class="section-badge-row" style="margin-top: 26px;">
                 <div class="badge-title-wrap">
                     <span class="section-glow-title" data-i18n="title_social_missions">📢 অফিসিয়াল সোশ্যাল মিশন</span>
@@ -146,10 +166,10 @@
                 </div>
             </div>
             <div id="telegram-tasks-container" class="tasks-vertical-stack">
-                <!-- Telegram Channel, Group & Partner Cards -->
+                <div class="loading-state" data-i18n="msg_syncing">ডাটা সিঙ্ক হচ্ছে...</div>
             </div>
 
-            <!-- SECTION C: CUSTOM / PARTNER TASKS -->
+            <!-- SECTION C: CUSTOM / PARTNER MISSIONS -->
             <div id="custom-tasks-wrapper" style="display: none; margin-top: 24px;">
                 <div class="section-badge-row">
                     <span class="section-glow-title" data-i18n="title_partner_missions">🌐 স্পেশাল ও পার্টনার মিশন</span>
@@ -157,7 +177,7 @@
                 <div id="custom-tasks-container" class="tasks-vertical-stack"></div>
             </div>
 
-            <!-- Community Transparency Card -->
+            <!-- Dynamic Community Transparency Card -->
             <div class="bento-box field-training-card" onclick="openCommunityChannel()" style="margin-top: 18px;">
                 <div class="field-training-left">
                     <div class="training-icon-badge">
@@ -166,8 +186,8 @@
                         </svg>
                     </div>
                     <div class="training-copy">
-                        <h4 data-i18n="card_community_head">অফিসিয়াল কমিউনিটি ও স্বচ্ছতা</h4>
-                        <p data-i18n="card_community_sub">দৈনিক আপডেট, টিকিট গিভঅ্যাওয়ে ও ডিস্ট্রিবিউশন প্রুফ</p>
+                        <h4 id="community-card-title" data-i18n="card_community_head">অফিসিয়াল কমিউনিটি ও স্বচ্ছতা</h4>
+                        <p id="community-card-sub" data-i18n="card_community_sub">দৈনিক আপডেট, টিকিট গিভঅ্যাওয়ে ও ডিস্ট্রিবিউশন প্রুফ</p>
                     </div>
                 </div>
                 <div class="field-training-action">
@@ -203,7 +223,7 @@
                 <div class="console-header">
                     <div class="console-title-wrap">
                         <span class="console-pill" id="wave-indicator">WAVE 1</span>
-                        <h4 class="console-name">Reflex Grid Core</h4>
+                        <h4 class="console-name" id="arcade-game-name">Reflex Grid Core</h4>
                     </div>
                     <div class="console-metrics">
                         <span class="combo-badge" id="combo-multiplier">1X COMBO</span>
@@ -225,10 +245,10 @@
                             <span class="rule-chip chip-red" data-i18n="rule_red">⚠️ Red Hazard = শিল্ড লস!</span>
                         </div>
                         <div class="entry-cost-banner">
-                            <span data-i18n="lbl_game_cost">🎮 এন্ট্রি খরচ: ১টি টিকেট (1 Ticket)</span>
+                            <span id="display-game-entry-cost">🎮 এন্ট্রি খরচ: ১টি টিকেট (1 Ticket)</span>
                         </div>
                         <div class="game-reward-projection">
-                            <span data-i18n="lbl_reward_rate">💰 রিওয়ার্ড ফর্মুলা: প্রতি ৪ স্কোরে = ১ Energy Cell</span>
+                            <span id="display-reward-rate">💰 রিওয়ার্ড ফর্মুলা: প্রতি ৪ স্কোরে = ১ Energy Cell</span>
                         </div>
                         <button type="button" class="cyber-btn primary-glow match-launch-btn" onclick="startArcadeMatch(event)">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -306,7 +326,7 @@
             <div class="bento-box">
                 <h4 style="font-size: 15.5px; margin-bottom: 6px;" data-i18n="head_manual_ton">ম্যানুয়াল TON Address সেটআপ</h4>
                 <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;" data-i18n="sub_manual_ton">
-                    যদি TON Connect এ কোনো ত্রুটি হয়, তবে Tonkeeper বা Telegram Wallet (v4R2) অ্যাড্রেস পেস্ট করে সেভ করুন।
+                    যদি TON Connect এ কোনো ত্রুটি হয়, তবে Tonkeeper বা Telegram Wallet অ্যাড্রেস পেস্ট করে সেভ করুন।
                 </p>
                 <div class="terminal-input-wrap">
                     <input type="text" id="manual-ton-address-input" placeholder="EQ... / UQ... Address" class="cyber-input" spellcheck="false" autocomplete="off" />
@@ -330,9 +350,10 @@
                     </div>
                 </div>
 
+                <!-- Admin Controlled Withdrawal Policy Card -->
                 <div class="notice-policy-box" style="margin: 16px 0;">
                     <h4 data-i18n="head_withdraw_rule">📌 উইথড্র নীতিমালা:</h4>
-                    <p data-i18n="body_withdraw_rule">নূন্যতম উইথড্রল রিকোয়ারমেন্ট ১,০০০ CELLS। সাবমিট করার ২৪ থেকে ৪৮ ঘণ্টার মধ্যে অ্যাড্রেসে ভেরিফিকেশন সহ ডিস্ট্রিবিউট হয়।</p>
+                    <p id="display-withdraw-policy" data-i18n="body_withdraw_rule">নূন্যতম উইথড্রল রিকোয়ারমেন্ট ১,০০০ CELLS। সাবমিট করার ২৪ থেকে ৪৮ ঘণ্টার মধ্যে অ্যাড্রেসে ভেরিফিকেশন সহ ডিস্ট্রিবিউট হয়।</p>
                 </div>
 
                 <button type="button" class="cyber-btn primary-glow" onclick="handleWithdrawRequest()">
@@ -351,15 +372,15 @@
                 <p class="guild-subtext" data-i18n="sub_stall_leaderboard">কোয়ান্টাম এরেনায় সর্বোচ্চ ব্যক্তিগত স্কোর অর্জনকারীদের তালিকা।</p>
             </div>
 
-            <!-- Referral Card: Inviting Gives Game Tickets -->
+            <!-- Referral Card (Admin Controlled Bonus Tickets) -->
             <div class="bento-box invite-terminal">
                 <div class="invite-banner-header">
-                    <span class="reward-pill ticket-highlight-pill" data-i18n="banner_ref_ticket">
+                    <span class="reward-pill ticket-highlight-pill" id="display-ref-badge" data-i18n="banner_ref_ticket">
                         🎁 প্রতি ফ্রেন্ড ইনভাইটে ৩টি টিকেট (+৩ 🎟️) এন্ট্রি বোনাস!
                     </span>
                 </div>
 
-                <p class="invite-explainer" data-i18n="msg_ref_explainer">
+                <p class="invite-explainer" id="display-ref-explainer" data-i18n="msg_ref_explainer">
                     বন্ধুদের মিনি-অ্যাপে আমন্ত্রণ জানান। প্রতি রেফারে ফ্রি গেম টিকেট পাবেন যা দিয়ে গেম খেলে আনলিমিটেড CELLS আয় করা যাবে।
                 </p>
 
@@ -370,7 +391,7 @@
 
                 <button type="button" class="cyber-btn primary-glow" onclick="shareReferralLink()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    <span data-i18n="btn_invite_friends">বন্ধুদের ইনভাইট করুন (+৩ টিকেট)</span>
+                    <span id="btn-invite-text" data-i18n="btn_invite_friends">বন্ধুদের ইনভাইট করুন (+৩ টিকেট)</span>
                 </button>
             </div>
 
@@ -477,7 +498,7 @@
                 </div>
             </div>
 
-            <!-- Profile Nav Menu Items -->
+            <!-- Profile Nav Action Items -->
             <div class="bento-box action-list-dock">
                 <!-- Check-in Drawer trigger -->
                 <div class="dock-action-row" onclick="openCheckInFullView()" role="button" tabindex="0">
@@ -490,19 +511,30 @@
                     <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
 
-                <!-- Community Direct Link -->
+                <!-- Community Direct Link (Admin Controlled) -->
                 <div class="dock-action-row" onclick="openCommunityChannel()" role="button" tabindex="0">
                     <div class="dock-left-cell">
                         <div class="dock-icon-box">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
                         </div>
-                        <span class="dock-title" data-i18n="menu_official_tg">অফিসিয়াল টেলিগ্রাম চ্যানেল</span>
+                        <span class="dock-title" id="profile-community-name" data-i18n="menu_official_tg">অফিসিয়াল টেলিগ্রাম চ্যানেল</span>
+                    </div>
+                    <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
+
+                <!-- Admin Support / Contact Link -->
+                <div class="dock-action-row" id="dock-support-row" onclick="openAdminSupport()" role="button" tabindex="0">
+                    <div class="dock-left-cell">
+                        <div class="dock-icon-box" style="color: var(--neon-gold);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <span class="dock-title">সরাসরি অ্যাডমিন সাপোর্ট</span>
                     </div>
                     <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
             </div>
 
-            <div class="cyber-footer-tag">Aetheria Arcade v9.0.0 • TON Network Reflex Grid</div>
+            <div class="cyber-footer-tag" id="app-footer-version">Aetheria Arcade v9.1.0 • TON Network Reflex Grid</div>
         </section>
 
     </main>
@@ -547,7 +579,7 @@
         </div>
     </div>
 
-    <!-- ================= 7-DAY STREAK PROTOCOL DRAWER ================= -->
+    <!-- ================= 7-DAY STREAK PROTOCOL DRAWER (DYNAMIC VALUES) ================= -->
     <div id="checkin-fullview" class="cyber-drawer-overlay" onclick="closeCheckInFullView()">
         <div class="cyber-drawer-sheet" onclick="event.stopPropagation()">
             <div class="drawer-drag-pill"></div>
@@ -595,6 +627,6 @@
     </nav>
 
     <!-- Client Runtime Logic -->
-    <script src="app.js?v=9.0.0"></script>
+    <script src="app.js?v=9.1.0"></script>
 </body>
 </html>
