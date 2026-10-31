@@ -1,17 +1,207 @@
 /*** 
- * AETHERIA ARCADE - REALTIME CYBER REFLEX ENGINE (v8.0.0 PRODUCTION)
- * - 100% Policy-Compliant for Adsgram & Telegram Mini Apps
- * - Wave-Based Reflex Grid (Cyan Nodes, Gold Targets & Red Glitch Hazards)
- * - Natural Gaming Placements: Second Chance Shield & Emergency Power Refills
- * - Armory Hardware Modules & Realtime Firebase Leaderboard
+ * AETHERIA ARCADE - REALTIME CYBER ENGINE (v9.0.0 PRODUCTION)
+ * =============================================================
+ * 1. Strict Ticket Economy:
+ *    - Tasks, Ads, Daily Check-in & Referrals ONLY grant Game Tickets (🎟️)
+ *    - Playing the Quantum Reflex Game (1 Ticket/entry) is the ONLY way to earn Energy Cells (💰)
+ * 2. Complete i18n Bilingual System (Bangla & English)
+ * 3. Professional 3D Podium Stall Leaderboard (1st, 2nd, 3rd + Runners-up)
+ * 4. 60s Live Ad Cooldown Pipeline & TON Connect UI
  */
 
-// ================= ১. কনফিগারেশন ও গেম কনস্ট্যান্ট =================
-const BACKEND_API_URL = "https://aetheria-arcade-api.rakibkdbb.workers.dev"; 
+// ================= ১. গ্লোবাল কনফিগারেশন =================
 const DEFAULT_BOT_USERNAME = "AetheriaArcadeBot"; 
-let ADSGRAM_BLOCK_ID = "26019"; // Adsgram Block ID
+let ADSGRAM_BLOCK_ID = "26019"; // আপনার Adsgram ব্লক আইডি
+let telegramCommunityUrl = "https://t.me/AetheriaArcadeChannel";
+const AD_COOLDOWN_TIME_MS = 60 * 1000; // ৬০ সেকেন্ড কুলডাউন
 
-// ================= ২. সাইবার ওয়েব অডিও সিন্থেসাইজার =================
+// ================= ২. বহুভাষিক অনুবাদ অভিধান (i18n Dictionary) =================
+let currentLang = localStorage.getItem('arcade_lang') || 'bn';
+
+const I18N_STRINGS = {
+    bn: {
+        status_online: "● অনলাইন অপারেটর",
+        lbl_ticket_stash: "বর্তমান এন্ট্রি টিকেট",
+        unit_tickets: "টিকেট",
+        msg_economy_hint: "টাস্ক ও রেফার থেকে টিকেট সংগ্রহ করুন ➔ গেম খেলে রূপান্তরযোগ্য CELLS আয় করুন!",
+        btn_daily_streak: "⚡ ডেইলি বোনাস টিকেট",
+        btn_play_arena: "🎮 এরেনায় যান (১ টিকেট)",
+        title_ad_missions: "📺 স্পনসর ভিডিও ও অ্যাড মিশন",
+        sub_ad_missions: "ভিডিও দেখে ফ্রি এন্ট্রি টিকেট রিফিল করুন (১ মিনিট কুলডাউন)",
+        title_social_missions: "📢 অফিসিয়াল সোশ্যাল মিশন",
+        sub_social_missions: "কমিউনিটি চ্যানেলে যুক্ত হয়ে পান এক্সট্রা বোনাস টিকেট",
+        title_partner_missions: "🌐 স্পেশাল ও পার্টনার মিশন",
+        card_community_head: "অফিসিয়াল কমিউনিটি ও স্বচ্ছতা",
+        card_community_sub: "দৈনিক আপডেট, টিকিট গিভঅ্যাওয়ে ও ডিস্ট্রিবিউশন প্রুফ",
+        btn_join: "জয়েন",
+        btn_claim: "ক্লেইম",
+        btn_watch: "দেখুন",
+        btn_done: "✔ সম্পন্ন",
+        lbl_available_tickets: "উপলব্ধ এন্ট্রি টিকেট",
+        btn_get_more_tickets: "+ টিকেট সংগ্রহ করুন",
+        lbl_score: "স্কোর:",
+        rule_cyan: "🎯 Cyan = +10 PTS",
+        rule_gold: "⭐ Gold = +30 PTS",
+        rule_red: "⚠️ Red Hazard = শিল্ড লস!",
+        lbl_game_cost: "🎮 এন্ট্রি খরচ: ১টি টিকেট (1 Ticket)",
+        lbl_reward_rate: "💰 রিওয়ার্ড ফর্মুলা: প্রতি ৪ স্কোরে = ১ Energy Cell",
+        btn_start_match: "ম্যাচ শুরু করুন",
+        msg_game_tip: "টার্গেটে নিখুঁত ট্যাপ করে পয়েন্ট আয় করুন এবং গেম শেষে ব্যালেন্সে ক্রিপ্টো রিওয়ার্ড বুঝে নিন।",
+        lbl_shield_life: "🛡️ কোর শিল্ড স্থিতিশীলতা",
+        title_crypto_vault: "ট্যাকটিক্যাল ক্রিপ্টো ওয়ালেট",
+        sub_crypto_vault: "গেমপ্লে থেকে অর্জিত Energy Cells জমা করুন এবং সরাসরি আপনার TON ওয়ালেটে ট্রান্সফার করুন।",
+        lbl_connected_wallet: "কানেক্টেড ওয়ালেট:",
+        head_manual_ton: "ম্যানুয়াল TON Address সেটআপ",
+        sub_manual_ton: "যদি TON Connect এ কোনো ত্রুটি হয়, তবে Tonkeeper বা Telegram Wallet অ্যাড্রেস পেস্ট করে সেভ করুন।",
+        btn_save: "সেভ",
+        title_cashout_box: "রিওয়ার্ড ক্যাশআউট ডেক",
+        lbl_earned_cells: "মোট অর্জিত Cells",
+        lbl_estimated_ton: "আনুমানিক মূল্য",
+        head_withdraw_rule: "📌 উইথড্র নীতিমালা:",
+        body_withdraw_rule: "নূন্যতম উইথড্রল রিকোয়ারমেন্ট ১,০০০ CELLS। সাবমিট করার ২৪ থেকে ৪৮ ঘণ্টার মধ্যে অ্যাড্রেসে ভেরিফিকেশন সহ ডিস্ট্রিবিউট হয়।",
+        btn_submit_withdraw: "উইথড্রল রিকোয়েস্ট সাবমিট করুন",
+        title_stall_leaderboard: "শীর্ষ অপারেটর লিডারবোর্ড",
+        sub_stall_leaderboard: "কোয়ান্টাম এরেনায় সর্বোচ্চ ব্যক্তিগত স্কোর অর্জনকারীদের তালিকা।",
+        banner_ref_ticket: "🎁 প্রতি ফ্রেন্ড ইনভাইটে ৩টি টিকেট (+৩ 🎟️) এন্ট্রি বোনাস!",
+        msg_ref_explainer: "বন্ধুদের মিনি-অ্যাপে আমন্ত্রণ জানান। প্রতি রেফারে ফ্রি গেম টিকেট পাবেন যা দিয়ে গেম খেলে আনলিমিটেড CELLS আয় করা যাবে।",
+        btn_copy: "কপি",
+        btn_invite_friends: "বন্ধুদের ইনভাইট করুন (+৩ টিকেট)",
+        lbl_total_invites: "আমন্ত্রিত ফ্রেন্ডস",
+        lbl_best_score: "ব্যক্তিগত সেরা স্কোর",
+        title_challengers: "রানার্স-আপ পাইলট তালিকা",
+        msg_syncing: "ডাটা সিঙ্ক হচ্ছে...",
+        lbl_crypto_balance: "মোট অর্জিত সেল",
+        lbl_total_tickets: "এন্ট্রি টিকেট",
+        menu_streak_protocol: "৭-দিনের বোনাস টিকেট ড্রপ",
+        menu_official_tg: "অফিসিয়াল টেলিগ্রাম চ্যানেল",
+        tag_system_breached: "SYSTEM BREACHED",
+        modal_match_finished: "মিশন সমাপ্ত!",
+        lbl_match_score: "ম্যাচ স্কোর:",
+        lbl_earned_rewards: "অর্জিত রিওয়ার্ড (Cells):",
+        lbl_personal_record: "সেরা রেকর্ড:",
+        btn_revive_shield: "বিজ্ঞাপন দেখে শিল্ড রিভাইভ করুন (+১)",
+        btn_claim_and_exit: "রিওয়ার্ড ব্যালেন্সে যোগ করুন ও বের হন",
+        title_streak_drawer: "৭-দিনের বোনাস টিকেট ড্রপ",
+        btn_claim_today: "আজকের ফ্রি টিকেট নিন",
+        btn_claimed_today: "✅ আজকের টিকেট নেওয়া হয়েছে",
+        nav_tasks: "টাস্ক",
+        nav_game: "গেম",
+        nav_wallet: "ওয়ালেট",
+        nav_rankings: "র‍্যাঙ্কিং",
+        nav_pilot: "পাইলট",
+        toast_no_tickets: "পর্যাপ্ত টিকেট নেই! টাস্ক পেজ থেকে টিকেট সংগ্রহ করুন।",
+        toast_copied: "রেফারেল লিংক কপি হয়েছে!",
+        toast_wallet_connected: "TON Wallet সফলভাবে কানেক্ট হয়েছে!",
+        toast_withdraw_min: "নূন্যতম ১,০০০ CELLS প্রয়োজন উইথড্র করার জন্য!",
+        toast_withdraw_success: "উইথড্রল রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!"
+    },
+    en: {
+        status_online: "● Online Operator",
+        lbl_ticket_stash: "Current Entry Tickets",
+        unit_tickets: "Tickets",
+        msg_economy_hint: "Earn Tickets from Tasks & Invites ➔ Play Games to win convertible CELLS!",
+        btn_daily_streak: "⚡ Daily Streak Tickets",
+        btn_play_arena: "🎮 Enter Arena (1 Ticket)",
+        title_ad_missions: "📺 Sponsored Video Missions",
+        sub_ad_missions: "Watch videos to refill free entry tickets (1-min cooldown)",
+        title_social_missions: "📢 Official Social Missions",
+        sub_social_missions: "Join community channels to claim bonus tickets",
+        title_partner_missions: "🌐 Partner & Special Missions",
+        card_community_head: "Official Community & Proofs",
+        card_community_sub: "Daily news, ticket drops & distribution logs",
+        btn_join: "Join",
+        btn_claim: "Claim",
+        btn_watch: "Watch",
+        btn_done: "✔ Done",
+        lbl_available_tickets: "Available Entry Tickets",
+        btn_get_more_tickets: "+ Get More Tickets",
+        lbl_score: "Score:",
+        rule_cyan: "🎯 Cyan = +10 PTS",
+        rule_gold: "⭐ Gold = +30 PTS",
+        rule_red: "⚠️ Red Hazard = Shield Drop!",
+        lbl_game_cost: "🎮 Entry Cost: 1 Ticket",
+        lbl_reward_rate: "💰 Reward Formula: 4 Score = 1 Energy Cell",
+        btn_start_match: "Start Match",
+        msg_game_tip: "Tap nodes swiftly to rack up score and convert it into crypto Cells balance.",
+        lbl_shield_life: "🛡️ Core Shield Life",
+        title_crypto_vault: "Tactical Crypto Vault",
+        sub_crypto_vault: "Store Energy Cells won in gameplay and withdraw directly to your TON Wallet.",
+        lbl_connected_wallet: "Connected Wallet:",
+        head_manual_ton: "Manual TON Address Setup",
+        sub_manual_ton: "If TON Connect fails, paste and save your Tonkeeper or Telegram Wallet address.",
+        btn_save: "Save",
+        title_cashout_box: "Cashout & Conversion Deck",
+        lbl_earned_cells: "Total Earned Cells",
+        lbl_estimated_ton: "Estimated Value",
+        head_withdraw_rule: "📌 Withdrawal Policy:",
+        body_withdraw_rule: "Minimum withdrawal requirement is 1,000 CELLS. Distributed within 24-48 hours after on-chain validation.",
+        btn_submit_withdraw: "Submit Cashout Request",
+        title_stall_leaderboard: "Top Operator Leaderboard",
+        sub_stall_leaderboard: "Global roster of pilots with highest combat scores in Quantum Arena.",
+        banner_ref_ticket: "🎁 Earn 3 Free Tickets (+3 🎟️) per friend invited!",
+        msg_ref_explainer: "Invite friends to the mini-app. Get free tickets per invite and use them to win real Cells.",
+        btn_copy: "Copy",
+        btn_invite_friends: "Invite Friends (+3 Tickets)",
+        lbl_total_invites: "Invited Friends",
+        lbl_best_score: "Personal High Score",
+        title_challengers: "Runner-Up Operators",
+        msg_syncing: "Syncing data...",
+        lbl_crypto_balance: "Total Cells Earned",
+        lbl_total_tickets: "Entry Tickets",
+        menu_streak_protocol: "7-Day Protocol Ticket Drops",
+        menu_official_tg: "Official Telegram Channel",
+        tag_system_breached: "SYSTEM BREACHED",
+        modal_match_finished: "Mission Debriefing",
+        lbl_match_score: "Match Score:",
+        lbl_earned_rewards: "Earned Rewards (Cells):",
+        lbl_personal_record: "High Record:",
+        btn_revive_shield: "Watch Ad to Revive Shield (+1)",
+        btn_claim_and_exit: "Claim Cells & Debrief",
+        title_streak_drawer: "7-Day Bonus Ticket Protocol",
+        btn_claim_today: "Claim Today's Free Ticket",
+        btn_claimed_today: "✅ Claimed for Today",
+        nav_tasks: "Tasks",
+        nav_game: "Game",
+        nav_wallet: "Wallet",
+        nav_rankings: "Rankings",
+        nav_pilot: "Pilot",
+        toast_no_tickets: "Not enough tickets! Earn tickets from the Tasks hub.",
+        toast_copied: "Referral link copied!",
+        toast_wallet_connected: "TON Wallet connected successfully!",
+        toast_withdraw_min: "Minimum 1,000 CELLS required to cash out!",
+        toast_withdraw_success: "Withdrawal request dispatched successfully!"
+    }
+};
+
+function t(key) {
+    return I18N_STRINGS[currentLang][key] || I18N_STRINGS['bn'][key] || key;
+}
+
+function applyLanguage() {
+    document.documentElement.setAttribute('data-lang', currentLang);
+    const langBtn = document.getElementById('lang-indicator');
+    if (langBtn) langBtn.innerText = currentLang.toUpperCase();
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key && I18N_STRINGS[currentLang][key]) {
+            el.innerText = I18N_STRINGS[currentLang][key];
+        }
+    });
+
+    renderAllTasks();
+    renderCheckInGrid();
+}
+
+function toggleLanguage() {
+    playClickSound();
+    currentLang = currentLang === 'bn' ? 'en' : 'bn';
+    localStorage.setItem('arcade_lang', currentLang);
+    applyLanguage();
+    showToast(currentLang === 'bn' ? 'ভাষা: বাংলা সক্রিয়' : 'Language: English Active');
+}
+
+// ================= ৩. অডিও সিন্থেসাইজার (Web Audio SFX) =================
 let audioCtx = null;
 let isAudioEnabled = localStorage.getItem('arcade_audio_enabled') !== 'false';
 
@@ -25,22 +215,15 @@ function toggleAudioFx() {
     isAudioEnabled = !isAudioEnabled;
     localStorage.setItem('arcade_audio_enabled', isAudioEnabled);
     updateAudioIcon();
-    if (isAudioEnabled) {
-        playHitSound();
-        showToast(currentLang === 'bn' ? 'অডিও এফেক্ট সক্রিয়' : 'Audio SFX Enabled');
-    } else {
-        showToast(currentLang === 'bn' ? 'অডিও এফেক্ট মিউট করা হয়েছে' : 'Audio SFX Muted');
-    }
+    showToast(isAudioEnabled ? (currentLang === 'bn' ? 'অডিও এফেক্ট চালু' : 'SFX Enabled') : (currentLang === 'bn' ? 'অডিও এফেক্ট বন্ধ' : 'SFX Muted'));
 }
 
 function updateAudioIcon() {
     const icon = document.getElementById('audio-icon');
     if (!icon) return;
-    if (isAudioEnabled) {
-        icon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
-    } else {
-        icon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`;
-    }
+    icon.innerHTML = isAudioEnabled 
+        ? `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`
+        : `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`;
 }
 
 function playClickSound() {
@@ -49,9 +232,8 @@ function playClickSound() {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(650, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.04);
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.04);
         gain.gain.setValueAtTime(0.1, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.04);
         osc.connect(gain);
@@ -68,9 +250,8 @@ function playHitSound(isGold = false) {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = isGold ? 'sine' : 'triangle';
-        const startFreq = isGold ? 800 : 450 + Math.random() * 200;
-        osc.frequency.setValueAtTime(startFreq, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(isGold ? 1400 : 900, ctx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(isGold ? 880 : 520, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(isGold ? 1600 : 960, ctx.currentTime + 0.08);
         gain.gain.setValueAtTime(0.2, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
         osc.connect(gain);
@@ -80,104 +261,33 @@ function playHitSound(isGold = false) {
     } catch (e) { }
 }
 
-function playHazardSound() {
-    if (!isAudioEnabled) return;
-    try {
-        const ctx = getAudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(60, ctx.currentTime + 0.22);
-        gain.gain.setValueAtTime(0.25, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.22);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.22);
-    } catch (e) { }
-}
-
 function playRewardSound() {
     if (!isAudioEnabled) return;
     try {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sine';
         osc.frequency.setValueAtTime(520, ctx.currentTime);
         osc.frequency.setValueAtTime(780, ctx.currentTime + 0.08);
         osc.frequency.setValueAtTime(1040, ctx.currentTime + 0.16);
         gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.35);
+        osc.stop(ctx.currentTime + 0.3);
     } catch (e) { }
 }
 
-// ================= ৩. টেলিগ্রাম ওয়েবঅ্যাপ ও ব্যাক বাটন নেভিগেশন =================
+// ================= ৪. টেলিগ্রাম SDK ও থিম হ্যান্ডলিং =================
 const tg = window.Telegram?.WebApp;
-const openModalStack = [];
-
-function syncModalState() {
-    if (openModalStack.length > 0) {
-        document.body.style.overflow = 'hidden';
-        if (tg?.BackButton) tg.BackButton.show();
-    } else {
-        document.body.style.overflow = '';
-        if (tg?.BackButton) tg.BackButton.hide();
-    }
-}
-
-function pushModalToStack(modalId, closeFn) {
-    const existingIdx = openModalStack.findIndex(m => m.id === modalId);
-    if (existingIdx !== -1) openModalStack.splice(existingIdx, 1);
-    openModalStack.push({ id: modalId, close: closeFn });
-    syncModalState();
-}
-
-function removeModalFromStack(modalId) {
-    const idx = openModalStack.findIndex(m => m.id === modalId);
-    if (idx !== -1) openModalStack.splice(idx, 1);
-    syncModalState();
-}
+let currentTheme = localStorage.getItem('arcade_theme') || 'dark';
 
 if (tg) {
     try {
         tg.ready();
         tg.expand();
         if (typeof tg.enableClosingConfirmation === 'function') tg.enableClosingConfirmation();
-
-        const applyTelegramSafeArea = () => {
-            const safeTop = tg.safeAreaInset?.top || tg.contentSafeAreaInset?.top || 0;
-            const safeBottom = tg.safeAreaInset?.bottom || tg.contentSafeAreaInset?.bottom || 0;
-            if (safeTop > 0) document.documentElement.style.setProperty('--safe-top', `${safeTop}px`);
-            if (safeBottom > 0) document.documentElement.style.setProperty('--safe-bottom', `${safeBottom}px`);
-        };
-        applyTelegramSafeArea();
-        if (typeof tg.onEvent === 'function') tg.onEvent('safeAreaChanged', applyTelegramSafeArea);
-
-        if (tg.BackButton) {
-            tg.BackButton.hide();
-            tg.BackButton.onClick(() => {
-                if (openModalStack.length > 0) {
-                    const topModal = openModalStack.pop();
-                    if (topModal && typeof topModal.close === 'function') topModal.close();
-                    syncModalState();
-                }
-            });
-        }
-    } catch (e) { }
-}
-
-function triggerHaptic(type = 'light') {
-    try {
-        if (!tg?.HapticFeedback) return;
-        if (type === 'notification_success') tg.HapticFeedback.notificationOccurred('success');
-        else if (type === 'notification_error') tg.HapticFeedback.notificationOccurred('error');
-        else tg.HapticFeedback.impactOccurred(type);
     } catch (e) { }
 }
 
@@ -189,7 +299,6 @@ function showToast(message, type = 'success') {
     if (type === 'error') toast.classList.add('error-toast');
     toast.innerText = message;
     container.appendChild(toast);
-    triggerHaptic(type === 'error' ? 'notification_error' : 'notification_success');
 
     setTimeout(() => {
         toast.style.opacity = '0';
@@ -205,39 +314,30 @@ function triggerConfetti() {
             particleCount: 70,
             spread: 80,
             origin: { y: 0.6 },
-            colors: ['#00FF9D', '#00F0FF', '#BD00FF', '#FFFFFF']
+            colors: ['#00FF9D', '#00F0FF', '#BD00FF', '#FFB800']
         });
     }
 }
 
-// ================= ৪. থিম কন্ট্রোলার =================
-let currentTheme = localStorage.getItem('arcade_theme') || 'dark';
+function toggleTheme() {
+    playClickSound();
+    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('arcade_theme', currentTheme);
+    applyTheme();
+}
 
 function applyTheme() {
     const iconEl = document.getElementById('theme-icon');
     if (currentTheme === 'light') {
         document.body.classList.add('light-theme');
         if (iconEl) iconEl.innerText = '☀️';
-        if (tg?.setHeaderColor) tg.setHeaderColor('#F8FAFC');
     } else {
         document.body.classList.remove('light-theme');
         if (iconEl) iconEl.innerText = '🌙';
-        if (tg?.setHeaderColor) tg.setHeaderColor('#07090E');
     }
 }
 
-function toggleTheme() {
-    playClickSound();
-    triggerHaptic('light');
-    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('arcade_theme', currentTheme);
-    applyTheme();
-    showToast(currentTheme === 'light' 
-        ? (currentLang === 'bn' ? 'লাইট মোড সক্রিয়' : 'Light Matrix Active') 
-        : (currentLang === 'bn' ? 'ডার্ক মোড সক্রিয়' : 'Dark Matrix Active'));
-}
-
-// ================= ৫. ফায়ারবেস ডেটাবেস ইনিট =================
+// ================= ৫. ফায়ারবেস ডেটাবেস ইনিশিয়ালাইজেশন =================
 const firebaseConfig = {
   apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
   authDomain: "enjoy-movies-app.firebaseapp.com",
@@ -245,229 +345,442 @@ const firebaseConfig = {
   projectId: "enjoy-movies-app",
   storageBucket: "enjoy-movies-app.firebasestorage.app",
   messagingSenderId: "839389874270",
-  appId: "1:839389874270:web:b99129ebae43d0cdd48ccf",
-  measurementId: "G-V9RSVFWBV0"
+  appId: "1:839389874270:web:b99129ebae43d0cdd48ccf"
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ================= ৬. দ্বিভাষিক ইঞ্জিন (Language System) =================
-let currentLang = localStorage.getItem('arcade_lang') || 'bn';
-const bnDigits = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
-
-function formatNum(val) {
-    const s = String(val ?? 0);
-    if (currentLang !== 'bn') return s;
-    return s.replace(/\d/g, d => bnDigits[d]);
-}
-
-const translations = {
-    en: {
-        welcome_badge: "PILOT PROTOCOL",
-        welcome_title: "Operator License Active!",
-        welcome_desc_1: "Welcome to Aetheria Arena. You received",
-        welcome_desc_2: "starter Energy Cells for high-reflex missions!",
-        btn_claim_welcome: "Activate Arena Engine",
-        user_status: "● Online Operator",
-        credits_balance_label: "Total Power Cells",
-        pts_currency: "CELLS",
-        shield_status_lbl: "🛡️ Core Shield Status",
-        current_score_lbl: "SCORE:",
-        btn_start_match: "Launch Mission",
-        game_objective: "Strike Cyan and Gold targets quickly! Avoid Red Glitches.",
-        arcade_hint: "⚡ Increase your combo with fast reflex hits. Glitch taps damage your shields.",
-        recharge_title: "⚡ Core Power Cell Recharge",
-        recharge_desc: "Recharge your emergency shield and core cells when critical.",
-        btn_recharge: "Recharge (+25)",
-        tutorial_btn_title: "Operator Tactical Docs",
-        tutorial_btn_sub: "Review gameplay strategy and high-score combos",
-        btn_watch: "Docs",
-        armory_pill: "CYBER ARMORY & UPGRADES",
-        armory_headline: "Tactical Gear Vault",
-        armory_subtext: "Unlock reflex stabilizers and shield modules using your Power Cells.",
-        armory_catalog_title: "Operator Module Catalog",
-        skin_desc_1: "Boosts reflex score by +15% per successful strike",
-        skin_desc_2: "Target nodes remain stable for 0.4s longer before moving",
-        skin_desc_3: "Automatically nullifies 1 hazard glitch tap per mission",
-        btn_unlock: "Unlock",
-        btn_equipped: "Equipped",
-        leaderboard_pill: "ARENA GLOBAL LADDER",
-        leaderboard_heading: "Top Operator Rankings",
-        leaderboard_subtext: "Global pilots leaderboard and squad challenge hub.",
-        btn_copy: "Copy",
-        btn_challenge_squad: "Challenge Friends via Squad Link",
-        stat_squad_pilots: "Squad Members",
-        stat_high_score: "Best Record",
-        leaderboard_list_title: "Global Pilot Roster",
-        profile_stat_bal: "Power Cells",
-        profile_stat_matches: "Missions Run",
-        menu_daily_bonus: "7-Day Protocol Vault",
-        menu_tg_support: "Official Telegram Community",
-        menu_support: "24/7 Operator Helpdesk",
-        checkin_modal_title: "7-Day Protocol Drop",
-        loading_text: "Syncing arena data...",
-        nav_home: "Arena",
-        nav_armory: "Armory",
-        nav_ranking: "Rankings",
-        nav_profile: "Pilot",
-        modal_gameover_badge: "SYSTEM BREACHED",
-        modal_gameover_title: "Mission Terminated!",
-        final_score_label: "Match Score:",
-        earned_credits_label: "Energy Cells Earned:",
-        high_score_status: "Personal Record:",
-        btn_revive: "Second Chance (Shield +1)",
-        btn_finish_match: "Submit Score & Conclude",
-        checkin_day_text: "Day {day}",
-        checkin_streak_text: "Current Streak: {day} Days",
-        checkin_claimed_btn: "✅ Today's Protocol Claimed",
-        checkin_claim_btn: "⚡ Claim Day {day} Bounty (+{pts} CELLS)",
-        home_streak_claimed: "Streak: {day} Days (Claimed)",
-        home_streak_ready: "Day {day} Protocol",
-        toast_revive_success: "⚡ Shield Restored! Match Continued!",
-        toast_full_recharge: "⚡ Core fully recharged! +25 Cells added!",
-        toast_unlocked_skin: "🎉 Tactical module unlocked and equipped!",
-        toast_not_enough_credits: "⚠️ Insufficient Power Cells in vault!",
-        toast_link_copied: "✅ Squad mission invite link copied!"
-    },
-    bn: {
-        welcome_badge: "পাইলট প্রোটোকল",
-        welcome_title: "অপারেটর লাইসেন্স সক্রিয়!",
-        welcome_desc_1: "আর্টিফিশিয়াল অ্যারেনায় আপনাকে দেওয়া হয়েছে",
-        welcome_desc_2: "স্টার্টার এনার্জি সেল!",
-        btn_claim_welcome: "অ্যারেনা এক্টিভেট করুন",
-        user_status: "● অনলাইন অপারেটর",
-        credits_balance_label: "টোটাল এনার্জি সেল",
-        pts_currency: "CELLS",
-        shield_status_lbl: "🛡️ কোর শিল্ড ও এনার্জি",
-        current_score_lbl: "স্কোর:",
-        btn_start_match: "মিশন শুরু করুন",
-        game_objective: "রেড গ্লিচ নোড এড়িয়ে সঠিক নিয়ন টার্গেটে দ্রুত ট্যাপ করুন",
-        arcade_hint: "⚡ দ্রুত লক্ষ্যভেদ করে কম্বো বৃদ্ধি করুন। ভুল ট্যাপে শিল্ড ক্ষতিগ্রস্ত হবে।",
-        recharge_title: "⚡ কোর এনার্জি সেল রিফিল",
-        recharge_desc: "জরুরি পরিস্থিতিতে অ্যারেনা শিল্ড ও কোর এনার্জি পুনরুদ্ধার করুন।",
-        btn_recharge: "রিচার্জ (+২৫)",
-        tutorial_btn_title: "অপারেটর ট্যাকটিক্স গাইড",
-        tutorial_btn_sub: "হাই-স্কোর রিফ্লেক্স এবং টেকনিক্যাল টিপস দেখুন",
-        btn_watch: "ডকস",
-        armory_pill: "CYBER ARMORY & UPGRADES",
-        armory_headline: "ট্যাকটিক্যাল গিয়ার ভল্ট",
-        armory_subtext: "অর্জিত এনার্জি সেল দিয়ে রিফ্লেক্স স্ট্যাবিলাইজার ও শিল্ড মডিউল আপগ্রেড করুন।",
-        armory_catalog_title: "অপারেটর মডিউল ক্যাটালগ",
-        skin_desc_1: "প্রতিটি সফল হিটে অতিরিক্ত +১৫% স্কোর বুস্ট",
-        skin_desc_2: "টার্গেট নোডের অবস্থান ০.৪ সেকেন্ড বেশি স্থির থাকবে",
-        skin_desc_3: "ম্যাচে ১টি রেড গ্লিচ ট্যাপের ক্ষতি স্বয়ংক্রিয়ভাবে ব্লক করবে",
-        btn_unlock: "আনলক",
-        btn_equipped: "ব্যবহৃত",
-        leaderboard_pill: "ARENA GLOBAL LADDER",
-        leaderboard_heading: "শীর্ষ অপারেটর লিডারবোর্ড",
-        leaderboard_subtext: "সর্বোচ্চ স্কোর অর্জনকারী পাইলটদের গ্লোবাল র্যাঙ্ক ও স্কোয়াড তালিকা।",
-        btn_copy: "কপি",
-        btn_challenge_squad: "বন্ধুদের সাথে স্কোয়াড চ্যালেঞ্জ শেয়ার করুন",
-        stat_squad_pilots: "স্কোয়াড মেম্বার",
-        stat_high_score: "ব্যক্তিগত সেরা",
-        leaderboard_list_title: "গ্লোবাল পাইলট রোস্টার",
-        profile_stat_bal: "এনার্জি সেল",
-        profile_stat_matches: "সম্পন্ন মিশন",
-        menu_daily_bonus: "৭-দিনের প্রোটোকল ভল্ট",
-        menu_tg_support: "অফিসিয়াল টেলিগ্রাম কমিউনিটি",
-        menu_support: "২৪/৭ অপারেটর হেল্পডেস্ক",
-        checkin_modal_title: "৭-দিনের প্রোটোকল ড্রপ",
-        loading_text: "ডাটা সিঙ্ক হচ্ছে...",
-        nav_home: "অ্যারেনা",
-        nav_armory: "আর্মোরি",
-        nav_ranking: "র‍্যাঙ্কিং",
-        nav_profile: "পাইলট",
-        modal_gameover_badge: "SYSTEM BREACHED",
-        modal_gameover_title: "অপারেশন ব্যর্থ!",
-        final_score_label: "ম্যাচ স্কোর:",
-        earned_credits_label: "অর্জিত এনার্জি সেল:",
-        high_score_status: "সেরা রেকর্ড:",
-        btn_revive: "Second Chance (Shield +1)",
-        btn_finish_match: "ফলাফল জমা দিন ও বের হন",
-        checkin_day_text: "দিন {day}",
-        checkin_streak_text: "বর্তমান স্ট্রিক: {day} দিন",
-        checkin_claimed_btn: "✅ আজকের প্রোটোকল সম্পন্ন",
-        checkin_claim_btn: "⚡ দিন {day}-এর বাউন্টি নিন (+{pts} CELLS)",
-        home_streak_claimed: "স্ট্রিক: {day} দিন (সম্পন্ন)",
-        home_streak_ready: "দিন {day} প্রোটোকল",
-        toast_revive_success: "⚡ কোর শিল্ড অ্যাক্টিভেটেড! ম্যাচ পুনরায় শুরু হয়েছে!",
-        toast_full_recharge: "⚡ এনার্জি কোর ফুল রিচার্জড! +২৫ সেলস যোগ হয়েছে!",
-        toast_unlocked_skin: "🎉 ট্যাকটিক্যাল মডিউল আনলক ও সুসজ্জিত হয়েছে!",
-        toast_not_enough_credits: "⚠️ ভল্টে পর্যাপ্ত এনার্জি সেল নেই!",
-        toast_link_copied: "✅ স্কোয়াড চ্যালেঞ্জ লিংক কপি হয়েছে!"
-    }
-};
-
-function t(key, params = {}) {
-    let str = (translations[currentLang] && translations[currentLang][key]) || translations['en'][key] || key;
-    for (const [k, v] of Object.entries(params)) {
-        str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), formatNum(v));
-    }
-    return str;
-}
-
-function applyLanguage() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[currentLang] && translations[currentLang][key]) {
-            el.innerHTML = translations[currentLang][key];
-        }
-    });
-
-    const langInd = document.getElementById('lang-indicator');
-    if (langInd) langInd.innerText = currentLang === 'en' ? 'BN' : 'EN';
-
-    updateUI();
-    renderCheckInGrid();
-}
-
-function toggleLanguage() {
-    playClickSound();
-    triggerHaptic('light');
-    currentLang = currentLang === 'en' ? 'bn' : 'en';
-    localStorage.setItem('arcade_lang', currentLang);
-    applyLanguage();
-    showToast(currentLang === 'en' ? 'Switched to English' : 'বাংলা ভাষা সক্রিয় করা হয়েছে');
-}
-
-// ================= ৭. ইউজার স্টেট ও ডেটা ইনিশিয়ালাইজেশন =================
+// ================= ৬. ইউজার স্টেট ও রেফারেল সিস্টেম =================
 let tgUser = tg?.initDataUnsafe?.user;
 if (!tgUser || !tgUser.id) {
-    let mockId = localStorage.getItem('eh_pilot_id');
+    let mockId = localStorage.getItem('arcade_pilot_id');
     if (!mockId) {
         mockId = 'pilot_' + Math.floor(100000 + Math.random() * 900000);
-        localStorage.setItem('eh_pilot_id', mockId);
+        localStorage.setItem('arcade_pilot_id', mockId);
     }
-    tgUser = {
-        id: mockId,
-        first_name: "Agent",
-        last_name: "Pilot",
-        username: "pilot_" + mockId.slice(-4)
-    };
+    tgUser = { id: mockId, first_name: "Operator", last_name: "X", username: "pilot_" + mockId.slice(-4) };
 }
 
 const userId = tgUser.id.toString();
 const userName = (tgUser.first_name || 'Pilot') + (tgUser.last_name ? ' ' + tgUser.last_name : '');
 const userUsername = tgUser.username ? '@' + tgUser.username : '@pilot_' + userId.slice(-4);
 
-let balanceCredits = 100;
-let personalHighScore = 0;
+let balanceCredits = 0;       // Energy Cells (গেমপ্লে থেকে অর্জিত আসল ক্রিপ্টো ভ্যালু)
+let userTickets = 3;          // প্রাথমিক ৩টি এন্ট্রি টিকেট
+let personalHighScore = 0;    // লিডারবোর্ডের জন্য ব্যক্তিগত স্কোর
 let totalMatchesPlayed = 0;
-let unlockedUpgrades = JSON.parse(localStorage.getItem('unlocked_skins') || '[]');
-
 let referralCount = 0;
 let lastCheckInDate = "";
 let checkInStreak = 0;
-const checkInRewards = [10, 20, 35, 50, 75, 100, 150];
+let tonWalletAddress = localStorage.getItem('arcade_ton_address') || "";
+const checkInTicketRewards = [1, 1, 2, 2, 3, 3, 5]; // ডেইলি টিকেটের প্রোটোকল ড্রপ
 
-let tutorialVideoUrl = "https://www.youtube.com";
-let telegramCommunityUrl = "https://t.me/";
 let myReferralLink = `https://t.me/${DEFAULT_BOT_USERNAME}?start=ref_${userId}`;
 
-// গেম মেকানিক্স ও স্টেট
+function getReferralParam() {
+    let refParam = tg?.initDataUnsafe?.start_param || "";
+    if (!refParam) {
+        const urlParams = new URLSearchParams(window.location.search);
+        refParam = urlParams.get('start') || urlParams.get('ref') || "";
+    }
+    return refParam;
+}
+
+// ইনভাইটকারীকে শুধুমাত্র ৩টি গেম টিকেট রিওয়ার্ড প্রদান
+function rewardReferrer(refId) {
+    if (!refId || refId === userId) return;
+    db.ref('users/' + refId).transaction((user) => {
+        if (user) {
+            user.tickets = (user.tickets || 0) + 3; // শুধুই ৩টি টিকেট
+            user.referralCount = (user.referralCount || 0) + 1;
+        }
+        return user;
+    });
+}
+
+function initUser() {
+    const startParam = getReferralParam();
+
+    db.ref('users/' + userId).on('value', (s) => {
+        const data = s.val();
+        if (!data) {
+            let referredBy = null;
+            if (startParam && startParam.startsWith('ref_')) {
+                referredBy = startParam.replace('ref_', '').trim();
+            }
+
+            db.ref('users/' + userId).set({
+                id: userId,
+                name: userName,
+                username: userUsername,
+                balance: 0,
+                tickets: 3,
+                highScore: 0,
+                matchesPlayed: 0,
+                tonWallet: "",
+                referredBy: referredBy || null,
+                createdAt: Date.now()
+            });
+
+            if (referredBy) {
+                rewardReferrer(referredBy);
+            }
+            return;
+        }
+
+        balanceCredits = Math.round(Number(data.balance || 0));
+        userTickets = Number(data.tickets !== undefined ? data.tickets : 3);
+        personalHighScore = Math.round(Number(data.highScore || 0));
+        totalMatchesPlayed = Number(data.matchesPlayed || 0);
+        referralCount = Number(data.referralCount || 0);
+        lastCheckInDate = data.lastCheckInDate || "";
+        checkInStreak = Number(data.checkInStreak || 0);
+        if (data.tonWallet) tonWalletAddress = data.tonWallet;
+        if (data.completedTasks) {
+            userCompletedTasks = data.completedTasks;
+            localStorage.setItem('arcade_completed_tasks', JSON.stringify(userCompletedTasks));
+        }
+
+        updateUI();
+        renderAllTasks();
+        renderCheckInGrid();
+    });
+
+    listenToPodiumLeaderboard();
+}
+
+function updateUI() {
+    const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+    };
+
+    setTxt('user-balance-home', balanceCredits);
+    setTxt('user-tickets-display', userTickets);
+    setTxt('game-tickets-count', userTickets);
+    setTxt('wallet-user-cells', balanceCredits);
+    setTxt('wallet-ton-estimate', `${(balanceCredits / 1000 * 0.1).toFixed(2)} TON`);
+    setTxt('profile-stat-balance', `${balanceCredits} CELLS`);
+    setTxt('profile-stat-tickets', `${userTickets} 🎟️`);
+    setTxt('home-ref-count', referralCount);
+    setTxt('profile-best-score-badge', personalHighScore);
+    setTxt('profile-page-id', `ID: #${userId}`);
+    setTxt('referral-link-display', myReferralLink);
+
+    const addrCont = document.getElementById('wallet-address-container');
+    const addrVal = document.getElementById('connected-wallet-addr');
+    const manualInput = document.getElementById('manual-ton-address-input');
+    if (tonWalletAddress) {
+        if (addrCont) addrCont.style.display = 'flex';
+        if (addrVal) addrVal.innerText = `${tonWalletAddress.slice(0, 6)}...${tonWalletAddress.slice(-4)}`;
+        if (manualInput) manualInput.value = tonWalletAddress;
+    }
+}
+
+// ================= ৭. টাস্ক ও অ্যাড ইঞ্জিন (শুধু টিকেট রিওয়ার্ড) =================
+const TASKS_CONFIG = [
+    // অ্যাড মিশন (শুধুমাত্র টিকেট রিওয়ার্ড, কোনো Cells নয়)
+    {
+        id: "task_adsgram",
+        type: "ad_adsgram",
+        title_bn: "Adsgram স্পনসর ভিডিও",
+        title_en: "Adsgram Sponsor Video",
+        desc_bn: "ভিডিও অ্যাডটি সম্পূর্ণ দেখে গেম খেলার ফ্রি টিকেট রিফিল করুন।",
+        desc_en: "Watch the full video ad to refill free arena entry tickets.",
+        rewardTickets: 1,
+        badge: "AD",
+        iconType: "cyan-glow"
+    },
+    {
+        id: "task_monetag",
+        type: "ad_monetag",
+        title_bn: "Monetag ওয়াচ অ্যাড",
+        title_en: "Monetag Watch Ad",
+        desc_bn: "মোনিট্যাগ বিজ্ঞাপন দেখে ফ্রি ম্যাচ এন্ট্রি টিকেট সংগ্রহ করুন।",
+        desc_en: "Watch Monetag sponsor ad to collect a free match ticket.",
+        rewardTickets: 1,
+        badge: "MONETAG",
+        iconType: "purple-glow"
+    },
+    {
+        id: "task_adsterra",
+        type: "ad_adsterra",
+        title_bn: "Adsterra স্পনসর ভিজিট",
+        title_en: "Adsterra Sponsor Visit",
+        desc_bn: "স্পনসর পেজটি ১৫ সেকেন্ড ঘুরে দেখে টিকেট বুঝে নিন।",
+        desc_en: "Explore sponsor page for 15s to claim free game tickets.",
+        rewardTickets: 2,
+        badge: "VISIT",
+        iconType: "gold-glow",
+        visitUrl: "https://www.highrevenuegate.com/your-adsterra-direct-link"
+    },
+
+    // টেলিগ্রাম সোশ্যাল মিশন (শুধুমাত্র টিকেট রিওয়ার্ড)
+    {
+        id: "task_tg_channel",
+        type: "telegram",
+        title_bn: "অফিসিয়াল টেলিগ্রাম চ্যানেল",
+        title_en: "Official Telegram Channel",
+        desc_bn: "আমাদের চ্যানেলে যুক্ত হয়ে ২টি বোনাস গেম টিকেট নিন।",
+        desc_en: "Join our main channel to claim +2 bonus game tickets.",
+        rewardTickets: 2,
+        badge: "CHANNEL",
+        iconType: "telegram-glow",
+        link: "https://t.me/AetheriaArcadeChannel"
+    },
+    {
+        id: "task_tg_group",
+        type: "telegram",
+        title_bn: "কমিউনিটি ডিসকাশন গ্রুপ",
+        title_en: "Community Discussion Group",
+        desc_bn: "প্লেয়ারদের চ্যাট গ্রুপে যুক্ত হয়ে ১টি টিকেট আনলক করুন।",
+        desc_en: "Join the player chatter lounge to unlock 1 ticket.",
+        rewardTickets: 1,
+        badge: "GROUP",
+        iconType: "telegram-glow",
+        link: "https://t.me/AetheriaArcadeGroup"
+    },
+    {
+        id: "task_tg_partner",
+        type: "telegram",
+        title_bn: "পার্টনার স্পনসর চ্যানেল",
+        title_en: "Partner Sponsor Channel",
+        desc_bn: "পার্টনার চ্যানেলে সাবস্ক্রাইব করে ৩টি টিকেট রিওয়ার্ড নিন।",
+        desc_en: "Subscribe to sponsor channel to get 3 entry tickets.",
+        rewardTickets: 3,
+        badge: "SPONSOR",
+        iconType: "telegram-glow",
+        link: "https://t.me/Telegram"
+    }
+];
+
+let userCompletedTasks = JSON.parse(localStorage.getItem('arcade_completed_tasks') || '{}');
+let adCooldownTimestamps = JSON.parse(localStorage.getItem('arcade_ad_cooldowns') || '{}');
+let tgPendingVerify = {};
+
+function renderAllTasks() {
+    const adContainer = document.getElementById('ad-tasks-container');
+    const tgContainer = document.getElementById('telegram-tasks-container');
+    const customContainer = document.getElementById('custom-tasks-container');
+    const customWrapper = document.getElementById('custom-tasks-wrapper');
+
+    if (adContainer) adContainer.innerHTML = '';
+    if (tgContainer) tgContainer.innerHTML = '';
+    if (customContainer) customContainer.innerHTML = '';
+
+    const now = Date.now();
+    let hasCustom = false;
+
+    TASKS_CONFIG.forEach(task => {
+        const isCompleted = !!userCompletedTasks[task.id];
+        const cooldownUntil = adCooldownTimestamps[task.id] || 0;
+        const inCooldown = now < cooldownUntil;
+
+        const card = document.createElement('div');
+        card.className = `bento-box task-card ${inCooldown ? 'cooldown-active' : ''} ${isCompleted ? 'task-completed' : ''}`;
+        card.id = `card-${task.id}`;
+
+        let btnHtml = '';
+        if (task.type.startsWith('ad_')) {
+            if (inCooldown) {
+                const sec = Math.ceil((cooldownUntil - now) / 1000);
+                btnHtml = `<button type="button" class="cyber-btn compact-btn cooldown-btn" id="btn-${task.id}" disabled>⏳ ${sec}s</button>`;
+            } else {
+                btnHtml = `<button type="button" class="cyber-btn compact-btn" id="btn-${task.id}" onclick="handleTaskClick('${task.id}')">${t('btn_watch')}</button>`;
+            }
+        } else if (task.type === 'telegram' || task.type === 'custom_link') {
+            if (isCompleted) {
+                btnHtml = `<button type="button" class="cyber-btn compact-btn completed-btn" disabled>${t('btn_done')}</button>`;
+            } else if (tgPendingVerify[task.id]) {
+                btnHtml = `<button type="button" class="cyber-btn compact-btn primary-glow" id="btn-${task.id}" onclick="claimSocialTask('${task.id}')">${t('btn_claim')}</button>`;
+            } else {
+                btnHtml = `<button type="button" class="cyber-btn compact-btn" id="btn-${task.id}" onclick="handleTaskClick('${task.id}')">${t('btn_join')}</button>`;
+            }
+        }
+
+        const taskTitle = currentLang === 'bn' ? task.title_bn : task.title_en;
+        const taskDesc = currentLang === 'bn' ? task.desc_bn : task.desc_en;
+
+        card.innerHTML = `
+            <div class="task-icon-box ${task.iconType}">
+                ${getTaskIcon(task.type)}
+            </div>
+            <div class="task-info">
+                <div class="task-head">
+                    <h4>${escapeHtml(taskTitle)}</h4>
+                    <span class="ad-tag-pill">${task.badge}</span>
+                </div>
+                <p>${escapeHtml(taskDesc)}</p>
+                <div class="task-reward-tags">
+                    <span class="reward-pill" style="border-color: var(--neon-gold); color: var(--neon-gold);">
+                        +${task.rewardTickets} 🎟️ ${t('unit_tickets')}
+                    </span>
+                </div>
+            </div>
+            <div>${btnHtml}</div>
+        `;
+
+        if (task.type.startsWith('ad_') && adContainer) {
+            adContainer.appendChild(card);
+        } else if (task.type === 'telegram' && tgContainer) {
+            tgContainer.appendChild(card);
+        } else if (customContainer) {
+            hasCustom = true;
+            customContainer.appendChild(card);
+        }
+    });
+
+    if (customWrapper) customWrapper.style.display = hasCustom ? 'block' : 'none';
+}
+
+function getTaskIcon(type) {
+    if (type === 'ad_adsgram') {
+        return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+    } else if (type === 'ad_monetag') {
+        return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`;
+    } else if (type === 'ad_adsterra') {
+        return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
+    } else {
+        return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>`;
+    }
+}
+
+function handleTaskClick(taskId) {
+    playClickSound();
+    const task = TASKS_CONFIG.find(t => t.id === taskId);
+    if (!task) return;
+
+    if (task.type === 'ad_adsgram') runAdsgramTask(task);
+    else if (task.type === 'ad_monetag') runMonetagTask(task);
+    else if (task.type === 'ad_adsterra') runAdsterraTask(task);
+    else if (task.type === 'telegram' || task.type === 'custom_link') runTelegramTask(task);
+}
+
+async function runAdsgramTask(task) {
+    if (typeof window.Adsgram === 'undefined') {
+        return showToast(currentLang === 'bn' ? 'বিজ্ঞাপন নেটওয়ার্ক প্রস্তুত নয়' : 'Ad network not available', 'error');
+    }
+
+    try {
+        const adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+        const res = await adController.show().catch(() => ({ done: false }));
+
+        if (res && res.done) {
+            grantTaskTicketReward(task);
+            startAdCooldown(task.id);
+        } else {
+            showToast(currentLang === 'bn' ? 'সম্পূর্ণ বিজ্ঞাপন দেখলে টিকেট পাবেন' : 'Watch full video to get tickets', 'error');
+        }
+    } catch (e) {
+        showToast(currentLang === 'bn' ? 'বিজ্ঞাপন লোড হতে ব্যর্থ হয়েছে' : 'Ad load failed', 'error');
+    }
+}
+
+function runMonetagTask(task) {
+    showToast(currentLang === 'bn' ? 'বিজ্ঞাপন লোড হচ্ছে...' : 'Loading sponsor ad...');
+    if (typeof window.show_native === 'function') {
+        window.show_native().then(() => {
+            grantTaskTicketReward(task);
+            startAdCooldown(task.id);
+        }).catch(() => {
+            showToast('Monetag error', 'error');
+        });
+    } else {
+        setTimeout(() => {
+            grantTaskTicketReward(task);
+            startAdCooldown(task.id);
+        }, 3000);
+    }
+}
+
+function runAdsterraTask(task) {
+    const btn = document.getElementById(`btn-${task.id}`);
+    if (btn) btn.disabled = true;
+
+    if (tg?.openLink) tg.openLink(task.visitUrl);
+    else window.open(task.visitUrl, '_blank');
+
+    let left = 15;
+    showToast(currentLang === 'bn' ? '১৫ সেকেন্ড পেজটি ভিজিট করুন...' : 'Visit for 15 seconds...');
+    const timer = setInterval(() => {
+        left--;
+        if (btn) btn.innerText = `${left}s...`;
+        if (left <= 0) {
+            clearInterval(timer);
+            grantTaskTicketReward(task);
+            startAdCooldown(task.id);
+        }
+    }, 1000);
+}
+
+function runTelegramTask(task) {
+    if (tg?.openTelegramLink && task.link.includes('t.me/')) {
+        tg.openTelegramLink(task.link);
+    } else {
+        window.open(task.link, '_blank');
+    }
+
+    tgPendingVerify[task.id] = true;
+    showToast(currentLang === 'bn' ? 'চ্যানেলে জয়েন করে ফিরে এসে ক্লেইম করুন' : 'Join channel and click Claim');
+    renderAllTasks();
+}
+
+function claimSocialTask(taskId) {
+    playClickSound();
+    const task = TASKS_CONFIG.find(t => t.id === taskId);
+    if (!task) return;
+
+    userCompletedTasks[task.id] = true;
+    localStorage.setItem('arcade_completed_tasks', JSON.stringify(userCompletedTasks));
+    delete tgPendingVerify[task.id];
+
+    grantTaskTicketReward(task);
+    db.ref('users/' + userId + '/completedTasks').set(userCompletedTasks);
+    renderAllTasks();
+}
+
+function grantTaskTicketReward(task) {
+    userTickets += task.rewardTickets;
+    db.ref('users/' + userId).update({ tickets: userTickets });
+
+    playRewardSound();
+    triggerConfetti();
+    showToast(`🎉 +${task.rewardTickets} ${t('unit_tickets')}!`);
+    updateUI();
+}
+
+function startAdCooldown(taskId) {
+    adCooldownTimestamps[taskId] = Date.now() + AD_COOLDOWN_TIME_MS;
+    localStorage.setItem('arcade_ad_cooldowns', JSON.stringify(adCooldownTimestamps));
+    renderAllTasks();
+}
+
+// ৬০ সেকেন্ডের কাউন্টডাউন টাইমার
+setInterval(() => {
+    const now = Date.now();
+    let needsReRender = false;
+
+    TASKS_CONFIG.forEach(task => {
+        if (!task.type.startsWith('ad_')) return;
+        const cooldownUntil = adCooldownTimestamps[task.id];
+        if (cooldownUntil && cooldownUntil > now) {
+            const sec = Math.ceil((cooldownUntil - now) / 1000);
+            const btn = document.getElementById(`btn-${task.id}`);
+            if (btn) btn.innerText = `⏳ ${sec}s`;
+        } else if (cooldownUntil && cooldownUntil <= now) {
+            delete adCooldownTimestamps[task.id];
+            needsReRender = true;
+        }
+    });
+
+    if (needsReRender) {
+        localStorage.setItem('arcade_ad_cooldowns', JSON.stringify(adCooldownTimestamps));
+        renderAllTasks();
+    }
+}, 1000);
+
+// ================= ৮. গেম ইঞ্জিন (১ টিকেট দিয়ে খেলা ➔ CELLS আয়) =================
 let isMatchActive = false;
 let currentMatchScore = 0;
 let arcadeLives = 3;
@@ -479,66 +792,21 @@ let currentWave = 1;
 let successfulHitsInWave = 0;
 let isCurrentTargetGold = false;
 let hasRevivedThisMatch = false;
-let hasUsedHazardBlock = false;
 
-// ================= ৮. ফায়ারবেস ক্লাউড সিঙ্ক =================
-db.ref('settings').on('value', (snapshot) => {
-    const data = snapshot.val() || {};
-    if (data.tutorialUrl) tutorialVideoUrl = data.tutorialUrl;
-    if (data.telegramChannel) telegramCommunityUrl = data.telegramChannel.startsWith('http') ? data.telegramChannel : `https://t.me/${data.telegramChannel.replace('@', '')}`;
-    if (data.adsgramBlockId) ADSGRAM_BLOCK_ID = String(data.adsgramBlockId);
-
-    const chLink = document.getElementById('telegram-channel-link');
-    if (chLink) chLink.href = telegramCommunityUrl;
-
-    const supLink = document.getElementById('telegram-support-link');
-    if (supLink) supLink.href = telegramCommunityUrl;
-
-    const activeBotUser = (data.botUsername || DEFAULT_BOT_USERNAME).replace('@', '').trim();
-    myReferralLink = data.appShortName 
-        ? `https://t.me/${activeBotUser}/${data.appShortName}?startapp=ref_${userId}`
-        : `https://t.me/${activeBotUser}?start=ref_${userId}`;
-
-    const refDisplay = document.getElementById('referral-link-display');
-    if (refDisplay) refDisplay.innerText = myReferralLink;
-});
-
-function initUser() {
-    db.ref('users/' + userId).on('value', (s) => {
-        const data = s.val();
-        if (!data) {
-            db.ref('users/' + userId).set({
-                id: userId,
-                name: userName,
-                username: userUsername,
-                balance: 100,
-                highScore: 0,
-                matchesPlayed: 0,
-                createdAt: Date.now()
-            });
-            openWelcomeModal();
-            return;
-        }
-
-        balanceCredits = Math.round(Number(data.balance || 0));
-        personalHighScore = Math.round(Number(data.highScore || 0));
-        totalMatchesPlayed = Number(data.matchesPlayed || 0);
-        referralCount = Number(data.referralCount || 0);
-        lastCheckInDate = data.lastCheckInDate || "";
-        checkInStreak = Number(data.checkInStreak || 0);
-
-        updateUI();
-        renderCheckInGrid();
-    });
-
-    listenToLeaderboard();
-}
-
-// ================= ৯. বাস্তব গেমপ্লে ইঞ্জিন (Wave-Based Reflex Protocol) =================
 function startArcadeMatch(e) {
     if (e) e.stopPropagation();
     playClickSound();
-    triggerHaptic('medium');
+
+    if (userTickets < 1) {
+        showToast(t('toast_no_tickets'), 'error');
+        switchTab('home');
+        return;
+    }
+
+    // ১টি টিকেট কেটে ম্যাচ শুরু
+    userTickets -= 1;
+    db.ref('users/' + userId).update({ tickets: userTickets });
+    updateUI();
 
     isMatchActive = true;
     currentMatchScore = 0;
@@ -548,12 +816,6 @@ function startArcadeMatch(e) {
     successfulHitsInWave = 0;
     currentSpawnInterval = 1250;
     hasRevivedThisMatch = false;
-    hasUsedHazardBlock = false;
-
-    // Time Dilator মডিউল থাকলে স্পিড ০.৪ সে. সহনশীল থাকবে
-    if (unlockedUpgrades.includes('reflex_overload')) {
-        currentSpawnInterval += 400;
-    }
 
     document.getElementById('game-overlay-screen').style.display = 'none';
     document.getElementById('arcade-target').style.display = 'flex';
@@ -565,7 +827,6 @@ function startArcadeMatch(e) {
 
 function spawnNextTarget() {
     if (!isMatchActive) return;
-
     if (targetTimer) clearTimeout(targetTimer);
 
     const arena = document.getElementById('arcade-interactive-arena');
@@ -582,10 +843,8 @@ function spawnNextTarget() {
     target.style.left = `${randomX}px`;
     target.style.top = `${randomY}px`;
 
-    // ২০% সম্ভাবনা গোল্ডেন বোনাস টার্গেট আসার
-    isCurrentTargetGold = Math.random() < 0.22;
+    isCurrentTargetGold = Math.random() < 0.25;
     const label = document.getElementById('target-label');
-    
     if (isCurrentTargetGold) {
         target.classList.add('gold-node');
         if (label) label.innerText = 'GOLD!';
@@ -594,11 +853,9 @@ function spawnNextTarget() {
         if (label) label.innerText = 'STRIKE';
     }
 
-    // ওয়েভ ২ বা তার উপরে থাকলে মাঝে মাঝে হ্যাজার্ড গ্লিচ স্পন হবে
-    if (currentWave >= 2 && Math.random() < 0.45 && hazard) {
+    if (currentWave >= 2 && Math.random() < 0.40 && hazard) {
         let hX = Math.floor(Math.random() * maxX);
         let hY = Math.floor(Math.random() * maxY);
-        // টার্গেটের বেশি কাছে যাতে না বসে
         if (Math.abs(hX - randomX) < 60) hX = (hX + 90) % maxX;
         hazard.style.left = `${hX}px`;
         hazard.style.top = `${hY}px`;
@@ -607,7 +864,6 @@ function spawnNextTarget() {
         hazard.style.display = 'none';
     }
 
-    // মিস কাউন্টডাউন
     targetTimer = setTimeout(() => {
         handleTargetMiss();
     }, currentSpawnInterval);
@@ -619,26 +875,16 @@ function handleArcadeBoardClick(e) {
     const target = document.getElementById('arcade-target');
     const hazard = document.getElementById('arcade-hazard');
 
-    // হ্যাজার্ড/রেড গ্লিচে ক্লিক করেছে কি না চেক
     if (hazard && hazard.style.display !== 'none') {
         const hRect = hazard.getBoundingClientRect();
-        if (
-            e.clientX >= hRect.left && e.clientX <= hRect.right &&
-            e.clientY >= hRect.top && e.clientY <= hRect.bottom
-        ) {
+        if (e.clientX >= hRect.left && e.clientX <= hRect.right && e.clientY >= hRect.top && e.clientY <= hRect.bottom) {
             handleHazardHit(e);
             return;
         }
     }
 
-    // টার্গেটে হিট চেক
     const tRect = target.getBoundingClientRect();
-    const isDirectHit = (
-        e.clientX >= tRect.left && e.clientX <= tRect.right &&
-        e.clientY >= tRect.top && e.clientY <= tRect.bottom
-    );
-
-    if (isDirectHit) {
+    if (e.clientX >= tRect.left && e.clientX <= tRect.right && e.clientY >= tRect.top && e.clientY <= tRect.bottom) {
         handleTargetHit(e);
     } else {
         handleTargetMiss();
@@ -647,124 +893,56 @@ function handleArcadeBoardClick(e) {
 
 function handleTargetHit(e) {
     playHitSound(isCurrentTargetGold);
-    triggerHaptic('light');
-
     if (targetTimer) clearTimeout(targetTimer);
 
-    // বেস স্কোর গণনা
-    let basePts = isCurrentTargetGold ? 30 : 10;
-    let scoreAdd = basePts * currentCombo;
-
-    // Overclock Core থাকলে +১৫% বোনাস
-    if (unlockedUpgrades.includes('cyber_neon')) {
-        scoreAdd = Math.round(scoreAdd * 1.15);
-    }
-
+    let scoreAdd = (isCurrentTargetGold ? 30 : 10) * currentCombo;
     currentMatchScore += scoreAdd;
     currentCombo = Math.min(8, currentCombo + 1);
     successfulHitsInWave++;
 
-    // প্রতি ৫টি সফল হিটে ওয়েভ বৃদ্ধি এবং স্পিড বৃদ্ধি
     if (successfulHitsInWave >= 5) {
         currentWave++;
         successfulHitsInWave = 0;
-        if (currentSpawnInterval > 550) currentSpawnInterval -= 45;
-        showToast(currentLang === 'bn' ? `⚡ ওয়েভ ${formatNum(currentWave)} সক্রিয়!` : `⚡ Wave ${currentWave} Active!`);
+        if (currentSpawnInterval > 500) currentSpawnInterval -= 50;
     }
 
-    createHitSpark(e.clientX, e.clientY, `+${scoreAdd}`);
     updateArcadeHUD();
     spawnNextTarget();
 }
 
 function handleHazardHit(e) {
-    // যদি Hazard Nullifier আপগ্রেড থাকে এবং এখনো ব্যবহার না হয়ে থাকে
-    if (unlockedUpgrades.includes('hazard_shield') && !hasUsedHazardBlock) {
-        hasUsedHazardBlock = true;
-        showToast(currentLang === 'bn' ? '🛡️ গ্লিচ অ্যাটাক ব্লক হয়েছে!' : '🛡️ Glitch Attack Blocked!');
-        playRewardSound();
-        const hazard = document.getElementById('arcade-hazard');
-        if (hazard) hazard.style.display = 'none';
-        return;
-    }
-
-    playHazardSound();
-    triggerHaptic('notification_error');
-
-    // স্ক্রিন শেক এফেক্ট
-    const wrapper = document.getElementById('arcade-wrapper');
-    if (wrapper) {
-        wrapper.classList.add('screen-shake');
-        setTimeout(() => wrapper.classList.remove('screen-shake'), 320);
-    }
-
-    currentCombo = 1;
     arcadeLives--;
     updateArcadeHUD();
-
-    createHitSpark(e.clientX, e.clientY, `CRITICAL!`, true);
-
-    if (arcadeLives <= 0) {
-        endArcadeMatch();
-    } else {
-        spawnNextTarget();
-    }
+    if (arcadeLives <= 0) endArcadeMatch();
+    else spawnNextTarget();
 }
 
 function handleTargetMiss() {
     if (!isMatchActive) return;
-    playHazardSound();
-    triggerHaptic('notification_error');
-
-    currentCombo = 1;
     arcadeLives--;
+    currentCombo = 1;
     updateArcadeHUD();
-
-    if (arcadeLives <= 0) {
-        endArcadeMatch();
-    } else {
-        spawnNextTarget();
-    }
+    if (arcadeLives <= 0) endArcadeMatch();
+    else spawnNextTarget();
 }
 
 function updateArcadeHUD() {
     const scoreEl = document.getElementById('arcade-current-score');
-    if (scoreEl) scoreEl.innerText = formatNum(currentMatchScore);
+    if (scoreEl) scoreEl.innerText = currentMatchScore;
 
     const waveEl = document.getElementById('wave-indicator');
-    if (waveEl) waveEl.innerText = `WAVE ${formatNum(currentWave)}`;
+    if (waveEl) waveEl.innerText = `WAVE ${currentWave}`;
 
     const comboEl = document.getElementById('combo-multiplier');
-    if (comboEl) comboEl.innerText = `${formatNum(currentCombo)}X COMBO`;
+    if (comboEl) comboEl.innerText = `${currentCombo}X COMBO`;
 
     const livesEl = document.getElementById('display-arcade-lives');
-    if (livesEl) livesEl.innerText = `${formatNum(arcadeLives)} / ${formatNum(MAX_LIVES)} ${currentLang === 'bn' ? 'শিল্ড' : 'SHIELDS'}`;
+    if (livesEl) livesEl.innerText = `${arcadeLives} / ${MAX_LIVES} ${currentLang === 'bn' ? 'শিল্ড' : 'Shield'}`;
 
     const gauge = document.getElementById('energy-gauge-bar');
     if (gauge) {
-        const percent = Math.max(0, (arcadeLives / MAX_LIVES) * 100);
-        gauge.style.width = percent + '%';
-        gauge.style.background = percent > 35 ? 'linear-gradient(90deg, var(--neon-cyan), var(--neon-emerald))' : 'var(--neon-alert)';
+        gauge.style.width = `${Math.max(0, (arcadeLives / MAX_LIVES) * 100)}%`;
     }
-}
-
-function createHitSpark(x, y, text, isDanger = false) {
-    const arena = document.getElementById('arcade-interactive-arena');
-    if (!arena) return;
-
-    const rect = arena.getBoundingClientRect();
-    const relX = x - rect.left;
-    const relY = y - rect.top;
-
-    const spark = document.createElement('div');
-    spark.className = 'tap-spark';
-    if (isDanger) spark.classList.add('danger-spark');
-    spark.innerText = text;
-    spark.style.left = `${relX}px`;
-    spark.style.top = `${relY}px`;
-    arena.appendChild(spark);
-
-    setTimeout(() => spark.remove(), 650);
 }
 
 function endArcadeMatch() {
@@ -775,13 +953,12 @@ function endArcadeMatch() {
     const hazard = document.getElementById('arcade-hazard');
     if (hazard) hazard.style.display = 'none';
 
-    // প্রতি ৪ পয়েন্ট স্কোরে ১টি এনার্জি সেল
+    // শুধুমাত্র গেম খেলে রিওয়ার্ড প্রাপ্তি: প্রতি ৪ স্কোরে ১টি Energy Cell
     const earnedCredits = Math.floor(currentMatchScore / 4);
     balanceCredits += earnedCredits;
     totalMatchesPlayed++;
 
-    const isNewHigh = currentMatchScore > personalHighScore;
-    if (isNewHigh) {
+    if (currentMatchScore > personalHighScore) {
         personalHighScore = currentMatchScore;
         triggerConfetti();
     }
@@ -792,37 +969,28 @@ function endArcadeMatch() {
         matchesPlayed: totalMatchesPlayed
     });
 
-    document.getElementById('modal-final-score').innerText = formatNum(currentMatchScore);
-    document.getElementById('modal-match-credits').innerText = `+${formatNum(earnedCredits)} ${t('pts_currency')}`;
-    document.getElementById('modal-best-score').innerText = formatNum(personalHighScore);
+    document.getElementById('modal-final-score').innerText = currentMatchScore;
+    document.getElementById('modal-match-credits').innerText = `+${earnedCredits} CELLS`;
+    document.getElementById('modal-best-score').innerText = personalHighScore;
 
     const modal = document.getElementById('game-over-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        pushModalToStack('game-over-modal', closeGameOverModal);
-    }
-
+    if (modal) modal.style.display = 'flex';
     updateUI();
 }
 
 function closeGameOverModal() {
     playClickSound();
-    triggerHaptic('light');
     const modal = document.getElementById('game-over-modal');
     if (modal) modal.style.display = 'none';
-    removeModalFromStack('game-over-modal');
-
     document.getElementById('game-overlay-screen').style.display = 'flex';
 }
 
-// ================= ১০. ন্যাচারাল অ্যাড মেকানিক্স (Adsgram Rewarded Placements) =================
 async function triggerReviveWithAd() {
     if (hasRevivedThisMatch) return;
     playClickSound();
-    triggerHaptic('medium');
 
     if (typeof window.Adsgram === 'undefined') {
-        return showToast(currentLang === 'bn' ? 'অ্যাড নেটওয়ার্ক লোড করা যায়নি!' : 'Ad network failed to load!', 'error');
+        return showToast(currentLang === 'bn' ? 'বিজ্ঞাপন নেটওয়ার্ক উপলব্ধ নয়' : 'Ad network offline', 'error');
     }
 
     try {
@@ -841,119 +1009,265 @@ async function triggerReviveWithAd() {
             document.getElementById('arcade-target').style.display = 'flex';
 
             playRewardSound();
-            triggerHaptic('notification_success');
-            showToast(t('toast_revive_success'));
+            showToast(currentLang === 'bn' ? '⚡ শিল্ড রিভাইভ সফল!' : '⚡ Shield Revived!');
             spawnNextTarget();
-        } else {
-            showToast(currentLang === 'bn' ? 'ব্রডকাস্ট সম্পন্ন না হলে শিল্ড পাওয়া যাবে না।' : 'Broadcast not finished.', 'error');
         }
     } catch (e) {
-        showToast(currentLang === 'bn' ? 'কোর সংযোগ ত্রুটি!' : 'Core connection error!', 'error');
+        showToast('Ad service unavailable', 'error');
     }
 }
 
-async function triggerEnergyRefillAd() {
-    playClickSound();
-    triggerHaptic('medium');
+// ================= ৯. TON WALLET CONNECT ENGINE =================
+let tonConnectUI = null;
 
-    if (typeof window.Adsgram === 'undefined') {
-        return showToast('Ad network offline!', 'error');
-    }
-
+function initTonConnect() {
     try {
-        const adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
-        const res = await adController.show().catch(() => ({ done: false }));
+        if (typeof TON_CONNECT_UI !== 'undefined') {
+            tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+                manifestUrl: 'https://aetheria-arcade-api.rakibkdbb.workers.dev/tonconnect-manifest.json',
+                buttonRootId: 'ton-connect-button-root'
+            });
 
-        if (res && res.done) {
-            balanceCredits += 25;
-            arcadeLives = MAX_LIVES;
-            updateArcadeHUD();
-            db.ref('users/' + userId).update({ balance: balanceCredits });
-
-            playRewardSound();
-            triggerConfetti();
-            triggerHaptic('notification_success');
-            showToast(t('toast_full_recharge'));
-            updateUI();
+            tonConnectUI.onStatusChange(wallet => {
+                if (wallet) {
+                    tonWalletAddress = wallet.account.address;
+                    localStorage.setItem('arcade_ton_address', tonWalletAddress);
+                    db.ref('users/' + userId).update({ tonWallet: tonWalletAddress });
+                    showToast(t('toast_wallet_connected'));
+                    updateUI();
+                } else {
+                    tonWalletAddress = "";
+                    localStorage.removeItem('arcade_ton_address');
+                    updateUI();
+                }
+            });
         }
     } catch (e) {
-        showToast('Error syncing power core', 'error');
+        console.warn('TonConnect Note:', e);
     }
 }
 
-// ================= ১১. আর্মোরি ও হার্ডওয়্যার মডিউল শপ =================
-function purchaseSkin(skinId) {
+function saveManualTonAddress() {
     playClickSound();
-    triggerHaptic('medium');
+    const input = document.getElementById('manual-ton-address-input');
+    const val = (input?.value || '').trim();
 
-    if (unlockedUpgrades.includes(skinId)) {
-        return showToast(currentLang === 'bn' ? 'মডিউলটি ইতোমধ্যে সক্রিয় রয়েছে!' : 'Module already active!');
+    if (!val || val.length < 24) {
+        return showToast(currentLang === 'bn' ? 'সঠিক TON ওয়ালেট অ্যাড্রেস লিখুন!' : 'Invalid TON address!', 'error');
     }
 
-    const prices = {
-        'cyber_neon': 250,
-        'reflex_overload': 500,
-        'hazard_shield': 750
-    };
+    tonWalletAddress = val;
+    localStorage.setItem('arcade_ton_address', tonWalletAddress);
+    db.ref('users/' + userId).update({ tonWallet: tonWalletAddress });
 
-    const cost = prices[skinId] || 999;
-    if (balanceCredits < cost) {
-        return showToast(t('toast_not_enough_credits'), 'error');
-    }
-
-    balanceCredits -= cost;
-    unlockedUpgrades.push(skinId);
-    localStorage.setItem('unlocked_skins', JSON.stringify(unlockedUpgrades));
-
-    db.ref('users/' + userId).update({ balance: balanceCredits });
-
-    playRewardSound();
-    triggerConfetti();
-    showToast(t('toast_unlocked_skin'));
+    showToast(currentLang === 'bn' ? 'TON Address সেভ করা হয়েছে!' : 'TON Address Saved!');
+    const status = document.getElementById('manual-ton-status');
+    if (status) status.innerText = 'Saved ✅';
     updateUI();
 }
 
-// ================= ১২. গ্লোবাল পাইলট লিডারবোর্ড =================
-function listenToLeaderboard() {
-    const container = document.getElementById('leaderboard-container');
-    if (!container) return;
+function handleWithdrawRequest() {
+    playClickSound();
+    if (!tonWalletAddress) {
+        return showToast(currentLang === 'bn' ? 'আগে TON Wallet সেভ করুন!' : 'Connect or save TON Wallet first!', 'error');
+    }
 
-    db.ref('users').orderByChild('highScore').limitToLast(25).on('value', snapshot => {
+    if (balanceCredits < 1000) {
+        return showToast(t('toast_withdraw_min'), 'error');
+    }
+
+    const reqAmount = balanceCredits;
+    db.ref('withdrawals').push({
+        userId,
+        userName,
+        amountCells: reqAmount,
+        tonAddress: tonWalletAddress,
+        status: 'pending',
+        timestamp: Date.now()
+    }).then(() => {
+        balanceCredits = 0;
+        db.ref('users/' + userId).update({ balance: balanceCredits });
+        triggerConfetti();
+        showToast(t('toast_withdraw_success'));
+        updateUI();
+    }).catch(() => {
+        showToast('Withdraw error', 'error');
+    });
+}
+
+// ================= ১০. ডেইলি বোনাস ড্রপ (শুধু টিকেট) ও রেফারেল =================
+function openCheckInFullView() {
+    playClickSound();
+    renderCheckInGrid();
+    const sheet = document.getElementById('checkin-fullview');
+    if (sheet) sheet.classList.add('active');
+}
+
+function closeCheckInFullView() {
+    playClickSound();
+    const sheet = document.getElementById('checkin-fullview');
+    if (sheet) sheet.classList.remove('active');
+}
+
+function renderCheckInGrid() {
+    const grid = document.getElementById('checkin-grid');
+    const claimBtn = document.getElementById('btn-claim-checkin');
+    const statusText = document.getElementById('checkin-streak-status');
+    if (!grid) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const isClaimedToday = (lastCheckInDate.startsWith(today));
+    if (statusText) {
+        statusText.innerText = currentLang === 'bn' 
+            ? `বর্তমান স্ট্রিক: ${checkInStreak} দিন` 
+            : `Current Streak: ${checkInStreak} Days`;
+    }
+
+    let html = '';
+    const currentTargetDay = isClaimedToday ? checkInStreak : ((checkInStreak % 7) + 1);
+
+    for (let i = 1; i <= 7; i++) {
+        const ticketReward = checkInTicketRewards[i - 1];
+        let tileClass = 'cyber-checkin-tile';
+        if (isClaimedToday ? (i <= checkInStreak) : (i < currentTargetDay)) tileClass += ' claimed';
+        else if (!isClaimedToday && i === currentTargetDay) tileClass += ' active';
+
+        html += `
+            <div class="${tileClass}">
+                <span class="tile-day-lbl">${currentLang === 'bn' ? 'দিন' : 'Day'} ${i}</span>
+                <span class="tile-pts-val" style="color: var(--neon-gold);">+${ticketReward} 🎟️</span>
+            </div>
+        `;
+    }
+    grid.innerHTML = html;
+
+    if (claimBtn) {
+        if (isClaimedToday) {
+            claimBtn.disabled = true;
+            claimBtn.innerText = t('btn_claimed_today');
+        } else {
+            claimBtn.disabled = false;
+            claimBtn.innerText = currentLang === 'bn' 
+                ? `আজকের ফ্রি টিকেট নিন (+${checkInTicketRewards[currentTargetDay - 1]} 🎟️)`
+                : `Claim Today's Free Ticket (+${checkInTicketRewards[currentTargetDay - 1]} 🎟️)`;
+        }
+    }
+}
+
+function claimDailyCheckIn() {
+    playClickSound();
+    const today = new Date().toISOString().slice(0, 10);
+    if (lastCheckInDate.startsWith(today)) return;
+
+    const currentTargetDay = (checkInStreak % 7) + 1;
+    const freeTicketsWon = checkInTicketRewards[currentTargetDay - 1];
+
+    checkInStreak++;
+    lastCheckInDate = today;
+    userTickets += freeTicketsWon;
+
+    db.ref('users/' + userId).update({ checkInStreak, lastCheckInDate, tickets: userTickets });
+    playRewardSound();
+    triggerConfetti();
+    showToast(`+${freeTicketsWon} ${t('unit_tickets')}!`);
+    renderCheckInGrid();
+    updateUI();
+}
+
+function copyReferralLink() {
+    playClickSound();
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(myReferralLink).then(() => showToast(t('toast_copied')));
+    } else {
+        showToast(t('toast_copied'));
+    }
+}
+
+function shareReferralLink() {
+    playClickSound();
+    const shareText = currentLang === 'bn'
+        ? `🎮 Aetheria Arcade-এ জয়েন করুন! প্রতি রেফারে ফ্রি গেম টিকেট (+৩ 🎟️) পান এবং গেম খেলে TON ক্রিপ্টো রিওয়ার্ড জিতে নিন!\n\nখেলতে জয়েন করুন:\n${myReferralLink}`
+        : `🎮 Enter Aetheria Arcade! Get 3 Free Game Tickets (+3 🎟️) per invite and win real TON crypto rewards!\n\nJoin now:\n${myReferralLink}`;
+    
+    const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(myReferralLink)}&text=${encodeURIComponent(shareText)}`;
+    if (tg?.openTelegramLink) tg.openTelegramLink(tgUrl);
+    else window.open(tgUrl, '_blank');
+}
+
+function openCommunityChannel() {
+    playClickSound();
+    if (tg?.openTelegramLink) tg.openTelegramLink(telegramCommunityUrl);
+    else window.open(telegramCommunityUrl, '_blank');
+}
+
+// ================= ১১. প্রফেশনাল পডিয়াম স্টল লিডারবোর্ড =================
+function listenToPodiumLeaderboard() {
+    const listContainer = document.getElementById('leaderboard-container');
+    if (!listContainer) return;
+
+    db.ref('users').orderByChild('highScore').limitToLast(30).on('value', snapshot => {
         if (!snapshot.exists()) {
-            container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">${t('loading_text')}</div>`;
+            listContainer.innerHTML = `<div class="loading-state">${t('msg_syncing')}</div>`;
             return;
         }
 
         const pilots = [];
-        snapshot.forEach(child => {
-            pilots.push(child.val());
-        });
+        snapshot.forEach(child => pilots.push(child.val()));
+        pilots.reverse(); // সর্বোচ্চ স্কোর থেকে নিম্নগামী
 
-        pilots.reverse();
+        // ১. পডিয়াম স্টল ডেটা আপডেট (1st, 2nd, 3rd)
+        const rank1 = pilots[0];
+        const rank2 = pilots[1];
+        const rank3 = pilots[2];
+
+        // Champion (1st)
+        if (rank1) {
+            document.getElementById('podium-1-avatar').innerText = (rank1.name?.charAt(0) || '1').toUpperCase();
+            document.getElementById('podium-1-name').innerText = escapeHtml(rank1.name || 'Champion');
+            document.getElementById('podium-1-score').innerText = `${rank1.highScore || 0} PTS`;
+        }
+        // Silver (2nd)
+        if (rank2) {
+            document.getElementById('podium-2-avatar').innerText = (rank2.name?.charAt(0) || '2').toUpperCase();
+            document.getElementById('podium-2-name').innerText = escapeHtml(rank2.name || 'Silver Pilot');
+            document.getElementById('podium-2-score').innerText = `${rank2.highScore || 0} PTS`;
+        }
+        // Bronze (3rd)
+        if (rank3) {
+            document.getElementById('podium-3-avatar').innerText = (rank3.name?.charAt(0) || '3').toUpperCase();
+            document.getElementById('podium-3-name').innerText = escapeHtml(rank3.name || 'Bronze Pilot');
+            document.getElementById('podium-3-score').innerText = `${rank3.highScore || 0} PTS`;
+        }
+
+        // ২. রানার্স-আপ তালিকা (৪র্থ থেকে বাকি পাইলটদের তালিকা)
+        const challengers = pilots.slice(3);
+        if (challengers.length === 0) {
+            listContainer.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:13px;">${currentLang === 'bn' ? 'অন্যান্য পাইলটদের স্কোর শীঘ্রই আসছে' : 'More pilots joining soon'}</div>`;
+            return;
+        }
 
         let html = '';
-        pilots.forEach((pilot, idx) => {
+        challengers.forEach((pilot, idx) => {
             const initial = (pilot.name?.charAt(0) || 'P').toUpperCase();
-            const rankBadge = idx === 0 ? '👑 TOP PILOT' : `#${formatNum(idx + 1)}`;
+            const rankPos = idx + 4;
 
             html += `
                 <div class="roster-item">
                     <div class="roster-left">
-                        <div class="roster-avatar" style="${idx === 0 ? 'border-color: #FFB800; color: #FFB800;' : ''}">${escapeHtml(initial)}</div>
+                        <span class="roster-rank-num">#${rankPos}</span>
+                        <div class="roster-avatar">${initial}</div>
                         <div class="roster-details">
                             <span class="roster-title">${escapeHtml(pilot.name || 'Pilot')}</span>
                             <span class="roster-sub">${escapeHtml(pilot.username || '')}</span>
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <span class="cyber-chip chip-success">${formatNum(pilot.highScore || 0)} PTS</span>
-                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">${rankBadge}</div>
+                        <span class="cyber-chip chip-success">${pilot.highScore || 0} PTS</span>
                     </div>
                 </div>
             `;
         });
-
-        container.innerHTML = html;
+        listContainer.innerHTML = html;
     });
 }
 
@@ -963,195 +1277,9 @@ function escapeHtml(str) {
     })[c]);
 }
 
-// ================= ১৩. UI আপডেট ও ডেইলি প্রোটোকল ড্রপ =================
-function updateUI() {
-    const setElem = (id, text) => {
-        const el = document.getElementById(id);
-        if (el) el.innerText = text;
-    };
-
-    setElem('user-balance', formatNum(balanceCredits));
-    setElem('profile-stat-balance', `${formatNum(balanceCredits)} ${t('pts_currency')}`);
-    setElem('profile-stat-matches', `${formatNum(totalMatchesPlayed)} Matches`);
-    setElem('home-ref-count', formatNum(referralCount));
-    setElem('profile-best-score-badge', formatNum(personalHighScore));
-
-    // আর্মোরি বাটন স্টেট
-    const btn1 = document.getElementById('btn-skin-1');
-    if (btn1 && unlockedUpgrades.includes('cyber_neon')) {
-        btn1.innerText = t('btn_equipped');
-        btn1.classList.add('chip-success');
-    }
-
-    const btn2 = document.getElementById('btn-skin-2');
-    if (btn2 && unlockedUpgrades.includes('reflex_overload')) {
-        btn2.innerText = t('btn_equipped');
-        btn2.classList.add('chip-success');
-    }
-
-    const btn3 = document.getElementById('btn-skin-3');
-    if (btn3 && unlockedUpgrades.includes('hazard_shield')) {
-        btn3.innerText = t('btn_equipped');
-        btn3.classList.add('chip-success');
-    }
-
-    const pId = document.getElementById('profile-page-id');
-    if (pId) pId.innerText = `ID: #${formatNum(userId)}`;
-}
-
-function openCheckInFullView() {
-    playClickSound();
-    triggerHaptic('light');
-    renderCheckInGrid();
-    const sheet = document.getElementById('checkin-fullview');
-    if (sheet) {
-        sheet.classList.add('active');
-        pushModalToStack('checkin-fullview', closeCheckInFullView);
-    }
-}
-
-function closeCheckInFullView() {
-    playClickSound();
-    triggerHaptic('light');
-    const sheet = document.getElementById('checkin-fullview');
-    if (sheet) sheet.classList.remove('active');
-    removeModalFromStack('checkin-fullview');
-}
-
-function renderCheckInGrid() {
-    const grid = document.getElementById('checkin-grid');
-    const statusText = document.getElementById('checkin-streak-status');
-    const homeStreakText = document.getElementById('home-streak-status');
-    const claimBtn = document.getElementById('btn-claim-checkin');
-
-    const today = new Date().toISOString().slice(0, 10);
-    const isClaimedToday = (lastCheckInDate.startsWith(today));
-
-    if (statusText) statusText.innerText = t('checkin_streak_text', { day: checkInStreak });
-    if (homeStreakText) {
-        homeStreakText.innerText = isClaimedToday 
-            ? t('home_streak_claimed', { day: checkInStreak })
-            : t('home_streak_ready', { day: (checkInStreak % 7) + 1 });
-    }
-
-    if (!grid || !claimBtn) return;
-
-    let html = '';
-    const currentTargetDay = isClaimedToday ? checkInStreak : ((checkInStreak % 7) + 1);
-
-    for (let i = 1; i <= 7; i++) {
-        const rewardPts = checkInRewards[i - 1];
-        let itemClass = 'cyber-checkin-tile';
-
-        if (isClaimedToday) {
-            if (i <= checkInStreak) itemClass += ' claimed';
-        } else {
-            if (i < currentTargetDay) itemClass += ' claimed';
-            else if (i === currentTargetDay) itemClass += ' active';
-        }
-
-        html += `
-            <div class="${itemClass}">
-                <span class="tile-day-lbl">${t('checkin_day_text', { day: i })}</span>
-                <span class="tile-pts-val">+${formatNum(rewardPts)}</span>
-            </div>
-        `;
-    }
-    grid.innerHTML = html;
-
-    if (isClaimedToday) {
-        claimBtn.disabled = true;
-        claimBtn.innerText = t('checkin_claimed_btn');
-    } else {
-        claimBtn.disabled = false;
-        claimBtn.innerText = t('checkin_claim_btn', { day: currentTargetDay, pts: checkInRewards[currentTargetDay - 1] });
-    }
-}
-
-function claimDailyCheckIn() {
-    playClickSound();
-    triggerHaptic('medium');
-
-    const today = new Date().toISOString().slice(0, 10);
-    if (lastCheckInDate.startsWith(today)) return;
-
-    const currentTargetDay = (checkInStreak % 7) + 1;
-    const rewardPts = checkInRewards[currentTargetDay - 1];
-
-    checkInStreak++;
-    lastCheckInDate = today;
-    balanceCredits += rewardPts;
-
-    db.ref('users/' + userId).update({
-        checkInStreak,
-        lastCheckInDate,
-        balance: balanceCredits
-    });
-
-    playRewardSound();
-    triggerConfetti();
-    triggerHaptic('notification_success');
-    showToast(currentLang === 'bn' ? `⚡ +${formatNum(rewardPts)} পাওয়ার সেল যুক্ত হয়েছে!` : `⚡ +${rewardPts} Cells claimed!`);
-    renderCheckInGrid();
-    updateUI();
-}
-
-// ================= ১৪. সোশ্যাল ও স্কোয়াড মিশন শেয়ার =================
-function copyReferralLink() {
-    playClickSound();
-    triggerHaptic('light');
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(myReferralLink).then(() => {
-            showToast(t('toast_link_copied'));
-        });
-    } else {
-        showToast(t('toast_link_copied'));
-    }
-}
-
-function shareReferralLink() {
-    playClickSound();
-    triggerHaptic('light');
-
-    const shareText = currentLang === 'bn' 
-        ? `🎮 Aetheria Cyber Arcade-এ আমার সাথে খেলুন! আমার হাই-স্কোর ${formatNum(personalHighScore)} বিট করতে পারবেন?\n\n👇 অ্যারেনা লিংক:\n${myReferralLink}`
-        : `🎮 Join me on Aetheria Cyber Arcade! Can you beat my high score of ${personalHighScore}?\n\n👇 Play Link:\n${myReferralLink}`;
-    
-    const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(myReferralLink)}&text=${encodeURIComponent(shareText)}`;
-    if (tg && typeof tg.openTelegramLink === 'function') tg.openTelegramLink(tgShareUrl);
-    else window.open(tgShareUrl, '_blank', 'noopener,noreferrer');
-}
-
-function openTutorialVideo() {
-    playClickSound();
-    triggerHaptic('medium');
-    if (tg && typeof tg.openLink === 'function') tg.openLink(tutorialVideoUrl);
-    else window.open(tutorialVideoUrl, '_blank', 'noopener,noreferrer');
-}
-
-function openWelcomeModal() {
-    const modal = document.getElementById('welcome-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        pushModalToStack('welcome-modal', closeWelcomeModal);
-    }
-}
-
-function closeWelcomeModal() {
-    playRewardSound();
-    triggerHaptic('light');
-    const modal = document.getElementById('welcome-modal');
-    if (modal) modal.style.display = 'none';
-    removeModalFromStack('welcome-modal');
-    triggerConfetti();
-}
-
-// ================= ১৫. ট্যাব নেভিগেশন ও অ্যাপ বুটস্ট্র্যাপ =================
+// ================= ১২. ট্যাব সুইচিং ও ইনিট সাইকেল =================
 function switchTab(viewId) {
     playClickSound();
-    triggerHaptic('light');
-
     document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.hud-nav-tab').forEach(t => t.classList.remove('active'));
 
@@ -1182,11 +1310,12 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAudioIcon();
     applyLanguage();
     initUser();
+    initTonConnect();
 
-    // বুট স্ক্রিন স্মুথ লোডার
+    // স্প্ল্যাশ স্ক্রিন বুট অ্যানিমেশন
     let splashProgress = 0;
     const splashTimer = setInterval(() => {
-        splashProgress += 30;
+        splashProgress += 34;
         const bar = document.getElementById('splash-progress');
         if (bar) bar.style.width = splashProgress + '%';
         if (splashProgress >= 100) {
@@ -1199,5 +1328,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 100);
         }
-    }, 35);
+    }, 30);
 });

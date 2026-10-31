@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="dark" data-lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -13,6 +13,9 @@
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+    <!-- TON Connect Official SDK -->
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+
     <!-- Adsgram Official SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
@@ -21,15 +24,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=8.0.0">
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=9.0.0">
 </head>
 <body class="cyber-theme">
 
-    <!-- Toast Notification Engine -->
-    <div id="toast-container" class="toast-viewport"></div>
+    <!-- Toast Notification Viewport -->
+    <div id="toast-container" class="toast-viewport" aria-live="polite"></div>
 
-    <!-- Futuristic Cyber Boot Loader -->
+    <!-- Cyber Boot Loader (Splash Screen) -->
     <div id="splash-screen" class="cyber-boot-screen">
         <div class="boot-matrix">
             <div class="cyber-core-spinner">
@@ -38,188 +41,211 @@
                 <div class="core-dot"></div>
             </div>
             <div class="boot-logo">AETHERIA<span>_ARCADE</span></div>
-            <div class="boot-status-text" id="boot-status">INITIALIZING REFLEX MATRIX...</div>
+            <div class="boot-status-text" id="boot-status">SYSTEM PROTOCOLS INITIALIZING...</div>
             <div class="boot-progress-track">
                 <div class="boot-progress-glow" id="splash-progress"></div>
             </div>
         </div>
     </div>
 
-    <!-- GAME OVER / SECOND CHANCE MODAL -->
-    <div id="game-over-modal" class="cyber-modal-overlay" style="display: none;">
-        <div class="cyber-modal-box neon-border" onclick="event.stopPropagation()">
-            <div class="modal-tag-badge neon-alert" data-i18n="modal_gameover_badge">SYSTEM BREACHED</div>
-            <div class="holo-icon-wrap" style="color: var(--neon-alert);">
-                <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="15" y1="9" x2="9" y2="15"/>
-                    <line x1="9" y1="9" x2="15" y2="15"/>
-                </svg>
-            </div>
-            <h3 class="modal-title" data-i18n="modal_gameover_title">অপারেশন ব্যর্থ!</h3>
-            <p class="modal-subtext">
-                <span data-i18n="final_score_label">ম্যাচ স্কোর:</span> 
-                <strong id="modal-final-score" class="neon-gem" style="font-size: 24px;">0</strong>
-            </p>
-
-            <div class="cyber-terminal-card" style="margin-bottom: 16px;">
-                <div class="terminal-row">
-                    <span class="t-muted" data-i18n="earned_credits_label">অর্জিত এনার্জি সেল:</span>
-                    <span class="neon-emerald font-bold" id="modal-match-credits">+0 CELLS</span>
-                </div>
-                <div class="terminal-row">
-                    <span class="t-muted" data-i18n="high_score_status">সেরা রেকর্ড:</span>
-                    <span class="t-light font-bold" id="modal-best-score">0</span>
-                </div>
-            </div>
-
-            <!-- Natural Rewarded Placement: Second Chance Shield -->
-            <button type="button" class="cyber-btn primary-glow" id="btn-revive-game" onclick="triggerReviveWithAd()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-                <span data-i18n="btn_revive">Second Chance (Shield +1)</span>
-            </button>
-
-            <button type="button" class="cyber-link-btn" onclick="closeGameOverModal()" data-i18n="btn_finish_match">
-                ফলাফল জমা দিন ও বের হন
-            </button>
-        </div>
-    </div>
-
-    <!-- Pilot Starter Kit Modal -->
-    <div id="welcome-modal" class="cyber-modal-overlay" onclick="closeWelcomeModal()">
-        <div class="cyber-modal-box neon-border" onclick="event.stopPropagation()">
-            <div class="modal-tag-badge" data-i18n="welcome_badge">PILOT PROTOCOL</div>
-            <div class="holo-icon-wrap">
-                <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-            </div>
-            <h3 class="modal-title" data-i18n="welcome_title">অপারেটর লাইসেন্স সক্রিয়!</h3>
-            <p class="modal-subtext">
-                <span data-i18n="welcome_desc_1">আর্টিফিশিয়াল অ্যারেনায় আপনাকে দেওয়া হয়েছে</span> 
-                <strong id="welcome-bonus-modal" class="neon-gem">100</strong> 
-                <span data-i18n="welcome_desc_2">স্টার্টার এনার্জি সেল!</span>
-            </p>
-            <button type="button" class="cyber-btn primary-glow" onclick="closeWelcomeModal()" data-i18n="btn_claim_welcome">
-                অ্যারেনা এক্টিভেট করুন
-            </button>
-        </div>
-    </div>
-
-    <!-- HUD Tactical Top Header -->
+    <!-- Top HUD Header -->
     <header class="cyber-hud-header">
-        <div class="hud-profile-chip" onclick="switchTab('profile')">
+        <div class="hud-profile-chip" onclick="switchTab('profile')" role="button" tabindex="0">
             <div class="pilot-avatar-frame">
                 <div class="pilot-avatar-img" id="header-avatar">P</div>
-                <span class="pilot-level-tag" id="header-level-tag">LV.1</span>
+                <span class="pilot-level-tag">V9</span>
             </div>
             <div class="pilot-status-column">
                 <div class="pilot-title-row">
-                    <span class="pilot-callsign" id="header-name">Loading...</span>
+                    <span class="pilot-callsign" id="header-name">Pilot</span>
                     <span class="hud-online-beacon"></span>
                 </div>
-                <span class="pilot-rank-badge" id="header-user-status" data-i18n="user_status">● অনলাইন অপারেটর</span>
+                <span class="pilot-rank-badge" id="header-user-status" data-i18n="status_online">● অনলাইন অপারেটর</span>
             </div>
         </div>
 
         <div class="hud-quick-controls">
             <!-- Audio Toggle -->
-            <button type="button" class="hud-circle-btn" id="btn-audio-toggle" onclick="toggleAudioFx()" title="Toggle Sound">
+            <button type="button" class="hud-circle-btn" id="btn-audio-toggle" onclick="toggleAudioFx()" title="Audio Toggle" aria-label="Audio FX">
                 <svg id="audio-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
                 </svg>
             </button>
-
-            <!-- Theme Toggle -->
+            <!-- Day/Night Theme Toggle -->
             <button type="button" class="hud-circle-btn" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
                 <span id="theme-icon">🌙</span>
             </button>
-
-            <!-- Language Switcher -->
-            <button type="button" class="hud-lang-pill" onclick="toggleLanguage()">
+            <!-- Language Switcher (Bangla / English) -->
+            <button type="button" class="hud-lang-pill" id="btn-lang-toggle" onclick="toggleLanguage()" aria-label="Toggle Language">
                 <span id="lang-indicator">BN</span>
             </button>
         </div>
     </header>
 
-    <!-- Main Container Viewport -->
+    <!-- Main Viewport Deck -->
     <main class="app-viewport">
 
-        <!-- ================= 1. ARENA & CYBER ARCADE (HOME) ================= -->
-        <section id="arena" class="view-panel active">
+        <!-- ================= 1. HOME VIEW: TASKS & TICKETS HUB ================= -->
+        <section id="home" class="view-panel active">
             
-            <!-- Dashboard Energy & Score Matrix -->
-            <div class="bento-box hero-matrix neon-glow">
+            <!-- Bento Balance Matrix -->
+            <div class="bento-box hero-matrix">
                 <div class="matrix-topbar">
                     <div class="matrix-label-group">
-                        <span class="matrix-eyebrow" data-i18n="credits_balance_label">টোটাল এনার্জি সেল</span>
+                        <span class="matrix-eyebrow" data-i18n="lbl_ticket_stash">বর্তমান এন্ট্রি টিকেট</span>
                         <div class="gem-counter">
-                            <span id="user-balance" class="gem-digits">0</span>
-                            <span class="gem-unit" data-i18n="pts_currency">CELLS</span>
+                            <span class="ticket-symbol-glow">🎟️</span>
+                            <span id="user-tickets-display" class="gem-digits">0</span>
+                            <span class="gem-unit" data-i18n="unit_tickets">টিকেট</span>
                         </div>
                     </div>
 
-                    <button type="button" class="cyber-streak-pill" onclick="openCheckInFullView()">
-                        <div class="fire-flame">⚡</div>
-                        <span id="home-streak-status">ডেইলি লগ</span>
-                    </button>
+                    <!-- Energy Cells Preview Badge -->
+                    <div class="cells-badge-pill" onclick="switchTab('wallet')">
+                        <span class="badge-dot"></span>
+                        <span id="user-balance-home" class="cells-count">0</span>
+                        <span class="cells-lbl">CELLS</span>
+                    </div>
                 </div>
 
-                <div class="energy-dock">
-                    <div class="energy-label-row">
-                        <span class="energy-title" data-i18n="shield_status_lbl">🛡️ কোর শিল্ড ও এনার্জি</span>
-                        <span class="energy-val" id="display-arcade-lives">৩ / ৩ শিল্ড</span>
-                    </div>
-                    <div class="energy-progress-track">
-                        <div class="energy-fill-active" id="energy-gauge-bar" style="width: 100%;"></div>
-                    </div>
+                <!-- Info Hint on Economy -->
+                <div class="economy-explainer-banner">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <span data-i18n="msg_economy_hint">টাস্ক ও রেফার থেকে টিকেট সংগ্রহ করুন ➔ গেম খেলে রূপান্তরযোগ্য CELLS আয় করুন!</span>
+                </div>
+
+                <div class="quick-action-strip">
+                    <button type="button" class="cyber-streak-pill" onclick="openCheckInFullView()">
+                        <span data-i18n="btn_daily_streak">⚡ ডেইলি বোনাস টিকেট</span>
+                    </button>
+                    <button type="button" class="cyber-streak-pill accent-btn" onclick="switchTab('game')">
+                        <span data-i18n="btn_play_arena">🎮 এরেনায় যান (১ টিকেট)</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- FUNCTIONAL REAL-TIME CYBER ARCADE ENGINE -->
+            <!-- SECTION A: SPONSORED AD STATIONS (STRICT 1-MIN COOLDOWN -> GIVES TICKETS) -->
+            <div class="section-badge-row">
+                <div class="badge-title-wrap">
+                    <span class="section-glow-title" data-i18n="title_ad_missions">📺 স্পনসর ভিডিও ও অ্যাড মিশন</span>
+                    <span class="section-sub-glow" data-i18n="sub_ad_missions">ভিডিও দেখে ফ্রি এন্ট্রি টিকেট রিফিল করুন (১ মিনিট কুলডাউন)</span>
+                </div>
+            </div>
+            <div id="ad-tasks-container" class="tasks-vertical-stack">
+                <!-- Adsgram, Monetag, Adsterra Dynamic Elements -->
+            </div>
+
+            <!-- SECTION B: TELEGRAM SOCIAL MISSIONS -->
+            <div class="section-badge-row" style="margin-top: 26px;">
+                <div class="badge-title-wrap">
+                    <span class="section-glow-title" data-i18n="title_social_missions">📢 অফিসিয়াল সোশ্যাল মিশন</span>
+                    <span class="section-sub-glow" data-i18n="sub_social_missions">কমিউনিটি চ্যানেলে যুক্ত হয়ে পান এক্সট্রা বোনাস টিকেট</span>
+                </div>
+            </div>
+            <div id="telegram-tasks-container" class="tasks-vertical-stack">
+                <!-- Telegram Channel, Group & Partner Cards -->
+            </div>
+
+            <!-- SECTION C: CUSTOM / PARTNER TASKS -->
+            <div id="custom-tasks-wrapper" style="display: none; margin-top: 24px;">
+                <div class="section-badge-row">
+                    <span class="section-glow-title" data-i18n="title_partner_missions">🌐 স্পেশাল ও পার্টনার মিশন</span>
+                </div>
+                <div id="custom-tasks-container" class="tasks-vertical-stack"></div>
+            </div>
+
+            <!-- Community Transparency Card -->
+            <div class="bento-box field-training-card" onclick="openCommunityChannel()" style="margin-top: 18px;">
+                <div class="field-training-left">
+                    <div class="training-icon-badge">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+                    </div>
+                    <div class="training-copy">
+                        <h4 data-i18n="card_community_head">অফিসিয়াল কমিউনিটি ও স্বচ্ছতা</h4>
+                        <p data-i18n="card_community_sub">দৈনিক আপডেট, টিকিট গিভঅ্যাওয়ে ও ডিস্ট্রিবিউশন প্রুফ</p>
+                    </div>
+                </div>
+                <div class="field-training-action">
+                    <span data-i18n="btn_join">জয়েন</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= 2. GAME VIEW: QUANTUM REFLEX ARENA ================= -->
+        <section id="game" class="view-panel">
+            
+            <!-- Game HUD Header Bar -->
+            <div class="bento-box hero-matrix" style="padding: 16px;">
+                <div class="matrix-topbar">
+                    <div>
+                        <span class="matrix-eyebrow" data-i18n="lbl_available_tickets">উপলব্ধ এন্ট্রি টিকেট</span>
+                        <div class="gem-counter">
+                            <span class="ticket-symbol-glow">🎫</span>
+                            <span id="game-tickets-count" class="gem-digits" style="font-size: 34px;">0</span>
+                            <span class="gem-unit" data-i18n="unit_tickets">TICKETS</span>
+                        </div>
+                    </div>
+                    <button type="button" class="cyber-chip-btn accent-chip" onclick="switchTab('home')">
+                        <span data-i18n="btn_get_more_tickets">+ টিকেট সংগ্রহ করুন</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Arcade Cabinet Console -->
             <div class="bento-box mini-arcade-console" id="arcade-wrapper">
                 <div class="console-header">
                     <div class="console-title-wrap">
                         <span class="console-pill" id="wave-indicator">WAVE 1</span>
-                        <h4 class="console-name">Quantum Reflex Grid</h4>
+                        <h4 class="console-name">Reflex Grid Core</h4>
                     </div>
                     <div class="console-metrics">
                         <span class="combo-badge" id="combo-multiplier">1X COMBO</span>
                         <div class="console-score-pill">
-                            <span data-i18n="current_score_lbl">স্কোর:</span>
+                            <span data-i18n="lbl_score">স্কোর:</span>
                             <strong class="neon-emerald" id="arcade-current-score">0</strong>
                         </div>
                     </div>
                 </div>
 
-                <!-- Interactive Game Stage Canvas -->
+                <!-- Interactive Game Arena Screen -->
                 <div class="arcade-interactive-pad" id="arcade-interactive-arena" onclick="handleArcadeBoardClick(event)">
                     
-                    <!-- Pre-Game Start Overlay Screen -->
+                    <!-- Pre-Game Overlay -->
                     <div id="game-overlay-screen" class="arcade-start-overlay">
                         <div class="rules-pill-box">
-                            <span class="rule-chip chip-cyan">🎯 Cyan = +10 PTS</span>
-                            <span class="rule-chip chip-gold">⭐ Gold = +30 PTS</span>
-                            <span class="rule-chip chip-red">⚠️ Red Glitch = AVOID!</span>
+                            <span class="rule-chip chip-cyan" data-i18n="rule_cyan">🎯 Cyan = +10 PTS</span>
+                            <span class="rule-chip chip-gold" data-i18n="rule_gold">⭐ Gold = +30 PTS</span>
+                            <span class="rule-chip chip-red" data-i18n="rule_red">⚠️ Red Hazard = শিল্ড লস!</span>
                         </div>
-                        <button type="button" class="cyber-btn primary-glow" style="width: auto; padding: 13px 32px; margin-top: 14px;" onclick="startArcadeMatch(event)">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                            <span data-i18n="btn_start_match">মিশন শুরু করুন</span>
+                        <div class="entry-cost-banner">
+                            <span data-i18n="lbl_game_cost">🎮 এন্ট্রি খরচ: ১টি টিকেট (1 Ticket)</span>
+                        </div>
+                        <div class="game-reward-projection">
+                            <span data-i18n="lbl_reward_rate">💰 রিওয়ার্ড ফর্মুলা: প্রতি ৪ স্কোরে = ১ Energy Cell</span>
+                        </div>
+                        <button type="button" class="cyber-btn primary-glow match-launch-btn" onclick="startArcadeMatch(event)">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span data-i18n="btn_start_match">ম্যাচ শুরু করুন</span>
                         </button>
-                        <small style="margin-top: 12px; color: var(--text-muted);" data-i18n="game_objective">রেড গ্লিচ নোড এড়িয়ে সঠিক নিয়ন টার্গেটে দ্রুত ট্যাপ করুন</small>
+                        <small class="overlay-note" data-i18n="msg_game_tip">টার্গেটে নিখুঁত ট্যাপ করে পয়েন্ট আয় করুন এবং গেম শেষে ব্যালেন্সে ক্রিপ্টো রিওয়ার্ড বুঝে নিন।</small>
                     </div>
 
-                    <!-- Dynamic Moving Target Node -->
+                    <!-- Target Interactive Node (Cyan / Gold) -->
                     <div class="cyber-target-node" id="arcade-target" style="display: none; position: absolute;">
-                        <div class="node-pulse-halo"></div>
                         <svg class="node-svg" width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                         </svg>
                         <span class="node-label" id="target-label">STRIKE</span>
                     </div>
 
-                    <!-- Dynamic Hazard / Glitch Node -->
+                    <!-- Hazard Node (Glitch Node) -->
                     <div class="cyber-hazard-node" id="arcade-hazard" style="display: none; position: absolute;">
                         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                             <circle cx="12" cy="12" r="10"/>
@@ -232,169 +258,205 @@
                     <div class="arena-scanline"></div>
                 </div>
 
-                <div class="arcade-footer-stats">
-                    <span data-i18n="arcade_hint">⚡ দ্রুত লক্ষ্যভেদ করে কম্বো বৃদ্ধি করুন। ভুল ট্যাপে শিল্ড ক্ষতিগ্রস্ত হবে।</span>
+                <!-- Life / Core Shield Gauge -->
+                <div class="energy-dock">
+                    <div class="energy-label-row">
+                        <span class="energy-title" data-i18n="lbl_shield_life">🛡️ কোর শিল্ড স্থিতিশীলতা</span>
+                        <span class="energy-val" id="display-arcade-lives">৩ / ৩ শিল্ড</span>
+                    </div>
+                    <div class="energy-progress-track">
+                        <div class="energy-fill-active" id="energy-gauge-bar" style="width: 100%;"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- IN-GAME POWER CELLS RECHARGE (Reward Placement) -->
-            <div class="bento-box recharge-banner-card">
-                <div class="recharge-copy">
-                    <h4 data-i18n="recharge_title">⚡ কোর এনার্জি সেল রিফিল</h4>
-                    <p data-i18n="recharge_desc">জরুরি পরিস্থিতিতে অ্যারেনা শিল্ড ও কোর এনার্জি পুনরুদ্ধার করুন।</p>
+        </section>
+
+        <!-- ================= 3. WALLET VIEW: TON CONNECT & CASHOUT ================= -->
+        <section id="wallet" class="view-panel">
+            
+            <div class="bento-box guild-hero-box ton-gradient-box">
+                <span class="guild-pill ton-pill">TON BLOCKCHAIN INTEGRATED</span>
+                <h3 class="guild-headline" data-i18n="title_crypto_vault">ট্যাকটিক্যাল ক্রিপ্টো ওয়ালেট</h3>
+                <p class="guild-subtext" data-i18n="sub_crypto_vault">
+                    গেমপ্লে থেকে অর্জিত Energy Cells জমা করুন এবং সরাসরি আপনার TON ওয়ালেটে ট্রান্সফার করুন।
+                </p>
+            </div>
+
+            <!-- Official TON Connect UI Button Container -->
+            <div class="bento-box wallet-connect-box">
+                <div class="wallet-status-row">
+                    <div class="ton-brand-badge">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 8.5L12 15L22 8.5L12 2Z" stroke="#0098EA" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M2 15.5L12 22L22 15.5" stroke="#0098EA" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        <span>The Open Network</span>
+                    </div>
+                    <div id="ton-connect-button-root"></div>
                 </div>
-                <button type="button" class="cyber-btn compact-btn" onclick="triggerEnergyRefillAd()">
-                    <span data-i18n="btn_recharge">রিচার্জ (+২৫)</span>
+
+                <div class="wallet-address-preview" id="wallet-address-container" style="display: none;">
+                    <span class="addr-label" data-i18n="lbl_connected_wallet">কানেক্টেড ওয়ালেট:</span>
+                    <span class="addr-value" id="connected-wallet-addr">UQ...</span>
+                </div>
+            </div>
+
+            <!-- Manual TON Address Fallback Card -->
+            <div class="bento-box">
+                <h4 style="font-size: 15.5px; margin-bottom: 6px;" data-i18n="head_manual_ton">ম্যানুয়াল TON Address সেটআপ</h4>
+                <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;" data-i18n="sub_manual_ton">
+                    যদি TON Connect এ কোনো ত্রুটি হয়, তবে Tonkeeper বা Telegram Wallet (v4R2) অ্যাড্রেস পেস্ট করে সেভ করুন।
+                </p>
+                <div class="terminal-input-wrap">
+                    <input type="text" id="manual-ton-address-input" placeholder="EQ... / UQ... Address" class="cyber-input" spellcheck="false" autocomplete="off" />
+                    <button type="button" class="cyber-chip-btn" onclick="saveManualTonAddress()" data-i18n="btn_save">সেভ</button>
+                </div>
+                <small id="manual-ton-status" style="font-size: 11.5px; color: var(--neon-emerald);"></small>
+            </div>
+
+            <!-- Cashout & Conversion Ledger Card -->
+            <div class="bento-box">
+                <h4 style="font-size: 16px; margin-bottom: 6px;" data-i18n="title_cashout_box">রিওয়ার্ড ক্যাশআউট ডেক</h4>
+                <div class="conversion-preview-deck">
+                    <div class="conversion-tile">
+                        <span data-i18n="lbl_earned_cells">মোট অর্জিত Cells</span>
+                        <strong id="wallet-user-cells" class="neon-gem">0</strong>
+                    </div>
+                    <div class="conversion-arrow">➔</div>
+                    <div class="conversion-tile">
+                        <span data-i18n="lbl_estimated_ton">আনুমানিক মূল্য</span>
+                        <strong id="wallet-ton-estimate" style="color: #0098EA;">0.00 TON</strong>
+                    </div>
+                </div>
+
+                <div class="notice-policy-box" style="margin: 16px 0;">
+                    <h4 data-i18n="head_withdraw_rule">📌 উইথড্র নীতিমালা:</h4>
+                    <p data-i18n="body_withdraw_rule">নূন্যতম উইথড্রল রিকোয়ারমেন্ট ১,০০০ CELLS। সাবমিট করার ২৪ থেকে ৪৮ ঘণ্টার মধ্যে অ্যাড্রেসে ভেরিফিকেশন সহ ডিস্ট্রিবিউট হয়।</p>
+                </div>
+
+                <button type="button" class="cyber-btn primary-glow" onclick="handleWithdrawRequest()">
+                    <span data-i18n="btn_submit_withdraw">উইথড্রল রিকোয়েস্ট সাবমিট করুন</span>
                 </button>
             </div>
 
-            <!-- Guide Video Card -->
-            <div class="bento-box field-training-card" onclick="openTutorialVideo()">
-                <div class="field-training-left">
-                    <div class="training-icon-badge">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                    </div>
-                    <div class="training-copy">
-                        <h4 data-i18n="tutorial_btn_title">অপারেটর ট্যাকটিক্স গাইড</h4>
-                        <p data-i18n="tutorial_btn_sub">হাই-স্কোর রিফ্লেক্স এবং টেকনিক্যাল টিপস দেখুন</p>
-                    </div>
-                </div>
-                <div class="field-training-action">
-                    <span data-i18n="btn_watch">ডকস</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>
-            </div>
-
         </section>
 
-        <!-- ================= 2. ARMORY & GADGETS (IN-GAME STORE) ================= -->
-        <section id="armory" class="view-panel">
-            <div class="bento-box guild-hero-box neon-purple-glow">
-                <span class="guild-pill" data-i18n="armory_pill">CYBER ARMORY & UPGRADES</span>
-                <h3 class="guild-headline" data-i18n="armory_headline">ট্যাকটিক্যাল গিয়ার ভল্ট</h3>
-                <p class="guild-subtext" data-i18n="armory_subtext">
-                    অর্জিত এনার্জি সেল দিয়ে রিফ্লেক্স স্ট্যাবিলাইজার ও শিল্ড মডিউল আপগ্রেড করুন।
-                </p>
-            </div>
-
-            <div class="section-badge-row">
-                <span class="section-glow-title" data-i18n="armory_catalog_title">অপারেটর মডিউল ক্যাটালগ</span>
-            </div>
-
-            <div class="tactical-grid">
-                
-                <!-- Upgrade 1 -->
-                <div class="tactical-card booster-purple">
-                    <div class="card-body-layout">
-                        <div class="tactical-icon-wrap icon-purple">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-                                <polyline points="2 17 12 22 22 17"/>
-                                <polyline points="2 12 12 17 22 12"/>
-                            </svg>
-                        </div>
-                        <div class="tactical-meta">
-                            <h4 class="tactical-title">Overclock Core</h4>
-                            <p class="tactical-desc" data-i18n="skin_desc_1">প্রতিটি সফল হিটে অতিরিক্ত +১৫% স্কোর বুস্ট</p>
-                        </div>
-                    </div>
-                    <div class="tactical-bottom-strip">
-                        <span class="tactical-bounty">250 <span data-i18n="pts_currency">CELLS</span></span>
-                        <button type="button" class="cyber-chip-btn" id="btn-skin-1" onclick="purchaseSkin('cyber_neon')" data-i18n="btn_unlock">আনলক</button>
-                    </div>
-                </div>
-
-                <!-- Upgrade 2 -->
-                <div class="tactical-card booster-blue">
-                    <div class="card-body-layout">
-                        <div class="tactical-icon-wrap icon-blue">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                        </div>
-                        <div class="tactical-meta">
-                            <h4 class="tactical-title">Time Dilator</h4>
-                            <p class="tactical-desc" data-i18n="skin_desc_2">টার্গেট নোডের অবস্থান ০.৪ সেকেন্ড বেশি স্থির থাকবে</p>
-                        </div>
-                    </div>
-                    <div class="tactical-bottom-strip">
-                        <span class="tactical-bounty">500 <span data-i18n="pts_currency">CELLS</span></span>
-                        <button type="button" class="cyber-chip-btn" id="btn-skin-2" onclick="purchaseSkin('reflex_overload')" data-i18n="btn_unlock">আনলক</button>
-                    </div>
-                </div>
-
-                <!-- Upgrade 3 -->
-                <div class="tactical-card booster-mint">
-                    <div class="card-body-layout">
-                        <div class="tactical-icon-wrap icon-mint">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            </svg>
-                        </div>
-                        <div class="tactical-meta">
-                            <h4 class="tactical-title">Hazard Nullifier</h4>
-                            <p class="tactical-desc" data-i18n="skin_desc_3">ম্যাচে ১টি রেড গ্লিচ ট্যাপের ক্ষতি স্বয়ংক্রিয়ভাবে ব্লক করবে</p>
-                        </div>
-                    </div>
-                    <div class="tactical-bottom-strip">
-                        <span class="tactical-bounty">750 <span data-i18n="pts_currency">CELLS</span></span>
-                        <button type="button" class="cyber-chip-btn" id="btn-skin-3" onclick="purchaseSkin('hazard_shield')" data-i18n="btn_unlock">আনলক</button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ================= 3. LEADERBOARD & GUILD (RANKING) ================= -->
+        <!-- ================= 4. RANKINGS VIEW: PROFESSIONAL PODIUM STALL LADDER & INVITE ================= -->
         <section id="rankings" class="view-panel">
-            <div class="bento-box guild-hero-box neon-purple-glow">
-                <span class="guild-pill" data-i18n="leaderboard_pill">ARENA GLOBAL LADDER</span>
-                <h3 class="guild-headline" data-i18n="leaderboard_heading">শীর্ষ অপারেটর লিডারবোর্ড</h3>
-                <p class="guild-subtext" data-i18n="leaderboard_subtext">
-                    সর্বোচ্চ স্কোর অর্জনকারী পাইলটদের গ্লোবাল র্যাঙ্ক ও স্কোয়াড তালিকা।
-                </p>
+            
+            <div class="bento-box guild-hero-box stall-header-banner">
+                <span class="guild-pill gold-pill">GLOBAL PILOT ROSTER</span>
+                <h3 class="guild-headline" data-i18n="title_stall_leaderboard">শীর্ষ অপারেটর লিডারবোর্ড</h3>
+                <p class="guild-subtext" data-i18n="sub_stall_leaderboard">কোয়ান্টাম এরেনায় সর্বোচ্চ ব্যক্তিগত স্কোর অর্জনকারীদের তালিকা।</p>
             </div>
 
-            <!-- Squad Recruitment -->
+            <!-- Referral Card: Inviting Gives Game Tickets -->
             <div class="bento-box invite-terminal">
+                <div class="invite-banner-header">
+                    <span class="reward-pill ticket-highlight-pill" data-i18n="banner_ref_ticket">
+                        🎁 প্রতি ফ্রেন্ড ইনভাইটে ৩টি টিকেট (+৩ 🎟️) এন্ট্রি বোনাস!
+                    </span>
+                </div>
+
+                <p class="invite-explainer" data-i18n="msg_ref_explainer">
+                    বন্ধুদের মিনি-অ্যাপে আমন্ত্রণ জানান। প্রতি রেফারে ফ্রি গেম টিকেট পাবেন যা দিয়ে গেম খেলে আনলিমিটেড CELLS আয় করা যাবে।
+                </p>
+
                 <div class="terminal-input-wrap">
                     <span id="referral-link-display" class="terminal-text-val">লিংক লোড হচ্ছে...</span>
                     <button type="button" class="cyber-chip-btn" onclick="copyReferralLink()" data-i18n="btn_copy">কপি</button>
                 </div>
 
-                <button type="button" class="cyber-btn primary-glow" id="btn-share-referral" onclick="shareReferralLink()">
+                <button type="button" class="cyber-btn primary-glow" onclick="shareReferralLink()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    <span data-i18n="btn_challenge_squad">বন্ধুদের সাথে স্কোয়াড চ্যালেঞ্জ শেয়ার করুন</span>
+                    <span data-i18n="btn_invite_friends">বন্ধুদের ইনভাইট করুন (+৩ টিকেট)</span>
                 </button>
             </div>
 
+            <!-- Stats Pair -->
             <div class="bento-stat-pair">
                 <div class="bento-box stat-tile">
-                    <span class="tile-label" data-i18n="stat_squad_pilots">স্কোয়াড মেম্বার</span>
+                    <span class="tile-label" data-i18n="lbl_total_invites">আমন্ত্রিত ফ্রেন্ডস</span>
                     <span class="tile-val font-bold" id="home-ref-count">0</span>
                 </div>
                 <div class="bento-box stat-tile">
-                    <span class="tile-label" data-i18n="stat_high_score">ব্যক্তিগত সেরা</span>
+                    <span class="tile-label" data-i18n="lbl_best_score">ব্যক্তিগত সেরা স্কোর</span>
                     <span class="tile-val neon-gem font-bold" id="profile-best-score-badge">0</span>
                 </div>
             </div>
 
-            <div class="section-badge-row" style="margin-top: 18px;">
-                <span class="section-glow-title" data-i18n="leaderboard_list_title">গ্লোবাল পাইলট রোস্টার</span>
+            <!-- ================= PROFESSIONAL 3D PODIUM STALL (1st, 2nd, 3rd) ================= -->
+            <div class="stall-arena-container">
+                <div class="stall-podium-deck" id="podium-deck-root">
+                    
+                    <!-- 2nd Place: Silver Stall -->
+                    <div class="podium-stall stall-silver" id="stall-rank-2">
+                        <div class="stall-crown">🥈</div>
+                        <div class="stall-avatar-wrap">
+                            <div class="stall-avatar" id="podium-2-avatar">P</div>
+                            <span class="stall-rank-tag">#2</span>
+                        </div>
+                        <div class="stall-pilot-info">
+                            <span class="stall-pilot-name" id="podium-2-name">---</span>
+                            <span class="stall-pilot-score" id="podium-2-score">0 PTS</span>
+                        </div>
+                        <div class="stall-stand pillar-silver">
+                            <span class="pillar-label">SILVER</span>
+                        </div>
+                    </div>
+
+                    <!-- 1st Place: Gold Champion Stall (Center & Tallest) -->
+                    <div class="podium-stall stall-gold" id="stall-rank-1">
+                        <div class="stall-crown-gold">👑</div>
+                        <div class="stall-avatar-wrap gold-ring">
+                            <div class="stall-avatar" id="podium-1-avatar">P</div>
+                            <span class="stall-rank-tag gold-tag">#1</span>
+                        </div>
+                        <div class="stall-pilot-info">
+                            <span class="stall-pilot-name gold-name" id="podium-1-name">---</span>
+                            <span class="stall-pilot-score neon-gem" id="podium-1-score">0 PTS</span>
+                        </div>
+                        <div class="stall-stand pillar-gold">
+                            <span class="pillar-label">CHAMPION</span>
+                        </div>
+                    </div>
+
+                    <!-- 3rd Place: Bronze Stall -->
+                    <div class="podium-stall stall-bronze" id="stall-rank-3">
+                        <div class="stall-crown">🥉</div>
+                        <div class="stall-avatar-wrap">
+                            <div class="stall-avatar" id="podium-3-avatar">P</div>
+                            <span class="stall-rank-tag">#3</span>
+                        </div>
+                        <div class="stall-pilot-info">
+                            <span class="stall-pilot-name" id="podium-3-name">---</span>
+                            <span class="stall-pilot-score" id="podium-3-score">0 PTS</span>
+                        </div>
+                        <div class="stall-stand pillar-bronze">
+                            <span class="pillar-label">BRONZE</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 4th+ Ranks Pilot List -->
+            <div class="section-badge-row">
+                <span class="section-glow-title" data-i18n="title_challengers">রানার্স-আপ পাইলট তালিকা</span>
             </div>
 
             <div class="bento-box roster-scroll-box">
                 <div id="leaderboard-container" class="roster-dynamic-list">
-                    <div class="loading-state" data-i18n="loading_text">ডাটা সিঙ্ক হচ্ছে...</div>
+                    <div class="loading-state" data-i18n="msg_syncing">ডাটা সিঙ্ক হচ্ছে...</div>
                 </div>
             </div>
+
         </section>
 
-        <!-- ================= 4. PILOT / PROFILE TAB ================= -->
+        <!-- ================= 5. PILOT DOSSIER / PROFILE VIEW ================= -->
         <section id="profile" class="view-panel">
+            
             <div class="bento-box pilot-dossier-card">
                 <div class="dossier-avatar-wrap">
                     <div class="dossier-avatar-core" id="profile-avatar">P</div>
@@ -405,96 +467,134 @@
 
                 <div class="dossier-stat-deck">
                     <div class="deck-cell">
-                        <span class="deck-lbl" data-i18n="profile_stat_bal">এনার্জি সেল</span>
-                        <span class="deck-val" id="profile-stat-balance">0 CELLS</span>
+                        <span class="deck-lbl" data-i18n="lbl_crypto_balance">মোট অর্জিত সেল</span>
+                        <span class="deck-val neon-gem" id="profile-stat-balance">0 CELLS</span>
                     </div>
                     <div class="deck-cell">
-                        <span class="deck-lbl" data-i18n="profile_stat_matches">সম্পন্ন মিশন</span>
-                        <span class="deck-val neon-gem" id="profile-stat-matches">0 Matches</span>
+                        <span class="deck-lbl" data-i18n="lbl_total_tickets">এন্ট্রি টিকেট</span>
+                        <span class="deck-val font-bold" id="profile-stat-tickets" style="color: var(--neon-gold);">0 🎟️</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Settings & Community Links -->
+            <!-- Profile Nav Menu Items -->
             <div class="bento-box action-list-dock">
-                
-                <div class="dock-action-row" onclick="openCheckInFullView()">
+                <!-- Check-in Drawer trigger -->
+                <div class="dock-action-row" onclick="openCheckInFullView()" role="button" tabindex="0">
                     <div class="dock-left-cell">
                         <div class="dock-icon-box">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         </div>
-                        <span class="dock-title" data-i18n="menu_daily_bonus">৭-দিনের প্রোটোকল ভল্ট</span>
+                        <span class="dock-title" data-i18n="menu_streak_protocol">৭-দিনের বোনাস টিকেট ড্রপ</span>
                     </div>
                     <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
 
-                <a id="telegram-channel-link" href="#" target="_blank" rel="noopener noreferrer" class="dock-action-row">
+                <!-- Community Direct Link -->
+                <div class="dock-action-row" onclick="openCommunityChannel()" role="button" tabindex="0">
                     <div class="dock-left-cell">
                         <div class="dock-icon-box">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
                         </div>
-                        <span class="dock-title" data-i18n="menu_tg_support">অফিসিয়াল টেলিগ্রাম কমিউনিটি</span>
+                        <span class="dock-title" data-i18n="menu_official_tg">অফিসিয়াল টেলিগ্রাম চ্যানেল</span>
                     </div>
                     <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
-
-                <a id="telegram-support-link" href="#" target="_blank" rel="noopener noreferrer" class="dock-action-row">
-                    <div class="dock-left-cell">
-                        <div class="dock-icon-box">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                        </div>
-                        <span class="dock-title" data-i18n="menu_support">২৪/৭ অপারেটর হেল্পডেস্ক</span>
-                    </div>
-                    <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
+                </div>
             </div>
 
-            <div class="cyber-footer-tag">Aetheria Arcade v8.0.0 • Verified Telegram Gaming Platform</div>
+            <div class="cyber-footer-tag">Aetheria Arcade v9.0.0 • TON Network Reflex Grid</div>
         </section>
 
     </main>
 
-    <!-- ================= 7-DAY PROTOCOL REWARD DRAWER ================= -->
-    <div id="checkin-fullview" class="cyber-drawer-overlay" onclick="closeCheckInFullView()">
-        <div class="cyber-drawer-sheet" onclick="event.stopPropagation()">
-            <div class="drawer-drag-pill"></div>
-            <div class="drawer-header-row">
-                <h3 data-i18n="checkin_modal_title">৭-দিনের প্রোটোকল ড্রপ</h3>
-                <button type="button" class="drawer-close-btn" onclick="closeCheckInFullView()">✕</button>
+    <!-- ================= GAME OVER / MATCH SETTLEMENT MODAL ================= -->
+    <div id="game-over-modal" class="cyber-modal-overlay" style="display: none;">
+        <div class="cyber-modal-box neon-border" onclick="event.stopPropagation()">
+            <div class="modal-tag-badge neon-alert" data-i18n="tag_system_breached">SYSTEM BREACHED</div>
+            <div class="holo-icon-wrap" style="color: var(--neon-alert);">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
             </div>
-            <div class="drawer-streak-counter">
-                <span id="checkin-streak-status">বর্তমান স্ট্রিক: ০ দিন</span>
-            </div>
-            
-            <div class="cyber-checkin-grid" id="checkin-grid"></div>
+            <h3 class="modal-title" data-i18n="modal_match_finished">মিশন সমাপ্ত!</h3>
+            <p class="modal-subtext">
+                <span data-i18n="lbl_match_score">ম্যাচ স্কোর:</span> <strong id="modal-final-score" class="neon-gem" style="font-size: 24px;">0</strong>
+            </p>
 
-            <button type="button" id="btn-claim-checkin" onclick="claimDailyCheckIn()" class="cyber-btn primary-glow">
-                আজকের সেল ক্লেইম করুন
+            <div class="cyber-terminal-card" style="margin-bottom: 16px;">
+                <div class="terminal-row">
+                    <span class="t-muted" data-i18n="lbl_earned_rewards">অর্জিত রিওয়ার্ড (Cells):</span>
+                    <span class="neon-emerald font-bold" id="modal-match-credits">+0 CELLS</span>
+                </div>
+                <div class="terminal-row">
+                    <span class="t-muted" data-i18n="lbl_personal_record">সেরা রেকর্ড:</span>
+                    <span class="t-light font-bold" id="modal-best-score">0</span>
+                </div>
+            </div>
+
+            <!-- Rewarded Ad: Revive Shield in-game -->
+            <button type="button" class="cyber-btn primary-glow" id="btn-revive-game" onclick="triggerReviveWithAd()">
+                <span class="ad-tag-pill">AD</span>
+                <span data-i18n="btn_revive_shield">বিজ্ঞাপন দেখে শিল্ড রিভাইভ করুন (+১)</span>
+            </button>
+
+            <!-- Claim and Return -->
+            <button type="button" class="cyber-link-btn" onclick="closeGameOverModal()" data-i18n="btn_claim_and_exit">
+                রিওয়ার্ড ব্যালেন্সে যোগ করুন ও বের হন
             </button>
         </div>
     </div>
 
-    <!-- HUD Tactical Bottom Navigation Dock -->
+    <!-- ================= 7-DAY STREAK PROTOCOL DRAWER ================= -->
+    <div id="checkin-fullview" class="cyber-drawer-overlay" onclick="closeCheckInFullView()">
+        <div class="cyber-drawer-sheet" onclick="event.stopPropagation()">
+            <div class="drawer-drag-pill"></div>
+            <div class="drawer-header-row">
+                <h3 data-i18n="title_streak_drawer">৭-দিনের বোনাস টিকেট ড্রপ</h3>
+                <button type="button" class="drawer-close-btn" onclick="closeCheckInFullView()" aria-label="Close">✕</button>
+            </div>
+            <div class="drawer-streak-counter">
+                <span id="checkin-streak-status">বর্তমান স্ট্রিক: ০ দিন</span>
+            </div>
+            <div class="cyber-checkin-grid" id="checkin-grid"></div>
+            <button type="button" id="btn-claim-checkin" onclick="claimDailyCheckIn()" class="cyber-btn primary-glow">
+                আজকের ফ্রি টিকেট নিন
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= BOTTOM HUD NAVIGATION BAR ================= -->
     <nav class="cyber-hud-nav">
-        <button type="button" class="hud-nav-tab active" onclick="switchTab('arena')">
+        <!-- Tab 1: Tasks / Tickets -->
+        <button type="button" class="hud-nav-tab active" onclick="switchTab('home')" aria-label="Tasks">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span data-i18n="nav_tasks">টাস্ক</span>
+        </button>
+        <!-- Tab 2: Game / Reflex Arena -->
+        <button type="button" class="hud-nav-tab" onclick="switchTab('game')" aria-label="Game Arena">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-            <span data-i18n="nav_home">অ্যারেনা</span>
+            <span data-i18n="nav_game">গেম</span>
         </button>
-        <button type="button" class="hud-nav-tab" onclick="switchTab('armory')">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-            <span data-i18n="nav_armory">আর্মোরি</span>
+        <!-- Tab 3: Wallet / Cashout -->
+        <button type="button" class="hud-nav-tab" onclick="switchTab('wallet')" aria-label="Wallet">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><circle cx="16" cy="14" r="2"/></svg>
+            <span data-i18n="nav_wallet">ওয়ালেট</span>
         </button>
-        <button type="button" class="hud-nav-tab" onclick="switchTab('rankings')">
+        <!-- Tab 4: Podium Stall Rankings -->
+        <button type="button" class="hud-nav-tab" onclick="switchTab('rankings')" aria-label="Rankings">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-            <span data-i18n="nav_ranking">র‍্যাঙ্কিং</span>
+            <span data-i18n="nav_rankings">র‍্যাঙ্কিং</span>
         </button>
-        <button type="button" class="hud-nav-tab" onclick="switchTab('profile')">
+        <!-- Tab 5: Pilot Profile -->
+        <button type="button" class="hud-nav-tab" onclick="switchTab('profile')" aria-label="Pilot Dossier">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
-            <span data-i18n="nav_profile">পাইলট</span>
+            <span data-i18n="nav_pilot">পাইলট</span>
         </button>
     </nav>
 
-    <!-- Client Script -->
-    <script src="app.js?v=8.0.0"></script>
+    <!-- Client Runtime Logic -->
+    <script src="app.js?v=9.0.0"></script>
 </body>
 </html>
