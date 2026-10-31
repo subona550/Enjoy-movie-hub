@@ -1,53 +1,70 @@
 /*** 
- * AETHERIA ARCADE - REALTIME CYBER ENGINE (v9.1.0 PRODUCTION)
+ * AETHERIA ARCADE - REALTIME CYBER ENGINE (v9.2.0 PRODUCTION)
  * =============================================================
  * 1. 100% Dynamic Admin-Controlled Engine (Firebase Realtime DB)
- *    - Realtime Maintenance Shield & Live Broadcast Announcements
- *    - Dynamic Game Cost, Score-to-Cells Ratio & Referral Rewards
- *    - Realtime Tasks System (Ad Networks, Telegram & Partner Missions)
- *    - Dynamic Withdrawal Limits, Policy & TON Conversion Multiplier
- * 2. Strict Two-Tier Economy:
- *    - Tasks, Ads, Daily Check-in & Invites ONLY grant Tickets (🎟️)
- *    - Playing Quantum Reflex Arena is the ONLY way to earn Cells (💰)
- * 3. 3D Podium Stall Leaderboard (1st, 2nd, 3rd + Runners-Up)
- * 4. Official TON Connect SDK & Web Audio Synthesizer
+ * 2. Server-Time Synchronized Anti-Cheat Protection (UTC Day Guard)
+ * 3. Daily Streak Auto-Reset & 24h Strict Claim Verification
+ * 4. Hitbox Padding / Touch Tolerance Engine (Mobile Friendly)
+ * 5. Strict TON Wallet Regex Validation (EQ / UQ / Raw Hex)
+ * 6. Telegram WebApp Native BackButton & Haptic Integration
+ * 7. Complete Bilingual i18n & Zero False-Reward Ad Security
  */
 
 // ================= ১. ফায়ারবেস ক্লাউড ইনিশিয়ালাইজেশন =================
 const firebaseConfig = {
-  apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
-  authDomain: "enjoy-movies-app.firebaseapp.com",
-  databaseURL: "https://enjoy-movies-app-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "enjoy-movies-app",
-  storageBucket: "enjoy-movies-app.firebasestorage.app",
-  messagingSenderId: "839389874270",
-  appId: "1:839389874270:web:b99129ebae43d0cdd48ccf"
+    apiKey: "AIzaSyDj-9ox7l6tRO9hYr9chF7MxWwkCTRchEA",
+    authDomain: "enjoy-movies-app.firebaseapp.com",
+    databaseURL: "https://enjoy-movies-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "enjoy-movies-app",
+    storageBucket: "enjoy-movies-app.firebasestorage.app",
+    messagingSenderId: "839389874270",
+    appId: "1:839389874270:web:b99129ebae43d0cdd48ccf"
 };
 
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ================= ২. অ্যাডমিন কনফিগ স্টেট (DEFAULT FALLBACKS) =================
+// সার্ভার টাইম অফসেট সিঙ্ক (ইউজারের ডিভাইসের ঘড়ি জালিয়াতি রোধ করতে)
+let serverTimeOffset = 0;
+db.ref('.info/serverTimeOffset').on('value', snap => {
+    serverTimeOffset = snap.val() || 0;
+});
+
+function getRealNow() {
+    return Date.now() + serverTimeOffset;
+}
+
+function getUtcDateString(timestamp) {
+    const d = new Date(timestamp);
+    return d.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
+function getDaysDiff(dateStr1, dateStr2) {
+    if (!dateStr1 || !dateStr2) return 999;
+    const d1 = new Date(dateStr1 + "T00:00:00Z").getTime();
+    const d2 = new Date(dateStr2 + "T00:00:00Z").getTime();
+    return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+
+// ================= ২. অ্যাডমিন কনফিগ স্টেট =================
 let adminConfig = {
     maintenanceMode: false,
     maintenanceMsg: "সার্ভার রক্ষণাবেক্ষণ চলছে। অ্যাডমিন সিস্টেমের কাজ সম্পন্ন হলে অ্যাপটি পুনরায় সচল হবে।",
     broadcastNotice: "",
     botUsername: "AetheriaArcadeBot",
     communityChannelUrl: "https://t.me/AetheriaArcadeChannel",
-    communityChannelName: "Aetheria Arcade Community",
     supportUsername: "AetheriaSupport",
     ticketCostPerMatch: 1,
-    scoreToCellDivisor: 4,      // প্রতি ৪ স্কোরে = ১ Cell
-    refBonusTickets: 3,         // প্রতি রেফারে ৩ টিকেট
-    minWithdrawCells: 1000,     // নূন্যতম ১০০০ সেল
-    tonPer1000Cells: 0.10,      // ১০০০ সেলে ০.১০ টন
-    adCooldownSec: 60,          // ৬০ সেকেন্ড অ্যাড কুলডাউন
+    scoreToCellDivisor: 4,
+    refBonusTickets: 3,
+    minWithdrawCells: 1000,
+    tonPer1000Cells: 0.10,
+    adCooldownSec: 60,
     adsgramBlockId: "26019",
     adsterraUrl: "https://www.highrevenuegate.com/your-adsterra-direct-link",
     checkInRewards: [1, 1, 2, 2, 3, 3, 5]
 };
 
-// অ্যাডমিন কনফিগার করা টাস্ক তালিকা
 let dynamicTasksList = [];
 
 // ================= ৩. বহুভাষিক অনুবাদ অভিধান (i18n Dictionary) =================
@@ -102,6 +119,7 @@ const I18N_STRINGS = {
         lbl_total_tickets: "এন্ট্রি টিকেট",
         menu_streak_protocol: "৭-দিনের বোনাস টিকেট ড্রপ",
         menu_official_tg: "অফিসিয়াল টেলিগ্রাম চ্যানেল",
+        menu_admin_support: "সরাসরি অ্যাডমিন সাপোর্ট",
         tag_system_breached: "SYSTEM BREACHED",
         modal_match_finished: "মিশন সমাপ্ত!",
         lbl_match_score: "ম্যাচ স্কোর:",
@@ -121,7 +139,9 @@ const I18N_STRINGS = {
         toast_copied: "রেফারেল লিংক কপি হয়েছে!",
         toast_wallet_connected: "TON Wallet সফলভাবে কানেক্ট হয়েছে!",
         toast_withdraw_min: "নূন্যতম উইথড্রল লিমিট পূরণ হয়নি!",
-        toast_withdraw_success: "উইথড্রল রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!"
+        toast_withdraw_success: "উইথড্রল রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!",
+        toast_ad_fail: "বিজ্ঞাপন সম্পন্ন হয়নি বা লোড ব্যর্থ হয়েছে!",
+        toast_invalid_ton: "সঠিক TON (EQ/UQ) ওয়ালেট অ্যাড্রেস লিখুন!"
     },
     en: {
         status_online: "● Online Operator",
@@ -171,6 +191,7 @@ const I18N_STRINGS = {
         lbl_total_tickets: "Entry Tickets",
         menu_streak_protocol: "7-Day Protocol Ticket Drops",
         menu_official_tg: "Official Telegram Channel",
+        menu_admin_support: "Direct Admin Support",
         tag_system_breached: "SYSTEM BREACHED",
         modal_match_finished: "Mission Debriefing",
         lbl_match_score: "Match Score:",
@@ -190,7 +211,9 @@ const I18N_STRINGS = {
         toast_copied: "Referral link copied!",
         toast_wallet_connected: "TON Wallet connected successfully!",
         toast_withdraw_min: "Minimum cashout threshold not reached!",
-        toast_withdraw_success: "Withdrawal request dispatched successfully!"
+        toast_withdraw_success: "Withdrawal request dispatched successfully!",
+        toast_ad_fail: "Ad not completed or blocked by ad-blocker!",
+        toast_invalid_ton: "Please enter a valid TON address (EQ/UQ)!"
     }
 };
 
@@ -223,7 +246,7 @@ function toggleLanguage() {
     showToast(currentLang === 'bn' ? 'ভাষা: বাংলা সক্রিয়' : 'Language: English Active');
 }
 
-// ================= ৪. অডিও সিন্থেসাইজার (Web Audio SFX) =================
+// ================= ৪. অডিও সিন্থেসাইজার ও হ্যাপটিক হ্যান্ডলার =================
 let audioCtx = null;
 let isAudioEnabled = localStorage.getItem('arcade_audio_enabled') !== 'false';
 
@@ -231,6 +254,14 @@ function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     return audioCtx;
+}
+
+function triggerHaptic(type = 'light') {
+    if (tg?.HapticFeedback) {
+        if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
+        else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
+        else tg.HapticFeedback.impactOccurred(type);
+    }
 }
 
 function toggleAudioFx() {
@@ -249,6 +280,7 @@ function updateAudioIcon() {
 }
 
 function playClickSound() {
+    triggerHaptic('light');
     if (!isAudioEnabled) return;
     try {
         const ctx = getAudioContext();
@@ -266,6 +298,7 @@ function playClickSound() {
 }
 
 function playHitSound(isGold = false) {
+    triggerHaptic(isGold ? 'heavy' : 'medium');
     if (!isAudioEnabled) return;
     try {
         const ctx = getAudioContext();
@@ -284,6 +317,7 @@ function playHitSound(isGold = false) {
 }
 
 function playRewardSound() {
+    triggerHaptic('success');
     if (!isAudioEnabled) return;
     try {
         const ctx = getAudioContext();
@@ -301,7 +335,7 @@ function playRewardSound() {
     } catch (e) { }
 }
 
-// ================= ৫. টেলিগ্রাম ওয়েবঅ্যাপ ও থিম হ্যান্ডলার =================
+// ================= ৫. টেলিগ্রাম ওয়েবঅ্যাপ ও ব্যাক বাটন লিসেনার =================
 const tg = window.Telegram?.WebApp;
 let currentTheme = localStorage.getItem('arcade_theme') || 'dark';
 
@@ -310,6 +344,18 @@ if (tg) {
         tg.ready();
         tg.expand();
         if (typeof tg.enableClosingConfirmation === 'function') tg.enableClosingConfirmation();
+        
+        // টেলিগ্রাম নেটিভ ব্যাক বাটন সাপোর্ট
+        if (tg.BackButton) {
+            tg.BackButton.onClick(() => {
+                const sheet = document.getElementById('checkin-fullview');
+                if (sheet && sheet.classList.contains('active')) {
+                    closeCheckInFullView();
+                } else {
+                    switchTab('home');
+                }
+            });
+        }
     } catch (e) { }
 }
 
@@ -318,7 +364,10 @@ function showToast(message, type = 'success') {
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'cyber-toast-item';
-    if (type === 'error') toast.classList.add('error-toast');
+    if (type === 'error') {
+        toast.classList.add('error-toast');
+        triggerHaptic('error');
+    }
     toast.innerText = message;
     container.appendChild(toast);
 
@@ -374,8 +423,8 @@ const userId = tgUser.id.toString();
 const userName = (tgUser.first_name || 'Pilot') + (tgUser.last_name ? ' ' + tgUser.last_name : '');
 const userUsername = tgUser.username ? '@' + tgUser.username : '@pilot_' + userId.slice(-4);
 
-let balanceCredits = 0;       // Energy Cells (গেমপ্লে থেকে অর্জিত উইথড্রযোগ্য ক্রিপ্টো)
-let userTickets = 3;          // এন্ট্রি টিকেট
+let balanceCredits = 0;
+let userTickets = 3;
 let personalHighScore = 0;
 let totalMatchesPlayed = 0;
 let referralCount = 0;
@@ -395,7 +444,6 @@ function getReferralParam() {
     return refParam;
 }
 
-// অ্যাডমিনের সেট করা রেফার বোনাস টিকেট প্রদান
 function rewardReferrer(refId) {
     if (!refId || refId === userId) return;
     const bonusTickets = Number(adminConfig.refBonusTickets || 3);
@@ -408,16 +456,14 @@ function rewardReferrer(refId) {
     });
 }
 
-// ================= ৭. অ্যাডমিন রিয়েলটাইম লিসেনার (THE ADMIN ENGINE) =================
+// ================= ৭. অ্যাডমিন রিয়েলটাইম লিসেনার =================
 function listenToAdminSettings() {
-    // ১. গ্লোবাল সেটিংস লিসেনার
     db.ref('settings').on('value', snapshot => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             adminConfig = {
                 ...adminConfig,
                 ...data,
-                // Array নিশ্চিত করা
                 checkInRewards: Array.isArray(data.checkInRewards) 
                     ? data.checkInRewards 
                     : (typeof data.checkInRewards === 'string' 
@@ -428,7 +474,6 @@ function listenToAdminSettings() {
         applyAdminSettings();
     });
 
-    // ২. ডাইনামিক টাস্ক লিসেনার
     db.ref('tasks').on('value', snapshot => {
         if (snapshot.exists()) {
             const val = snapshot.val();
@@ -438,7 +483,6 @@ function listenToAdminSettings() {
                 dynamicTasksList = Object.keys(val).map(key => ({ id: key, ...val[key] }));
             }
         } else {
-            // ডিফল্ট টাস্ক সেটআপ (যদি ডাটাবেজে না থাকে)
             dynamicTasksList = getDefaultTasksList();
         }
         renderAllTasks();
@@ -446,7 +490,6 @@ function listenToAdminSettings() {
 }
 
 function applyAdminSettings() {
-    // ১. মেইনটেন্যান্স শিল্ড
     const mScreen = document.getElementById('maintenance-screen');
     const mText = document.getElementById('maintenance-msg');
     if (mScreen) {
@@ -458,7 +501,6 @@ function applyAdminSettings() {
         }
     }
 
-    // ২. লাইভ ব্রডকাস্ট নোটিশ ব্যানার
     const bBanner = document.getElementById('admin-broadcast-banner');
     const bText = document.getElementById('admin-broadcast-text');
     if (bBanner && bText) {
@@ -470,7 +512,6 @@ function applyAdminSettings() {
         }
     }
 
-    // ৩. রিয়েলটাইম ডাইনামিক টেক্সট রি-রেন্ডারিং
     renderAdminControlledTexts();
     renderCheckInGrid();
     updateUI();
@@ -482,7 +523,6 @@ function renderAdminControlledTexts() {
     const refBonus = adminConfig.refBonusTickets;
     const minWithdraw = adminConfig.minWithdrawCells;
 
-    // কুইক প্লে বাটন
     const btnPlayLbl = document.getElementById('btn-quick-play-lbl');
     if (btnPlayLbl) {
         btnPlayLbl.innerText = currentLang === 'bn' 
@@ -490,11 +530,10 @@ function renderAdminControlledTexts() {
             : `🎮 Enter Arena (${cost} Ticket)`;
     }
 
-    // গেম স্ক্রিন নোটিশ
     const entryCostEl = document.getElementById('display-game-entry-cost');
     if (entryCostEl) {
         entryCostEl.innerText = currentLang === 'bn' 
-            ? `🎮 এন্ট্রি খরচ: ${cost}টি টিকেট (${cost} Ticket)` 
+            ? `🎮 এন্ট্রি খরচ: ${cost}টি টিকেট` 
             : `🎮 Entry Cost: ${cost} Ticket(s)`;
     }
 
@@ -505,7 +544,6 @@ function renderAdminControlledTexts() {
             : `💰 Reward Rate: Every ${divisor} Score = 1 Energy Cell`;
     }
 
-    // রেফারেল কার্ডের টেক্সট
     const refBadge = document.getElementById('display-ref-badge');
     if (refBadge) {
         refBadge.innerText = currentLang === 'bn'
@@ -520,7 +558,6 @@ function renderAdminControlledTexts() {
             : `Invite Friends (+${refBonus} Tickets)`;
     }
 
-    // উইথড্রল পলিসি
     const withdrawPolicy = document.getElementById('display-withdraw-policy');
     if (withdrawPolicy) {
         withdrawPolicy.innerText = currentLang === 'bn'
@@ -528,7 +565,6 @@ function renderAdminControlledTexts() {
             : `Minimum withdrawal requirement is ${minWithdraw.toLocaleString()} CELLS. Distributed within 24-48 hours after on-chain validation.`;
     }
 
-    // কমিউনিটি চ্যানেল নাম
     const commSub = document.getElementById('sub-ad-missions-text');
     if (commSub) {
         const sec = adminConfig.adCooldownSec;
@@ -585,23 +621,11 @@ function getDefaultTasksList() {
             badge: "CHANNEL",
             iconType: "telegram-glow",
             link: adminConfig.communityChannelUrl
-        },
-        {
-            id: "task_tg_group",
-            type: "telegram",
-            title_bn: "কমিউনিটি ডিসকাশন গ্রুপ",
-            title_en: "Community Discussion Group",
-            desc_bn: "প্লেয়ারদের চ্যাট গ্রুপে যুক্ত হয়ে ১টি টিকেট আনলক করুন।",
-            desc_en: "Join the player chatter lounge to unlock 1 ticket.",
-            rewardTickets: 1,
-            badge: "GROUP",
-            iconType: "telegram-glow",
-            link: "https://t.me/AetheriaArcadeGroup"
         }
     ];
 }
 
-// ================= ৮. ইউজার ডেটাবেস ইনিশিয়ালাইজেশন =================
+// ================= ৮. ইউজার ডাটাবেজ ইনিশিয়ালাইজেশন =================
 function initUser() {
     const startParam = getReferralParam();
 
@@ -623,7 +647,7 @@ function initUser() {
                 matchesPlayed: 0,
                 tonWallet: "",
                 referredBy: referredBy || null,
-                createdAt: Date.now()
+                createdAt: firebase.database.ServerValue.TIMESTAMP
             });
 
             if (referredBy) {
@@ -639,6 +663,7 @@ function initUser() {
         referralCount = Number(data.referralCount || 0);
         lastCheckInDate = data.lastCheckInDate || "";
         checkInStreak = Number(data.checkInStreak || 0);
+
         if (data.tonWallet) tonWalletAddress = data.tonWallet;
         if (data.completedTasks) {
             userCompletedTasks = data.completedTasks;
@@ -664,7 +689,6 @@ function updateUI() {
     setTxt('game-tickets-count', userTickets);
     setTxt('wallet-user-cells', balanceCredits);
 
-    // TON কনভার্শন হিসাব (অ্যাডমিন নিয়ন্ত্রিত)
     const tonRate = Number(adminConfig.tonPer1000Cells || 0.1);
     const estimatedTon = ((balanceCredits / 1000) * tonRate).toFixed(3);
     setTxt('wallet-ton-estimate', `${estimatedTon} TON`);
@@ -699,7 +723,7 @@ function renderAllTasks() {
     if (tgContainer) tgContainer.innerHTML = '';
     if (customContainer) customContainer.innerHTML = '';
 
-    const now = Date.now();
+    const now = getRealNow();
     let hasCustom = false;
 
     dynamicTasksList.forEach(task => {
@@ -770,7 +794,7 @@ function getTaskIcon(type) {
     } else if (type === 'ad_monetag') {
         return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`;
     } else if (type === 'ad_adsterra') {
-        return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
+        return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
     } else {
         return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>`;
     }
@@ -790,7 +814,7 @@ function handleTaskClick(taskId) {
 async function runAdsgramTask(task) {
     const blockId = adminConfig.adsgramBlockId || "26019";
     if (typeof window.Adsgram === 'undefined') {
-        return showToast(currentLang === 'bn' ? 'বিজ্ঞাপন নেটওয়ার্ক উপলব্ধ নয়' : 'Ad network not available', 'error');
+        return showToast(t('toast_ad_fail'), 'error');
     }
 
     try {
@@ -801,10 +825,10 @@ async function runAdsgramTask(task) {
             grantTaskTicketReward(task);
             startAdCooldown(task.id);
         } else {
-            showToast(currentLang === 'bn' ? 'সম্পূর্ণ বিজ্ঞাপন দেখলে টিকেট পাবেন' : 'Watch full video to get tickets', 'error');
+            showToast(t('toast_ad_fail'), 'error');
         }
     } catch (e) {
-        showToast(currentLang === 'bn' ? 'বিজ্ঞাপন লোড হতে ব্যর্থ হয়েছে' : 'Ad load failed', 'error');
+        showToast(t('toast_ad_fail'), 'error');
     }
 }
 
@@ -815,14 +839,11 @@ function runMonetagTask(task) {
             grantTaskTicketReward(task);
             startAdCooldown(task.id);
         }).catch(() => {
-            grantTaskTicketReward(task);
-            startAdCooldown(task.id);
+            showToast(t('toast_ad_fail'), 'error');
         });
     } else {
-        setTimeout(() => {
-            grantTaskTicketReward(task);
-            startAdCooldown(task.id);
-        }, 2500);
+        // বিজ্ঞাপন না দেখালে কোনো ফলব্যাক রিওয়ার্ড দেওয়া হবে না
+        showToast(t('toast_ad_fail'), 'error');
     }
 }
 
@@ -876,25 +897,22 @@ function claimSocialTask(taskId) {
 
 function grantTaskTicketReward(task) {
     const ticketsWon = Number(task.rewardTickets || 1);
-    userTickets += ticketsWon;
-    db.ref('users/' + userId).update({ tickets: userTickets });
-
+    db.ref('users/' + userId + '/tickets').transaction(current => (current || 0) + ticketsWon);
+    
     playRewardSound();
     triggerConfetti();
     showToast(`🎉 +${ticketsWon} ${t('unit_tickets')}!`);
-    updateUI();
 }
 
 function startAdCooldown(taskId) {
     const cooldownMs = (Number(adminConfig.adCooldownSec) || 60) * 1000;
-    adCooldownTimestamps[taskId] = Date.now() + cooldownMs;
+    adCooldownTimestamps[taskId] = getRealNow() + cooldownMs;
     localStorage.setItem('arcade_ad_cooldowns', JSON.stringify(adCooldownTimestamps));
     renderAllTasks();
 }
 
-// কুলডাউন লাইভ টাইমার লুপ
 setInterval(() => {
-    const now = Date.now();
+    const now = getRealNow();
     let needsReRender = false;
 
     dynamicTasksList.forEach(task => {
@@ -934,17 +952,17 @@ function startArcadeMatch(e) {
     playClickSound();
 
     const requiredTickets = Number(adminConfig.ticketCostPerMatch || 1);
-
     if (userTickets < requiredTickets) {
         showToast(t('toast_no_tickets'), 'error');
         switchTab('home');
         return;
     }
 
-    // অ্যাডমিন নির্ধারিত টিকিট ডিডাক্ট
-    userTickets -= requiredTickets;
-    db.ref('users/' + userId).update({ tickets: userTickets });
-    updateUI();
+    // টিকিট ডিডাক্ট
+    db.ref('users/' + userId + '/tickets').transaction(tickets => {
+        if (tickets >= requiredTickets) return tickets - requiredTickets;
+        return undefined; // Abort if insufficient
+    });
 
     isMatchActive = true;
     currentMatchScore = 0;
@@ -1007,29 +1025,48 @@ function spawnNextTarget() {
     }, currentSpawnInterval);
 }
 
+// টাচ টলারেন্স সহ ক্লিক হ্যান্ডলার (মোবাইল ফ্রেন্ডলি হিটবক্স)
 function handleArcadeBoardClick(e) {
     if (!isMatchActive) return;
 
     const target = document.getElementById('arcade-target');
     const hazard = document.getElementById('arcade-hazard');
+    const tolerance = 20; // ২০ পিক্সেল অতিরিক্ত টলারেন্স
+
+    const clickX = e.clientX;
+    const clickY = e.clientY;
 
     if (hazard && hazard.style.display !== 'none') {
         const hRect = hazard.getBoundingClientRect();
-        if (e.clientX >= hRect.left && e.clientX <= hRect.right && e.clientY >= hRect.top && e.clientY <= hRect.bottom) {
-            handleHazardHit(e);
+        if (
+            clickX >= hRect.left - tolerance &&
+            clickX <= hRect.right + tolerance &&
+            clickY >= hRect.top - tolerance &&
+            clickY <= hRect.bottom + tolerance
+        ) {
+            handleHazardHit();
             return;
         }
     }
 
-    const tRect = target.getBoundingClientRect();
-    if (e.clientX >= tRect.left && e.clientX <= tRect.right && e.clientY >= tRect.top && e.clientY <= tRect.bottom) {
-        handleTargetHit(e);
-    } else {
-        handleTargetMiss();
+    if (target && target.style.display !== 'none') {
+        const tRect = target.getBoundingClientRect();
+        if (
+            clickX >= tRect.left - tolerance &&
+            clickX <= tRect.right + tolerance &&
+            clickY >= tRect.top - tolerance &&
+            clickY <= tRect.bottom + tolerance
+        ) {
+            handleTargetHit();
+            return;
+        }
     }
+
+    // টার্গেটের অনেক বাইরে ট্যাপ করলে মিস
+    handleTargetMiss();
 }
 
-function handleTargetHit(e) {
+function handleTargetHit() {
     playHitSound(isCurrentTargetGold);
     if (targetTimer) clearTimeout(targetTimer);
 
@@ -1048,7 +1085,8 @@ function handleTargetHit(e) {
     spawnNextTarget();
 }
 
-function handleHazardHit(e) {
+function handleHazardHit() {
+    triggerHaptic('error');
     arcadeLives--;
     updateArcadeHUD();
     if (arcadeLives <= 0) endArcadeMatch();
@@ -1057,6 +1095,7 @@ function handleHazardHit(e) {
 
 function handleTargetMiss() {
     if (!isMatchActive) return;
+    triggerHaptic('medium');
     arcadeLives--;
     currentCombo = 1;
     updateArcadeHUD();
@@ -1091,7 +1130,6 @@ function endArcadeMatch() {
     const hazard = document.getElementById('arcade-hazard');
     if (hazard) hazard.style.display = 'none';
 
-    // অ্যাডমিন নির্ধারিত রেশিও অনুযায়ী Cells রিওয়ার্ড প্রাপ্তি
     const divisor = Math.max(1, Number(adminConfig.scoreToCellDivisor || 4));
     const earnedCredits = Math.floor(currentMatchScore / divisor);
     balanceCredits += earnedCredits;
@@ -1130,7 +1168,7 @@ async function triggerReviveWithAd() {
 
     const blockId = adminConfig.adsgramBlockId || "26019";
     if (typeof window.Adsgram === 'undefined') {
-        return showToast(currentLang === 'bn' ? 'বিজ্ঞাপন নেটওয়ার্ক প্রস্তুত নয়' : 'Ad network offline', 'error');
+        return showToast(t('toast_ad_fail'), 'error');
     }
 
     try {
@@ -1151,9 +1189,11 @@ async function triggerReviveWithAd() {
             playRewardSound();
             showToast(currentLang === 'bn' ? '⚡ শিল্ড রিভাইভ সফল!' : '⚡ Shield Revived!');
             spawnNextTarget();
+        } else {
+            showToast(t('toast_ad_fail'), 'error');
         }
     } catch (e) {
-        showToast('Ad service unavailable', 'error');
+        showToast(t('toast_ad_fail'), 'error');
     }
 }
 
@@ -1182,9 +1222,17 @@ function initTonConnect() {
                 }
             });
         }
-    } catch (e) {
-        console.warn('TonConnect Note:', e);
-    }
+    } catch (e) { }
+}
+
+// TON Address Regex Validator (Friendly বা Raw Hex)
+function isValidTonAddress(address) {
+    if (!address || typeof address !== 'string') return false;
+    const trimmed = address.trim();
+    // ৪char base64 friendly (EQ / UQ / kQ / 0Q) অথবা raw hex (-1: / 0:)
+    const friendlyRegex = /^(EQ|UQ|kQ|0Q)[A-Za-z0-9_-]{46}$/;
+    const rawRegex = /^-?[0-9]:[a-fA-F0-9]{64}$/;
+    return friendlyRegex.test(trimmed) || rawRegex.test(trimmed);
 }
 
 function saveManualTonAddress() {
@@ -1192,8 +1240,8 @@ function saveManualTonAddress() {
     const input = document.getElementById('manual-ton-address-input');
     const val = (input?.value || '').trim();
 
-    if (!val || val.length < 24) {
-        return showToast(currentLang === 'bn' ? 'সঠিক TON ওয়ালেট অ্যাড্রেস লিখুন!' : 'Invalid TON address!', 'error');
+    if (!isValidTonAddress(val)) {
+        return showToast(t('toast_invalid_ton'), 'error');
     }
 
     tonWalletAddress = val;
@@ -1208,8 +1256,8 @@ function saveManualTonAddress() {
 
 function handleWithdrawRequest() {
     playClickSound();
-    if (!tonWalletAddress) {
-        return showToast(currentLang === 'bn' ? 'আগে TON Wallet সেভ করুন!' : 'Connect or save TON Wallet first!', 'error');
+    if (!isValidTonAddress(tonWalletAddress)) {
+        return showToast(t('toast_invalid_ton'), 'error');
     }
 
     const minLimit = Number(adminConfig.minWithdrawCells || 1000);
@@ -1229,10 +1277,10 @@ function handleWithdrawRequest() {
         tonEquivalent: Number(tonEquivalent),
         tonAddress: tonWalletAddress,
         status: 'pending',
-        timestamp: Date.now()
+        timestamp: firebase.database.ServerValue.TIMESTAMP
     }).then(() => {
         balanceCredits = 0;
-        db.ref('users/' + userId).update({ balance: balanceCredits });
+        db.ref('users/' + userId).update({ balance: 0 });
         triggerConfetti();
         showToast(t('toast_withdraw_success'));
         updateUI();
@@ -1241,18 +1289,25 @@ function handleWithdrawRequest() {
     });
 }
 
-// ================= ১২. ডেইলি ড্রপ (ADMIN CONTROLLED REWARDS) =================
+// ================= ১২. ডেইলি ড্রপ (STRICT 24H & RESET GUARD) =================
 function openCheckInFullView() {
     playClickSound();
     renderCheckInGrid();
     const sheet = document.getElementById('checkin-fullview');
     if (sheet) sheet.classList.add('active');
+    if (tg?.BackButton) tg.BackButton.show();
 }
 
 function closeCheckInFullView() {
     playClickSound();
     const sheet = document.getElementById('checkin-fullview');
     if (sheet) sheet.classList.remove('active');
+    
+    // হোম পেজে থাকলে টেলিগ্রাম ব্যাক বাটন লুকানো হবে
+    const activeView = document.querySelector('.view-panel.active');
+    if (activeView && activeView.id === 'home' && tg?.BackButton) {
+        tg.BackButton.hide();
+    }
 }
 
 function renderCheckInGrid() {
@@ -1262,23 +1317,33 @@ function renderCheckInGrid() {
     if (!grid) return;
 
     const rewardsArr = adminConfig.checkInRewards || [1, 1, 2, 2, 3, 3, 5];
-    const today = new Date().toISOString().slice(0, 10);
-    const isClaimedToday = (lastCheckInDate.startsWith(today));
+    const today = getUtcDateString(getRealNow());
+    const isClaimedToday = (lastCheckInDate === today);
+
+    // স্ট্রিক ব্রেক ক্যালকুলেশন
+    const daysSince = getDaysDiff(lastCheckInDate, today);
+    let displayStreak = checkInStreak;
+    if (daysSince > 1) {
+        displayStreak = 0; // একদিনের বেশি বাদ দিলে স্ট্রিক ভেঙে গেছে
+    }
 
     if (statusText) {
         statusText.innerText = currentLang === 'bn' 
-            ? `বর্তমান স্ট্রিক: ${checkInStreak} দিন` 
-            : `Current Streak: ${checkInStreak} Days`;
+            ? `বর্তমান স্ট্রিক: ${displayStreak} দিন` 
+            : `Current Streak: ${displayStreak} Days`;
     }
 
     let html = '';
-    const currentTargetDay = isClaimedToday ? checkInStreak : ((checkInStreak % 7) + 1);
+    const currentTargetDay = isClaimedToday ? ((displayStreak - 1) % 7) + 1 : (displayStreak % 7) + 1;
 
     for (let i = 1; i <= 7; i++) {
         const ticketReward = rewardsArr[i - 1] || 1;
         let tileClass = 'cyber-checkin-tile';
-        if (isClaimedToday ? (i <= checkInStreak) : (i < currentTargetDay)) tileClass += ' claimed';
-        else if (!isClaimedToday && i === currentTargetDay) tileClass += ' active';
+        if (isClaimedToday ? (i <= currentTargetDay) : (i < currentTargetDay)) {
+            tileClass += ' claimed';
+        } else if (!isClaimedToday && i === currentTargetDay) {
+            tileClass += ' active';
+        }
 
         html += `
             <div class="${tileClass}">
@@ -1305,18 +1370,33 @@ function renderCheckInGrid() {
 
 function claimDailyCheckIn() {
     playClickSound();
-    const today = new Date().toISOString().slice(0, 10);
-    if (lastCheckInDate.startsWith(today)) return;
+    const today = getUtcDateString(getRealNow());
+    if (lastCheckInDate === today) return;
+
+    const daysSince = getDaysDiff(lastCheckInDate, today);
+    let newStreak = checkInStreak;
+
+    // যদি একদিন পরে আসে তবে স্ট্রিক বাড়বে, বেশি দিন পার হলে ১ থেকে শুরু হবে
+    if (daysSince === 1) {
+        newStreak++;
+    } else {
+        newStreak = 1;
+    }
 
     const rewardsArr = adminConfig.checkInRewards || [1, 1, 2, 2, 3, 3, 5];
-    const currentTargetDay = (checkInStreak % 7) + 1;
+    const currentTargetDay = ((newStreak - 1) % 7) + 1;
     const freeTicketsWon = Number(rewardsArr[currentTargetDay - 1] || 1);
 
-    checkInStreak++;
+    checkInStreak = newStreak;
     lastCheckInDate = today;
     userTickets += freeTicketsWon;
 
-    db.ref('users/' + userId).update({ checkInStreak, lastCheckInDate, tickets: userTickets });
+    db.ref('users/' + userId).update({
+        checkInStreak,
+        lastCheckInDate,
+        tickets: userTickets
+    });
+
     playRewardSound();
     triggerConfetti();
     showToast(`+${freeTicketsWon} ${t('unit_tickets')}!`);
@@ -1363,7 +1443,7 @@ function openAdminSupport() {
     else window.open(url, '_blank');
 }
 
-// ================= ১৩. প্রফেশনাল ৩ডি পডিয়াম স্টল লিডারবোর্ড =================
+// ================= ১৩. ৩ডি পডিয়াম স্টল লিডারবোর্ড =================
 function listenToPodiumLeaderboard() {
     const listContainer = document.getElementById('leaderboard-container');
     if (!listContainer) return;
@@ -1378,31 +1458,29 @@ function listenToPodiumLeaderboard() {
         snapshot.forEach(child => pilots.push(child.val()));
         pilots.reverse();
 
-        // ১. পডিয়াম স্টল ডেটা (1st, 2nd, 3rd)
         const rank1 = pilots[0];
         const rank2 = pilots[1];
         const rank3 = pilots[2];
 
-        // Champion (1st)
+        // 1st (Gold)
         if (rank1) {
             document.getElementById('podium-1-avatar').innerText = (rank1.name?.charAt(0) || '1').toUpperCase();
             document.getElementById('podium-1-name').innerText = escapeHtml(rank1.name || 'Champion');
             document.getElementById('podium-1-score').innerText = `${rank1.highScore || 0} PTS`;
         }
-        // Silver (2nd)
+        // 2nd (Silver)
         if (rank2) {
             document.getElementById('podium-2-avatar').innerText = (rank2.name?.charAt(0) || '2').toUpperCase();
             document.getElementById('podium-2-name').innerText = escapeHtml(rank2.name || 'Silver Pilot');
             document.getElementById('podium-2-score').innerText = `${rank2.highScore || 0} PTS`;
         }
-        // Bronze (3rd)
+        // 3rd (Bronze)
         if (rank3) {
             document.getElementById('podium-3-avatar').innerText = (rank3.name?.charAt(0) || '3').toUpperCase();
             document.getElementById('podium-3-name').innerText = escapeHtml(rank3.name || 'Bronze Pilot');
             document.getElementById('podium-3-score').innerText = `${rank3.highScore || 0} PTS`;
         }
 
-        // ২. রানার্স-আপ তালিকা (৪র্থ+)
         const challengers = pilots.slice(3);
         if (challengers.length === 0) {
             listContainer.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:13px;">${currentLang === 'bn' ? 'অন্যান্য পাইলটদের স্কোর শীঘ্রই আসছে' : 'More pilots joining soon'}</div>`;
@@ -1452,6 +1530,12 @@ function switchTab(viewId) {
     const activeNav = document.querySelector(`.hud-nav-tab[onclick*="${viewId}"]`);
     if (activeNav) activeNav.classList.add('active');
 
+    // টেলিগ্রাম ব্যাক-বাটন স্টেট টগল
+    if (tg?.BackButton) {
+        if (viewId === 'home') tg.BackButton.hide();
+        else tg.BackButton.show();
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1473,12 +1557,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAudioIcon();
     applyLanguage();
 
-    // অ্যাডমিন ডেটা ও ইউজার লিসেনার চালু করা
     listenToAdminSettings();
     initUser();
     initTonConnect();
 
-    // স্প্ল্যাশ স্ক্রিন বুট অ্যানিমেশন
+    // স্প্ল্যাশ স্ক্রিন
     let splashProgress = 0;
     const splashTimer = setInterval(() => {
         splashProgress += 34;

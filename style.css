@@ -1,13 +1,4 @@
-/* ==========================================================
-   AETHERIA ARCADE - REALTIME CYBER ENGINE (v9.0.0 PRODUCTION)
-   - 100% Policy-Compliant Telegram Mini-App Architecture
-   - Strict Ticket / Crypto Cells Split Economy
-   - 3D Dynamic Podium Stall Leaderboard (1st, 2nd, 3rd)
-   - Realtime Reflex Grid Arena & TON Connect Integration
-========================================================== */
-
 :root {
-    /* OBSIDIAN CYBER MATRIX (DEFAULT DARK) */
     --bg-base: #06080D;
     --card-surface: #0C111D;
     --card-border: rgba(0, 240, 255, 0.15);
@@ -30,14 +21,9 @@
     --neon-gold-glow: rgba(255, 184, 0, 0.45);
 
     --neon-silver: #E2E8F0;
-    --neon-silver-soft: rgba(226, 232, 240, 0.15);
     --neon-bronze: #CD7F32;
-    --neon-bronze-soft: rgba(205, 127, 50, 0.18);
 
     --neon-ton: #0098EA;
-    --neon-ton-soft: rgba(0, 152, 234, 0.15);
-    --neon-ton-glow: rgba(0, 152, 234, 0.35);
-
     --neon-alert: #FF3366;
     --neon-alert-soft: rgba(255, 51, 102, 0.15);
     --neon-warning: #FFB800;
@@ -55,7 +41,6 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* DAY / CLEAN LIGHT MATRIX */
 body.light-theme {
     --bg-base: #F1F5F9;
     --card-surface: #FFFFFF;
@@ -71,22 +56,13 @@ body.light-theme {
     --neon-emerald-glow: rgba(5, 150, 105, 0.25);
 
     --neon-purple: #7C3AED;
-    --neon-purple-soft: rgba(124, 58, 237, 0.1);
-    --neon-purple-glow: rgba(124, 58, 237, 0.25);
-
     --neon-gold: #D97706;
     --neon-gold-soft: rgba(217, 119, 6, 0.14);
     --neon-gold-glow: rgba(217, 119, 6, 0.3);
 
     --neon-silver: #64748B;
-    --neon-silver-soft: rgba(100, 116, 139, 0.12);
     --neon-bronze: #B45309;
-    --neon-bronze-soft: rgba(180, 83, 9, 0.15);
-
     --neon-ton: #0088CC;
-    --neon-ton-soft: rgba(0, 136, 204, 0.12);
-    --neon-ton-glow: rgba(0, 136, 204, 0.25);
-
     --neon-alert: #E11D48;
     --neon-alert-soft: rgba(225, 29, 72, 0.12);
     --neon-warning: #D97706;
@@ -130,7 +106,7 @@ input, select, textarea {
 .neon-emerald { color: var(--neon-emerald) !important; text-shadow: 0 0 12px var(--neon-emerald-glow); }
 .neon-alert { color: var(--neon-alert) !important; }
 
-/* ================= 1. CYBER BOOT SCREEN ================= */
+/* Boot Screen */
 .cyber-boot-screen {
     position: fixed;
     inset: 0;
@@ -197,7 +173,6 @@ input, select, textarea {
     letter-spacing: 3px;
     color: var(--text-primary);
 }
-
 .boot-logo span { color: var(--neon-cyan); }
 
 .boot-status-text {
@@ -225,7 +200,7 @@ input, select, textarea {
     transition: width 0.2s ease;
 }
 
-/* ================= 2. HUD HEADER ================= */
+/* HUD Header */
 .cyber-hud-header {
     display: flex;
     justify-content: space-between;
@@ -285,22 +260,9 @@ input, select, textarea {
     letter-spacing: 0.5px;
 }
 
-.pilot-status-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.pilot-title-row {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.pilot-callsign {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--text-primary);
-}
+.pilot-status-column { display: flex; flex-direction: column; }
+.pilot-title-row { display: flex; align-items: center; gap: 7px; }
+.pilot-callsign { font-size: 15px; font-weight: 800; color: var(--text-primary); }
 
 .hud-online-beacon {
     width: 7px;
@@ -316,17 +278,8 @@ input, select, textarea {
     50% { opacity: 0.4; transform: scale(0.85); }
 }
 
-.pilot-rank-badge {
-    font-size: 12px;
-    color: var(--neon-emerald);
-    font-weight: 700;
-}
-
-.hud-quick-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+.pilot-rank-badge { font-size: 12px; color: var(--neon-emerald); font-weight: 700; }
+.hud-quick-controls { display: flex; align-items: center; gap: 8px; }
 
 .hud-circle-btn {
     width: 38px;
@@ -341,7 +294,6 @@ input, select, textarea {
     cursor: pointer;
     transition: transform 0.15s ease;
 }
-
 .hud-circle-btn:active { transform: scale(0.92); }
 
 .hud-lang-pill {
@@ -355,10 +307,9 @@ input, select, textarea {
     cursor: pointer;
     transition: all 0.15s ease;
 }
-
 .hud-lang-pill:active { transform: scale(0.92); background: var(--neon-cyan-soft); }
 
-/* ================= 3. BENTO LAYOUT & VIEWPORTS ================= */
+/* Bento Layout */
 .app-viewport {
     padding: 14px 12px 28px 12px;
     max-width: 580px;
@@ -390,47 +341,14 @@ input, select, textarea {
     background: linear-gradient(175deg, var(--card-surface) 0%, rgba(255, 184, 0, 0.05) 100%);
 }
 
-.matrix-topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
+.matrix-topbar { display: flex; justify-content: space-between; align-items: flex-start; }
+.matrix-eyebrow { font-size: 13px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
 
-.matrix-eyebrow {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-}
+.gem-counter { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.ticket-symbol-glow { font-size: 34px; filter: drop-shadow(0 0 10px rgba(255, 184, 0, 0.5)); }
+.gem-digits { font-size: 44px; font-weight: 900; letter-spacing: -1.2px; color: var(--text-primary); }
+.gem-unit { font-size: 15px; color: var(--neon-gold); font-weight: 900; letter-spacing: 1px; }
 
-.gem-counter {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-}
-
-.ticket-symbol-glow {
-    font-size: 34px;
-    filter: drop-shadow(0 0 10px rgba(255, 184, 0, 0.5));
-}
-
-.gem-digits {
-    font-size: 44px;
-    font-weight: 900;
-    letter-spacing: -1.2px;
-    color: var(--text-primary);
-}
-
-.gem-unit {
-    font-size: 15px;
-    color: var(--neon-gold);
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-/* CELLS BADGE PILL IN HOME */
 .cells-badge-pill {
     background: var(--neon-cyan-soft);
     border: 1.5px solid var(--neon-cyan);
@@ -445,7 +363,6 @@ input, select, textarea {
     box-shadow: 0 0 14px var(--neon-cyan-soft);
     transition: transform 0.15s ease;
 }
-
 .cells-badge-pill:active { transform: scale(0.95); }
 .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--neon-cyan); box-shadow: 0 0 6px var(--neon-cyan); }
 .cells-count { font-size: 18px; font-weight: 900; }
@@ -490,7 +407,6 @@ input, select, textarea {
     flex: 1;
     transition: transform 0.15s ease;
 }
-
 .cyber-streak-pill:active { transform: scale(0.97); }
 
 .cyber-streak-pill.accent-btn {
@@ -499,37 +415,13 @@ input, select, textarea {
     color: var(--neon-emerald);
 }
 
-.section-badge-row {
-    margin: 20px 4px 14px 4px;
-}
+.section-badge-row { margin: 20px 4px 14px 4px; }
+.badge-title-wrap { display: flex; flex-direction: column; gap: 2px; }
+.section-glow-title { font-size: 17.5px; font-weight: 900; color: var(--text-primary); display: block; letter-spacing: -0.2px; }
+.section-sub-glow { font-size: 12px; color: var(--text-secondary); display: block; }
 
-.badge-title-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.section-glow-title {
-    font-size: 17.5px;
-    font-weight: 900;
-    color: var(--text-primary);
-    display: block;
-    letter-spacing: -0.2px;
-}
-
-.section-sub-glow {
-    font-size: 12px;
-    color: var(--text-secondary);
-    display: block;
-}
-
-/* ================= 4. TASK & AD MISSION CARDS ================= */
-.tasks-vertical-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
+/* Tasks Stack */
+.tasks-vertical-stack { display: flex; flex-direction: column; gap: 12px; }
 .task-card {
     display: flex;
     align-items: center;
@@ -538,16 +430,8 @@ input, select, textarea {
     border-left: 4px solid var(--neon-gold);
     transition: transform 0.15s ease, opacity 0.25s ease;
 }
-
-.task-card.cooldown-active {
-    opacity: 0.85;
-    border-left-color: var(--neon-warning);
-}
-
-.task-card.task-completed {
-    opacity: 0.6;
-    border-left-color: var(--neon-emerald);
-}
+.task-card.cooldown-active { opacity: 0.85; border-left-color: var(--neon-warning); }
+.task-card.task-completed { opacity: 0.6; border-left-color: var(--neon-emerald); }
 
 .task-icon-box {
     width: 48px;
@@ -569,12 +453,7 @@ input, select, textarea {
 .task-head h4 { font-size: 15px; font-weight: 800; color: var(--text-primary); }
 .task-info p { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
 
-.task-reward-tags {
-    display: flex;
-    gap: 6px;
-    margin-top: 6px;
-}
-
+.task-reward-tags { display: flex; gap: 6px; margin-top: 6px; }
 .reward-pill {
     background: var(--chip-bg);
     border: 1px solid var(--card-border);
@@ -595,24 +474,6 @@ input, select, textarea {
     letter-spacing: 0.5px;
 }
 
-.cyber-btn.cooldown-btn {
-    background: var(--chip-bg) !important;
-    color: var(--neon-warning) !important;
-    border: 1px solid rgba(255, 184, 0, 0.4) !important;
-    font-family: monospace;
-    font-size: 13px !important;
-    cursor: not-allowed !important;
-    box-shadow: none !important;
-}
-
-.cyber-btn.completed-btn {
-    background: transparent !important;
-    color: var(--neon-emerald) !important;
-    border: 1px solid rgba(0, 255, 157, 0.3) !important;
-    cursor: default !important;
-    box-shadow: none !important;
-}
-
 .field-training-card {
     display: flex;
     justify-content: space-between;
@@ -622,14 +483,8 @@ input, select, textarea {
     cursor: pointer;
     transition: transform 0.15s ease;
 }
-
 .field-training-card:active { transform: scale(0.98); }
-
-.field-training-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
+.field-training-left { display: flex; align-items: center; gap: 14px; }
 
 .training-icon-badge {
     width: 42px;
@@ -642,59 +497,21 @@ input, select, textarea {
     justify-content: center;
     flex-shrink: 0;
 }
+.training-copy h4 { font-size: 15px; font-weight: 800; color: var(--text-primary); }
+.training-copy p { font-size: 12px; color: var(--text-secondary); }
+.field-training-action { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 800; color: var(--neon-cyan); }
 
-.training-copy h4 {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--text-primary);
-}
-
-.training-copy p {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.field-training-action {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13.5px;
-    font-weight: 800;
-    color: var(--neon-cyan);
-}
-
-/* ================= 5. ARCADE GAME ARENA (WHERE REWARDS ARE EARNED) ================= */
+/* Arcade Pad */
 .mini-arcade-console {
     background: linear-gradient(180deg, var(--card-surface) 0%, #060910 100%);
     border: 1.5px solid rgba(0, 255, 157, 0.25);
     padding: 18px;
 }
 
-.console-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-}
-
-.console-pill {
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 1.2px;
-    color: var(--neon-emerald);
-}
-
-.console-name {
-    font-size: 17.5px;
-    font-weight: 900;
-    color: var(--text-primary);
-}
-
-.console-metrics {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+.console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.console-pill { font-size: 11px; font-weight: 900; letter-spacing: 1.2px; color: var(--neon-emerald); }
+.console-name { font-size: 17.5px; font-weight: 900; color: var(--text-primary); }
+.console-metrics { display: flex; align-items: center; gap: 8px; }
 
 .combo-badge {
     background: rgba(189, 0, 255, 0.15);
@@ -726,10 +543,6 @@ input, select, textarea {
     touch-action: manipulation;
 }
 
-.arcade-interactive-pad:active {
-    border-color: var(--neon-cyan);
-}
-
 .arcade-start-overlay {
     position: absolute;
     inset: 0;
@@ -743,53 +556,18 @@ input, select, textarea {
     text-align: center;
 }
 
-.rules-pill-box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-.rule-chip {
-    font-size: 11px;
-    font-weight: 800;
-    padding: 4px 8px;
-    border-radius: 8px;
-}
-
+.rules-pill-box { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 10px; }
+.rule-chip { font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 8px; }
 .chip-cyan { background: var(--neon-cyan-soft); color: var(--neon-cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
 .chip-gold { background: var(--neon-gold-soft); color: var(--neon-gold); border: 1px solid rgba(255, 184, 0, 0.3); }
 .chip-red { background: var(--neon-alert-soft); color: var(--neon-alert); border: 1px solid rgba(255, 51, 102, 0.3); }
 
-.entry-cost-banner {
-    font-size: 14px;
-    color: var(--neon-gold);
-    font-weight: 900;
-    margin-top: 4px;
-}
+.entry-cost-banner { font-size: 14px; color: var(--neon-gold); font-weight: 900; margin-top: 4px; }
+.game-reward-projection { font-size: 12.5px; color: var(--neon-emerald); font-weight: 800; margin-top: 2px; margin-bottom: 12px; }
+.match-launch-btn { width: auto !important; padding: 13px 34px !important; }
+.overlay-note { margin-top: 12px; color: var(--text-muted); font-size: 11.5px; max-width: 320px; }
 
-.game-reward-projection {
-    font-size: 12.5px;
-    color: var(--neon-emerald);
-    font-weight: 800;
-    margin-top: 2px;
-    margin-bottom: 12px;
-}
-
-.match-launch-btn {
-    width: auto !important;
-    padding: 13px 34px !important;
-}
-
-.overlay-note {
-    margin-top: 12px;
-    color: var(--text-muted);
-    font-size: 11.5px;
-    max-width: 320px;
-}
-
-/* NODES */
+/* Interactive Nodes with safe cushioning */
 .cyber-target-node {
     display: flex;
     flex-direction: column;
@@ -801,6 +579,7 @@ input, select, textarea {
     z-index: 5;
     animation: targetPulse 0.45s ease alternate infinite;
     transform-origin: center;
+    pointer-events: none; /* Click handled via parent arena with tolerance */
 }
 
 @keyframes targetPulse {
@@ -808,29 +587,14 @@ input, select, textarea {
     100% { transform: scale(1.08); filter: drop-shadow(0 0 16px var(--neon-cyan)); }
 }
 
-.node-label {
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    background: rgba(0, 240, 255, 0.2);
-    padding: 2px 6px;
-    border-radius: 6px;
-}
+.node-label { font-size: 10px; font-weight: 900; letter-spacing: 1px; background: rgba(0, 240, 255, 0.2); padding: 2px 6px; border-radius: 6px; }
 
-.cyber-target-node.gold-node {
-    color: var(--neon-gold);
-    animation: goldPulse 0.35s ease alternate infinite;
-}
-
+.cyber-target-node.gold-node { color: var(--neon-gold); animation: goldPulse 0.35s ease alternate infinite; }
 @keyframes goldPulse {
     0% { transform: scale(1.0); filter: drop-shadow(0 0 8px var(--neon-gold)); }
     100% { transform: scale(1.15); filter: drop-shadow(0 0 20px var(--neon-gold)); }
 }
-
-.cyber-target-node.gold-node .node-label {
-    background: rgba(255, 184, 0, 0.25);
-    color: var(--neon-gold);
-}
+.cyber-target-node.gold-node .node-label { background: rgba(255, 184, 0, 0.25); color: var(--neon-gold); }
 
 .cyber-hazard-node {
     display: flex;
@@ -842,6 +606,7 @@ input, select, textarea {
     user-select: none;
     z-index: 6;
     animation: hazardFlicker 0.2s infinite;
+    pointer-events: none;
 }
 
 @keyframes hazardFlicker {
@@ -849,15 +614,7 @@ input, select, textarea {
     50% { filter: drop-shadow(0 0 16px var(--neon-alert)); opacity: 0.75; }
 }
 
-.hazard-label {
-    font-size: 9.5px;
-    font-weight: 900;
-    letter-spacing: 1.2px;
-    background: rgba(255, 51, 102, 0.25);
-    color: var(--neon-alert);
-    padding: 2px 6px;
-    border-radius: 6px;
-}
+.hazard-label { font-size: 9.5px; font-weight: 900; letter-spacing: 1.2px; background: rgba(255, 51, 102, 0.25); color: var(--neon-alert); padding: 2px 6px; border-radius: 6px; }
 
 .arena-scanline {
     position: absolute;
@@ -867,73 +624,24 @@ input, select, textarea {
     animation: scanAnim 3s linear infinite;
     pointer-events: none;
 }
-
 @keyframes scanAnim {
     0% { transform: translateY(-100%); }
     100% { transform: translateY(400%); }
 }
 
-.energy-dock {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--card-border);
-}
-
-.energy-label-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12.5px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
+.energy-dock { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--card-border); }
+.energy-label-row { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; margin-bottom: 8px; }
 .energy-title { color: var(--text-secondary); }
 .energy-val { color: var(--neon-emerald); }
+.energy-progress-track { width: 100%; height: 7px; background: var(--input-bg); border-radius: 6px; overflow: hidden; border: 1px solid var(--card-border); }
+.energy-fill-active { height: 100%; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-emerald)); box-shadow: 0 0 10px var(--neon-emerald-glow); border-radius: 6px; transition: width 0.25s ease; }
 
-.energy-progress-track {
-    width: 100%;
-    height: 7px;
-    background: var(--input-bg);
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid var(--card-border);
-}
-
-.energy-fill-active {
-    height: 100%;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-emerald));
-    box-shadow: 0 0 10px var(--neon-emerald-glow);
-    border-radius: 6px;
-    transition: width 0.25s ease;
-}
-
-/* ================= 6. TON CRYPTO WALLET & CASHOUT ================= */
-.ton-gradient-box {
-    border: 1px solid rgba(0, 152, 234, 0.4);
-    background: linear-gradient(180deg, var(--card-surface) 0%, rgba(0, 152, 234, 0.08) 100%);
-}
-
+/* TON & Wallet */
+.ton-gradient-box { border: 1px solid rgba(0, 152, 234, 0.4); background: linear-gradient(180deg, var(--card-surface) 0%, rgba(0, 152, 234, 0.08) 100%); }
 .ton-pill { color: #0098EA !important; }
-
-.wallet-connect-box {
-    border: 1px solid rgba(0, 152, 234, 0.35);
-    background: linear-gradient(180deg, var(--card-surface) 0%, rgba(0, 152, 234, 0.06) 100%);
-}
-
-.wallet-status-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.ton-brand-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 800;
-    font-size: 15px;
-    color: #0098EA;
-}
+.wallet-connect-box { border: 1px solid rgba(0, 152, 234, 0.35); background: linear-gradient(180deg, var(--card-surface) 0%, rgba(0, 152, 234, 0.06) 100%); }
+.wallet-status-row { display: flex; justify-content: space-between; align-items: center; }
+.ton-brand-badge { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: #0098EA; }
 
 .wallet-address-preview {
     margin-top: 14px;
@@ -946,7 +654,6 @@ input, select, textarea {
     align-items: center;
     font-size: 12.5px;
 }
-
 .addr-label { color: var(--text-muted); font-weight: 700; }
 .addr-value { color: var(--neon-cyan); font-weight: 800; font-family: monospace; }
 
@@ -959,15 +666,7 @@ input, select, textarea {
     padding: 8px 10px 8px 16px;
     margin-bottom: 10px;
 }
-
-.cyber-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--text-primary);
-    font-size: 13.5px;
-    outline: none;
-}
+.cyber-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-size: 13.5px; outline: none; }
 
 .conversion-preview-deck {
     display: flex;
@@ -979,60 +678,22 @@ input, select, textarea {
     margin-top: 10px;
     border: 1px solid var(--card-border);
 }
-
 .conversion-tile { text-align: center; }
 .conversion-tile span { font-size: 12px; color: var(--text-muted); display: block; }
 .conversion-tile strong { font-size: 18px; margin-top: 4px; display: block; }
 .conversion-arrow { font-size: 20px; color: var(--neon-cyan); }
 
-/* ================= 7. PROFESSIONAL 3D PODIUM STALL LADDER ================= */
-.stall-header-banner {
-    border: 1px solid rgba(255, 184, 0, 0.35);
-    background: linear-gradient(180deg, var(--card-surface) 0%, rgba(255, 184, 0, 0.05) 100%);
-}
-
+/* Leaderboard & Podium */
+.stall-header-banner { border: 1px solid rgba(255, 184, 0, 0.35); background: linear-gradient(180deg, var(--card-surface) 0%, rgba(255, 184, 0, 0.05) 100%); }
 .gold-pill { color: var(--neon-gold) !important; }
-
 .invite-banner-header { text-align: center; margin-bottom: 10px; }
-.ticket-highlight-pill {
-    font-size: 13px !important;
-    padding: 6px 14px !important;
-    border-color: var(--neon-gold) !important;
-    color: var(--neon-gold) !important;
-    display: inline-block;
-}
+.ticket-highlight-pill { font-size: 13px !important; padding: 6px 14px !important; border-color: var(--neon-gold) !important; color: var(--neon-gold) !important; display: inline-block; }
+.invite-explainer { font-size: 12.5px; color: var(--text-secondary); text-align: center; margin-bottom: 14px; line-height: 1.45; }
 
-.invite-explainer {
-    font-size: 12.5px;
-    color: var(--text-secondary);
-    text-align: center;
-    margin-bottom: 14px;
-    line-height: 1.45;
-}
+.stall-arena-container { margin: 20px 0 24px 0; perspective: 1000px; }
+.stall-podium-deck { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: flex-end; gap: 10px; min-height: 250px; }
+.podium-stall { display: flex; flex-direction: column; align-items: center; position: relative; }
 
-/* 3D PODIUM STALL ARENA */
-.stall-arena-container {
-    margin: 20px 0 24px 0;
-    perspective: 1000px;
-}
-
-.stall-podium-deck {
-    display: grid;
-    grid-template-columns: 1fr 1.15fr 1fr;
-    align-items: flex-end;
-    gap: 10px;
-    min-height: 250px;
-}
-
-.podium-stall {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    transition: transform 0.2s ease;
-}
-
-/* CROWNS & ICONS */
 .stall-crown { font-size: 24px; margin-bottom: 4px; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4)); }
 .stall-crown-gold { font-size: 32px; margin-bottom: 4px; animation: crownFloat 2s ease-in-out infinite; filter: drop-shadow(0 0 12px var(--neon-gold)); }
 
@@ -1041,13 +702,7 @@ input, select, textarea {
     50% { transform: translateY(-6px); }
 }
 
-.stall-avatar-wrap {
-    position: relative;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 8px;
-}
-
+.stall-avatar-wrap { position: relative; width: 48px; height: 48px; margin-bottom: 8px; }
 .stall-avatar {
     width: 100%;
     height: 100%;
@@ -1061,213 +716,43 @@ input, select, textarea {
     font-size: 18px;
     font-weight: 900;
 }
+.stall-rank-tag { position: absolute; bottom: -6px; right: -4px; background: var(--neon-silver); color: #000; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 6px; }
+.gold-ring .stall-avatar { border-color: var(--neon-gold); color: var(--neon-gold); box-shadow: 0 0 18px var(--neon-gold-glow); font-size: 22px; }
+.stall-avatar-wrap.gold-ring { width: 58px; height: 58px; }
+.gold-tag { background: var(--neon-gold) !important; color: #000 !important; }
 
-.stall-rank-tag {
-    position: absolute;
-    bottom: -6px;
-    right: -4px;
-    background: var(--neon-silver);
-    color: #000000;
-    font-size: 10px;
-    font-weight: 900;
-    padding: 1px 6px;
-    border-radius: 6px;
-}
+.stall-pilot-info { text-align: center; display: flex; flex-direction: column; margin-bottom: 10px; width: 100%; padding: 0 4px; }
+.stall-pilot-name { font-size: 13px; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stall-pilot-name.gold-name { font-size: 14.5px; color: var(--neon-gold); }
+.stall-pilot-score { font-size: 11.5px; font-weight: 800; color: var(--text-muted); }
 
-/* CHAMPION GOLD RING */
-.gold-ring .stall-avatar {
-    border-color: var(--neon-gold);
-    color: var(--neon-gold);
-    box-shadow: 0 0 18px var(--neon-gold-glow);
-    font-size: 22px;
-}
+.stall-stand { width: 100%; border-radius: 16px 16px 8px 8px; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
+.pillar-label { font-size: 9.5px; font-weight: 900; letter-spacing: 1px; opacity: 0.8; }
+.pillar-silver { height: 105px; background: linear-gradient(180deg, #334155 0%, #1E293B 100%); border: 1.5px solid var(--neon-silver); color: var(--neon-silver); }
+.pillar-gold { height: 145px; background: linear-gradient(180deg, rgba(255, 184, 0, 0.35) 0%, #1A1305 100%); border: 2px solid var(--neon-gold); color: var(--neon-gold); box-shadow: inset 0 2px 14px rgba(255, 184, 0, 0.4); }
+.pillar-bronze { height: 80px; background: linear-gradient(180deg, #452410 0%, #201007 100%); border: 1.5px solid var(--neon-bronze); color: var(--neon-bronze); }
 
-.stall-avatar-wrap.gold-ring {
-    width: 58px;
-    height: 58px;
-}
-
-.gold-tag {
-    background: var(--neon-gold) !important;
-    color: #000 !important;
-}
-
-/* PILOT INFO ON STALL */
-.stall-pilot-info {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 0 4px;
-}
-
-.stall-pilot-name {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.stall-pilot-name.gold-name {
-    font-size: 14.5px;
-    color: var(--neon-gold);
-}
-
-.stall-pilot-score {
-    font-size: 11.5px;
-    font-weight: 800;
-    color: var(--text-muted);
-}
-
-/* 3D PILLARS (STANDS) */
-.stall-stand {
-    width: 100%;
-    border-radius: 16px 16px 8px 8px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 10px;
-    box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.15), 0 10px 24px rgba(0, 0, 0, 0.4);
-    position: relative;
-    overflow: hidden;
-}
-
-.pillar-label {
-    font-size: 9.5px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    opacity: 0.8;
-}
-
-/* SILVER PILLAR (RANK 2) */
-.pillar-silver {
-    height: 105px;
-    background: linear-gradient(180deg, #334155 0%, #1E293B 100%);
-    border: 1.5px solid var(--neon-silver);
-    color: var(--neon-silver);
-}
-
-/* GOLD CHAMPION PILLAR (RANK 1) - TALLEST & PROMINENT */
-.pillar-gold {
-    height: 145px;
-    background: linear-gradient(180deg, rgba(255, 184, 0, 0.35) 0%, #1A1305 100%);
-    border: 2px solid var(--neon-gold);
-    color: var(--neon-gold);
-    box-shadow: inset 0 2px 14px rgba(255, 184, 0, 0.4), 0 0 25px rgba(255, 184, 0, 0.25);
-}
-
-/* BRONZE PILLAR (RANK 3) */
-.pillar-bronze {
-    height: 80px;
-    background: linear-gradient(180deg, #452410 0%, #201007 100%);
-    border: 1.5px solid var(--neon-bronze);
-    color: var(--neon-bronze);
-}
-
-/* RUNNERS UP ROSTER LIST (4th+) */
 .roster-scroll-box { padding: 12px; }
-
-.roster-dynamic-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: 380px;
-    overflow-y: auto;
-}
-
-.roster-item {
-    background: var(--input-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    padding: 12px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.roster-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.roster-rank-num {
-    font-size: 13px;
-    font-weight: 900;
-    color: var(--text-muted);
-    min-width: 28px;
-}
-
-.roster-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    background: var(--card-surface);
-    border: 1.5px solid var(--neon-cyan);
-    color: var(--neon-cyan);
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
+.roster-dynamic-list { display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; }
+.roster-item { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+.roster-left { display: flex; align-items: center; gap: 10px; }
+.roster-rank-num { font-size: 13px; font-weight: 900; color: var(--text-muted); min-width: 28px; }
+.roster-avatar { width: 38px; height: 38px; border-radius: 12px; background: var(--card-surface); border: 1.5px solid var(--neon-cyan); color: var(--neon-cyan); font-weight: 900; display: flex; align-items: center; justify-content: center; }
 .roster-details { display: flex; flex-direction: column; }
 .roster-title { font-size: 14px; font-weight: 800; }
 .roster-sub { font-size: 11.5px; color: var(--text-muted); }
 
-.cyber-chip {
-    font-size: 11.5px;
-    font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 8px;
-}
+.cyber-chip { font-size: 11.5px; font-weight: 800; padding: 4px 10px; border-radius: 8px; }
+.chip-success { background: var(--neon-emerald-soft); color: var(--neon-emerald); border: 1px solid rgba(0, 255, 157, 0.3); }
 
-.chip-success {
-    background: var(--neon-emerald-soft);
-    color: var(--neon-emerald);
-    border: 1px solid rgba(0, 255, 157, 0.3);
-}
+.bento-stat-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-tile { text-align: center; padding: 18px 14px; }
+.tile-label { font-size: 12px; color: var(--text-muted); font-weight: 700; }
+.tile-val { font-size: 26px; font-weight: 900; margin-top: 6px; display: block; }
 
-.bento-stat-pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.stat-tile {
-    text-align: center;
-    padding: 18px 14px;
-}
-
-.tile-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 700;
-}
-
-.tile-val {
-    font-size: 26px;
-    font-weight: 900;
-    margin-top: 6px;
-    display: block;
-}
-
-/* ================= 8. PILOT / PROFILE DOSSIER ================= */
-.pilot-dossier-card {
-    text-align: center;
-    padding: 26px 18px;
-}
-
-.dossier-avatar-wrap {
-    position: relative;
-    width: 76px;
-    height: 76px;
-    margin: 0 auto 14px auto;
-}
-
+/* Profile Dossier */
+.pilot-dossier-card { text-align: center; padding: 26px 18px; }
+.dossier-avatar-wrap { position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto; }
 .dossier-avatar-core {
     width: 100%;
     height: 100%;
@@ -1282,78 +767,25 @@ input, select, textarea {
     color: var(--neon-cyan);
     box-shadow: 0 0 20px var(--neon-cyan-soft);
 }
-
 .pilot-identity-name { font-size: 20px; font-weight: 900; }
 .pilot-telegram-tag { font-size: 13.5px; color: var(--text-muted); display: block; margin-top: 3px; }
+.pilot-terminal-uuid { display: inline-block; background: var(--chip-bg); color: var(--text-secondary); font-size: 11.5px; font-weight: 700; padding: 4px 12px; border-radius: 12px; margin-top: 8px; }
 
-.pilot-terminal-uuid {
-    display: inline-block;
-    background: var(--chip-bg);
-    color: var(--text-secondary);
-    font-size: 11.5px;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 12px;
-    margin-top: 8px;
-}
-
-.dossier-stat-deck {
-    display: flex;
-    gap: 12px;
-    margin-top: 18px;
-    border-top: 1px solid var(--card-border);
-    padding-top: 16px;
-}
-
-.deck-cell {
-    flex: 1;
-    background: var(--input-bg);
-    border-radius: 16px;
-    padding: 12px;
-}
-
+.dossier-stat-deck { display: flex; gap: 12px; margin-top: 18px; border-top: 1px solid var(--card-border); padding-top: 16px; }
+.deck-cell { flex: 1; background: var(--input-bg); border-radius: 16px; padding: 12px; }
 .deck-lbl { font-size: 11.5px; color: var(--text-muted); font-weight: 700; display: block; }
 .deck-val { font-size: 16px; font-weight: 800; margin-top: 4px; display: block; }
 
 .action-list-dock { padding: 4px 14px; }
-
-.dock-action-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 4px;
-    border-bottom: 1px solid var(--card-border);
-    cursor: pointer;
-    text-decoration: none;
-    color: var(--text-primary);
-}
-
+.dock-action-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 4px; border-bottom: 1px solid var(--card-border); cursor: pointer; color: var(--text-primary); }
 .dock-action-row:last-child { border-bottom: none; }
 .dock-left-cell { display: flex; align-items: center; gap: 14px; }
-
-.dock-icon-box {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    background: var(--chip-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--neon-cyan);
-}
-
+.dock-icon-box { width: 38px; height: 38px; border-radius: 12px; background: var(--chip-bg); display: flex; align-items: center; justify-content: center; color: var(--neon-cyan); }
 .dock-title { font-size: 15px; font-weight: 800; display: block; }
 .chevron-arrow { color: var(--text-muted); }
+.cyber-footer-tag { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 20px; font-weight: 700; }
 
-.cyber-footer-tag {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 20px;
-    font-weight: 700;
-}
-
-/* ================= 9. CYBER BUTTON SYSTEM ================= */
+/* Buttons */
 .cyber-btn {
     width: 100%;
     background: var(--neon-cyan);
@@ -1370,20 +802,10 @@ input, select, textarea {
     gap: 10px;
     transition: transform 0.1s ease, opacity 0.2s ease;
 }
-
 .cyber-btn:active { transform: scale(0.985); }
 .cyber-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-
-.primary-glow {
-    box-shadow: 0 0 24px var(--neon-cyan-glow);
-}
-
-.compact-btn {
-    width: auto !important;
-    padding: 10px 18px !important;
-    font-size: 13.5px !important;
-    flex-shrink: 0;
-}
+.primary-glow { box-shadow: 0 0 24px var(--neon-cyan-glow); }
+.compact-btn { width: auto !important; padding: 10px 18px !important; font-size: 13.5px !important; flex-shrink: 0; }
 
 .cyber-chip-btn {
     background: var(--chip-bg);
@@ -1396,16 +818,8 @@ input, select, textarea {
     cursor: pointer;
     transition: all 0.15s ease;
 }
-
-.cyber-chip-btn:active {
-    transform: scale(0.95);
-    background: var(--neon-cyan-soft);
-}
-
-.cyber-chip-btn.accent-chip {
-    border-color: var(--neon-gold);
-    color: var(--neon-gold);
-}
+.cyber-chip-btn:active { transform: scale(0.95); background: var(--neon-cyan-soft); }
+.cyber-chip-btn.accent-chip { border-color: var(--neon-gold); color: var(--neon-gold); }
 
 .cyber-link-btn {
     width: 100%;
@@ -1419,7 +833,7 @@ input, select, textarea {
     margin-top: 8px;
 }
 
-/* ================= 10. MODALS & SETTLEMENT ================= */
+/* Modals & Drawers */
 .cyber-modal-overlay {
     position: fixed;
     inset: 0;
@@ -1449,24 +863,9 @@ input, select, textarea {
     text-align: center;
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
 }
-
 .neon-border { border-color: rgba(0, 240, 255, 0.4); }
-
-.modal-tag-badge {
-    font-size: 11.5px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    color: var(--neon-cyan);
-    margin-bottom: 12px;
-}
-
-.holo-icon-wrap {
-    color: var(--neon-cyan);
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: center;
-}
-
+.modal-tag-badge { font-size: 11.5px; font-weight: 900; letter-spacing: 1px; color: var(--neon-cyan); margin-bottom: 12px; }
+.holo-icon-wrap { color: var(--neon-cyan); margin-bottom: 12px; display: flex; justify-content: center; }
 .modal-title { font-size: 21px; font-weight: 900; margin-bottom: 6px; }
 .modal-subtext { font-size: 14px; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; }
 
@@ -1480,14 +879,7 @@ input, select, textarea {
     gap: 10px;
     text-align: left;
 }
-
-.terminal-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13.5px;
-}
-
+.terminal-row { display: flex; justify-content: space-between; align-items: center; font-size: 13.5px; }
 .t-muted { color: var(--text-secondary); }
 .t-light { color: var(--text-primary); }
 
@@ -1498,21 +890,9 @@ input, select, textarea {
     padding: 16px;
     margin-bottom: 14px;
 }
+.notice-policy-box h4 { font-size: 14px; font-weight: 800; color: var(--neon-cyan); margin-bottom: 6px; }
+.notice-policy-box p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
 
-.notice-policy-box h4 {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--neon-cyan);
-    margin-bottom: 6px;
-}
-
-.notice-policy-box p {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
-/* ================= 11. BOTTOM DRAWERS (7-DAY PROTOCOL) ================= */
 .cyber-drawer-overlay {
     position: fixed;
     inset: 0;
@@ -1521,7 +901,6 @@ input, select, textarea {
     align-items: flex-end;
     z-index: 10015;
 }
-
 .cyber-drawer-overlay.active { display: flex; }
 
 .cyber-drawer-sheet {
@@ -1540,67 +919,20 @@ input, select, textarea {
     to { transform: translateY(0); }
 }
 
-.drawer-drag-pill {
-    width: 36px;
-    height: 4px;
-    background: var(--text-muted);
-    border-radius: 4px;
-    margin: 0 auto 16px auto;
-    opacity: 0.5;
-}
-
-.drawer-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
+.drawer-drag-pill { width: 36px; height: 4px; background: var(--text-muted); border-radius: 4px; margin: 0 auto 16px auto; opacity: 0.5; }
+.drawer-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .drawer-header-row h3 { font-size: 18.5px; font-weight: 900; }
+.drawer-close-btn { background: var(--chip-bg); border: none; color: var(--text-primary); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-weight: 800; }
+.drawer-streak-counter { font-size: 14px; color: var(--neon-gold); font-weight: 800; margin-bottom: 16px; }
 
-.drawer-close-btn {
-    background: var(--chip-bg);
-    border: none;
-    color: var(--text-primary);
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-weight: 800;
-}
-
-.drawer-streak-counter {
-    font-size: 14px;
-    color: var(--neon-gold);
-    font-weight: 800;
-    margin-bottom: 16px;
-}
-
-.cyber-checkin-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.cyber-checkin-tile {
-    background: var(--input-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 12px 4px;
-    text-align: center;
-}
-
-.cyber-checkin-tile.active {
-    border-color: var(--neon-gold);
-    background: var(--neon-gold-soft);
-}
-
+.cyber-checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+.cyber-checkin-tile { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 12px 4px; text-align: center; }
+.cyber-checkin-tile.active { border-color: var(--neon-gold); background: var(--neon-gold-soft); }
 .cyber-checkin-tile.claimed { opacity: 0.4; }
 .tile-day-lbl { font-size: 11.5px; color: var(--text-muted); font-weight: 700; display: block; }
 .tile-pts-val { font-size: 13.5px; font-weight: 900; color: var(--text-primary); margin-top: 4px; display: block; }
 
-/* ================= 12. BOTTOM NAVIGATION BAR ================= */
+/* Navigation Bar */
 .cyber-hud-nav {
     position: fixed;
     bottom: 0;
@@ -1630,16 +962,10 @@ input, select, textarea {
     cursor: pointer;
     transition: color 0.2s ease;
 }
+.hud-nav-tab.active { color: var(--neon-cyan); }
+.hud-nav-tab.active svg { filter: drop-shadow(0 0 8px var(--neon-cyan-glow)); }
 
-.hud-nav-tab.active {
-    color: var(--neon-cyan);
-}
-
-.hud-nav-tab.active svg {
-    filter: drop-shadow(0 0 8px var(--neon-cyan-glow));
-}
-
-/* ================= 13. TOAST NOTIFICATIONS ================= */
+/* Toast */
 .toast-viewport {
     position: fixed;
     top: calc(16px + var(--safe-top));
@@ -1664,20 +990,11 @@ input, select, textarea {
     margin-bottom: 8px;
     animation: toastIn 0.25s ease;
 }
-
-.cyber-toast-item.error-toast {
-    border-color: var(--neon-alert);
-}
+.cyber-toast-item.error-toast { border-color: var(--neon-alert); }
 
 @keyframes toastIn {
     from { opacity: 0; transform: translateY(-8px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.loading-state {
-    text-align: center;
-    padding: 24px;
-    font-size: 13.5px;
-    color: var(--text-muted);
-    font-weight: 700;
-}
+.loading-state { text-align: center; padding: 24px; font-size: 13.5px; color: var(--text-muted); font-weight: 700; }
